@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: 'jdbc:h2:mem:testdb;Mode=Oracle'
+    type: com.zaxxer.hikari.HikariDataSource
+
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+
+# Disable security locally so that the health end point shows full
+# details and all Spring Boot Actuator end points are visible
+management:
+  security:
+    enabled: false
+
+logging.level.uk.gov: INFO
+
