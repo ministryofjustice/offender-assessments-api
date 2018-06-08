@@ -26,7 +26,7 @@ Without additional configuration this mode uses an in memory H2 database.
 java -jar build/libs/offender-assessment-api.jar
 ```
 
-### Start the application with Delius Oracle db
+### Start the application with Oracle db
 
 set SPRING_PROFILES_ACTIVE=oracle
 ```
