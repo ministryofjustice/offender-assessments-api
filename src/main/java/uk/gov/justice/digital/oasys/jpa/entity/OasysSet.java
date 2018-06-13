@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.math.BigDecimal;
 import java.sql.Time;
 
 @Data
+@Builder
 @Entity
 @Table(name = "OASYS_SET")
 public class OasysSet {
