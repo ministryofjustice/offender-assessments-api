@@ -100,11 +100,11 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Ogrs[].class);
 
-        assertThat(ogrss.length).isGreaterThan(0);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
-    public void getOgrsForUnknowOffenderGivesNotFound() {
+    public void getOgrsForUnknownOffenderGivesNotFound() {
         given()
                 .when()
                 .get("/offenders/crn/{0}/ogrs", "crn2")
