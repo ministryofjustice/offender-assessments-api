@@ -3,6 +3,7 @@ package uk.gov.justice.digital.oasys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.Ogrs;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
@@ -26,12 +27,16 @@ public class OgrsService {
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream())
-                .map(oasysSet -> Ogrs.builder()
-                        .oasysSetId(oasysSet.getOasysSetPk())
-                        .ogrs3_1_year(oasysSet.getOgrs31Year())
-                        .ogrs3_2_year(oasysSet.getOgrs32Year())
-                        .build())
+                .map(oasysSet -> getBuild(oasysSet))
                 .collect(Collectors.toList()));
+    }
+
+    private Ogrs getBuild(OasysSet oasysSet) {
+        return Ogrs.builder()
+                .oasysSetId(oasysSet.getOasysSetPk())
+                .ogrs3_1_year(oasysSet.getOgrs31Year())
+                .ogrs3_2_year(oasysSet.getOgrs32Year())
+                .build();
     }
 
 }

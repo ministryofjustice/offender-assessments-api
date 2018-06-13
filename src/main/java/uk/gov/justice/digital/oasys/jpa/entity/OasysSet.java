@@ -261,28 +261,26 @@ public class OasysSet {
     private String bcsSystemCreatedInd;
     @Column(name = "RECEPTION_DATE")
     private Time receptionDate;
-
-    @OneToOne
-    @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK", referencedColumnName = "OASYS_ASSESSMENT_GROUP_PK", nullable = false)
-    private OasysAssessmentGroup oasysAssessmentGroupPk;
+    @Column(name = "OASYS_ASSESSMENT_GROUP_PK")
+    private Long oasysAssessmentGroupPk;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "ASSESSMENT_STATUS_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "ASSESSMENT_STATUS_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "ASSESSMENT_STATUS_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "ASSESSMENT_STATUS_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement assessmentStatus;
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "ASSESSMENT_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "ASSESSMENT_TYPE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "ASSESSMENT_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "ASSESSMENT_TYPE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
 
     private RefElement assessmentType;
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "ASSESSOR_SERVICE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "ASSESSOR_SERVICE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "ASSESSOR_SERVICE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "ASSESSOR_SERVICE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement assessorServiceCat;
 
@@ -292,15 +290,15 @@ public class OasysSet {
     @OneToOne
 
     @JoinColumns({
-            @JoinColumn(name = "BCS_CARED_FOR_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "BCS_CARED_FOR_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "BCS_CARED_FOR_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "BCS_CARED_FOR_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement bcsCaredFor;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "COUNTERSIGNER_SERVICE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "COUNTERSIGNER_SERVICE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "COUNTERSIGNER_SERVICE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "COUNTERSIGNER_SERVICE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement countersignerService;
 
@@ -310,117 +308,117 @@ public class OasysSet {
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "CURRENT_LOCAL_AUTHORITY_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "CURRENT_LOCAL_AUTHORITY_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "CURRENT_LOCAL_AUTHORITY_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "CURRENT_LOCAL_AUTHORITY_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement currentLocalAuthority;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "DELETE_PSR_TEMPLATE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "DELETE_PSR_TEMPLATE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "DELETE_PSR_TEMPLATE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "DELETE_PSR_TEMPLATE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement deletePsrTemplate;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "DISCHARGE_LOCAL_AUTHORITY_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "DISCHARGE_LOCAL_AUTHORITY_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "DISCHARGE_LOCAL_AUTHORITY_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "DISCHARGE_LOCAL_AUTHORITY_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement dischargeLocalAuthority;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "ETHNIC_CATEGORY_CODE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "ETHNIC_CATEGORY_CODE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "ETHNIC_CATEGORY_CODE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "ETHNIC_CATEGORY_CODE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement ethnicCategoryCode;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "GENDER_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "GENDER_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "GENDER_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "GENDER_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement gender;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "LEVEL_HEALTHCARE_REQ_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "LEVEL_HEALTHCARE_REQ_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "LEVEL_HEALTHCARE_REQ_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "LEVEL_HEALTHCARE_REQ_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement levelHealthcareReq;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "NO_RM2000_REASON_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "NO_RM2000_REASON_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "NO_RM2000_REASON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "NO_RM2000_REASON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement noRm2000Reason;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "NO_SARA_REASON_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "NO_SARA_REASON_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "NO_SARA_REASON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "NO_SARA_REASON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement noSaraReason;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "OGP_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "OGP_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "OGP_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "OGP_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement ogpRiskRecon;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "OGRS3_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "OGRS3_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "OGRS3_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "OGRS3_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement ogrs3RiskRecon;
 
     @OneToOne
-    @JoinColumn(name = "ORIGINATING_AREAEST_CODE", referencedColumnName = "CT_AREA_EST_CODE")
+    @JoinColumn(name = "ORIGINATING_AREAEST_CODE", referencedColumnName = "CT_AREA_EST_CODE", insertable = false, updatable = false)
     private CtAreaEst originatingAreaEst;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "ORIGINATING_AREAEST_CODE", referencedColumnName = "CT_AREA_EST_CODE", nullable = false),
-            @JoinColumn(name = "ORIGINATING_DIVISION_CODE", referencedColumnName = "DIVISION_CODE", nullable = false),
+            @JoinColumn(name = "ORIGINATING_AREAEST_CODE", referencedColumnName = "CT_AREA_EST_CODE"),
+            @JoinColumn(name = "ORIGINATING_DIVISION_CODE", referencedColumnName = "DIVISION_CODE"),
             @JoinColumn(name = "ORIGINATING_TEAM_CODE", referencedColumnName = "TEAM_CODE")
     })
     private Team originatingTeam;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "OTHER_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "OTHER_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "OTHER_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "OTHER_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement otherRiskRecon;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "OVP_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "OVP_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "OVP_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "OVP_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement ovpRiskRecon;
 
-    @OneToOne
-    @JoinColumn(name = "PARENT_OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private OasysSet parentOasysSetPk;
+    @Column(name = "PARENT_OASYS_SET_PK")
+    private Long parentOasysSetPk;
+
     @OneToOne
     @JoinColumn(name = "PHYSICAL_LOCATION", referencedColumnName = "CT_AREA_EST_CODE")
     private CtAreaEst physicalLocation;
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "PREF_SPOKEN_LANGUAGE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "PREF_SPOKEN_LANGUAGE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "PREF_SPOKEN_LANGUAGE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "PREF_SPOKEN_LANGUAGE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement prefSpokenLanguage;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "PREF_WRITE_LANGUAGE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "PREF_WRITE_LANGUAGE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "PREF_WRITE_LANGUAGE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "PREF_WRITE_LANGUAGE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement prefWriteLanguage;
 
@@ -430,59 +428,58 @@ public class OasysSet {
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "PSR_TEMPLATE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "PSR_TEMPLATE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "PSR_TEMPLATE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "PSR_TEMPLATE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement psrTemplate;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "PURPOSE_ASSESSMENT_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "PURPOSE_ASSESSMENT_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "PURPOSE_ASSESSMENT_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "PURPOSE_ASSESSMENT_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement purposeAssessment;
 
     @OneToOne
-    @JoinColumn(name = "REF_ASS_VERSION_CODE", referencedColumnName = "REF_ASS_VERSION_CODE", nullable = false)
-    private RefAssVersion refAssVersionCode;
+    @JoinColumns({
+            @JoinColumn(name = "REF_ASS_VERSION_CODE", referencedColumnName = "REF_ASS_VERSION_CODE"),
+            @JoinColumn(name = "VERSION_NUMBER", referencedColumnName = "VERSION_NUMBER")
+    })
+    private RefAssVersion refAssVersion;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "RELEASE_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "RELEASE_TYPE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "RELEASE_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "RELEASE_TYPE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement releaseType;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "RELIGION_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "RELIGION_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "RELIGION_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "RELIGION_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement religion;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "ROSH_LEVEL_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "ROSH_LEVEL_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "ROSH_LEVEL_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "ROSH_LEVEL_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement roshLevel;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "SSP_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "SSP_TYPE_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "SSP_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "SSP_TYPE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement sspType;
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(name = "TIER_LEVEL_CAT", referencedColumnName = "REF_CATEGORY_CODE", nullable = false),
-            @JoinColumn(name = "TIER_LEVEL_ELM", referencedColumnName = "REF_ELEMENT_CODE", nullable = false)
+            @JoinColumn(name = "TIER_LEVEL_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "TIER_LEVEL_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement tierLevel;
-
-    @OneToOne
-    @JoinColumn(name = "VERSION_NUMBER", referencedColumnName = "VERSION_NUMBER", nullable = false)
-    private RefAssVersion versionNumber;
 
 }

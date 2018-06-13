@@ -20,4 +20,4 @@ management:
     enabled: false
 
 logging.level.uk.gov: INFO
-
+logging.level.org.hibernate: INFO

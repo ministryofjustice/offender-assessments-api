@@ -12,10 +12,9 @@ import java.util.Objects;
 
 @Data
 @Entity
+@Table(name = "TEAM")
 @IdClass(TeamPK.class)
 public class Team {
-    @Column(name = "TEAM_UK")
-    private Long teamUk;
     @Id
     @Column(name = "CT_AREA_EST_CODE")
     private String ctAreaEstCode;
@@ -25,6 +24,8 @@ public class Team {
     @Id
     @Column(name = "TEAM_CODE")
     private String teamCode;
+    @Column(name = "TEAM_UK")
+    private Long teamUk;
     @Column(name = "TEAM_NAME")
     private String teamName;
     @Column(name = "CONTACT_NUMBER")

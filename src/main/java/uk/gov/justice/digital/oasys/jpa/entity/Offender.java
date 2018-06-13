@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "OFFENDER")
 public class Offender {
     @Id
     @Column(name = "OFFENDER_PK")
@@ -175,7 +176,7 @@ public class Offender {
     @Column(name = "HOST_CPA")
     private String hostCpa;
     @OneToMany
-    @JoinColumn(name = "OFFENDER_PK", referencedColumnName = "OFFENDER_PK", nullable = false)
+    @JoinColumn(name = "OFFENDER_PK", referencedColumnName = "OFFENDER_PK")
     private List<OasysAssessmentGroup> oasysAssessmentGroups;
 
 }

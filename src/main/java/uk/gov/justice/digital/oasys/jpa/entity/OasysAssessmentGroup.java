@@ -31,7 +31,7 @@ public class OasysAssessmentGroup {
     private String lastupdUser;
 
     @OneToMany
-    @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK")
+    @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK", referencedColumnName = "OASYS_ASSESSMENT_GROUP_PK")
     private List<OasysSet> oasysSets;
 
 }
