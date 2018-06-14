@@ -1,14 +1,25 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "OASYS_SET")
 public class OasysSet {
@@ -156,7 +167,7 @@ public class OasysSet {
     @Column(name = "REQUESTED_BY")
     private String requestedBy;
     @Column(name = "DATE_COMPLETED")
-    private Time dateCompleted;
+    private Timestamp dateCompleted;
     @Column(name = "DATE_ASSESSMENT_REQST")
     private Time dateAssessmentReqst;
     @Column(name = "DATE_REPORT_REQST")
@@ -376,7 +387,7 @@ public class OasysSet {
             @JoinColumn(name = "OGRS3_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
             @JoinColumn(name = "OGRS3_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
-    private RefElement ogrs3RiskRecon;
+        private RefElement ogrs3RiskRecon;
 
     @OneToOne
     @JoinColumn(name = "ORIGINATING_AREAEST_CODE", referencedColumnName = "CT_AREA_EST_CODE", insertable = false, updatable = false)
