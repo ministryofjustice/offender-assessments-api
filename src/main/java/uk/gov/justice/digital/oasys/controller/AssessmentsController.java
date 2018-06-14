@@ -29,7 +29,7 @@ public class AssessmentsController {
     }
 
 
-    @RequestMapping(path = "/offenders/crn/{crn}/ogrs", method = RequestMethod.GET)
+    @RequestMapping(path = "/offenders/crn/{crn}/ogrs3", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})

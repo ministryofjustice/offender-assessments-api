@@ -93,7 +93,7 @@ public class AssessmentsControllerTest {
     public void canGetOgrsForOffenderCRNs() {
         Ogrs[] ogrss = given()
                 .when()
-                .get("/offenders/crn/{0}/ogrs", "crn1")
+                .get("/offenders/crn/{0}/ogrs3", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -107,7 +107,7 @@ public class AssessmentsControllerTest {
     public void getOgrsForUnknownOffenderGivesNotFound() {
         given()
                 .when()
-                .get("/offenders/crn/{0}/ogrs", "crn2")
+                .get("/offenders/crn/{0}/ogrs3", "crn2")
                 .then()
                 .statusCode(404);
     }

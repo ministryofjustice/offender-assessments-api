@@ -31,7 +31,6 @@ public class OgrsService {
                 .flatMap(
                         oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets()
                                 .stream()
-//                                .sorted(Comparator.comparing(OasysSet::getDateCompleted, Comparator.nullsLast(Comparator.re())).reversed()))
                                 .map(oasysSet -> Ogrs.builder()
                                         .oasysSetId(oasysSet.getOasysSetPk())
                                         .oasysAssessmentGroupId(oasysAssessmentGroup.getOasysAssessmentGroupPk())
