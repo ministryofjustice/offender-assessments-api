@@ -185,39 +185,39 @@ public class OasysSet {
     @Column(name = "CELL_LOCATION")
     private String cellLocation;
     @Column(name = "OGP_ST_WESC")
-    private Long ogpStWesc;
+    private BigDecimal ogpStWesc;
     @Column(name = "OGP_DY_WESC")
-    private Long ogpDyWesc;
+    private BigDecimal ogpDyWesc;
     @Column(name = "OGP_TOT_WESC")
-    private Long ogpTotWesc;
+    private BigDecimal ogpTotWesc;
     @Column(name = "OVP_ST_WESC")
-    private Long ovpStWesc;
+    private BigDecimal ovpStWesc;
     @Column(name = "OVP_DY_WESC")
-    private Long ovpDyWesc;
+    private BigDecimal ovpDyWesc;
     @Column(name = "OVP_TOT_WESC")
-    private Long ovpTotWesc;
+    private BigDecimal ovpTotWesc;
     @Column(name = "OGRS3_1YEAR")
     private BigDecimal ogrs31Year;
     @Column(name = "OGRS3_2YEAR")
     private BigDecimal ogrs32Year;
     @Column(name = "OGP_1YEAR")
-    private Long ogp1Year;
+    private BigDecimal ogp1Year;
     @Column(name = "OGP_2YEAR")
-    private Long ogp2Year;
+    private BigDecimal ogp2Year;
     @Column(name = "OVP_1YEAR")
-    private Long ovp1Year;
+    private BigDecimal ovp1Year;
     @Column(name = "OVP_2YEAR")
-    private Long ovp2Year;
+    private BigDecimal ovp2Year;
     @Column(name = "OVP_PREV_WESC")
-    private Long ovpPrevWesc;
+    private BigDecimal ovpPrevWesc;
     @Column(name = "OVP_VIO_WESC")
-    private Long ovpVioWesc;
+    private BigDecimal ovpVioWesc;
     @Column(name = "OVP_NON_VIO_WESC")
-    private Long ovpNonVioWesc;
+    private BigDecimal ovpNonVioWesc;
     @Column(name = "OVP_AGE_WESC")
-    private Long ovpAgeWesc;
+    private BigDecimal ovpAgeWesc;
     @Column(name = "OVP_SEX_WESC")
-    private Long ovpSexWesc;
+    private BigDecimal ovpSexWesc;
     @Column(name = "LOW_SCORE_NEED_ATTN_REASON")
     private String lowScoreNeedAttnReason;
     @Column(name = "COURT_OTHER_TEXT")

@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.gov.justice.digital.oasys.api.Ogp;
 import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
@@ -76,14 +77,43 @@ public class AssessmentsControllerTest {
                         .oasysSetPk(1L)
                         .ogrs31Year(BigDecimal.ONE)
                         .ogrs32Year(BigDecimal.TEN)
+                        .ogp1Year(BigDecimal.ONE)
+                        .ogp2Year(BigDecimal.TEN)
+                        .ogpDyWesc(BigDecimal.ONE)
+                        .ogpStWesc(BigDecimal.TEN)
+                        .ogpTotWesc(BigDecimal.ONE)
+                        .ovpStWesc(BigDecimal.TEN)
+                        .ovpDyWesc(BigDecimal.ONE)
+                        .ovpTotWesc(BigDecimal.TEN)
+                        .ovp1Year(BigDecimal.ONE)
+                        .ovp2Year(BigDecimal.TEN)
+                        .ovpPrevWesc(BigDecimal.ONE)
+                        .ovpVioWesc(BigDecimal.TEN)
+                        .ovpNonVioWesc(BigDecimal.ONE)
+                        .ovpAgeWesc(BigDecimal.TEN)
+                        .ovpSexWesc(BigDecimal.ONE)
                         .build(),
                 OasysSet.builder()
                         .oasysSetPk(2L)
                         .ogrs31Year(BigDecimal.TEN)
                         .ogrs32Year(BigDecimal.ONE)
+                        .ogp1Year(BigDecimal.TEN)
+                        .ogp2Year(BigDecimal.ONE)
+                        .ogpDyWesc(BigDecimal.TEN)
+                        .ogpStWesc(BigDecimal.ONE)
+                        .ogpTotWesc(BigDecimal.TEN)
+                        .ovpStWesc(BigDecimal.ONE)
+                        .ovpDyWesc(BigDecimal.TEN)
+                        .ovpTotWesc(BigDecimal.ONE)
+                        .ovp1Year(BigDecimal.TEN)
+                        .ovp2Year(BigDecimal.ONE)
+                        .ovpPrevWesc(BigDecimal.TEN)
+                        .ovpVioWesc(BigDecimal.ONE)
+                        .ovpNonVioWesc(BigDecimal.TEN)
+                        .ovpAgeWesc(BigDecimal.ONE)
+                        .ovpSexWesc(BigDecimal.TEN)
                         .build());
     }
-
 
     @After
     public void tearDown() {
@@ -111,4 +141,51 @@ public class AssessmentsControllerTest {
                 .then()
                 .statusCode(404);
     }
+
+    @Test
+    public void canGetOgpForOffenderCRNs() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/crn/{0}/ogp", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgpForUnknownOffenderGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/crn/{0}/ogp", "crn2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOvpForOffenderCRNs() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/crn/{0}/ovp", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOvpForUnknownOffenderGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/crn/{0}/ovp", "crn2")
+                .then()
+                .statusCode(404);
+    }
+
 }

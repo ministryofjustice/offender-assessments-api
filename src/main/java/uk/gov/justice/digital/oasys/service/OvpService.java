@@ -2,7 +2,9 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.justice.digital.oasys.api.Ogp;
 import uk.gov.justice.digital.oasys.api.Ogrs;
+import uk.gov.justice.digital.oasys.api.Ovp;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
@@ -14,16 +16,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class OgrsService {
+public class OvpService {
 
     private final OffenderRepository offenderRepository;
 
     @Autowired
-    public OgrsService(OffenderRepository offenderRepository) {
+    public OvpService(OffenderRepository offenderRepository) {
         this.offenderRepository = offenderRepository;
     }
 
-    public Optional<List<Ogrs>> getOgrsForOffenderCRN(String crn) {
+    public Optional<List<Ovp>> getOvpForOffenderCRN(String crn) {
         Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
 
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
@@ -31,23 +33,32 @@ public class OgrsService {
                 .flatMap(
                         oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets()
                                 .stream()
-                                .map(oasysSet -> Ogrs.builder()
+                                .map(oasysSet -> Ovp.builder()
                                         .oasysSetId(oasysSet.getOasysSetPk())
                                         .oasysAssessmentGroupId(oasysAssessmentGroup.getOasysAssessmentGroupPk())
-                                        .ogrs3_1_year(oasysSet.getOgrs31Year())
-                                        .ogrs3_2_year(oasysSet.getOgrs32Year())
-                                        .reconvictionRiskSummary(Optional.ofNullable(oasysSet.getOgrs3RiskRecon())
+                                        .ovpStaticWeightedScore(oasysSet.getOvpStWesc())
+                                        .ovpDynamicWeightedScore(oasysSet.getOvpDyWesc())
+                                        .ovpTotalWeightedScore(oasysSet.getOvpTotWesc())
+                                        .ovp1Year(oasysSet.getOvp1Year())
+                                        .ovp2Year(oasysSet.getOvp2Year())
+                                        .ovpRiskSummary(Optional.ofNullable(oasysSet.getOvpRiskRecon())
                                                 .map(RefElement::getRefElementShortDesc)
                                                 .orElse(null))
-                                        .reconvictionRisk(Optional.ofNullable(oasysSet.getOgrs3RiskRecon())
+                                        .ovpRisk(Optional.ofNullable(oasysSet.getOvpRiskRecon())
                                                 .map(RefElement::getRefElementDesc)
                                                 .orElse(null))
+                                        .ovpPreviousWeightedScore(oasysSet.getOvpPrevWesc())
+                                        .ovpViolentWeightedScore(oasysSet.getOvpVioWesc())
+                                        .ovpNonViolentWeightedScore(oasysSet.getOvpNonVioWesc())
+                                        .ovpAgeWeightedScore(oasysSet.getOvpAgeWesc())
+                                        .ovpSexWeightedScore(oasysSet.getOvpSexWesc())
                                         .completedDate(Optional.ofNullable(oasysSet.getDateCompleted()).map(Timestamp::toLocalDateTime).orElse(null))
                                         .assessmentCompleted(oasysSet.getDateCompleted() != null)
                                         .assessmentVoided(oasysSet.getAssessmentVoidedDate() != null)
                                         .build()))
-                .sorted(Comparator.comparing(Ogrs::getCompletedDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                .sorted(Comparator.comparing(Ovp::getCompletedDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
                 .collect(Collectors.toList()));
     }
 
 }
+

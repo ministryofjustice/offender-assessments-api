@@ -2,6 +2,7 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.justice.digital.oasys.api.Ogp;
 import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
@@ -14,16 +15,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class OgrsService {
+public class OgpService {
 
     private final OffenderRepository offenderRepository;
 
     @Autowired
-    public OgrsService(OffenderRepository offenderRepository) {
+    public OgpService(OffenderRepository offenderRepository) {
         this.offenderRepository = offenderRepository;
     }
 
-    public Optional<List<Ogrs>> getOgrsForOffenderCRN(String crn) {
+    public Optional<List<Ogp>> getOgpForOffenderCRN(String crn) {
         Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
 
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
@@ -31,23 +32,27 @@ public class OgrsService {
                 .flatMap(
                         oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets()
                                 .stream()
-                                .map(oasysSet -> Ogrs.builder()
+                                .map(oasysSet -> Ogp.builder()
                                         .oasysSetId(oasysSet.getOasysSetPk())
                                         .oasysAssessmentGroupId(oasysAssessmentGroup.getOasysAssessmentGroupPk())
-                                        .ogrs3_1_year(oasysSet.getOgrs31Year())
-                                        .ogrs3_2_year(oasysSet.getOgrs32Year())
-                                        .reconvictionRiskSummary(Optional.ofNullable(oasysSet.getOgrs3RiskRecon())
+                                        .ogp1Year(oasysSet.getOgp1Year())
+                                        .ogp2Year(oasysSet.getOgp2Year())
+                                        .ogpDynamicWeightedScore(oasysSet.getOgpDyWesc())
+                                        .ogpStaticWeightedScore(oasysSet.getOgpStWesc())
+                                        .ogpTotalWeightedScore(oasysSet.getOgpTotWesc())
+                                        .ogpRiskSummary(Optional.ofNullable(oasysSet.getOgpRiskRecon())
                                                 .map(RefElement::getRefElementShortDesc)
                                                 .orElse(null))
-                                        .reconvictionRisk(Optional.ofNullable(oasysSet.getOgrs3RiskRecon())
+                                        .ogpRisk(Optional.ofNullable(oasysSet.getOgpRiskRecon())
                                                 .map(RefElement::getRefElementDesc)
                                                 .orElse(null))
                                         .completedDate(Optional.ofNullable(oasysSet.getDateCompleted()).map(Timestamp::toLocalDateTime).orElse(null))
                                         .assessmentCompleted(oasysSet.getDateCompleted() != null)
                                         .assessmentVoided(oasysSet.getAssessmentVoidedDate() != null)
                                         .build()))
-                .sorted(Comparator.comparing(Ogrs::getCompletedDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                .sorted(Comparator.comparing(Ogp::getCompletedDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
                 .collect(Collectors.toList()));
     }
 
 }
+
