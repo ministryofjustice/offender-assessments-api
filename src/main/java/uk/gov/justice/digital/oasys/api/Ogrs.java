@@ -13,8 +13,8 @@ public class Ogrs {
     private Long oasysAssessmentGroupId;
     private BigDecimal ogrs3_1_year;
     private BigDecimal ogrs3_2_year;
-    private String riskSummary;
-    private String risk;
+    private String reconvictionRiskSummary;
+    private String reconvictionRisk;
     private LocalDateTime completedDate;
     private boolean assessmentVoided;
     private boolean assessmentCompleted;
