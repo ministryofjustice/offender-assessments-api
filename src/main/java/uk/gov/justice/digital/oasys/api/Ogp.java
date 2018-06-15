@@ -8,13 +8,14 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class Ogrs {
+public class Ogp {
     private Long oasysSetId;
     private Long oasysAssessmentGroupId;
-    private BigDecimal ogrs3_1_year;
-    private BigDecimal ogrs3_2_year;
-    private String riskSummary;
-    private String risk;
+    private BigDecimal ogpStWesc;
+    private BigDecimal ogpDyWesc;
+    private BigDecimal ogpTotWesc;
+    private BigDecimal ogp1Year;
+    private BigDecimal ogp2Year;
     private LocalDateTime completedDate;
     private boolean assessmentVoided;
     private boolean assessmentCompleted;

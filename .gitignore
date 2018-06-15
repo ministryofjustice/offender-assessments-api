@@ -61,3 +61,4 @@ dist
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 /offender-assessments-api.iml
+*.iml

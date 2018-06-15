@@ -185,11 +185,11 @@ public class OasysSet {
     @Column(name = "CELL_LOCATION")
     private String cellLocation;
     @Column(name = "OGP_ST_WESC")
-    private Long ogpStWesc;
+    private BigDecimal ogpStWesc;
     @Column(name = "OGP_DY_WESC")
-    private Long ogpDyWesc;
+    private BigDecimal ogpDyWesc;
     @Column(name = "OGP_TOT_WESC")
-    private Long ogpTotWesc;
+    private BigDecimal ogpTotWesc;
     @Column(name = "OVP_ST_WESC")
     private Long ovpStWesc;
     @Column(name = "OVP_DY_WESC")
@@ -201,9 +201,9 @@ public class OasysSet {
     @Column(name = "OGRS3_2YEAR")
     private BigDecimal ogrs32Year;
     @Column(name = "OGP_1YEAR")
-    private Long ogp1Year;
+    private BigDecimal ogp1Year;
     @Column(name = "OGP_2YEAR")
-    private Long ogp2Year;
+    private BigDecimal ogp2Year;
     @Column(name = "OVP_1YEAR")
     private Long ovp1Year;
     @Column(name = "OVP_2YEAR")

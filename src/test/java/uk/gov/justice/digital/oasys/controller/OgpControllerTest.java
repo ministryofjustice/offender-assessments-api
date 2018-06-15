@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.gov.justice.digital.oasys.api.Ogp;
 import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
@@ -35,7 +36,7 @@ import static org.mockito.Matchers.eq;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("dev")
-public class AssessmentsControllerTest {
+public class OgpControllerTest {
 
     @LocalServerPort
     int port;
@@ -74,13 +75,19 @@ public class AssessmentsControllerTest {
     private List<OasysSet> someOasysSets() {
         return ImmutableList.of(OasysSet.builder()
                         .oasysSetPk(1L)
-                        .ogrs31Year(BigDecimal.ONE)
-                        .ogrs32Year(BigDecimal.TEN)
+                        .ogp1Year(BigDecimal.ONE)
+                        .ogp2Year(BigDecimal.TEN)
+                        .ogpDyWesc(BigDecimal.ONE)
+                        .ogpStWesc(BigDecimal.TEN)
+                        .ogpTotWesc(BigDecimal.ONE)
                         .build(),
                 OasysSet.builder()
                         .oasysSetPk(2L)
-                        .ogrs31Year(BigDecimal.TEN)
-                        .ogrs32Year(BigDecimal.ONE)
+                        .ogp1Year(BigDecimal.TEN)
+                        .ogp2Year(BigDecimal.ONE)
+                        .ogpDyWesc(BigDecimal.TEN)
+                        .ogpStWesc(BigDecimal.ONE)
+                        .ogpTotWesc(BigDecimal.TEN)
                         .build());
     }
 
@@ -90,24 +97,24 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetOgrsForOffenderCRNs() {
-        Ogrs[] ogrss = given()
+    public void canGetOgpForOffenderCRNs() {
+        Ogp[] ogps = given()
                 .when()
-                .get("/offenders/crn/{0}/ogrs3", "crn1")
+                .get("/offenders/crn/{0}/ogp", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Ogrs[].class);
+                .as(Ogp[].class);
 
-        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
-    public void getOgrsForUnknownOffenderGivesNotFound() {
+    public void getOgpForUnknownOffenderGivesNotFound() {
         given()
                 .when()
-                .get("/offenders/crn/{0}/ogrs3", "crn2")
+                .get("/offenders/crn/{0}/ogp", "crn2")
                 .then()
                 .statusCode(404);
     }

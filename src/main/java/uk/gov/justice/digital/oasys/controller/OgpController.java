@@ -21,31 +21,12 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @Api(description = "Offender Assessment resources", tags = "Offender ASSESSMENTS")
-public class AssessmentsController {
-
-    private final OgrsService ogrsService;
-
-    @Autowired
-    public AssessmentsController(OgrsService ogrsService) {
-        this.ogrsService = ogrsService;
-    }
-
-
-    @RequestMapping(path = "/offenders/crn/{crn}/ogrs3", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<Ogrs>> getOgrsScoreForOffenderCrn(@PathVariable("crn") String crn) {
-
-        return ogrsService.getOgrsForOffenderCRN(crn)
-                .map(ogrs -> new ResponseEntity<>(ogrs, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
+public class OgpController {
 
     private final OgpService ogpService;
 
     @Autowired
-    public AssessmentsController(OgpService ogpService) {
+    public OgpController(OgpService ogpService) {
         this.ogpService = ogpService;
     }
 
