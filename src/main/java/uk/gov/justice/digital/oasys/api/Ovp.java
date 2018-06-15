@@ -8,16 +8,21 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class Ogp {
+public class Ovp {
     private Long oasysSetId;
     private Long oasysAssessmentGroupId;
-    private BigDecimal ogpStWesc;
-    private BigDecimal ogpDyWesc;
-    private BigDecimal ogpTotWesc;
-    private BigDecimal ogp1Year;
-    private BigDecimal ogp2Year;
-    private String riskSummary;
-    private String risk;
+    private BigDecimal ovpStaticWeightedScore;
+    private BigDecimal ovpDynamicWeightedScore;
+    private BigDecimal ovpTotalWeightedScore;
+    private BigDecimal ovp1Year;
+    private BigDecimal ovp2Year;
+    private String ovpRiskSummary;
+    private String ovpRisk;
+    private BigDecimal ovpPreviousWeightedScore;
+    private BigDecimal ovpViolentWeightedScore;
+    private BigDecimal ovpNonViolentWeightedScore;
+    private BigDecimal ovpAgeWeightedScore;
+    private BigDecimal ovpSexWeightedScore;
     private LocalDateTime completedDate;
     private boolean assessmentVoided;
     private boolean assessmentCompleted;

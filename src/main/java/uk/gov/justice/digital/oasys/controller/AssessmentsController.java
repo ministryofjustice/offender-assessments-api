@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.Ogp;
 import uk.gov.justice.digital.oasys.api.Ogrs;
+import uk.gov.justice.digital.oasys.api.Ovp;
 import uk.gov.justice.digital.oasys.service.OgpService;
 import uk.gov.justice.digital.oasys.service.OgrsService;
+import uk.gov.justice.digital.oasys.service.OvpService;
 
 import java.util.List;
 
@@ -24,10 +26,14 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class AssessmentsController {
 
     private final OgrsService ogrsService;
+    private final OgpService ogpService;
+    private final OvpService ovpService;
 
     @Autowired
-    public AssessmentsController(OgrsService ogrsService) {
+    public AssessmentsController(OgrsService ogrsService, OgpService ogpService, OvpService ovpService) {
         this.ogrsService = ogrsService;
+        this.ogpService = ogpService;
+        this.ovpService = ovpService;
     }
 
 
@@ -39,6 +45,28 @@ public class AssessmentsController {
 
         return ogrsService.getOgrsForOffenderCRN(crn)
                 .map(ogrs -> new ResponseEntity<>(ogrs, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/crn/{crn}/ogp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogp>> getOgpScoreForOffenderCrn(@PathVariable("crn") String crn) {
+
+        return ogpService.getOgpForOffenderCRN(crn)
+                .map(ogp -> new ResponseEntity<>(ogp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/crn/{crn}/ovp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ovp>> getOvpScoreForOffenderCrn(@PathVariable("crn") String crn) {
+
+        return ovpService.getOvpForOffenderCRN(crn)
+                .map(ovp -> new ResponseEntity<>(ovp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 }

@@ -3,10 +3,13 @@ package uk.gov.justice.digital.oasys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.Ogp;
+import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,13 +37,20 @@ public class OgpService {
                                         .oasysAssessmentGroupId(oasysAssessmentGroup.getOasysAssessmentGroupPk())
                                         .ogp1Year(oasysSet.getOgp1Year())
                                         .ogp2Year(oasysSet.getOgp2Year())
-                                        .ogpDyWesc(oasysSet.getOgpDyWesc())
-                                        .ogpStWesc(oasysSet.getOgpStWesc())
-                                        .ogpTotWesc(oasysSet.getOgpTotWesc())
+                                        .ogpDynamicWeightedScore(oasysSet.getOgpDyWesc())
+                                        .ogpStaticWeightedScore(oasysSet.getOgpStWesc())
+                                        .ogpTotalWeightedScore(oasysSet.getOgpTotWesc())
+                                        .ogpRiskSummary(Optional.ofNullable(oasysSet.getOgpRiskRecon())
+                                                .map(RefElement::getRefElementShortDesc)
+                                                .orElse(null))
+                                        .ogpRisk(Optional.ofNullable(oasysSet.getOgpRiskRecon())
+                                                .map(RefElement::getRefElementDesc)
+                                                .orElse(null))
                                         .completedDate(Optional.ofNullable(oasysSet.getDateCompleted()).map(Timestamp::toLocalDateTime).orElse(null))
                                         .assessmentCompleted(oasysSet.getDateCompleted() != null)
                                         .assessmentVoided(oasysSet.getAssessmentVoidedDate() != null)
                                         .build()))
+                .sorted(Comparator.comparing(Ogp::getCompletedDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
                 .collect(Collectors.toList()));
     }
 

@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 public class Ogp {
     private Long oasysSetId;
     private Long oasysAssessmentGroupId;
-    private BigDecimal ogpStWesc;
-    private BigDecimal ogpDyWesc;
-    private BigDecimal ogpTotWesc;
+    private BigDecimal ogpStaticWeightedScore;
+    private BigDecimal ogpDynamicWeightedScore;
+    private BigDecimal ogpTotalWeightedScore;
     private BigDecimal ogp1Year;
     private BigDecimal ogp2Year;
+    private String ogpRiskSummary;
+    private String ogpRisk;
     private LocalDateTime completedDate;
     private boolean assessmentVoided;
     private boolean assessmentCompleted;
