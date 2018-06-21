@@ -10,11 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Builder
@@ -295,7 +297,7 @@ public class OasysSet {
             @JoinColumn(name = "ASSESSOR_SERVICE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
             @JoinColumn(name = "ASSESSOR_SERVICE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
-    private RefElement assessorServiceCat;
+    private RefElement assessorService;
 
     @OneToOne
     @JoinColumn(name = "ASSESSOR_USER", referencedColumnName = "OASYS_USER_CODE")
@@ -494,5 +496,9 @@ public class OasysSet {
             @JoinColumn(name = "TIER_LEVEL_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
     private RefElement tierLevel;
+
+    @OneToMany
+    @JoinColumn(name = "OASYS_SET_PK")
+    private List<OasysSection> oasysSections;
 
 }
