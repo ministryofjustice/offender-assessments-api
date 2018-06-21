@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.sql.Time;
 import java.util.List;
@@ -20,12 +22,12 @@ public class OasysSection {
     private Long oasysSectionPk;
     @Column(name = "OASYS_SET_PK")
     private Long oasysSetPk;
-    @Column(name = "REF_ASS_VERSION_CODE")
-    private String refAssVersionCode;
-    @Column(name = "VERSION_NUMBER")
-    private String versionNumber;
-    @Column(name = "REF_SECTION_CODE")
-    private String refSectionCode;
+    //    @Column(name = "REF_ASS_VERSION_CODE")
+//    private String refAssVersionCode;
+//    @Column(name = "VERSION_NUMBER")
+//    private String versionNumber;
+//    @Column(name = "REF_SECTION_CODE")
+//    private String refSectionCode;
     @Column(name = "SECTION_STATUS_ELM")
     private String sectionStatusElm;
     @Column(name = "SECTION_STATUS_CAT")
@@ -74,5 +76,12 @@ public class OasysSection {
     @OneToMany
     @JoinColumn(name = "OASYS_SECTION_PK")
     private List<OasysQuestion> oasysQuestions;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "REF_ASS_VERSION_CODE"),
+            @JoinColumn(name = "VERSION_NUMBER"),
+            @JoinColumn(name = "REF_SECTION_CODE")})
+    private RefSection refSection;
 
 }
