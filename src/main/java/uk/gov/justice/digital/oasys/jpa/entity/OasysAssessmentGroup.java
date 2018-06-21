@@ -40,6 +40,8 @@ public class OasysAssessmentGroup {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+    @Column(name = "HISTORIC_STATUS_ELM")
+    private String historicStatusELm;
 
     @OneToMany
     @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK", referencedColumnName = "OASYS_ASSESSMENT_GROUP_PK")

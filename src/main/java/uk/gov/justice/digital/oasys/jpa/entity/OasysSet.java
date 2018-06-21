@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -19,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Data
+@ToString(exclude = "group")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -276,8 +279,6 @@ public class OasysSet {
     private String bcsSystemCreatedInd;
     @Column(name = "RECEPTION_DATE")
     private Time receptionDate;
-    @Column(name = "OASYS_ASSESSMENT_GROUP_PK")
-    private Long oasysAssessmentGroupPk;
 
     @OneToOne
     @JoinColumns({
@@ -500,5 +501,9 @@ public class OasysSet {
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK")
     private List<OasysSection> oasysSections;
+
+    @ManyToOne
+    @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK")
+    private OasysAssessmentGroup group;
 
 }
