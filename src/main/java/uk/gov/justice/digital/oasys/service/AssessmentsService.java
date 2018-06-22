@@ -40,7 +40,7 @@ public class AssessmentsService {
                         oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream())
                                 .map(oasysSet -> Assessment.builder()
                                         .createdDateTime(typesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
-                                        .assessmentType(oasysSet.getAssessmentType().getRefElementShortDesc())
+                                        .assessmentType(oasysSet.getAssessmentType().getRefElementCode())
                                         .assessmentVersion(assessmentVersionOf(oasysSet.getRefAssVersion()))
                                         .completed(oasysSet.getDateCompleted() != null)
                                         .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))

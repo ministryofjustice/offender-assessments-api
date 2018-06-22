@@ -17,11 +17,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.gov.justice.digital.oasys.api.Assessment;
 import uk.gov.justice.digital.oasys.api.Ogp;
 import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
 import java.math.BigDecimal;
@@ -74,6 +76,7 @@ public class AssessmentsControllerTest {
 
     private List<OasysSet> someOasysSets() {
         return ImmutableList.of(OasysSet.builder()
+                        .assessmentType(assessmentType("oasys"))
                         .oasysSetPk(1L)
                         .ogrs31Year(BigDecimal.ONE)
                         .ogrs32Year(BigDecimal.TEN)
@@ -94,6 +97,7 @@ public class AssessmentsControllerTest {
                         .ovpSexWesc(BigDecimal.ONE)
                         .build(),
                 OasysSet.builder()
+                        .assessmentType(assessmentType("sara"))
                         .oasysSetPk(2L)
                         .ogrs31Year(BigDecimal.TEN)
                         .ogrs32Year(BigDecimal.ONE)
@@ -113,6 +117,10 @@ public class AssessmentsControllerTest {
                         .ovpAgeWesc(BigDecimal.ONE)
                         .ovpSexWesc(BigDecimal.TEN)
                         .build());
+    }
+
+    private RefElement assessmentType(String type) {
+        return RefElement.builder().refElementCode(type).build();
     }
 
     @After
@@ -188,18 +196,35 @@ public class AssessmentsControllerTest {
                 .statusCode(404);
     }
 
-//    @Test
-//    public void canGetAssessmentsForOffenderCRN() {
-//        Assessment[] assessments = given()
-//                .when()
-//                .get("/offenders/crn/{0}/assessments", "crn1")
-//                .then()
-//                .statusCode(200)
-//                .extract()
-//                .body()
-//                .as(Assessment[].class);
-//
-//        assertThat(assessments).isNotEmpty();
-//    }
+    @Test
+    public void canGetAssessmentsForOffenderCRN() {
+        Assessment[] assessments = given()
+                .when()
+                .get("/offenders/crn/{0}/assessments", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).hasSize(2);
+    }
+
+    @Test
+    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentType() {
+        Assessment[] assessments = given()
+                .when()
+                .param("assessmentType", "oasys")
+                .get("/offenders/crn/{0}/assessments", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).extracting("assessmentType").containsOnly("oasys");
+    }
+
+    //TODO: More filter tests like the one above
 
 }

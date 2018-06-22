@@ -10,7 +10,7 @@ public class AssessmentFilters {
 
     public static final BiFunction<String, Stream<OasysSet>, Stream<OasysSet>> byAssessmentType =
             (type, oasysSets) -> oasysSets
-                    .filter(set -> set.getRefAssVersion().getRefAssVersionCode().equals(type));
+                    .filter(set -> set.getAssessmentType().getRefElementCode().equals(type));
 
     public static final BiFunction<String, Stream<OasysSet>, Stream<OasysSet>> byGroupStatus =
             (groupStatus, oasysSets) -> oasysSets

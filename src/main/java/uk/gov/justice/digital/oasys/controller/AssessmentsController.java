@@ -109,7 +109,7 @@ public class AssessmentsController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<List<Assessment>> getAssessmentsForOffenderCrn(@PathVariable("crn") String crn,
                                                                          @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                         @RequestParam("type") Optional<String> filterAssessmentType,
+                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
                                                                          @RequestParam("voided") Optional<Boolean> filterVoided,
                                                                          @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
