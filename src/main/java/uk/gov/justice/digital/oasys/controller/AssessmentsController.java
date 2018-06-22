@@ -47,7 +47,6 @@ public class AssessmentsController {
         this.assessmentsService = assessmentsService;
     }
 
-
     @RequestMapping(path = "/offenders/crn/{crn}/ogrs3", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
