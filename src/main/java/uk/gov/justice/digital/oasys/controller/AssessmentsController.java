@@ -35,7 +35,7 @@ public class AssessmentsController {
         this.ogrsService = ogrsService;
         this.ogpService = ogpService;
         this.ovpService = ovpService;
-        this.assessmentService = assessmentsService
+        this.assessmentsService = assessmentsService
     }
 
 
