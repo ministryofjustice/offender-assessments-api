@@ -258,7 +258,7 @@ public class OasysSet {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private Timestamp createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")

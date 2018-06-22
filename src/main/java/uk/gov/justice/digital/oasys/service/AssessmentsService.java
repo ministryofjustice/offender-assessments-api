@@ -2,12 +2,15 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.Ovp;
+import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.AssessmentVersion;
+import uk.gov.justice.digital.oasys.api.Section;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
-import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
+import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
+import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 
-import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +20,15 @@ import java.util.stream.Collectors;
 public class AssessmentsService {
 
     private final OffenderRepository offenderRepository;
+    private final TypesTransformer typesTransformer;
 
     @Autowired
-    public AssessmentsService(OffenderRepository offenderRepository) {
+    public AssessmentsService(OffenderRepository offenderRepository, TypesTransformer typesTransformer) {
         this.offenderRepository = offenderRepository;
+        this.typesTransformer = typesTransformer;
     }
 
-    public Optional<List<Ovp>> getOvpForOffenderCRN(String crn) {
+    public Optional<List<Assessment>> getAssessmentsForOffenderCRN(String crn) {
         Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
 
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
@@ -31,31 +36,41 @@ public class AssessmentsService {
                 .flatMap(
                         oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets()
                                 .stream()
-                                .map(oasysSet -> Ovp.builder()
+                                .map(oasysSet -> Assessment.builder()
+                                        .createdDateTime(typesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
+                                        .assessmentType(oasysSet.getAssessmentType().getRefElementShortDesc())
+                                        .assessmentVersion(assessmentVersionOf(oasysSet.getRefAssVersion()))
+                                        .completed(oasysSet.getDateCompleted() != null)
+                                        .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
                                         .oasysSetId(oasysSet.getOasysSetPk())
-                                        .oasysAssessmentGroupId(oasysAssessmentGroup.getOasysAssessmentGroupPk())
-                                        .ovpStaticWeightedScore(oasysSet.getOvpStWesc())
-                                        .ovpDynamicWeightedScore(oasysSet.getOvpDyWesc())
-                                        .ovpTotalWeightedScore(oasysSet.getOvpTotWesc())
-                                        .ovp1Year(oasysSet.getOvp1Year())
-                                        .ovp2Year(oasysSet.getOvp2Year())
-                                        .ovpRiskSummary(Optional.ofNullable(oasysSet.getOvpRiskRecon())
-                                                .map(RefElement::getRefElementShortDesc)
-                                                .orElse(null))
-                                        .ovpRisk(Optional.ofNullable(oasysSet.getOvpRiskRecon())
-                                                .map(RefElement::getRefElementDesc)
-                                                .orElse(null))
-                                        .ovpPreviousWeightedScore(oasysSet.getOvpPrevWesc())
-                                        .ovpViolentWeightedScore(oasysSet.getOvpVioWesc())
-                                        .ovpNonViolentWeightedScore(oasysSet.getOvpNonVioWesc())
-                                        .ovpAgeWeightedScore(oasysSet.getOvpAgeWesc())
-                                        .ovpSexWeightedScore(oasysSet.getOvpSexWesc())
-                                        .completedDate(Optional.ofNullable(oasysSet.getDateCompleted()).map(Timestamp::toLocalDateTime).orElse(null))
-                                        .assessmentCompleted(oasysSet.getDateCompleted() != null)
-                                        .assessmentVoided(oasysSet.getAssessmentVoidedDate() != null)
+                                        .sections(sectionsOf(oasysSet.getOasysSections()))
+                                        .voided(oasysSet.getAssessmentVoidedDate() != null)
                                         .build()))
-                .sorted(Comparator.comparing(Ovp::getCompletedDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                .sorted(Comparator.comparing(Assessment::getCreatedDateTime, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
                 .collect(Collectors.toList()));
+    }
+
+    private List<Section> sectionsOf(List<OasysSection> oasysSections) {
+        return Optional.ofNullable(oasysSections)
+                .map(sections -> sections
+                        .stream()
+                        .map(this::sectionOf)
+                        .collect(Collectors.toList()))
+                .orElse(null);
+    }
+
+    private Section sectionOf(OasysSection section) {
+        return Section.builder()
+                //TODO
+                .build();
+    }
+
+    private AssessmentVersion assessmentVersionOf(RefAssVersion refAssVersion) {
+        return Optional.ofNullable(refAssVersion).map(
+                version -> AssessmentVersion.builder()
+                        // TODO
+                        .build()
+        ).orElse(null);
     }
 
 }

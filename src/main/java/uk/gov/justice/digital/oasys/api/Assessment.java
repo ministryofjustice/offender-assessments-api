@@ -12,8 +12,9 @@ public class Assessment {
     private Long oasysSetId;
     private String assessmentType;
     private AssessmentVersion assessmentVersion;
-    private LocalDateTime assessmentDateTime;
+    private LocalDateTime createdDateTime;
     private boolean completed;
+    private LocalDateTime completedDateTime;
     private boolean voided;
     private List<Section> sections;
 }
