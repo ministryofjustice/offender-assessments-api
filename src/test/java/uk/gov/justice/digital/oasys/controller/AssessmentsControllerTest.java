@@ -188,4 +188,18 @@ public class AssessmentsControllerTest {
                 .statusCode(404);
     }
 
+//    @Test
+//    public void canGetAssessmentsForOffenderCRN() {
+//        Assessment[] assessments = given()
+//                .when()
+//                .get("/offenders/crn/{0}/assessments", "crn1")
+//                .then()
+//                .statusCode(200)
+//                .extract()
+//                .body()
+//                .as(Assessment[].class);
+//
+//        assertThat(assessments).isNotEmpty();
+//    }
+
 }

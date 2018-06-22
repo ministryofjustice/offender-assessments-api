@@ -6,6 +6,7 @@ import uk.gov.justice.digital.oasys.api.Assessment;
 import uk.gov.justice.digital.oasys.api.AssessmentVersion;
 import uk.gov.justice.digital.oasys.api.Section;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
@@ -14,7 +15,9 @@ import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AssessmentsService {
@@ -28,14 +31,13 @@ public class AssessmentsService {
         this.typesTransformer = typesTransformer;
     }
 
-    public Optional<List<Assessment>> getAssessmentsForOffenderCRN(String crn) {
+    public Optional<List<Assessment>> getAssessmentsForOffenderCRN(String crn, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
         Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
 
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(
-                        oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets()
-                                .stream()
+                        oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream())
                                 .map(oasysSet -> Assessment.builder()
                                         .createdDateTime(typesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
                                         .assessmentType(oasysSet.getAssessmentType().getRefElementShortDesc())
@@ -54,7 +56,7 @@ public class AssessmentsService {
         return Optional.ofNullable(oasysSections)
                 .map(sections -> sections
                         .stream()
-                        .map(this::sectionOf)
+                        .map(section -> sectionOf(section))
                         .collect(Collectors.toList()))
                 .orElse(null);
     }
