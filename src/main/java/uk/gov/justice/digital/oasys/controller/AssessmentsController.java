@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.Ogp;
 import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.api.Ovp;
+import uk.gov.justice.digital.oasys.service.AssessmentsService;
 import uk.gov.justice.digital.oasys.service.OgpService;
 import uk.gov.justice.digital.oasys.service.OgrsService;
 import uk.gov.justice.digital.oasys.service.OvpService;
@@ -30,10 +31,11 @@ public class AssessmentsController {
     private final OvpService ovpService;
 
     @Autowired
-    public AssessmentsController(OgrsService ogrsService, OgpService ogpService, OvpService ovpService) {
+    public AssessmentsController(OgrsService ogrsService, OgpService ogpService, OvpService ovpService, AssessmentsService assessmentsService) {
         this.ogrsService = ogrsService;
         this.ogpService = ogpService;
         this.ovpService = ovpService;
+        this.assessmentService = assessmentsService
     }
 
 
@@ -69,4 +71,40 @@ public class AssessmentsController {
                 .map(ovp -> new ResponseEntity<>(ovp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
+
+    @RequestMapping(path = "/offenders/crn/{crn}/assessments/{assessmentsType}", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Assessments>> getAssessmentsTypesForOffenderCrn(@PathVariable("crn") String crn, @PathVariable("assessmentsType") String assessmentType) {
+
+        return assessmentsService.getAssessmentsTypesForOffenderCRN(crn,assessmentsType)
+                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/crn/{crn}/assessment/{assessmentType}/latest}", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Assessments>> getLatestAssessmentForOffenderCrn(@PathVariable("crn") String crn, @PathVariable("assessmentType") String assessmentType) {
+
+        return assessmentsService.getLatestAssessmentForOffenderCRN(crn,assessmentType)
+                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/crn/{crn}/assessments", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Assessments>> getAssessmentsForOffenderCrn(@PathVariable("crn") String crn) {
+
+        return assessmentsService.getAssessmentForOffenderCRN(crn)
+                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+
+
 }

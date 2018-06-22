@@ -14,12 +14,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class AssessmentService {
+public class AssessmentsService {
 
     private final OffenderRepository offenderRepository;
 
     @Autowired
-    public AssessmentService(OffenderRepository offenderRepository) {
+    public AssessmentsService(OffenderRepository offenderRepository) {
         this.offenderRepository = offenderRepository;
     }
 
