@@ -2,8 +2,6 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.Ogp;
-import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.api.Ovp;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
@@ -25,9 +23,37 @@ public class OvpService {
         this.offenderRepository = offenderRepository;
     }
 
+    public Optional<List<Ovp>> getOvpForOasysOffenderPk(Long oasysOffenderPk) {
+        Optional<Offender> maybeOffender = Optional.ofNullable(offenderRepository.findOne(oasysOffenderPk));
+
+        return mapOffender(maybeOffender);
+    }
+
     public Optional<List<Ovp>> getOvpForOffenderCRN(String crn) {
         Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
 
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ovp>> getOvpForOffenderPNC(String pnc) {
+        Optional<Offender> maybeOffender = offenderRepository.findByPnc(pnc);
+
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ovp>> getOvpForOffenderNomisId(String nomisId) {
+        Optional<Offender> maybeOffender = offenderRepository.findByCmsPrisNumber(nomisId);
+
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ovp>> getOvpForOffenderBookingId(String bookingId) {
+        Optional<Offender> maybeOffender = offenderRepository.findByPrisonNumber(bookingId);
+
+        return mapOffender(maybeOffender);
+    }
+
+    private Optional<List<Ovp>> mapOffender(Optional<Offender> maybeOffender) {
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(
@@ -59,6 +85,5 @@ public class OvpService {
                 .sorted(Comparator.comparing(Ovp::getCompletedDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
                 .collect(Collectors.toList()));
     }
-
 }
 

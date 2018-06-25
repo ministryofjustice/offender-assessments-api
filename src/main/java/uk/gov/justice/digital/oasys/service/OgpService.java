@@ -3,7 +3,6 @@ package uk.gov.justice.digital.oasys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.Ogp;
-import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
@@ -24,9 +23,38 @@ public class OgpService {
         this.offenderRepository = offenderRepository;
     }
 
+    public Optional<List<Ogp>> getOgpForOasysOffenderPk(Long oasysOffenderPk) {
+        Optional<Offender> maybeOffender = Optional.ofNullable(offenderRepository.findOne(oasysOffenderPk));
+
+        return mapOffender(maybeOffender);
+    }
+
     public Optional<List<Ogp>> getOgpForOffenderCRN(String crn) {
         Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
 
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ogp>> getOgpForOffenderPNC(String pnc) {
+        Optional<Offender> maybeOffender = offenderRepository.findByPnc(pnc);
+
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ogp>> getOgpForOffenderNomisId(String nomisId) {
+        Optional<Offender> maybeOffender = offenderRepository.findByCmsPrisNumber(nomisId);
+
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ogp>> getOgpForOffenderBookingId(String bookingId) {
+        Optional<Offender> maybeOffender = offenderRepository.findByPrisonNumber(bookingId);
+
+        return mapOffender(maybeOffender);
+    }
+
+
+    private Optional<List<Ogp>> mapOffender(Optional<Offender> maybeOffender) {
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(

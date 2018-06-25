@@ -23,9 +23,39 @@ public class OgrsService {
         this.offenderRepository = offenderRepository;
     }
 
+    public Optional<List<Ogrs>> getOgrsForOasysOffenderPk(Long oasysOffenderPk) {
+        Optional<Offender> maybeOffender = Optional.ofNullable(offenderRepository.findOne(oasysOffenderPk));
+
+        return mapOffender(maybeOffender);
+    }
+
     public Optional<List<Ogrs>> getOgrsForOffenderCRN(String crn) {
         Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
 
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ogrs>> getOgrsForOffenderPNC(String pnc) {
+        Optional<Offender> maybeOffender = offenderRepository.findByPnc(pnc);
+
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ogrs>> getOgrsForOffenderNomisId(String nomisId) {
+        Optional<Offender> maybeOffender = offenderRepository.findByCmsPrisNumber(nomisId);
+
+        return mapOffender(maybeOffender);
+    }
+
+    public Optional<List<Ogrs>> getOgrsForOffenderBookingId(String bookingId) {
+        Optional<Offender> maybeOffender = offenderRepository.findByPrisonNumber(bookingId);
+
+        return mapOffender(maybeOffender);
+    }
+
+
+
+    private Optional<List<Ogrs>> mapOffender(Optional<Offender> maybeOffender) {
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(

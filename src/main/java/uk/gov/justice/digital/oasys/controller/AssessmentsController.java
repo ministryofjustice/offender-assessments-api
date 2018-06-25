@@ -47,6 +47,39 @@ public class AssessmentsController {
         this.assessmentsService = assessmentsService;
     }
 
+    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/ogrs3", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogrs>> getOgrsScoreForOasysOffenderId(@PathVariable("oasysOffenderId") Long oasysOffenderId) {
+
+        return ogrsService.getOgrsForOasysOffenderPk(oasysOffenderId)
+                .map(ogrs -> new ResponseEntity<>(ogrs, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/ogp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogp>> getOgpScoreForOasysOffenderId(@PathVariable("oasysOffenderId") Long oasysOffenderId) {
+
+        return ogpService.getOgpForOasysOffenderPk(oasysOffenderId)
+                .map(ogp -> new ResponseEntity<>(ogp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/ovp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ovp>> getOvpScoreForOasysOffenderId(@PathVariable("oasysOffenderId") Long oasysOffenderId) {
+
+        return ovpService.getOvpForOasysOffenderPk(oasysOffenderId)
+                .map(ovp -> new ResponseEntity<>(ovp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
     @RequestMapping(path = "/offenders/crn/{crn}/ogrs3", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
@@ -76,6 +109,105 @@ public class AssessmentsController {
     public ResponseEntity<List<Ovp>> getOvpScoreForOffenderCrn(@PathVariable("crn") String crn) {
 
         return ovpService.getOvpForOffenderCRN(crn)
+                .map(ovp -> new ResponseEntity<>(ovp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/pnc/{pnc}/ogrs3", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogrs>> getOgrsScoreForOffenderPNC(@PathVariable("pnc") String pnc) {
+
+        return ogrsService.getOgrsForOffenderPNC(pnc)
+                .map(ogrs -> new ResponseEntity<>(ogrs, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/pnc/{pnc}/ogp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogp>> getOgpScoreForOffenderPNC(@PathVariable("pnc") String pnc) {
+
+        return ogpService.getOgpForOffenderPNC(pnc)
+                .map(ogp -> new ResponseEntity<>(ogp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/pnc/{pnc}/ovp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ovp>> getOvpScoreForOffenderPNC(@PathVariable("pnc") String pnc) {
+
+        return ovpService.getOvpForOffenderPNC(pnc)
+                .map(ovp -> new ResponseEntity<>(ovp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/nomisId/{nomisId}/ogrs3", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogrs>> getOgrsScoreForOffenderNomisId(@PathVariable("nomisId") String nomisId) {
+
+        return ogrsService.getOgrsForOffenderNomisId(nomisId)
+                .map(ogrs -> new ResponseEntity<>(ogrs, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/nomisId/{nomisId}/ogp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogp>> getOgpScoreForOffenderNomisId(@PathVariable("nomisId") String nomisId) {
+
+        return ogpService.getOgpForOffenderNomisId(nomisId)
+                .map(ogp -> new ResponseEntity<>(ogp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/nomisId/{nomisId}/ovp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ovp>> getOvpScoreForOffenderNomisId(@PathVariable("nomisId") String nomisId) {
+
+        return ovpService.getOvpForOffenderNomisId(nomisId)
+                .map(ovp -> new ResponseEntity<>(ovp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/bookingId/{bookingId}/ogrs3", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogrs>> getOgrsScoreForOffenderBookingId(@PathVariable("bookingId") String bookingId) {
+
+        return ogrsService.getOgrsForOffenderBookingId(bookingId)
+                .map(ogrs -> new ResponseEntity<>(ogrs, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/bookingId/{bookingId}/ogp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ogp>> getOgpScoreForOffenderBookingId(@PathVariable("bookingId") String bookingId) {
+
+        return ogpService.getOgpForOffenderBookingId(bookingId)
+                .map(ogp -> new ResponseEntity<>(ogp, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/bookingId/{bookingId}/ovp", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Ovp>> getOvpScoreForOffenderBookingId(@PathVariable("bookingId") String bookingId) {
+
+        return ovpService.getOvpForOffenderBookingId(bookingId)
                 .map(ovp -> new ResponseEntity<>(ovp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
