@@ -2,8 +2,17 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.*;
-import uk.gov.justice.digital.oasys.jpa.entity.*;
+import uk.gov.justice.digital.oasys.api.Answer;
+import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.AssessmentVersion;
+import uk.gov.justice.digital.oasys.api.Question;
+import uk.gov.justice.digital.oasys.api.Section;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
+import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 
@@ -90,11 +99,11 @@ public class AssessmentsService {
                 .oasysQuestionId(question.getOasysQuestionPk())
                 .displayScore(question.getDisplayScore())
                 .questionText(question.getRefQuestion().getRefSectionQuestion())
-                .answer(answerOf(question.getOasysAnswer()))
+                .answer(answerOf(question, question.getOasysAnswer()))
                 .build();
     }
 
-    private Answer answerOf(OasysAnswer oasysAnswer) {
+    private Answer answerOf(OasysQuestion question, OasysAnswer oasysAnswer) {
         return Optional.ofNullable(oasysAnswer)
                 .map(answer -> Answer.builder()
                         .refAnswerId(oasysAnswer.getRefAnswer().getRefAnswerUk())
@@ -106,7 +115,14 @@ public class AssessmentsService {
                         .ovpScore((oasysAnswer.getRefAnswer().getOvpScore()))
                         .qaRawScore(oasysAnswer.getRefAnswer().getQaRawScore())
                         .build())
-                .orElse(null);
+                .orElse(freeformAnswerof(question));
+    }
+
+    private Answer freeformAnswerof(OasysQuestion question) {
+        return Optional.ofNullable(question).map(q -> Answer
+                .builder()
+                .freeformText(q.getFreeFormatAnswer())
+                .build()).orElse(null);
     }
 
     private AssessmentVersion assessmentVersionOf(RefAssVersion refAssVersion) {
