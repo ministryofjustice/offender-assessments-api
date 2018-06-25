@@ -45,8 +45,7 @@ public class AssessmentsService {
         Optional<Assessment> assessment = maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream()))
-                .sorted(Comparator.comparing(OasysSet::getCreateDate).reversed())
-                .findFirst()
+                .max(Comparator.comparing(OasysSet::getCreateDate))
                 .flatMap(a -> Optional.ofNullable(assessmentsTransformer.assessmentOf(a)))
                 .orElse(null));
 
