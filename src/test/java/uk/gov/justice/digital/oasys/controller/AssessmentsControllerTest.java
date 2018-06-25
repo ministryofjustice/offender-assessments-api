@@ -60,6 +60,15 @@ public class AssessmentsControllerTest {
 
         Mockito.when(offenderRepository.findByCmsProbNumber(eq("crn1"))).thenReturn(anOffender());
         Mockito.when(offenderRepository.findByCmsProbNumber(eq("crn2"))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.findByCmsPrisNumber(eq("nomisId1"))).thenReturn(anOffender());
+        Mockito.when(offenderRepository.findByCmsPrisNumber(eq("nomisId2"))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.findByPrisonNumber(eq("bookingId1"))).thenReturn(anOffender());
+        Mockito.when(offenderRepository.findByPrisonNumber(eq("bookingId2"))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.findByPnc(eq("pnc1"))).thenReturn(anOffender());
+        Mockito.when(offenderRepository.findByPnc(eq("pnc2"))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.findOne(eq(1L))).thenReturn(anOffender().get());
+        Mockito.when(offenderRepository.findOne(eq(2L))).thenReturn(null);
+
     }
 
     private Optional<Offender> anOffender() {
@@ -210,6 +219,282 @@ public class AssessmentsControllerTest {
         given()
                 .when()
                 .get("/offenders/crn/{0}/ovp", "crn2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgrsForOffenderPnc() {
+        Ogrs[] ogrss = given()
+                .when()
+                .get("/offenders/pnc/{0}/ogrs3", "pnc1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogrs[].class);
+
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgrsForUnknownOffenderPncGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/pnc/{0}/ogrs3", "pnc2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgpForOffenderPnc() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/pnc/{0}/ogp", "pnc1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgpForUnknownOffenderPncGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/pnc/{0}/ogp", "pnc2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOvpForOffenderPnc() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/pnc/{0}/ovp", "pnc1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOvpForUnknownOffenderPncGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/pnc/{0}/ovp", "pnc2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgrsForOffenderNomisId() {
+        Ogrs[] ogrss = given()
+                .when()
+                .get("/offenders/nomisId/{0}/ogrs3", "nomisId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogrs[].class);
+
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgrsForUnknownOffenderNomisIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/nomisId/{0}/ogrs3", "nomisId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgpForOffenderNomisId() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/nomisId/{0}/ogp", "nomisId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgpForUnknownOffenderNomisIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/nomisId/{0}/ogp", "nomisId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOvpForOffenderNomisId() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/nomisId/{0}/ovp", "nomisId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOvpForUnknownOffenderNomisIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/nomisId/{0}/ovp", "nomisId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgrsForOffenderBookingId() {
+        Ogrs[] ogrss = given()
+                .when()
+                .get("/offenders/bookingId/{0}/ogrs3", "bookingId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogrs[].class);
+
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgrsForUnknownOffenderBookingIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/bookingId/{0}/ogrs3", "bookingId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgpForOffenderBookingId() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/bookingId/{0}/ogp", "bookingId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgpForUnknownOffenderBookingIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/bookingId/{0}/ogp", "bookingId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOvpForOffenderBookingId() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/bookingId/{0}/ovp", "bookingId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOvpForUnknownOffenderBookingIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/bookingId/{0}/ovp", "bookingId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgrsForOasysOffenderPk() {
+        Ogrs[] ogrss = given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ogrs3", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogrs[].class);
+
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgrsForUnknownOasysOffenderPkGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ogrs3", 2L)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgpForOasysOffenderPk() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ogp", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgpForUnknownOasysOffenderPkGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ogp", 2L)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOvpForOasysOffenderPk() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ovp", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOvpForUnknownOasysOffenderPkGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ovp", 2L)
                 .then()
                 .statusCode(404);
     }
