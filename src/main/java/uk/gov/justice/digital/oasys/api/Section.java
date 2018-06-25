@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 @Builder
 public class Section {
+    private Long refSectionId;
     private String refSectionCode;
     private Long oasysSectionId;
     private String status;

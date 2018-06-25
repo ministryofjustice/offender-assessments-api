@@ -69,6 +69,7 @@ public class AssessmentsService {
 
     private Section sectionOf(OasysSection section) {
         return Section.builder()
+                .refSectionId(section.getRefSection().getRefSectionUk())
                 .refSectionCode(section.getRefSection().getRefSectionCode())
                 .oasysSectionId(section.getOasysSectionPk())
                 .status(section.getSectionStatusElm())
