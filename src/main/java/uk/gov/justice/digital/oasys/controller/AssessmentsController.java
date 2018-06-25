@@ -120,6 +120,25 @@ public class AssessmentsController {
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
+
+    @RequestMapping(path = "/offenders/crn/{crn}/assessments/latest", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Assessment> getAssessmentsForOffenderCrnLatest(@PathVariable("crn") String crn,
+                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getLatestAssessmentForOffenderCRN(crn, assessmentsFilter)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
     private Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilterOf(Optional<String> filterAssessmentStatus, Optional<String> filterAssessmentType, Optional<String> filterGroupStatus, Optional<Boolean> filterVoided) {
 
         return filterAssessmentStatus.map(
@@ -138,6 +157,7 @@ public class AssessmentsController {
                                 voided -> curry(AssessmentFilters.byVoided, voided))
                                 .orElse(AssessmentFilters.identity));
     }
+
 
 
 }
