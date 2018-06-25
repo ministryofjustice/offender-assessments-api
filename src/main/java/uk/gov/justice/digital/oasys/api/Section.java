@@ -10,14 +10,13 @@ import java.util.List;
 public class Section {
     private String refSectionCode;
     private Long oasysSectionId;
-    private String statusCode;
-    private String statusDescription;
-    private Integer sectionOgpWeightedScore;
-    private Integer sectionOgpRawScore;
-    private Integer sectionOvpWeightedScore;
-    private Integer sectionOvpRawScore;
-    private Integer sectionOtherWeightedScore;
-    private Integer sectionOtherRawScore;
+    private String status;
+    private Long sectionOgpWeightedScore;
+    private Long sectionOgpRawScore;
+    private Long sectionOvpWeightedScore;
+    private Long sectionOvpRawScore;
+    private Long sectionOtherWeightedScore;
+    private Long sectionOtherRawScore;
     private Boolean lowScoreAttentionNeeded;
 
     private List<Question> questions;

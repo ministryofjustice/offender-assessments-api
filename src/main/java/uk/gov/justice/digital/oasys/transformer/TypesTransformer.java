@@ -50,7 +50,7 @@ public class TypesTransformer {
     public Boolean ynToBoolean(String yn) {
         return Optional.ofNullable(yn)
                 .map("Y"::equalsIgnoreCase)
-                .orElse(false);
+                .orElse(null);
     }
 
     public Boolean isActiveOf(String active) {

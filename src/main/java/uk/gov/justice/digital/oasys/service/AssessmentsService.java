@@ -2,13 +2,8 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.Assessment;
-import uk.gov.justice.digital.oasys.api.AssessmentVersion;
-import uk.gov.justice.digital.oasys.api.Section;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
+import uk.gov.justice.digital.oasys.api.*;
+import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 
@@ -58,21 +53,62 @@ public class AssessmentsService {
         return Optional.ofNullable(oasysSections)
                 .map(sections -> sections
                         .stream()
-                        .map(section -> sectionOf(section))
+                        .map(this::sectionOf)
                         .collect(Collectors.toList()))
                 .orElse(null);
     }
 
     private Section sectionOf(OasysSection section) {
         return Section.builder()
-                //TODO
+                .refSectionCode(section.getRefSection().getRefSectionCode())
+                .oasysSectionId(section.getOasysSectionPk())
+                .status(section.getSectionStatusElm())
+                .sectionOgpWeightedScore(section.getSectOgpWeightedScore())
+                .sectionOgpRawScore(section.getSectOgpRawScore())
+                .sectionOvpWeightedScore(section.getSectOvpWeightedScore())
+                .sectionOvpRawScore(section.getSectOvpRawScore())
+                .sectionOtherWeightedScore(section.getSectOtherWeightedScore())
+                .sectionOtherRawScore(section.getSectOtherRawScore())
+                .lowScoreAttentionNeeded(typesTransformer.ynToBoolean(section.getLowScoreNeedAttnInd()))
+                .questions(questionsOf(section.getOasysQuestions()))
                 .build();
+    }
+
+    private List<Question> questionsOf(List<OasysQuestion> oasysQuestions) {
+        return Optional.ofNullable(oasysQuestions)
+                .map(sections -> sections
+                        .stream()
+                        .map(this::questionOf)
+                        .collect(Collectors.toList()))
+                .orElse(null);
+    }
+
+    private Question questionOf(OasysQuestion question) {
+        return Question.builder()
+                .answer(answerOf(question.getOasysAnswer()))
+                .build();
+    }
+
+    private Answer answerOf(OasysAnswer oasysAnswer) {
+        return Optional.ofNullable(oasysAnswer)
+                .map(answer -> Answer.builder()
+                        .freeformText(oasysAnswer.getOasysQuestion().getFreeFormatAnswer())
+                        .oasysAnswerId(oasysAnswer.getOasysAnswerPk())
+
+                        //TODO
+                        .build())
+                .orElse(null);
     }
 
     private AssessmentVersion assessmentVersionOf(RefAssVersion refAssVersion) {
         return Optional.ofNullable(refAssVersion).map(
                 version -> AssessmentVersion.builder()
-                        // TODO
+                        .oasysFormVersion(refAssVersion.getOasysFormVersion())
+                        .oasysScoringAlgorithmVersion(refAssVersion.getOasysScoringAlgVersion())
+                        .refAssVersionCode(refAssVersion.getRefAssVersionCode())
+                        .refAssVersionId(refAssVersion.getRefAssVersionUk())
+                        .refModuleCode(refAssVersion.getRefModuleCode())
+                        .versionNumber(refAssVersion.getVersionNumber())
                         .build()
         ).orElse(null);
     }
