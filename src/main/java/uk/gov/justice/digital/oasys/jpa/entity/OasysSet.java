@@ -499,7 +499,7 @@ public class OasysSet {
     private RefElement tierLevel;
 
     @OneToMany
-    @JoinColumn(name = "OASYS_SET_PK")
+    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private List<OasysSection> oasysSections;
 
     @ManyToOne

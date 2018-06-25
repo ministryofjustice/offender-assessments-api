@@ -11,6 +11,7 @@ import java.util.List;
 public class Assessment {
     private Long oasysSetId;
     private String assessmentType;
+    private String historicStatus;
     private AssessmentVersion assessmentVersion;
     private LocalDateTime createdDateTime;
     private boolean completed;
