@@ -77,6 +77,7 @@ public class AssessmentsControllerTest {
 
     private List<OasysSet> someOasysSets() {
         return ImmutableList.of(OasysSet.builder()
+                        .createDate(new Timestamp(System.currentTimeMillis()))
                         .assessmentType(assessmentType("oasys"))
                         .oasysSetPk(1L)
                         .ogrs31Year(BigDecimal.ONE)
@@ -100,6 +101,7 @@ public class AssessmentsControllerTest {
                         .assessmentStatus(anAssessmentStatus("OPEN"))
                         .build(),
                 OasysSet.builder()
+                        .createDate(new Timestamp(System.currentTimeMillis()))
                         .assessmentType(assessmentType("sara"))
                         .oasysSetPk(2L)
                         .ogrs31Year(BigDecimal.TEN)

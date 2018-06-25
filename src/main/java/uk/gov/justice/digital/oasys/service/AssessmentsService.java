@@ -42,13 +42,12 @@ public class AssessmentsService {
     public Optional<Assessment> getLatestAssessmentForOffenderCRN(String crn, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
         Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
 
-        Optional<Assessment> assessment = maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
+        return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream()))
                 .max(Comparator.comparing(OasysSet::getCreateDate))
                 .flatMap(a -> Optional.ofNullable(assessmentsTransformer.assessmentOf(a)))
                 .orElse(null));
-
-    }
+        }
 }
 
