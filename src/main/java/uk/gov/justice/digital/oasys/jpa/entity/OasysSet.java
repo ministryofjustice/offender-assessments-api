@@ -40,7 +40,7 @@ public class OasysSet {
     @Column(name = "ASSESSMENT_VOIDED_BY")
     private String assessmentVoidedBy;
     @Column(name = "ASSESSMENT_VOIDED_DATE")
-    private Time assessmentVoidedDate;
+    private Timestamp assessmentVoidedDate;
     @Column(name = "ASSESSOR_NAME")
     private String assessorName;
     @Column(name = "ASSESSOR_OFFICE")

@@ -27,6 +27,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,6 +96,8 @@ public class AssessmentsControllerTest {
                         .ovpNonVioWesc(BigDecimal.ONE)
                         .ovpAgeWesc(BigDecimal.TEN)
                         .ovpSexWesc(BigDecimal.ONE)
+                        .group(aGroup("HISTORIC"))
+                        .assessmentStatus(anAssessmentStatus("OPEN"))
                         .build(),
                 OasysSet.builder()
                         .assessmentType(assessmentType("sara"))
@@ -116,7 +119,20 @@ public class AssessmentsControllerTest {
                         .ovpNonVioWesc(BigDecimal.TEN)
                         .ovpAgeWesc(BigDecimal.ONE)
                         .ovpSexWesc(BigDecimal.TEN)
+                        .group(aGroup("CURRENT"))
+                        .assessmentStatus(anAssessmentStatus("COMPLETE"))
+                        .assessmentVoidedDate(new Timestamp(System.currentTimeMillis()))
                         .build());
+    }
+
+    private RefElement anAssessmentStatus(String status) {
+        return RefElement.builder().refElementCode(status).build();
+    }
+
+    private OasysAssessmentGroup aGroup(String status) {
+        return OasysAssessmentGroup.builder()
+                .historicStatusELm(status)
+                .build();
     }
 
     private RefElement assessmentType(String type) {
@@ -225,6 +241,64 @@ public class AssessmentsControllerTest {
         assertThat(assessments).extracting("assessmentType").containsOnly("oasys");
     }
 
-    //TODO: More filter tests like the one above
+    @Test
+    public void canGetAssessmentsForOffenderCRNFlteredByHistoricStatus() {
+        Assessment[] assessments = given()
+                .when()
+                .param("historicStatus", "CURRENT")
+                .get("/offenders/crn/{0}/assessments", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).extracting("historicStatus").containsOnly("CURRENT");
+    }
+
+    @Test
+    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentStatus() {
+        Assessment[] assessments = given()
+                .when()
+                .param("assessmentStatus", "COMPLETE")
+                .get("/offenders/crn/{0}/assessments", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).extracting("assessmentStatus").containsOnly("COMPLETE");
+    }
+
+    @Test
+    public void canGetAssessmentsForOffenderCRNFlteredBVoided() {
+        Assessment[] assessments = given()
+                .when()
+                .param("voided", "true")
+                .get("/offenders/crn/{0}/assessments", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).extracting("voided").containsOnly(true);
+    }
+
+    @Test
+    public void canGetAssessmentsForOffenderCRNFlteredBNotVoided() {
+        Assessment[] assessments = given()
+                .when()
+                .param("voided", "false")
+                .get("/offenders/crn/{0}/assessments", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).extracting("voided").containsOnly(false);
+    }
 
 }

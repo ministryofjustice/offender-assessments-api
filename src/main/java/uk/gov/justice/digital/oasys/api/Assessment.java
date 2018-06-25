@@ -12,6 +12,7 @@ public class Assessment {
     private Long oasysSetId;
     private String assessmentType;
     private String historicStatus;
+    private String assessmentStatus;
     private AssessmentVersion assessmentVersion;
     private LocalDateTime createdDateTime;
     private boolean completed;

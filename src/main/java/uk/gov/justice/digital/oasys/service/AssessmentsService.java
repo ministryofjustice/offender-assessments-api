@@ -48,6 +48,7 @@ public class AssessmentsService {
                                         .sections(sectionsOf(oasysSet.getOasysSections()))
                                         .voided(oasysSet.getAssessmentVoidedDate() != null)
                                         .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
+                                        .assessmentStatus(oasysSet.getAssessmentStatus().getRefElementCode())
                                         .build()))
                 .sorted(Comparator.comparing(Assessment::getCreatedDateTime, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
                 .collect(Collectors.toList()));
