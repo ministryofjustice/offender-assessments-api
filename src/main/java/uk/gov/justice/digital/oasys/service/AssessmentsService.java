@@ -85,6 +85,11 @@ public class AssessmentsService {
 
     private Question questionOf(OasysQuestion question) {
         return Question.builder()
+                .refQuestionId(question.getRefQuestion().getRefQuestionUk())
+                .refQuestionCode(question.getRefQuestion().getRefQuestionCode())
+                .oasysQuestionId(question.getOasysQuestionPk())
+                .displayScore(question.getDisplayScore())
+                .questionText(question.getRefQuestion().getRefSectionQuestion())
                 .answer(answerOf(question.getOasysAnswer()))
                 .build();
     }
@@ -92,10 +97,14 @@ public class AssessmentsService {
     private Answer answerOf(OasysAnswer oasysAnswer) {
         return Optional.ofNullable(oasysAnswer)
                 .map(answer -> Answer.builder()
-                        .freeformText(oasysAnswer.getOasysQuestion().getFreeFormatAnswer())
+                        .refAnswerId(oasysAnswer.getRefAnswer().getRefAnswerUk())
+                        .refAnswerCode(oasysAnswer.getRefAnswer().getRefAnswerCode())
                         .oasysAnswerId(oasysAnswer.getOasysAnswerPk())
-
-                        //TODO
+                        .staticText(oasysAnswer.getRefAnswer().getRefSectionAnswer())
+                        .freeformText(oasysAnswer.getOasysQuestion().getFreeFormatAnswer())
+                        .ogpScore(oasysAnswer.getRefAnswer().getOgpScore())
+                        .ovpScore((oasysAnswer.getRefAnswer().getOvpScore()))
+                        .qaRawScore(oasysAnswer.getRefAnswer().getQaRawScore())
                         .build())
                 .orElse(null);
     }

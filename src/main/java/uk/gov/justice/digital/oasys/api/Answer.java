@@ -11,8 +11,8 @@ public class Answer {
     private Long oasysAnswerId;
     private String staticText;
     private String freeformText;
-    private Integer ogpScore;
-    private Integer ovpScore;
-    private Integer qaRawScore;
+    private Long ogpScore;
+    private Long ovpScore;
+    private Long qaRawScore;
 }
 
