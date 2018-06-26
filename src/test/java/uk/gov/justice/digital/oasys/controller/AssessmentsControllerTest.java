@@ -153,6 +153,29 @@ public class AssessmentsControllerTest {
     }
 
     @Test
+    public void canGetAssessmentsForOffenderPk() {
+        Assessment[] assessments = given()
+                .when()
+                .get("/offenders/oasysOffenderPk/{0}/assessments", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).hasSize(2);
+    }
+
+    @Test
+    public void getAssessmentForUnknownOffenderPkGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/oasysOffenderPk/{0}/assessments", 2L)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     public void canGetAssessmentsForOffenderCRN() {
         Assessment[] assessments = given()
                 .when()
@@ -167,7 +190,85 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentType() {
+    public void getAssessmentForUnknownOffenderCRNGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/crn/{0}/assessments", "crn2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetAssessmentsForOffenderPNC() {
+        Assessment[] assessments = given()
+                .when()
+                .get("/offenders/pnc/{0}/assessments", "pnc1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).hasSize(2);
+    }
+
+    @Test
+    public void getAssessmentForUnknownOffenderPNCGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/pnc/{0}/assessments", "pnc2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetAssessmentsForOffenderNomisId() {
+        Assessment[] assessments = given()
+                .when()
+                .get("/offenders/nomisId/{0}/assessments", "nomisId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).hasSize(2);
+    }
+
+    @Test
+    public void getAssessmentForUnknownOffenderNomisIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/nomisId/{0}/assessments", "nomisId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetAssessmentsForOffenderBookingId() {
+        Assessment[] assessments = given()
+                .when()
+                .get("/offenders/bookingId/{0}/assessments", "bookingId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment[].class);
+
+        assertThat(assessments).hasSize(2);
+    }
+
+    @Test
+    public void getAssessmentForUnknownOffenderBookingIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/bookingId/{0}/assessments", "bookingId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetAssessmentsForOffenderCRNFilteredByAssessmentType() {
         Assessment[] assessments = given()
                 .when()
                 .param("assessmentType", "oasys")
@@ -182,7 +283,7 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByHistoricStatus() {
+    public void canGetAssessmentsForOffenderCRNFilteredByHistoricStatus() {
         Assessment[] assessments = given()
                 .when()
                 .param("historicStatus", "CURRENT")
@@ -197,7 +298,7 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentStatus() {
+    public void canGetAssessmentsForOffenderCRNFilteredByAssessmentStatus() {
         Assessment[] assessments = given()
                 .when()
                 .param("assessmentStatus", "COMPLETE")
@@ -212,7 +313,7 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredBVoided() {
+    public void canGetAssessmentsForOffenderCRNFilteredBVoided() {
         Assessment[] assessments = given()
                 .when()
                 .param("voided", "true")
@@ -227,7 +328,7 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredBNotVoided() {
+    public void canGetAssessmentsForOffenderCRNFilteredBNotVoided() {
         Assessment[] assessments = given()
                 .when()
                 .param("voided", "false")
