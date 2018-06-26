@@ -156,7 +156,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderPk() {
         Assessment[] assessments = given()
                 .when()
-                .get("/offenders/oasysOffenderPk/{0}/assessments", 1L)
+                .get("/offenders/oasysOffenderId/{0}/assessments", 1L)
                 .then()
                 .statusCode(200)
                 .extract()
