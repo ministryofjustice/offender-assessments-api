@@ -58,6 +58,26 @@ public class AssessmentsController {
 //                .orElse(new ResponseEntity<>(NOT_FOUND));
 //    }
 
+
+
+    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/assessments", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Assessment>> getAssessmentsForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId,
+                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getAssessmentsForOffenderPK(oasysOffenderId, assessmentsFilter)
+                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
     @RequestMapping(path = "/offenders/crn/{crn}/assessments", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
@@ -76,6 +96,78 @@ public class AssessmentsController {
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
+    @RequestMapping(path = "/offenders/pnc/{pnc}/assessments", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Assessment>> getAssessmentsForOffenderPNC(@PathVariable("pnc") String pnc,
+                                                                        @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                        @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                        @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                        @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getAssessmentsForOffenderPNC(pnc, assessmentsFilter)
+                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/nomisId/{nomisId}/assessments", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Assessment>> getAssessmentsForOffenderNomisId(@PathVariable("nomisId") String nomisId,
+                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getAssessmentsForOffenderNomisId(nomisId, assessmentsFilter)
+                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/bookingId/{bookingId}/assessments", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<Assessment>> getAssessmentsForOffenderBooingId(@PathVariable("bookingId") String bookingId   ,
+                                                                             @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                             @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                             @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                             @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getAssessmentsForOffenderBookingId(bookingId, assessmentsFilter)
+                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+
+    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/assessments/latest", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Assessment> getAssessmentsForOffenderPkLatest(@PathVariable("oasysOffenderId") Long oasysOffenderId,
+                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getLatestAssessmentForOffenderPk(oasysOffenderId, assessmentsFilter)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
 
     @RequestMapping(path = "/offenders/crn/{crn}/assessments/latest", method = RequestMethod.GET)
     @ApiResponses({
@@ -91,6 +183,62 @@ public class AssessmentsController {
                 assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
         return assessmentsService.getLatestAssessmentForOffenderCRN(crn, assessmentsFilter)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+
+    @RequestMapping(path = "/offenders/pnc/{pnc}/assessments/latest", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Assessment> getAssessmentsForOffenderPncLatest(@PathVariable("pnc") String pnc,
+                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getLatestAssessmentForOffenderPNC(pnc, assessmentsFilter)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/nomisId/{nomisId}/assessments/latest", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Assessment> getAssessmentsForOffenderNomisIdLatest(@PathVariable("nomisId") String nomisId,
+                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getLatestAssessmentForOffenderNomisId(nomisId, assessmentsFilter)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+
+    @RequestMapping(path = "/offenders/bookingId/{bookingId}/assessments/latest", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Assessment> getAssessmentsForOffenderBookingIdLatest(@PathVariable("bookingId") String bookingId,
+                                                                             @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                             @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                             @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                             @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+
+        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
+                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+
+        return assessmentsService.getLatestAssessmentForOffenderBookingId(bookingId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -113,6 +261,4 @@ public class AssessmentsController {
                                 voided -> curry(AssessmentFilters.byVoided, voided))
                                 .orElse(AssessmentFilters.identity));
     }
-
-
 }
