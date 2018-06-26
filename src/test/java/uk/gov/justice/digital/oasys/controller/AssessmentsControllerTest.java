@@ -170,7 +170,7 @@ public class AssessmentsControllerTest {
     public void getAssessmentForUnknownOffenderPkGivesNotFound() {
         given()
                 .when()
-                .get("/offenders/oasysOffenderPk/{0}/assessments", 2L)
+                .get("/offenders/oasysOffenderId/{0}/assessments", 2L)
                 .then()
                 .statusCode(404);
     }
