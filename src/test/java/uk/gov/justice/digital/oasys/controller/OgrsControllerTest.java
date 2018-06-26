@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.Ogrs;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
@@ -37,7 +37,7 @@ import static org.mockito.Matchers.eq;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("dev")
-public class AssessmentsControllerTest {
+public class OgrsControllerTest {
 
     @LocalServerPort
     int port;
@@ -153,92 +153,117 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRN() {
-        Assessment[] assessments = given()
+    public void canGetOgrsForOffenderCRNs() {
+        Ogrs[] ogrss = given()
                 .when()
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/ogrs3", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(Ogrs[].class);
 
-        assertThat(assessments).hasSize(2);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentType() {
-        Assessment[] assessments = given()
+    public void getOgrsForUnknownOffenderGivesNotFound() {
+        given()
                 .when()
-                .param("assessmentType", "oasys")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/ogrs3", "crn2")
                 .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(Assessment[].class);
-
-        assertThat(assessments).extracting("assessmentType").containsOnly("oasys");
+                .statusCode(404);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByHistoricStatus() {
-        Assessment[] assessments = given()
+    public void canGetOgrsForOffenderPnc() {
+        Ogrs[] ogrss = given()
                 .when()
-                .param("historicStatus", "CURRENT")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/pnc/{0}/ogrs3", "pnc1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(Ogrs[].class);
 
-        assertThat(assessments).extracting("historicStatus").containsOnly("CURRENT");
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentStatus() {
-        Assessment[] assessments = given()
+    public void getOgrsForUnknownOffenderPncGivesNotFound() {
+        given()
                 .when()
-                .param("assessmentStatus", "COMPLETE")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/pnc/{0}/ogrs3", "pnc2")
                 .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(Assessment[].class);
-
-        assertThat(assessments).extracting("assessmentStatus").containsOnly("COMPLETE");
+                .statusCode(404);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredBVoided() {
-        Assessment[] assessments = given()
+    public void canGetOgrsForOffenderNomisId() {
+        Ogrs[] ogrss = given()
                 .when()
-                .param("voided", "true")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/nomisId/{0}/ogrs3", "nomisId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(Ogrs[].class);
 
-        assertThat(assessments).extracting("voided").containsOnly(true);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredBNotVoided() {
-        Assessment[] assessments = given()
+    public void getOgrsForUnknownOffenderNomisIdGivesNotFound() {
+        given()
                 .when()
-                .param("voided", "false")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/nomisId/{0}/ogrs3", "nomisId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgrsForOffenderBookingId() {
+        Ogrs[] ogrss = given()
+                .when()
+                .get("/offenders/bookingId/{0}/ogrs3", "bookingId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(Ogrs[].class);
 
-        assertThat(assessments).extracting("voided").containsOnly(false);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
+    @Test
+    public void getOgrsForUnknownOffenderBookingIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/bookingId/{0}/ogrs3", "bookingId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOgrsForOasysOffenderPk() {
+        Ogrs[] ogrss = given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ogrs3", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogrs[].class);
+
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOgrsForUnknownOasysOffenderPkGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ogrs3", 2L)
+                .then()
+                .statusCode(404);
+    }
 }

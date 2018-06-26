@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.Ogp;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
@@ -37,7 +37,7 @@ import static org.mockito.Matchers.eq;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("dev")
-public class AssessmentsControllerTest {
+public class OvpControllerTest {
 
     @LocalServerPort
     int port;
@@ -153,92 +153,117 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRN() {
-        Assessment[] assessments = given()
+    public void canGetOvpForOffenderCRNs() {
+        Ogp[] ogps = given()
                 .when()
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/ovp", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(Ogp[].class);
 
-        assertThat(assessments).hasSize(2);
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentType() {
-        Assessment[] assessments = given()
+    public void getOvpForUnknownOffenderGivesNotFound() {
+        given()
                 .when()
-                .param("assessmentType", "oasys")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/ovp", "crn2")
                 .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(Assessment[].class);
-
-        assertThat(assessments).extracting("assessmentType").containsOnly("oasys");
+                .statusCode(404);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByHistoricStatus() {
-        Assessment[] assessments = given()
+    public void canGetOvpForOffenderPnc() {
+        Ogp[] ogps = given()
                 .when()
-                .param("historicStatus", "CURRENT")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/pnc/{0}/ovp", "pnc1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(Ogp[].class);
 
-        assertThat(assessments).extracting("historicStatus").containsOnly("CURRENT");
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentStatus() {
-        Assessment[] assessments = given()
+    public void getOvpForUnknownOffenderPncGivesNotFound() {
+        given()
                 .when()
-                .param("assessmentStatus", "COMPLETE")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/pnc/{0}/ovp", "pnc2")
                 .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(Assessment[].class);
-
-        assertThat(assessments).extracting("assessmentStatus").containsOnly("COMPLETE");
+                .statusCode(404);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredBVoided() {
-        Assessment[] assessments = given()
+    public void canGetOvpForOffenderNomisId() {
+        Ogp[] ogps = given()
                 .when()
-                .param("voided", "true")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/nomisId/{0}/ovp", "nomisId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(Ogp[].class);
 
-        assertThat(assessments).extracting("voided").containsOnly(true);
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredBNotVoided() {
-        Assessment[] assessments = given()
+    public void getOvpForUnknownOffenderNomisIdGivesNotFound() {
+        given()
                 .when()
-                .param("voided", "false")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/nomisId/{0}/ovp", "nomisId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOvpForOffenderBookingId() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/bookingId/{0}/ovp", "bookingId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(Ogp[].class);
 
-        assertThat(assessments).extracting("voided").containsOnly(false);
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
+    @Test
+    public void getOvpForUnknownOffenderBookingIdGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/bookingId/{0}/ovp", "bookingId2")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetOvpForOasysOffenderPk() {
+        Ogp[] ogps = given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ovp", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Ogp[].class);
+
+        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+    }
+
+    @Test
+    public void getOvpForUnknownOasysOffenderPkGivesNotFound() {
+        given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/ovp", 2L)
+                .then()
+                .statusCode(404);
+    }
 }
