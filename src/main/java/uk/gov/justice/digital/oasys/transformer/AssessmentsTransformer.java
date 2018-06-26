@@ -2,12 +2,26 @@ package uk.gov.justice.digital.oasys.transformer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.justice.digital.oasys.api.*;
-import uk.gov.justice.digital.oasys.jpa.entity.*;
+import uk.gov.justice.digital.oasys.api.Answer;
+import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.AssessmentResource;
+import uk.gov.justice.digital.oasys.api.AssessmentSummary;
+import uk.gov.justice.digital.oasys.api.AssessmentVersion;
+import uk.gov.justice.digital.oasys.api.Question;
+import uk.gov.justice.digital.oasys.api.Section;
+import uk.gov.justice.digital.oasys.controller.AssessmentsController;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
+import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Component
 public class AssessmentsTransformer {
@@ -112,5 +126,25 @@ public class AssessmentsTransformer {
                         .versionNumber(refAssVersion.getVersionNumber())
                         .build()
         ).orElse(null);
+    }
+
+    public AssessmentResource assessmentResourceOf(OasysSet oasysSet) {
+        final AssessmentResource assessmentResource = AssessmentResource.builder()
+                .assessment(AssessmentSummary.builder()
+                        .createdDateTime(typesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
+                        .assessmentType(oasysSet.getAssessmentType().getRefElementCode())
+                        .assessmentVersion(assessmentVersionOf(oasysSet.getRefAssVersion()))
+                        .completed(oasysSet.getDateCompleted() != null)
+                        .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
+                        .oasysSetId(oasysSet.getOasysSetPk())
+                        .voided(oasysSet.getAssessmentVoidedDate() != null)
+                        .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
+                        .assessmentStatus(oasysSet.getAssessmentStatus().getRefElementCode())
+                        .build()).build();
+
+        assessmentResource.add(linkTo(methodOn(AssessmentsController.class).getAssessment(oasysSet.getOasysSetPk())).withSelfRel());
+
+        return assessmentResource;
+
     }
 }

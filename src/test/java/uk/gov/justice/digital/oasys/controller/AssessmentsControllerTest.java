@@ -18,10 +18,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.AssessmentResource;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
+import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
 import java.math.BigDecimal;
@@ -45,6 +47,9 @@ public class AssessmentsControllerTest {
     @MockBean
     private OffenderRepository offenderRepository;
 
+    @MockBean
+    private AssessmentRepository assessmentRepository;
+
     @Autowired
     @Qualifier("globalObjectMapper")
     private ObjectMapper objectMapper;
@@ -67,6 +72,16 @@ public class AssessmentsControllerTest {
         Mockito.when(offenderRepository.findOne(eq(1L))).thenReturn(anOffender().get());
         Mockito.when(offenderRepository.findOne(eq(2L))).thenReturn(null);
 
+        Mockito.when(assessmentRepository.findOne(eq(0L))).thenReturn(anOasysSet(0L));
+
+    }
+
+    private OasysSet anOasysSet(Long id) {
+        return OasysSet.builder()
+                .assessmentType(RefElement.builder().build())
+                .group(OasysAssessmentGroup.builder().build())
+                .assessmentStatus(RefElement.builder().build())
+                .oasysSetPk(id).build();
     }
 
     private Optional<Offender> anOffender() {
@@ -177,19 +192,21 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetAssessmentsForOffenderCRN() {
-        Assessment[] assessments = given()
+        AssessmentResource[] assessments = given()
                 .when()
                 .get("/offenders/crn/{0}/assessments", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
         assertThat(assessments).hasSize(2);
     }
 
     @Test
+    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentType() {
+        AssessmentResource[] assessments = given()
     public void getAssessmentForUnknownOffenderCRNGivesNotFound() {
         given()
                 .when()
@@ -277,14 +294,14 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
-        assertThat(assessments).extracting("assessmentType").containsOnly("oasys");
+        assertThat(assessments).extracting("assessment.assessmentType").containsOnly("oasys");
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFilteredByHistoricStatus() {
-        Assessment[] assessments = given()
+    public void canGetAssessmentsForOffenderCRNFlteredByHistoricStatus() {
+        AssessmentResource[] assessments = given()
                 .when()
                 .param("historicStatus", "CURRENT")
                 .get("/offenders/crn/{0}/assessments", "crn1")
@@ -292,14 +309,14 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
-        assertThat(assessments).extracting("historicStatus").containsOnly("CURRENT");
+        assertThat(assessments).extracting("assessment.historicStatus").containsOnly("CURRENT");
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFilteredByAssessmentStatus() {
-        Assessment[] assessments = given()
+    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentStatus() {
+        AssessmentResource[] assessments = given()
                 .when()
                 .param("assessmentStatus", "COMPLETE")
                 .get("/offenders/crn/{0}/assessments", "crn1")
@@ -307,14 +324,14 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
-        assertThat(assessments).extracting("assessmentStatus").containsOnly("COMPLETE");
+        assertThat(assessments).extracting("assessment.assessmentStatus").containsOnly("COMPLETE");
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFilteredBVoided() {
-        Assessment[] assessments = given()
+    public void canGetAssessmentsForOffenderCRNFlteredBVoided() {
+        AssessmentResource[] assessments = given()
                 .when()
                 .param("voided", "true")
                 .get("/offenders/crn/{0}/assessments", "crn1")
@@ -322,14 +339,14 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
-        assertThat(assessments).extracting("voided").containsOnly(true);
+        assertThat(assessments).extracting("assessment.voided").containsOnly(true);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFilteredBNotVoided() {
-        Assessment[] assessments = given()
+    public void canGetAssessmentsForOffenderCRNFlteredBNotVoided() {
+        AssessmentResource[] assessments = given()
                 .when()
                 .param("voided", "false")
                 .get("/offenders/crn/{0}/assessments", "crn1")
@@ -337,9 +354,39 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
-        assertThat(assessments).extracting("voided").containsOnly(false);
+        assertThat(assessments).extracting("assessment.voided").containsOnly(false);
+    }
+
+    @Test
+    public void assessmentResourceForValidAssessmentContainsValidLink() {
+        AssessmentResource[] assessments = given()
+                .when()
+                .param("voided", "false")
+                .get("/offenders/crn/{0}/assessments", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(AssessmentResource[].class);
+
+        assertThat(assessments).extracting("links").isNotEmpty();
+    }
+
+    @Test
+    public void canLookupAssessmentByOasysSetPk() {
+        Assessment assessment = given()
+                .when()
+                .get("/assessments/oasysSetId/{0}", 0L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment.class);
+
+        assertThat(assessment).extracting("oasysSetId").containsExactly(0L);
+
     }
 
 }

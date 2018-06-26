@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.AssessmentResource;
+import uk.gov.justice.digital.oasys.api.Question;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.service.AssessmentsService;
 import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
@@ -22,6 +24,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 import static uk.gov.justice.digital.oasys.service.filters.AssessmentFilters.curry;
 
 @RestController
@@ -58,42 +61,34 @@ public class AssessmentsController {
 //                .orElse(new ResponseEntity<>(NOT_FOUND));
 //    }
 
-
-
-    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/assessments", method = RequestMethod.GET)
+    @RequestMapping(path = "/assessments/oasysSetId/{oasysSetId}", method = RequestMethod.GET)
     @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 404, message = "Assessment not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<Assessment>> getAssessmentsForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId,
-                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+    public ResponseEntity<Assessment> getAssessment(@PathVariable("oasysSetId") Long oasysSetId) {
 
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+        return assessmentsService.getAssessment(oasysSetId).map(
+                assessment -> new ResponseEntity<>(assessment, OK)).orElse(new ResponseEntity<>(NOT_FOUND));
 
-        return assessmentsService.getAssessmentsForOffenderPK(oasysOffenderId, assessmentsFilter)
-                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
     }
+
 
     @RequestMapping(path = "/offenders/crn/{crn}/assessments", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<Assessment>> getAssessmentsForOffenderCrn(@PathVariable("crn") String crn,
-                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+    public ResponseEntity<List<AssessmentResource>> getAssessmentsForOffenderCrn(@PathVariable("crn") String crn,
+                                                                                 @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                                 @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                                 @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                                 @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return assessmentsService.getAssessmentsForOffenderCRN(crn, assessmentsFilter)
-                .map(assessments -> new ResponseEntity<>(assessments, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
+        final Optional<List<AssessmentResource>> maybeAssessmentsForOffenderCRN = assessmentsService.getAssessmentsForOffenderCRN(crn, assessmentsFilter);
+
+        return maybeAssessmentsForOffenderCRN.map(assessments -> new ResponseEntity<>(assessments, OK)).orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
     @RequestMapping(path = "/offenders/pnc/{pnc}/assessments", method = RequestMethod.GET)
@@ -187,58 +182,15 @@ public class AssessmentsController {
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
-
-    @RequestMapping(path = "/offenders/pnc/{pnc}/assessments/latest", method = RequestMethod.GET)
+    @RequestMapping(path = "/offenders/crn/{crn}/assessments/type/{assessmentType}/latest/section/{section}/question/{question:.+}", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<Assessment> getAssessmentsForOffenderPncLatest(@PathVariable("pnc") String pnc,
-                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return assessmentsService.getLatestAssessmentForOffenderPNC(pnc, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/nomisId/{nomisId}/assessments/latest", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<Assessment> getAssessmentsForOffenderNomisIdLatest(@PathVariable("nomisId") String nomisId,
-                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return assessmentsService.getLatestAssessmentForOffenderNomisId(nomisId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-
-    @RequestMapping(path = "/offenders/bookingId/{bookingId}/assessments/latest", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<Assessment> getAssessmentsForOffenderBookingIdLatest(@PathVariable("bookingId") String bookingId,
-                                                                             @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                             @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                             @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                             @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return assessmentsService.getLatestAssessmentForOffenderBookingId(bookingId, assessmentsFilter)
+    public ResponseEntity<Question> getQAndAForOffenderCrnLatestAssessmentType(@PathVariable("crn") String crn,
+                                                                               @PathVariable("assessmentType") String assessmentType,
+                                                                               @PathVariable("section") String section,
+                                                                               @PathVariable("question") String question) {
+        return assessmentsService.getLatestQAndAforOffenderCRN(crn, assessmentType, section, question)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -261,4 +213,6 @@ public class AssessmentsController {
                                 voided -> curry(AssessmentFilters.byVoided, voided))
                                 .orElse(AssessmentFilters.identity));
     }
+
+
 }
