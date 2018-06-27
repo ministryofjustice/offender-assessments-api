@@ -99,7 +99,7 @@ public class AssessmentsControllerTest {
 
     private List<OasysSet> someOasysSets() {
         return ImmutableList.of(OasysSet.builder()
-                        .createDate(new Timestamp(System.currentTimeMillis()))
+                        .createDate(new Timestamp(System.currentTimeMillis() - oneDay()))
                         .assessmentType(assessmentType("oasys"))
                         .oasysSetPk(1L)
                         .ogrs31Year(BigDecimal.ONE)
@@ -149,6 +149,10 @@ public class AssessmentsControllerTest {
                         .build());
     }
 
+    private long oneDay() {
+        return 1000 * 60 * 60 * 24;
+    }
+
     private RefElement anAssessmentStatus(String status) {
         return RefElement.builder().refElementCode(status).build();
     }
@@ -169,16 +173,30 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetAssessmentsForOffenderPk() {
-        Assessment[] assessments = given()
+        AssessmentResource[] assessments = given()
                 .when()
                 .get("/offenders/oasysOffenderId/{0}/assessments", 1L)
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
         assertThat(assessments).hasSize(2);
+    }
+
+    @Test
+    public void canGetLatestAssessmentForOffenderPk() {
+        Assessment assessments = given()
+                .when()
+                .get("/offenders/oasysOffenderId/{0}/assessments/latest", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment.class);
+
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
     }
 
     @Test
@@ -205,8 +223,21 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentType() {
-        AssessmentResource[] assessments = given()
+    public void canGetLatestAssessmentForOffenderCrn() {
+        Assessment assessments = given()
+                .when()
+                .get("/offenders/crn/{0}/assessments/latest", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment.class);
+
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+    }
+
+
+    @Test
     public void getAssessmentForUnknownOffenderCRNGivesNotFound() {
         given()
                 .when()
@@ -217,17 +248,32 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetAssessmentsForOffenderPNC() {
-        Assessment[] assessments = given()
+        AssessmentResource[] assessments = given()
                 .when()
                 .get("/offenders/pnc/{0}/assessments", "pnc1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
         assertThat(assessments).hasSize(2);
     }
+
+    @Test
+    public void canGetLatestAssessmentForOffenderPnc() {
+        Assessment assessments = given()
+                .when()
+                .get("/offenders/pnc/{0}/assessments/latest", "pnc1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment.class);
+
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+    }
+
 
     @Test
     public void getAssessmentForUnknownOffenderPNCGivesNotFound() {
@@ -240,17 +286,32 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetAssessmentsForOffenderNomisId() {
-        Assessment[] assessments = given()
+        AssessmentResource[] assessments = given()
                 .when()
                 .get("/offenders/nomisId/{0}/assessments", "nomisId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
         assertThat(assessments).hasSize(2);
     }
+
+    @Test
+    public void canGetLatestAssessmentForOffenderNmisId() {
+        Assessment assessments = given()
+                .when()
+                .get("/offenders/nomisId/{0}/assessments/latest", "nomisId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment.class);
+
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+    }
+
 
     @Test
     public void getAssessmentForUnknownOffenderNomisIdGivesNotFound() {
@@ -263,17 +324,32 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetAssessmentsForOffenderBookingId() {
-        Assessment[] assessments = given()
+        AssessmentResource[] assessments = given()
                 .when()
                 .get("/offenders/bookingId/{0}/assessments", "bookingId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment[].class);
+                .as(AssessmentResource[].class);
 
         assertThat(assessments).hasSize(2);
     }
+
+    @Test
+    public void canGetLatestAssessmentForOffenderBookingId() {
+        Assessment assessments = given()
+                .when()
+                .get("/offenders/bookingId/{0}/assessments/latest", "bookingId1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Assessment.class);
+
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+    }
+
 
     @Test
     public void getAssessmentForUnknownOffenderBookingIdGivesNotFound() {
@@ -286,7 +362,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetAssessmentsForOffenderCRNFilteredByAssessmentType() {
-        Assessment[] assessments = given()
+        AssessmentResource[] assessments = given()
                 .when()
                 .param("assessmentType", "oasys")
                 .get("/offenders/crn/{0}/assessments", "crn1")
