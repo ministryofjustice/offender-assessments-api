@@ -1,10 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -12,6 +8,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Data
+@Builder
 public class RefAssVersionPK implements Serializable {
     @Column(name = "REF_ASS_VERSION_CODE")
     @Id
