@@ -9,6 +9,9 @@ import java.util.Objects;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class RefAssVersionPK implements Serializable {
     @Column(name = "REF_ASS_VERSION_CODE")
     @Id

@@ -9,14 +9,11 @@ import java.util.List;
 @Builder
 public class RefQuestion {
     private Long refQuestionId;
-    private String refAssVersionCode;
-    private Long refVersionId;
-    private String refSectionCode;
     private String refQuestionCode;
     private Long refDisplaySort;
-    private String refSectionQuestion;
+    private String refQuestionText;
     private boolean refMandatoryIndicator;
-    private String refQAWeighting;
+    private Long refQAWeighting;
     private String refCtAreaEstCode;
 
     private List<RefAnswer> refAnswers;

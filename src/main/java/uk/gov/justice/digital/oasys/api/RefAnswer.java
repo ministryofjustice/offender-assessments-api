@@ -7,10 +7,7 @@ import lombok.Data;
 @Builder
 public class RefAnswer {
     private Long refAnswerId;
-    private String refAssVersionCode;
-    private Long refVersionId;
     private String refAnswerCode;
     private Long refDisplaySort;
-    private String refSectionCode;
 
 }
