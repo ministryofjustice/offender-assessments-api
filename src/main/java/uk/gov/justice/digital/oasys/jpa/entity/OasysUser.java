@@ -1,10 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
