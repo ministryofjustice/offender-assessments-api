@@ -510,4 +510,7 @@ public class OasysSet {
     @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK")
     private OasysAssessmentGroup group;
 
+    @OneToOne (mappedBy = "oasysSet")
+    private QaReview qaReview;
+
 }

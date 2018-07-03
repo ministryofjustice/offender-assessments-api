@@ -2,6 +2,7 @@ package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
 import lombok.Data;
+import uk.gov.justice.digital.oasys.jpa.entity.QaReview;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,4 +21,5 @@ public class Assessment {
     private boolean voided;
     private List<Section> sections;
     private List<OasysBcsPart> oasysBcsParts;
+    private uk.gov.justice.digital.oasys.api.QaReview qaReview;
 }

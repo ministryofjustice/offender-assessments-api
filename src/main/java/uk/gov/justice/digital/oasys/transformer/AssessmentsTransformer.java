@@ -38,6 +38,7 @@ public class AssessmentsTransformer {
                 .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
                 .oasysSetId(oasysSet.getOasysSetPk())
                 .oasysBcsParts(oasysBcsPartsOf(oasysSet.getOasysBcsParts()))
+                .qaReview(QaReviewOf(oasysSet.getQaReview()))
                 .sections(sectionsOf(oasysSet.getOasysSections()))
                 .voided(oasysSet.getAssessmentVoidedDate() != null)
                 .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
@@ -189,5 +190,23 @@ public class AssessmentsTransformer {
                 )
                 .orElse(null);
     }
-
+    private uk.gov.justice.digital.oasys.api.QaReview QaReviewOf(QaReview qaReview) {
+        return Optional.ofNullable(qaReview)
+                .map(qaReview1 -> uk.gov.justice.digital.oasys.api.QaReview.builder()
+                    .currentlyHidden(typesTransformer.ynToBoolean(qaReview.getCurrentlyHidden()))
+                    .dateCompleted(typesTransformer.localDateTimeOf(qaReview.getDateCompleted()))
+                    .dateSelected(typesTransformer.localDateTimeOf(qaReview.getDateSelected()))
+                    .displaySort(qaReview.getDisplaySort())
+                    .qaGrading(qaReview.getQaGrading())
+                    .qaScore(qaReview.getQaScore())
+                    .qaStatus(qaReview.getQaStatus())
+                    .qaSubstitutionReason(qaReview.getQaSubstitutionReason())
+                    .qaUser(oasysUserOf(qaReview.getQaUser()))
+                    .refPeriodMonth(qaReview.getRefPeriodMonth())
+                    .refPeriodQtr(qaReview.getRefPeriodQtr())
+                    .refPeriodYear(qaReview.getRefPeriodYear())
+                    .build()
+                )
+                .orElse(null);
+    }
 }
