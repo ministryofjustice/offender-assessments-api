@@ -67,6 +67,15 @@ public class AssessmentsControllerTest {
     }
 
     @Test
+    public void endpointsAreAuthorised() {
+        given()
+                .when()
+                .get("/xyz")
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
     public void canGetAssessmentsForOffenderPk() {
         AssessmentResource[] assessments = given()
                 .when()
