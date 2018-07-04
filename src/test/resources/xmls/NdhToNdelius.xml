@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns0:SubmitAssessmentSummaryRequest xmlns:ns0="http://www.bconline.co.uk/oasys/messages">
+    <ns1:OASYSAssessmentSummary xmlns:ns1="http://www.bconline.co.uk/oasys/assessment">
+        <ns1:CaseReferenceNumber>H923505</ns1:CaseReferenceNumber>
+        <ns1:EventNumber>1</ns1:EventNumber>
+        <ns1:DateAssessmentCompleted>2018-06-19</ns1:DateAssessmentCompleted>
+        <ns1:OASYSSection3Score>3</ns1:OASYSSection3Score>
+        <ns1:OASYSSection4Score>2</ns1:OASYSSection4Score>
+        <ns1:OASYSSection6Score>1</ns1:OASYSSection6Score>
+        <ns1:OASYSSection7Score>1</ns1:OASYSSection7Score>
+        <ns1:OASYSSection8Score>3</ns1:OASYSSection8Score>
+        <ns1:OASYSSection9Score>4</ns1:OASYSSection9Score>
+        <ns1:OASYSSection11Score>1</ns1:OASYSSection11Score>
+        <ns1:OASYSSection12Score>0</ns1:OASYSSection12Score>
+        <ns1:ConcernFlags>DK,DK,DK,DK,DK,DK,DK,DK</ns1:ConcernFlags>
+        <ns1:OASYS_ID>9485345</ns1:OASYS_ID>
+        <ns1:OASYSTotalScore>90</ns1:OASYSTotalScore>
+        <ns1:PurposeOfAssessmentCode>430</ns1:PurposeOfAssessmentCode>
+        <ns1:PurposeOfAssessmentDescription>CJA2003 - Start of Community Order</ns1:PurposeOfAssessmentDescription>
+        <ns1:DateCreated>2018-06-19</ns1:DateCreated>
+        <ns1:AssessedBy>Testing Admin Testing National</ns1:AssessedBy>
+        <ns1:Court>STAFCC</ns1:Court>
+        <ns1:CourtType>CRN</ns1:CourtType>
+        <ns1:OffenceCode>10423</ns1:OffenceCode>
+        <ns1:OGRSScore1>65</ns1:OGRSScore1>
+        <ns1:OGRSScore2>80</ns1:OGRSScore2>
+        <ns1:OGPNotCalculated>0</ns1:OGPNotCalculated>
+        <ns1:OVPNotCalculated>0</ns1:OVPNotCalculated>
+        <ns1:OGPScore1>50</ns1:OGPScore1>
+        <ns1:OGPScore2>65</ns1:OGPScore2>
+        <ns1:OVPScore1>9</ns1:OVPScore1>
+        <ns1:OVPScore2>15</ns1:OVPScore2>
+        <ns1:OGRSRiskRecon>H</ns1:OGRSRiskRecon>
+        <ns1:OGPRiskRecon>M</ns1:OGPRiskRecon>
+        <ns1:OVPRiskRecon>L</ns1:OVPRiskRecon>
+        <ns1:Layer1Obj/>
+        <ns1:SentencePlanInitialDate>2018-06-19</ns1:SentencePlanInitialDate>
+        <ns1:ReviewTerminated>N</ns1:ReviewTerminated>
+        <ns1:LayerType>LAYER_3</ns1:LayerType>
+    </ns1:OASYSAssessmentSummary>
+    <ns1:RiskType xmlns:ns1="http://www.bconline.co.uk/oasys/risk">
+        <ns1:CaseReferenceNumber>H923505</ns1:CaseReferenceNumber>
+        <ns1:RiskOfHarm>L,L,L,L,L,L,L,L,L</ns1:RiskOfHarm>
+    </ns1:RiskType>
+</ns0:SubmitAssessmentSummaryRequest>
