@@ -5,5 +5,5 @@ deploy:
   artifact: Dockerrun.aws.json
 global:
   application_name: assessments-api-dev
-  default_platform: null
-  default_region: null
+  default_platform: 64bit Amazon Linux 2018.03 v2.12.1 running Docker 18.03.1-ce
+  default_region: eu-west-2
