@@ -1,10 +1,7 @@
 branch-defaults:
   master:
-    environment: assessmentsapi-dev
+    environment: assessments-api-dev
 deploy:
   artifact: Dockerrun.aws.json
 global:
-  application_name: assessmentsapi-dev
-  default_platform: arn:aws:elasticbeanstalk:eu-west-2::platform/Docker running on
-    64bit Amazon Linux/2.6.0
-  default_region: eu-west-2
+  application_name: assessments-api-dev
