@@ -1,9 +1,20 @@
 branch-defaults:
   master:
     environment: assessments-api-dev
-deploy:
-  artifact: Dockerrun.aws.json
+environment-defaults:
+  assessments-api-dev:
+    branch: null
+    repository: null
 global:
-  application_name: assessments-api-dev
-  default_platform: 64bit Amazon Linux 2018.03 v2.12.1 running Docker 18.03.1-ce
+  application_name: assessments-api
+  default_ec2_keyname: null
+  default_platform: arn:aws:elasticbeanstalk:eu-west-2::platform/Docker running on
+    64bit Amazon Linux/2.12.1
   default_region: eu-west-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  sc: git
+  workspace_type: Application
