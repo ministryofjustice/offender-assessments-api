@@ -74,7 +74,7 @@ dependencies {
     compile 'com.zaxxer:HikariCP:2.7.6'
     compile 'commons-io:commons-io:2.6'
 
-
+    annotationProcessor 'org.projectlombok:lombok:1.16.18'
     compileOnly 'org.projectlombok:lombok:1.16.18'
 
     testRuntime 'com.h2database:h2:1.4.196'
