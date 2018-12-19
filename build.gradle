@@ -66,6 +66,11 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.security.oauth:spring-security-oauth2'
     compile 'org.springframework.security:spring-security-jwt'
+    compile 'org.apache.commons:commons-lang3:3.8'
+    compile 'net.logstash.logback:logstash-logback-encoder:5.2'
+    compile 'com.microsoft.azure:applicationinsights-core:2.1.2'
+    compile 'com.microsoft.azure:applicationinsights-web:2.1.2'
+    compile 'com.microsoft.azure:applicationinsights-logging-logback:2.1.2'
 
     compile 'org.hibernate:hibernate-java8:5.1.12.Final'
     compile 'org.springframework.hateoas:spring-hateoas:0.24.0.RELEASE'

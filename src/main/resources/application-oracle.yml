@@ -12,3 +12,5 @@ spring:
       hibernate:
         show_sql: true
 
+    profiles:
+      include: logstash
