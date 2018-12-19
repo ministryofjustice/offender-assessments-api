@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,7 +21,6 @@ import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.eq;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -37,6 +37,9 @@ public class OgrsControllerTest {
     @Autowired
     @Qualifier("globalObjectMapper")
     private ObjectMapper objectMapper;
+
+    @Value("${sample.token}")
+    private String validOauthToken;
 
     @Before
     public void setup() {
@@ -55,6 +58,7 @@ public class OgrsControllerTest {
     public void canGetOgrsForOffenderCRNs() {
         Ogrs[] ogrss = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/ogrs3", "crn1")
                 .then()
                 .statusCode(200)
@@ -69,6 +73,7 @@ public class OgrsControllerTest {
     public void getOgrsForUnknownOffenderGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/ogrs3", "crn2")
                 .then()
                 .statusCode(404);
@@ -78,6 +83,7 @@ public class OgrsControllerTest {
     public void canGetOgrsForOffenderPnc() {
         Ogrs[] ogrss = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/ogrs3", "pnc1")
                 .then()
                 .statusCode(200)
@@ -92,6 +98,7 @@ public class OgrsControllerTest {
     public void getOgrsForUnknownOffenderPncGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/ogrs3", "pnc2")
                 .then()
                 .statusCode(404);
@@ -101,6 +108,7 @@ public class OgrsControllerTest {
     public void canGetOgrsForOffenderNomisId() {
         Ogrs[] ogrss = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/ogrs3", "nomisId1")
                 .then()
                 .statusCode(200)
@@ -115,6 +123,7 @@ public class OgrsControllerTest {
     public void getOgrsForUnknownOffenderNomisIdGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/ogrs3", "nomisId2")
                 .then()
                 .statusCode(404);
@@ -124,6 +133,7 @@ public class OgrsControllerTest {
     public void canGetOgrsForOffenderBookingId() {
         Ogrs[] ogrss = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/ogrs3", "bookingId1")
                 .then()
                 .statusCode(200)
@@ -138,6 +148,7 @@ public class OgrsControllerTest {
     public void getOgrsForUnknownOffenderBookingIdGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/ogrs3", "bookingId2")
                 .then()
                 .statusCode(404);
@@ -147,6 +158,7 @@ public class OgrsControllerTest {
     public void canGetOgrsForOasysOffenderPk() {
         Ogrs[] ogrss = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/ogrs3", 1L)
                 .then()
                 .statusCode(200)
@@ -161,6 +173,7 @@ public class OgrsControllerTest {
     public void getOgrsForUnknownOasysOffenderPkGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/ogrs3", 2L)
                 .then()
                 .statusCode(404);
