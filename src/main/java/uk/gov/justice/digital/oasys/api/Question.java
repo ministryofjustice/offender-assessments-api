@@ -1,9 +1,9 @@
 package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 @Builder
 public class Question {
     private Long refQuestionId;

@@ -24,7 +24,7 @@ public class OgpService {
     }
 
     public Optional<List<Ogp>> getOgpForOasysOffenderPk(Long oasysOffenderPk) {
-        Optional<Offender> maybeOffender = Optional.ofNullable(offenderRepository.findOne(oasysOffenderPk));
+        Optional<Offender> maybeOffender = offenderRepository.findById(oasysOffenderPk);
 
         return mapOffender(maybeOffender);
     }

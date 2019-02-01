@@ -13,11 +13,10 @@ spring:
       hibernate:
         show_sql: true
 
-# Disable security locally so that the health end point shows full
-# details and all Spring Boot Actuator end points are visible
 management:
-  security:
-    enabled: false
+  endpoints:
+    web:
+      base-path: /
 
 logging.level.uk.gov: INFO
 logging.level.org.hibernate: INFO

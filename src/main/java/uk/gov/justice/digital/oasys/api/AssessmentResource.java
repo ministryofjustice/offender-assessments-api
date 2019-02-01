@@ -1,11 +1,11 @@
 package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Value;
 import org.springframework.hateoas.ResourceSupport;
 
-@Data
+@Value
 @EqualsAndHashCode(callSuper = false)
 @Builder
 public class AssessmentResource extends ResourceSupport {

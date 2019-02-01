@@ -1,12 +1,12 @@
 package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Value
 @Builder
 public class Assessment {
     private Long oasysSetId;
