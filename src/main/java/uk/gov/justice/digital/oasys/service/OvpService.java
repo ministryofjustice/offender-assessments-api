@@ -30,25 +30,25 @@ public class OvpService {
     }
 
     public Optional<List<Ovp>> getOvpForOffenderCRN(String crn) {
-        Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsProbNumber(crn);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ovp>> getOvpForOffenderPNC(String pnc) {
-        Optional<Offender> maybeOffender = offenderRepository.findByPnc(pnc);
+        Optional<Offender> maybeOffender = offenderRepository.getByPnc(pnc);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ovp>> getOvpForOffenderNomisId(String nomisId) {
-        Optional<Offender> maybeOffender = offenderRepository.findByCmsPrisNumber(nomisId);
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsPrisNumber(nomisId);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ovp>> getOvpForOffenderBookingId(String bookingId) {
-        Optional<Offender> maybeOffender = offenderRepository.findByPrisonNumber(bookingId);
+        Optional<Offender> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
 
         return mapOffender(maybeOffender);
     }

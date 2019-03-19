@@ -30,25 +30,25 @@ public class OgrsService {
     }
 
     public Optional<List<Ogrs>> getOgrsForOffenderCRN(String crn) {
-        Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsProbNumber(crn);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ogrs>> getOgrsForOffenderPNC(String pnc) {
-        Optional<Offender> maybeOffender = offenderRepository.findByPnc(pnc);
+        Optional<Offender> maybeOffender = offenderRepository.getByPnc(pnc);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ogrs>> getOgrsForOffenderNomisId(String nomisId) {
-        Optional<Offender> maybeOffender = offenderRepository.findByCmsPrisNumber(nomisId);
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsPrisNumber(nomisId);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ogrs>> getOgrsForOffenderBookingId(String bookingId) {
-        Optional<Offender> maybeOffender = offenderRepository.findByPrisonNumber(bookingId);
+        Optional<Offender> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
 
         return mapOffender(maybeOffender);
     }

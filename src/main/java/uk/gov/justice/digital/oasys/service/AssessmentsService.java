@@ -2,6 +2,7 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.Assessment;
 import uk.gov.justice.digital.oasys.api.AssessmentResource;
 import uk.gov.justice.digital.oasys.api.Question;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@Transactional(readOnly = true)
 public class AssessmentsService {
 
     private final OffenderRepository offenderRepository;
@@ -40,25 +42,25 @@ public class AssessmentsService {
     }
 
     public Optional<List<AssessmentResource>> getAssessmentsForOffenderCRN(String crn, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsProbNumber(crn);
 
         return assessmentResourceOf(assessmentsFilter, maybeOffender);
     }
 
     public Optional<List<AssessmentResource>> getAssessmentsForOffenderPnc(String pnc, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = offenderRepository.findByPnc(pnc);
+        Optional<Offender> maybeOffender = offenderRepository.getByPnc(pnc);
 
         return assessmentResourceOf(assessmentsFilter, maybeOffender);
     }
 
     public Optional<List<AssessmentResource>> getAssessmentsForOffenderNomisId(String nomisId, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = offenderRepository.findByCmsPrisNumber(nomisId);
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsPrisNumber(nomisId);
 
         return assessmentResourceOf(assessmentsFilter, maybeOffender);
     }
 
     public Optional<List<AssessmentResource>> getAssessmentsForOffenderBookingId(String bookingId, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = offenderRepository.findByPrisonNumber(bookingId);
+        Optional<Offender> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
 
         return assessmentResourceOf(assessmentsFilter, maybeOffender);
     }
@@ -70,23 +72,23 @@ public class AssessmentsService {
     }
 
     public Optional<Assessment> getLatestAssessmentForOffenderCRN(String crn, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = offenderRepository.findByCmsProbNumber(crn);
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsProbNumber(crn);
 
         return latestAssessmentOf(assessmentsFilter, maybeOffender);
     }
 
     public Optional<Assessment> getLatestAssessmentForOffenderPnc(String pnc, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = offenderRepository.findByPnc(pnc);
+        Optional<Offender> maybeOffender = offenderRepository.getByPnc(pnc);
 
         return latestAssessmentOf(assessmentsFilter, maybeOffender);
     }
     public Optional<Assessment> getLatestAssessmentForOffenderNomisId(String nomisId, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = offenderRepository.findByCmsPrisNumber(nomisId);
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsPrisNumber(nomisId);
 
         return latestAssessmentOf(assessmentsFilter, maybeOffender);
     }
     public Optional<Assessment> getLatestAssessmentForOffenderBookingId(String bookingId, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = offenderRepository.findByPrisonNumber(bookingId);
+        Optional<Offender> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
 
         return latestAssessmentOf(assessmentsFilter, maybeOffender);
     }
@@ -116,7 +118,7 @@ public class AssessmentsService {
 
     public Optional<Question> getLatestQAndAforOffenderCRN(String crn, String assessmentType, String section, String question) {
 
-        final Optional<Assessment> maybeAssessment = latestAssessmentOf(AssessmentFilters.curry(AssessmentFilters.byAssessmentType, assessmentType), offenderRepository.findByCmsProbNumber(crn));
+        final Optional<Assessment> maybeAssessment = latestAssessmentOf(AssessmentFilters.curry(AssessmentFilters.byAssessmentType, assessmentType), offenderRepository.getByCmsProbNumber(crn));
 
         return maybeAssessment.flatMap(assessment -> assessment
                 .getSections()

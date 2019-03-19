@@ -7,10 +7,10 @@ import java.util.Optional;
 
 public interface OffenderRepository extends JpaRepository<Offender,Long> {
 
-    Optional<Offender> findByCmsProbNumber(String crn);
-    Optional<Offender> findByCmsPrisNumber(String nomisId);
-    Optional<Offender> findByPrisonNumber(String bookingId);
-    Optional<Offender> findByPnc(String pnc);
+    Optional<Offender> getByCmsProbNumber(String crn);
+    Optional<Offender> getByCmsPrisNumber(String nomisId);
+    Optional<Offender> getByPrisonNumber(String bookingId);
+    Optional<Offender> getByPnc(String pnc);
 
 
 }

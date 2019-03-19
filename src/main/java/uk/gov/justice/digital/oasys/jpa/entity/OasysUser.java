@@ -1,15 +1,12 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Time;
-import java.util.Arrays;
-import java.util.Objects;
 
 @Data
 @Entity
@@ -28,8 +25,8 @@ public class OasysUser {
     private String userForename3;
     @Column(name = "USER_FAMILY_NAME")
     private String userFamilyName;
-    @Column(name = "PASSWORD_ENCRYPTED")
-    private byte[] passwordEncrypted;
+//    @Column(name = "PASSWORD_ENCRYPTED")
+//    private byte[] passwordEncrypted;
     @Column(name = "PASSWORD_CHANGE_DATE")
     private Time passwordChangeDate;
     @Column(name = "LAST_LOGIN")

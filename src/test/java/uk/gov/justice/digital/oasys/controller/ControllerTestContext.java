@@ -19,14 +19,14 @@ public class ControllerTestContext {
 
     public static void setup(OffenderRepository offenderRepository) {
 
-        Mockito.when(offenderRepository.findByCmsProbNumber(eq("crn1"))).thenReturn(anOffender());
-        Mockito.when(offenderRepository.findByCmsProbNumber(eq("crn2"))).thenReturn(Optional.empty());
-        Mockito.when(offenderRepository.findByCmsPrisNumber(eq("nomisId1"))).thenReturn(anOffender());
-        Mockito.when(offenderRepository.findByCmsPrisNumber(eq("nomisId2"))).thenReturn(Optional.empty());
-        Mockito.when(offenderRepository.findByPrisonNumber(eq("bookingId1"))).thenReturn(anOffender());
-        Mockito.when(offenderRepository.findByPrisonNumber(eq("bookingId2"))).thenReturn(Optional.empty());
-        Mockito.when(offenderRepository.findByPnc(eq("pnc1"))).thenReturn(anOffender());
-        Mockito.when(offenderRepository.findByPnc(eq("pnc2"))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.getByCmsProbNumber(eq("crn1"))).thenReturn(anOffender());
+        Mockito.when(offenderRepository.getByCmsProbNumber(eq("crn2"))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.getByCmsPrisNumber(eq("nomisId1"))).thenReturn(anOffender());
+        Mockito.when(offenderRepository.getByCmsPrisNumber(eq("nomisId2"))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.getByPrisonNumber(eq("bookingId1"))).thenReturn(anOffender());
+        Mockito.when(offenderRepository.getByPrisonNumber(eq("bookingId2"))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.getByPnc(eq("pnc1"))).thenReturn(anOffender());
+        Mockito.when(offenderRepository.getByPnc(eq("pnc2"))).thenReturn(Optional.empty());
         Mockito.when(offenderRepository.findById(eq(1L))).thenReturn(anOffender());
         Mockito.when(offenderRepository.findById(eq(2L))).thenReturn(Optional.empty());
 
