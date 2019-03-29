@@ -34,7 +34,7 @@ public class AssessmentsService {
     }
 
     public Optional<List<AssessmentResource>> getAssessmentsForOffenderPK(Long oasysOffenderPk, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = Optional.ofNullable(offenderRepository.findOne(oasysOffenderPk));
+        Optional<Offender> maybeOffender = offenderRepository.findById(oasysOffenderPk);
 
         return assessmentResourceOf(assessmentsFilter, maybeOffender);
     }
@@ -64,7 +64,7 @@ public class AssessmentsService {
     }
 
     public Optional<Assessment> getLatestAssessmentForOffenderPk(Long oasysOffenderPk, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
-        Optional<Offender> maybeOffender = Optional.ofNullable(offenderRepository.findOne(oasysOffenderPk));
+        Optional<Offender> maybeOffender = offenderRepository.findById(oasysOffenderPk);
 
     return latestAssessmentOf(assessmentsFilter, maybeOffender);
     }
@@ -111,7 +111,7 @@ public class AssessmentsService {
     }
 
     public Optional<Assessment> getAssessment(Long oasysSetId) {
-        return Optional.ofNullable(assessmentRepository.findOne(oasysSetId)).map(assessmentsTransformer::assessmentOf);
+        return assessmentRepository.findById(oasysSetId).map(assessmentsTransformer::assessmentOf);
     }
 
     public Optional<Question> getLatestQAndAforOffenderCRN(String crn, String assessmentType, String section, String question) {

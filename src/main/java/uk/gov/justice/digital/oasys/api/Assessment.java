@@ -1,13 +1,12 @@
 package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
-import lombok.Data;
-import uk.gov.justice.digital.oasys.jpa.entity.QaReview;
+import lombok.Value;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Value
 @Builder
 public class Assessment {
     private Long oasysSetId;
@@ -21,5 +20,5 @@ public class Assessment {
     private boolean voided;
     private List<Section> sections;
     private List<OasysBcsPart> oasysBcsParts;
-    private uk.gov.justice.digital.oasys.api.QaReview qaReview;
+    private QaReview qaReview;
 }

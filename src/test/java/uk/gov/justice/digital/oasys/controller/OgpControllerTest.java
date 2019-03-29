@@ -10,9 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.Ogp;
@@ -20,7 +21,6 @@ import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.eq;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -37,6 +37,9 @@ public class OgpControllerTest {
     @Autowired
     @Qualifier("globalObjectMapper")
     private ObjectMapper objectMapper;
+
+    @Value("${sample.token}")
+    private String validOauthToken;
 
     @Before
     public void setup() {
@@ -56,6 +59,7 @@ public class OgpControllerTest {
     public void canGetOgpForOffenderCRNs() {
         Ogp[] ogps = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/ogp", "crn1")
                 .then()
                 .statusCode(200)
@@ -70,6 +74,7 @@ public class OgpControllerTest {
     public void getOgpForUnknownOffenderGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/ogp", "crn2")
                 .then()
                 .statusCode(404);
@@ -79,6 +84,7 @@ public class OgpControllerTest {
     public void canGetOgpForOffenderPnc() {
         Ogp[] ogps = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/ogp", "pnc1")
                 .then()
                 .statusCode(200)
@@ -93,6 +99,7 @@ public class OgpControllerTest {
     public void getOgpForUnknownOffenderPncGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/ogp", "pnc2")
                 .then()
                 .statusCode(404);
@@ -102,6 +109,7 @@ public class OgpControllerTest {
     public void canGetOgpForOffenderNomisId() {
         Ogp[] ogps = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/ogp", "nomisId1")
                 .then()
                 .statusCode(200)
@@ -116,6 +124,7 @@ public class OgpControllerTest {
     public void getOgpForUnknownOffenderNomisIdGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/ogp", "nomisId2")
                 .then()
                 .statusCode(404);
@@ -125,6 +134,7 @@ public class OgpControllerTest {
     public void canGetOgpForOffenderBookingId() {
         Ogp[] ogps = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/ogp", "bookingId1")
                 .then()
                 .statusCode(200)
@@ -139,6 +149,7 @@ public class OgpControllerTest {
     public void getOgpForUnknownOffenderBookingIdGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/ogp", "bookingId2")
                 .then()
                 .statusCode(404);
@@ -148,6 +159,7 @@ public class OgpControllerTest {
     public void canGetOgpForOasysOffenderPk() {
         Ogp[] ogps = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/ogp", 1L)
                 .then()
                 .statusCode(200)
@@ -162,6 +174,7 @@ public class OgpControllerTest {
     public void getOgpForUnknownOasysOffenderPkGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/ogp", 2L)
                 .then()
                 .statusCode(404);

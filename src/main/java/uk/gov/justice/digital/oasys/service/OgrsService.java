@@ -24,7 +24,7 @@ public class OgrsService {
     }
 
     public Optional<List<Ogrs>> getOgrsForOasysOffenderPk(Long oasysOffenderPk) {
-        Optional<Offender> maybeOffender = Optional.ofNullable(offenderRepository.findOne(oasysOffenderPk));
+        Optional<Offender> maybeOffender = offenderRepository.findById(oasysOffenderPk);
 
         return mapOffender(maybeOffender);
     }

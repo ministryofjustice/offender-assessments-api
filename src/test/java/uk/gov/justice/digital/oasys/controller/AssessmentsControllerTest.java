@@ -11,9 +11,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.Assessment;
@@ -21,9 +22,11 @@ import uk.gov.justice.digital.oasys.api.AssessmentResource;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
+import java.util.Optional;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,6 +47,9 @@ public class AssessmentsControllerTest {
     @Qualifier("globalObjectMapper")
     private ObjectMapper objectMapper;
 
+    @Value("${sample.token}")
+    private String validOauthToken;
+
     @Before
     public void setup() {
         RestAssured.port = port;
@@ -53,9 +59,8 @@ public class AssessmentsControllerTest {
 
         ControllerTestContext.setup(offenderRepository);
 
-        Mockito.when(assessmentRepository.findOne(eq(0L))).thenReturn(ControllerTestContext.anOasysSet(0L));
+        Mockito.when(assessmentRepository.findById(eq(0L))).thenReturn(Optional.ofNullable(ControllerTestContext.anOasysSet(0L)));
     }
-
 
 
     @After
@@ -63,9 +68,28 @@ public class AssessmentsControllerTest {
     }
 
     @Test
+    public void endpointsAreAuthorised() {
+        given()
+                .when()
+                .get("/xyz")
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
+    public void healthEndpointIsUnauthorised() {
+        given()
+                .when()
+                .get("/health")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
     public void canGetAssessmentsForOffenderPk() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/assessments", 1L)
                 .then()
                 .statusCode(200)
@@ -80,6 +104,7 @@ public class AssessmentsControllerTest {
     public void canGetLatestAssessmentForOffenderPk() {
         Assessment assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/assessments/latest", 1L)
                 .then()
                 .statusCode(200)
@@ -94,6 +119,7 @@ public class AssessmentsControllerTest {
     public void getAssessmentForUnknownOffenderPkGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/assessments", 2L)
                 .then()
                 .statusCode(404);
@@ -103,6 +129,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderCRN() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/assessments", "crn1")
                 .then()
                 .statusCode(200)
@@ -117,6 +144,7 @@ public class AssessmentsControllerTest {
     public void canGetLatestAssessmentForOffenderCrn() {
         Assessment assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/assessments/latest", "crn1")
                 .then()
                 .statusCode(200)
@@ -132,6 +160,7 @@ public class AssessmentsControllerTest {
     public void getAssessmentForUnknownOffenderCRNGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/assessments", "crn2")
                 .then()
                 .statusCode(404);
@@ -141,6 +170,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderPNC() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/assessments", "pnc1")
                 .then()
                 .statusCode(200)
@@ -155,6 +185,7 @@ public class AssessmentsControllerTest {
     public void canGetLatestAssessmentForOffenderPnc() {
         Assessment assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/assessments/latest", "pnc1")
                 .then()
                 .statusCode(200)
@@ -170,6 +201,7 @@ public class AssessmentsControllerTest {
     public void getAssessmentForUnknownOffenderPNCGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/assessments", "pnc2")
                 .then()
                 .statusCode(404);
@@ -179,6 +211,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderNomisId() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/assessments", "nomisId1")
                 .then()
                 .statusCode(200)
@@ -193,6 +226,7 @@ public class AssessmentsControllerTest {
     public void canGetLatestAssessmentForOffenderNmisId() {
         Assessment assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/assessments/latest", "nomisId1")
                 .then()
                 .statusCode(200)
@@ -208,6 +242,7 @@ public class AssessmentsControllerTest {
     public void getAssessmentForUnknownOffenderNomisIdGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/assessments", "nomisId2")
                 .then()
                 .statusCode(404);
@@ -217,6 +252,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderBookingId() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/assessments", "bookingId1")
                 .then()
                 .statusCode(200)
@@ -231,6 +267,7 @@ public class AssessmentsControllerTest {
     public void canGetLatestAssessmentForOffenderBookingId() {
         Assessment assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/assessments/latest", "bookingId1")
                 .then()
                 .statusCode(200)
@@ -246,6 +283,7 @@ public class AssessmentsControllerTest {
     public void getAssessmentForUnknownOffenderBookingIdGivesNotFound() {
         given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/assessments", "bookingId2")
                 .then()
                 .statusCode(404);
@@ -255,6 +293,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderCRNFilteredByAssessmentType() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .param("assessmentType", "oasys")
                 .get("/offenders/crn/{0}/assessments", "crn1")
                 .then()
@@ -270,6 +309,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderCRNFlteredByHistoricStatus() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .param("historicStatus", "CURRENT")
                 .get("/offenders/crn/{0}/assessments", "crn1")
                 .then()
@@ -285,6 +325,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderCRNFlteredByAssessmentStatus() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .param("assessmentStatus", "COMPLETE")
                 .get("/offenders/crn/{0}/assessments", "crn1")
                 .then()
@@ -300,6 +341,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderCRNFlteredBVoided() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .param("voided", "true")
                 .get("/offenders/crn/{0}/assessments", "crn1")
                 .then()
@@ -315,6 +357,7 @@ public class AssessmentsControllerTest {
     public void canGetAssessmentsForOffenderCRNFlteredBNotVoided() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .param("voided", "false")
                 .get("/offenders/crn/{0}/assessments", "crn1")
                 .then()
@@ -330,6 +373,7 @@ public class AssessmentsControllerTest {
     public void assessmentResourceForValidAssessmentContainsValidLink() {
         AssessmentResource[] assessments = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .param("voided", "false")
                 .get("/offenders/crn/{0}/assessments", "crn1")
                 .then()
@@ -345,6 +389,7 @@ public class AssessmentsControllerTest {
     public void canLookupAssessmentByOasysSetPk() {
         Assessment assessment = given()
                 .when()
+                .auth().oauth2(validOauthToken)
                 .get("/assessments/oasysSetId/{0}", 0L)
                 .then()
                 .statusCode(200)

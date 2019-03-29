@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 
 public class ControllerTestContext {
 
@@ -27,8 +27,8 @@ public class ControllerTestContext {
         Mockito.when(offenderRepository.findByPrisonNumber(eq("bookingId2"))).thenReturn(Optional.empty());
         Mockito.when(offenderRepository.findByPnc(eq("pnc1"))).thenReturn(anOffender());
         Mockito.when(offenderRepository.findByPnc(eq("pnc2"))).thenReturn(Optional.empty());
-        Mockito.when(offenderRepository.findOne(eq(1L))).thenReturn(anOffender().get());
-        Mockito.when(offenderRepository.findOne(eq(2L))).thenReturn(null);
+        Mockito.when(offenderRepository.findById(eq(1L))).thenReturn(anOffender());
+        Mockito.when(offenderRepository.findById(eq(2L))).thenReturn(Optional.empty());
 
     }
 
