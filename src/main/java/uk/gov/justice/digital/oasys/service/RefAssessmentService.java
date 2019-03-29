@@ -8,6 +8,7 @@ import uk.gov.justice.digital.oasys.api.RefSection;
 import uk.gov.justice.digital.oasys.api.ReferenceAssessment;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersionPK;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.RefAssessmentRepository;
 import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 
@@ -65,9 +66,18 @@ public class RefAssessmentService {
                 .refScoredForOvp(typesTransformer.ynToBoolean(refSection.getScoredForOgp()))
                 .refSectionCode(refSection.getRefSectionCode())
                 .refSectionId(refSection.getRefSectionUk())
-                .refSectionType(refSection.getSectionTypeElm())
+                .shortDescription(shortDescriptionOf(refSection.getSectionType()))
+                .description(descriptionOf(refSection.getSectionType()))
                 .refQuestions(refQuestionsOf(refSection.getRefQuestions()))
                 .build();
+    }
+
+    private String descriptionOf(RefElement sectionType) {
+        return Optional.ofNullable(sectionType).map(RefElement::getRefElementDesc).orElse(null);
+    }
+
+    private String shortDescriptionOf(RefElement sectionType) {
+        return Optional.ofNullable(sectionType).map(RefElement::getRefElementShortDesc).orElse(null);
     }
 
     public List<RefQuestion> refQuestionsOf(List<uk.gov.justice.digital.oasys.jpa.entity.RefQuestion> refQuestions) {

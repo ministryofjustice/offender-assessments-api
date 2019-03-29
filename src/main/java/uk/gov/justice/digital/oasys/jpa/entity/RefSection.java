@@ -2,7 +2,15 @@ package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.sql.Time;
 import java.util.List;
 
@@ -24,10 +32,13 @@ public class RefSection {
     private Long refSectionUk;
     @Column(name = "FORM_SEQUENCE")
     private Long formSequence;
-    @Column(name = "SECTION_TYPE_ELM")
-    private String sectionTypeElm;
-    @Column(name = "SECTION_TYPE_CAT")
-    private String sectionTypeCat;
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "SECTION_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "SECTION_TYPE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement sectionType;
+
     @Column(name = "CRIM_NEED_SCORE_THRESHOLD")
     private Long crimNeedScoreThreshold;
     @Column(name = "SCORED_FOR_OGP")
