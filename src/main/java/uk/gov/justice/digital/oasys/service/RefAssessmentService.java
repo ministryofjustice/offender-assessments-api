@@ -28,10 +28,10 @@ public class RefAssessmentService {
 
     public Optional<ReferenceAssessment> getReferenceAssessmentOf(String type, String revision) {
 
-        Optional<RefAssVersion> maybeRefAssVersion = Optional.ofNullable(refAssessmentRepository.findOne(RefAssVersionPK.builder()
+        Optional<RefAssVersion> maybeRefAssVersion = refAssessmentRepository.findById(RefAssVersionPK.builder()
                 .refAssVersionCode(type)
                 .versionNumber(revision)
-                .build()));
+                .build());
 
 
         return maybeRefAssVersion.map(this::referenceAssessmentof);
