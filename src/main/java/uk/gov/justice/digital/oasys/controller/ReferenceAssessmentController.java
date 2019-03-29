@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.ReferenceAssessment;
 import uk.gov.justice.digital.oasys.service.RefAssessmentService;
 
-import java.util.List;
-import java.util.Optional;
-
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
@@ -30,7 +27,7 @@ public class ReferenceAssessmentController {
         this.refAssessmentService = refAssessmentService;
     }
 
-    @RequestMapping(path = "/RefAssessment/type/{type}/revision/{revision}", method = RequestMethod.GET)
+    @RequestMapping(path = "/referenceassessments/type/{type}/revision/{revision}", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Assessment not found"),
             @ApiResponse(code = 200, message = "OK")})
