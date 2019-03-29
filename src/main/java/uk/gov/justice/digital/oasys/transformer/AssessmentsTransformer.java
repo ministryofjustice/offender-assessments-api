@@ -10,11 +10,7 @@ import uk.gov.justice.digital.oasys.api.AssessmentVersion;
 import uk.gov.justice.digital.oasys.api.Question;
 import uk.gov.justice.digital.oasys.api.Section;
 import uk.gov.justice.digital.oasys.controller.AssessmentsController;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
+import uk.gov.justice.digital.oasys.jpa.entity.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +37,8 @@ public class AssessmentsTransformer {
                 .completed(oasysSet.getDateCompleted() != null)
                 .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
                 .oasysSetId(oasysSet.getOasysSetPk())
+                .oasysBcsParts(oasysBcsPartsOf(oasysSet.getOasysBcsParts()))
+                .qaReview(QaReviewOf(oasysSet.getQaReview()))
                 .sections(sectionsOf(oasysSet.getOasysSections()))
                 .voided(oasysSet.getAssessmentVoidedDate() != null)
                 .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
@@ -146,5 +144,69 @@ public class AssessmentsTransformer {
 
         return assessmentResource;
 
+    }
+
+    public List<uk.gov.justice.digital.oasys.api.OasysBcsPart> oasysBcsPartsOf(List<OasysBcsPart> oasysBcsParts) {
+        return Optional.ofNullable(oasysBcsParts)
+               .map(obpo -> oasysBcsParts
+                       .stream()
+                       .map(this::oasysBcsPartOf)
+                       .collect(Collectors.toList()))
+                .orElse(null);
+    }
+
+    private uk.gov.justice.digital.oasys.api.OasysBcsPart oasysBcsPartOf(OasysBcsPart oasysBcsPart) {
+        return Optional.ofNullable(oasysBcsPart)
+                .map(oasysBcsPart1 -> uk.gov.justice.digital.oasys.api.OasysBcsPart.builder()
+                    .bcsPartCompDate(typesTransformer.localDateTimeOf(oasysBcsPart.getCreateDate()))
+                    .bcsPart(oasysBcsPart.getBcsPart())
+                    .bcsPartStatus(oasysBcsPart.getBcsPartStatus())
+                    .bcsPartUserArea(oasysBcsPart.getBcsPartUserArea())
+                    .bcsPartUserPosition(oasysBcsPart.getBcsPartUserPosition())
+                    .createDate(typesTransformer.localDateTimeOf(oasysBcsPart.getCreateDate()))
+                    .createUser(oasysBcsPart.getCreateUser())
+                    .lastupdDate(typesTransformer.localDateTimeOf(oasysBcsPart.getLastupdDate()))
+                    .lastupdUser(oasysBcsPart.getLastupdUser())
+                    .lockIncompleteOtherText(oasysBcsPart.getLockIncompleteOtherText())
+                    .lockIncompleteReason(oasysBcsPart.getLockIncompleteReason())
+                    .part1CheckedDate(typesTransformer.localDateTimeOf(oasysBcsPart.getPart1CheckedDate()))
+                    .part1CheckedInd(oasysBcsPart.getPart1CheckedInd())
+                    .praCompDate(typesTransformer.localDateTimeOf(oasysBcsPart.getPraCompDate()))
+                    .praComplete(oasysBcsPart.getPraComplete())
+                    .praCompUser(oasysBcsPart.getPraCompUser())
+                    .bcsPartUser(oasysUserOf(oasysBcsPart.getBcsPartUser()))
+                    .part1CheckedUser(oasysUserOf(oasysBcsPart.getPart1CheckedUser()))
+                    .build()
+                )
+                .orElse(null);
+    }
+
+    private uk.gov.justice.digital.oasys.api.OasysUser oasysUserOf(OasysUser oasysUser) {
+        return Optional.ofNullable(oasysUser)
+                .map(oasysUser1 -> uk.gov.justice.digital.oasys.api.OasysUser.builder()
+                       .oasysUserId(oasysUser.getOasysUserCode())
+                       .userName(oasysUser.getUserForename1() + " " + oasysUser.getUserFamilyName())
+                        .build()
+                )
+                .orElse(null);
+    }
+    private uk.gov.justice.digital.oasys.api.QaReview QaReviewOf(QaReview qaReview) {
+        return Optional.ofNullable(qaReview)
+                .map(qaReview1 -> uk.gov.justice.digital.oasys.api.QaReview.builder()
+                    .currentlyHidden(typesTransformer.ynToBoolean(qaReview.getCurrentlyHidden()))
+                    .dateCompleted(typesTransformer.localDateTimeOf(qaReview.getDateCompleted()))
+                    .dateSelected(typesTransformer.localDateTimeOf(qaReview.getDateSelected()))
+                    .displaySort(qaReview.getDisplaySort())
+                    .qaGrading(qaReview.getQaGrading())
+                    .qaScore(qaReview.getQaScore())
+                    .qaStatus(qaReview.getQaStatus())
+                    .qaSubstitutionReason(qaReview.getQaSubstitutionReason())
+                    .qaUser(oasysUserOf(qaReview.getQaUser()))
+                    .refPeriodMonth(qaReview.getRefPeriodMonth())
+                    .refPeriodQtr(qaReview.getRefPeriodQtr())
+                    .refPeriodYear(qaReview.getRefPeriodYear())
+                    .build()
+                )
+                .orElse(null);
     }
 }

@@ -19,4 +19,6 @@ public class Assessment {
     private LocalDateTime completedDateTime;
     private boolean voided;
     private List<Section> sections;
+    private List<OasysBcsPart> oasysBcsParts;
+    private QaReview qaReview;
 }

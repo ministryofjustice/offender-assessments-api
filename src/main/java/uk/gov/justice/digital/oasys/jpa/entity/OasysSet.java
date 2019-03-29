@@ -502,8 +502,15 @@ public class OasysSet {
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private List<OasysSection> oasysSections;
 
+    @OneToMany
+    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
+    private List<OasysBcsPart> oasysBcsParts;
+
     @ManyToOne
     @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK")
     private OasysAssessmentGroup group;
+
+    @OneToOne (mappedBy = "oasysSet")
+    private QaReview qaReview;
 
 }
