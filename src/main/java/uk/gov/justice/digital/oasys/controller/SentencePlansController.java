@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.service.AssessmentsService;
-import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
 
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static uk.gov.justice.digital.oasys.service.filters.AssessmentFilters.curry;
 
 @RestController
 @Api(description = "Offender Sentence Plan resources", tags = "Offender Sentence Plans")
@@ -34,23 +32,6 @@ public class SentencePlansController {
         this.assessmentsService = assessmentsService;
     }
 
-    private Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilterOf(Optional<String> filterAssessmentStatus, Optional<String> filterAssessmentType, Optional<String> filterGroupStatus, Optional<Boolean> filterVoided) {
-        return filterAssessmentStatus.map(
-                assessmentStatus -> curry(AssessmentFilters.byAssessmentStatus, assessmentStatus))
-                .orElse(AssessmentFilters.identity)
-                .andThen(
-                        filterAssessmentType.map(
-                                assessmentType -> curry(AssessmentFilters.byAssessmentType, assessmentType))
-                                .orElse(AssessmentFilters.identity))
-                .andThen(
-                        filterGroupStatus.map(
-                                groupStatus -> curry(AssessmentFilters.byGroupStatus, groupStatus))
-                                .orElse(AssessmentFilters.identity))
-                .andThen(
-                        filterVoided.map(
-                                voided -> curry(AssessmentFilters.byVoided, voided))
-                                .orElse(AssessmentFilters.identity));
-    }
 
     @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/sentencePlans/latest", method = RequestMethod.GET)
     @ApiResponses({
@@ -63,7 +44,7 @@ public class SentencePlansController {
                                                                                 @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+                assessmentsService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
         return assessmentsService.getLatestSentencePlanForOffenderPk(oasysOffenderId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
@@ -81,7 +62,7 @@ public class SentencePlansController {
                                                                                  @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+                assessmentsService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
         return assessmentsService.getLatestSentencePlanForOffenderCrn(crn, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
@@ -99,7 +80,7 @@ public class SentencePlansController {
                                                                                  @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+                assessmentsService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
         return assessmentsService.getLatestSentencePlanForOffenderPnc(pnc, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
@@ -117,7 +98,7 @@ public class SentencePlansController {
                                                                                      @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+                assessmentsService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
         return assessmentsService.getLatestSentencePlanForOffenderNomsId(nomisId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
@@ -135,7 +116,7 @@ public class SentencePlansController {
                                                                                        @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+                assessmentsService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
         return assessmentsService.getLatestSentencePlanForOffenderBookingId(bookingId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
