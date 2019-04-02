@@ -513,4 +513,8 @@ public class OasysSet {
     @OneToOne (mappedBy = "oasysSet")
     private QaReview qaReview;
 
+    @OneToMany
+    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
+    private List<BasicSentencePlanObj> basicSentencePlanList;
+
 }

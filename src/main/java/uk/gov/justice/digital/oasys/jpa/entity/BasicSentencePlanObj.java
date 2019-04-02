@@ -1,18 +1,15 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.sql.Time;
-import java.util.Objects;
+import java.sql.Date;
 
 @Data
 @Entity
@@ -25,10 +22,15 @@ public class BasicSentencePlanObj {
     private Long displaySort;
     @Column(name = "INCLUDE_IN_PLAN_IND")
     private String includeInPlanInd;
-    @Column(name = "OFFENCE_BEHAV_LINK_ELM")
-    private String offenceBehavLinkElm;
-    @Column(name = "OFFENCE_BEHAV_LINK_CAT")
-    private String offenceBehavLinkCat;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "OFFENCE_BEHAV_LINK_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "OFFENCE_BEHAV_LINK_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement offenceBehaviourLink;
+
+
     @Column(name = "OBJECTIVE_TEXT")
     private String objectiveText;
     @Column(name = "MEASURE_TEXT")
@@ -42,9 +44,9 @@ public class BasicSentencePlanObj {
     @Column(name = "OASYS_SET_PK")
     private Long oasysSetPk;
     @Column(name = "DATE_OPENED")
-    private Time dateOpened;
+    private Date dateOpened;
     @Column(name = "DATE_COMPLETED")
-    private Time dateCompleted;
+    private Date dateCompleted;
     @Column(name = "PROBLEM_AREA_COMP_IND")
     private String problemAreaCompInd;
     @Column(name = "MIG_GUID")
@@ -54,11 +56,11 @@ public class BasicSentencePlanObj {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private Date createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private Date lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
     @Column(name = "CF_LAST_BCS_INT")
