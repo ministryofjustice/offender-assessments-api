@@ -22,6 +22,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static uk.gov.justice.digital.oasys.service.filters.AssessmentFilters.curry;
+
 @Service
 @Transactional(readOnly = true)
 public class AssessmentsService {
@@ -177,6 +179,25 @@ public class AssessmentsService {
         Optional<Offender> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
 
         return latestSentencePlanOf(assessmentsFilter, maybeOffender);
+    }
+
+    public Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilterOf(Optional<String> filterAssessmentStatus, Optional<String> filterAssessmentType, Optional<String> filterGroupStatus, Optional<Boolean> filterVoided) {
+
+        return filterAssessmentStatus.map(
+                assessmentStatus -> curry(AssessmentFilters.byAssessmentStatus, assessmentStatus))
+                .orElse(AssessmentFilters.identity)
+                .andThen(
+                        filterAssessmentType.map(
+                                assessmentType -> curry(AssessmentFilters.byAssessmentType, assessmentType))
+                                .orElse(AssessmentFilters.identity))
+                .andThen(
+                        filterGroupStatus.map(
+                                groupStatus -> curry(AssessmentFilters.byGroupStatus, groupStatus))
+                                .orElse(AssessmentFilters.identity))
+                .andThen(
+                        filterVoided.map(
+                                voided -> curry(AssessmentFilters.byVoided, voided))
+                                .orElse(AssessmentFilters.identity));
     }
 }
 
