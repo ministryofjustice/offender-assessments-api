@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Time;
+import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -24,7 +24,7 @@ public class OffenderAlias {
     @Column(name = "DISPLAY_SORT")
     private Long displaySort;
     @Column(name = "ALIAS_DATE_OF_BIRTH")
-    private Time aliasDateOfBirth;
+    private Timestamp aliasDateOfBirth;
     @Column(name = "ALIAS_FAMILY_NAME")
     private String aliasFamilyName;
     @Column(name = "NAME_SOUNDSLIKE")
@@ -40,11 +40,11 @@ public class OffenderAlias {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private Timestamp createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private Timestamp lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 

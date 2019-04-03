@@ -7,6 +7,7 @@ import uk.gov.justice.digital.oasys.api.Offender;
 import uk.gov.justice.digital.oasys.api.OffenderAlias;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +21,9 @@ public class OffenderTransformer {
                 .aliases(aliasesOf(offender))
                 .cmsEventNumber(offender.getCmsEventNumber())
                 .custody(booleanOf(offender.getCustodyInd()))
-                .dateOfBirth(LocalDate.from(offender.getDateOfBirth().toInstant()))
-                .dateOfDeath(LocalDate.from(offender.getDateOfDeath().toInstant()))
-                .dateOfDeportation(LocalDate.from(offender.getDateOfDeportation().toInstant()))
+                .dateOfBirth(localDateOf(offender.getDateOfBirth()))
+                .dateOfDeath(localDateOf(offender.getDateOfDeath()))
+                .dateOfDeportation(localDateOf(offender.getDateOfDeportation()))
                 .deceased(booleanOf(offender.getDeceasedInd()))
                 .dischargeCode(Optional.ofNullable(offender.getDischargeCode()).map(RefElement::getRefElementDesc).orElse(null))
                 .ethnicCategory(Optional.ofNullable(offender.getEthnicCategory()).map(RefElement::getRefElementDesc).orElse(null))
@@ -44,6 +45,10 @@ public class OffenderTransformer {
                 .riskToOthers(Optional.ofNullable(offender.getRiskToOthers()).map(RefElement::getRefElementDesc).orElse(null))
                 .riskToSelf(Optional.ofNullable(offender.getRiskToSelf()).map(RefElement::getRefElementDesc).orElse(null))
                 .build();
+    }
+
+    private LocalDate localDateOf(Timestamp date) {
+        return Optional.ofNullable(date).map(d -> d.toLocalDateTime().toLocalDate()).orElse(null);
     }
 
     private Identifiers identifiersOf(uk.gov.justice.digital.oasys.jpa.entity.Offender offender) {

@@ -22,34 +22,31 @@ public class OffenderService {
 
     public Optional<Offender> findOffenderByOasysOffenderId(Long oasysId) {
         return offenderRepository.findById(oasysId).map(
-                offender -> offenderTransformer.offenderOf(offender)
+                offenderTransformer::offenderOf
         );
     }
 
     public Optional<Offender> findOffenderByNomisId(String nomsId) {
         return offenderRepository.getByCmsPrisNumber(nomsId).map(
-                offender -> offenderTransformer.offenderOf(offender)
+                offenderTransformer::offenderOf
         );
     }
 
     public Optional<Offender> findOffenderByCrnId(String crn) {
         return offenderRepository.getByCmsProbNumber(crn).map(
-                offender -> offenderTransformer.offenderOf(offender)
+                offenderTransformer::offenderOf
         );
     }
 
     public Optional<Offender> findOffenderBypnc(String nomsId) {
         return offenderRepository.getByPnc(nomsId).map(
-                offender -> offenderTransformer.offenderOf(offender)
+                offenderTransformer::offenderOf
         );
     }
 
     public Optional<Offender> findOffenderByBookingNumber(String bookingNumber) {
         return offenderRepository.getByPrisonNumber(bookingNumber).map(
-                offender -> offenderTransformer.offenderOf(offender)
+                offenderTransformer::offenderOf
         );
     }
-
-
-
 }

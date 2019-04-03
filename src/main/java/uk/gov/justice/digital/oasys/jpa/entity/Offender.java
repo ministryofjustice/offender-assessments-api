@@ -13,7 +13,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -27,7 +27,7 @@ public class Offender {
     @Column(name = "OFFENDER_PK")
     private Long offenderPk;
     @Column(name = "ADDRESS_LAST_UPDATE_DATE")
-    private Time addressLastUpdateDate;
+    private Timestamp addressLastUpdateDate;
     @Column(name = "ADDRESS_LINE_1")
     private String addressLine1;
     @Column(name = "ADDRESS_LINE_2")
@@ -45,7 +45,7 @@ public class Offender {
     @Column(name = "TELEPHONE_NUMBER")
     private String telephoneNumber;
     @Column(name = "DATE_OF_BIRTH")
-    private Time dateOfBirth;
+    private Timestamp dateOfBirth;
     @Column(name = "TITLE_ELM")
     private String titleElm;
     @Column(name = "TITLE_CAT")
@@ -77,9 +77,9 @@ public class Offender {
     @Column(name = "MERGE_PNC_NUMBER")
     private String mergePncNumber;
     @Column(name = "DATE_OF_DEATH")
-    private Time dateOfDeath;
+    private Timestamp dateOfDeath;
     @Column(name = "DATE_OF_DEPORTATION")
-    private Time dateOfDeportation;
+    private Timestamp dateOfDeportation;
     @Column(name = "OFFENDER_MANAGED_IND")
     private String offenderManagedInd;
     @Column(name = "PPO_IND")
@@ -87,11 +87,11 @@ public class Offender {
     @Column(name = "REMAND_IND")
     private String remandInd;
     @Column(name = "REVIEW_DATE")
-    private Time reviewDate;
+    private Timestamp reviewDate;
     @Column(name = "REVIEW_REMINDER_DATE")
-    private Time reviewReminderDate;
+    private Timestamp reviewReminderDate;
     @Column(name = "TERM_REMINDER_DATE")
-    private Time termReminderDate;
+    private Timestamp termReminderDate;
 
     @OneToOne
     @JoinColumns({
@@ -157,7 +157,7 @@ public class Offender {
     @Column(name = "PHYSICAL_LOCATION_OTHER")
     private String physicalLocationOther;
     @Column(name = "DELETED_DATE")
-    private Time deletedDate;
+    private Timestamp deletedDate;
     @Column(name = "MERGED_IND")
     private String mergedInd;
     @Column(name = "CMS_MESSAGE")
@@ -171,7 +171,7 @@ public class Offender {
     @Column(name = "CMS_EVENT_NUMBER")
     private Long cmsEventNumber;
     @Column(name = "POTENTIAL_DELETION_DATE")
-    private Time potentialDeletionDate;
+    private Timestamp potentialDeletionDate;
     @Column(name = "RETAINED_IND")
     private String retainedInd;
     @Column(name = "RETAINED_REASON")
@@ -179,7 +179,7 @@ public class Offender {
     @Column(name = "LIFE_IND")
     private String lifeInd;
     @Column(name = "RELEASE_POT_DELETION_DATE")
-    private Time releasePotDeletionDate;
+    private Timestamp releasePotDeletionDate;
     @Column(name = "RESTORE_PNC_IND")
     private String restorePncInd;
     @Column(name = "PHYSICAL_LOCATION")
@@ -191,11 +191,11 @@ public class Offender {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private Timestamp createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private Timestamp lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 
