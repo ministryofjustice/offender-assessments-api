@@ -9,7 +9,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.sql.Time;
 import java.util.List;
@@ -90,26 +92,42 @@ public class Offender {
     private Time reviewReminderDate;
     @Column(name = "TERM_REMINDER_DATE")
     private Time termReminderDate;
-    @Column(name = "ETHNIC_CATEGORY_ELM")
-    private String ethnicCategoryElm;
-    @Column(name = "ETHNIC_CATEGORY_CAT")
-    private String ethnicCategoryCat;
-    @Column(name = "GENDER_ELM")
-    private String genderElm;
-    @Column(name = "GENDER_CAT")
-    private String genderCat;
-    @Column(name = "RISK_TO_OTHERS_ELM")
-    private String riskToOthersElm;
-    @Column(name = "RISK_TO_OTHERS_CAT")
-    private String riskToOthersCat;
-    @Column(name = "RISK_TO_SELF_ELM")
-    private String riskToSelfElm;
-    @Column(name = "RISK_TO_SELF_CAT")
-    private String riskToSelfCat;
-    @Column(name = "OFFENDER_HISTORIC_ELM")
-    private String offenderHistoricElm;
-    @Column(name = "OFFENDER_HISTORIC_CAT")
-    private String offenderHistoricCat;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "ETHNIC_CATEGORY_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "ETHNIC_CATEGORY_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement ethnicCategory;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "GENDER_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "GENDER_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement gender;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "RISK_TO_OTHERS_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "RISK_TO_OTHERS_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement riskToOthers;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "RISK_TO_SELF_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "RISK_TO_SELF_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement riskToSelf;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "OFFENDER_HISTORIC_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "OFFENDER_HISTORIC_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement offenderHistoric;
+
     @Column(name = "LOCAL_AUTHORITY_ELM")
     private String localAuthorityElm;
     @Column(name = "LOCAL_AUTHORITY_CAT")
@@ -180,14 +198,23 @@ public class Offender {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
-    @Column(name = "DISCHARGE_CODE_CAT")
-    private String dischargeCodeCat;
-    @Column(name = "DISCHARGE_CODE_ELM")
-    private String dischargeCodeElm;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "DISCHARGE_CODE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "DISCHARGE_CODE_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement dischargeCode;
+
+
     @Column(name = "HOST_CPA")
     private String hostCpa;
     @OneToMany
     @JoinColumn(name = "OFFENDER_PK", referencedColumnName = "OFFENDER_PK")
     private List<OasysAssessmentGroup> oasysAssessmentGroups;
+
+    @OneToMany
+    @JoinColumn(name = "OFFENDER_PK", referencedColumnName = "OFFENDER_PK")
+    private List<OffenderAlias> offenderAliases;
 
 }
