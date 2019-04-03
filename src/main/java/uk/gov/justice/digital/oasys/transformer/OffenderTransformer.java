@@ -71,7 +71,7 @@ public class OffenderTransformer {
         return Optional.ofNullable(offender.getOffenderAliases()).map(
                 aliases -> aliases.stream().map(a -> OffenderAlias
                         .builder()
-                        .dateOfBirth(LocalDate.from(a.getAliasDateOfBirth().toInstant()))
+                        .dateOfBirth(localDateOf(a.getAliasDateOfBirth()))
                         .familyName(a.getAliasFamilyName())
                         .forename1(a.getAliasForename1())
                         .forename2(a.getAliasForename2())
