@@ -8,15 +8,17 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -30,6 +32,8 @@ import java.util.List;
 public class OasysSet {
     @Id
     @Column(name = "OASYS_SET_PK")
+    @SequenceGenerator(name = "OASYS_SET_SEQ", sequenceName = "OASYS_SET_SEQ")
+    @GeneratedValue(generator = "OASYS_SET_SEQ", strategy = GenerationType.SEQUENCE)
     private Long oasysSetPk;
     @Column(name = "ADDL_OFFC_V2_LGCYDAT")
     private String addlOffcV2Lgcydat;
@@ -54,15 +58,15 @@ public class OasysSet {
     @Column(name = "ASSESSOR_POSITION")
     private String assessorPosition;
     @Column(name = "ASSESSOR_SIGNED_DATE")
-    private Time assessorSignedDate;
+    private Timestamp assessorSignedDate;
     @Column(name = "AUTOMATIC_RELEASE_DATE")
-    private Time automaticReleaseDate;
+    private Timestamp automaticReleaseDate;
     @Column(name = "CHARGES_PENDING_DTL")
     private String chargesPendingDtl;
     @Column(name = "CHARGES_PENDING_IND")
     private String chargesPendingInd;
     @Column(name = "CONDITIONAL_RELEASE_DATE")
-    private Time conditionalReleaseDate;
+    private Timestamp conditionalReleaseDate;
     @Column(name = "COUNTERSIGNER_NAME")
     private String countersignerName;
     @Column(name = "COUNTERSIGNER_OFFICE")
@@ -72,7 +76,7 @@ public class OasysSet {
     @Column(name = "COUNTERSIGNER_POSITION")
     private String countersignerPosition;
     @Column(name = "COUNTERSIGNER_SIGNED_DATE")
-    private Time countersignerSignedDate;
+    private Timestamp countersignerSignedDate;
     @Column(name = "COUNTERSIGNER_COMMENTS")
     private String countersignerComments;
     @Column(name = "CMS_PROB_NUMBER")
@@ -100,9 +104,9 @@ public class OasysSet {
     @Column(name = "CURRENT_TELEPHONE_NUMBER")
     private String currentTelephoneNumber;
     @Column(name = "DATE_OF_ACTUAL_RELEASE")
-    private Time dateOfActualRelease;
+    private Timestamp dateOfActualRelease;
     @Column(name = "DATE_OF_BIRTH")
-    private Time dateOfBirth;
+    private Timestamp dateOfBirth;
     @Column(name = "DET_U_IMMIGRATION_ACT_IND")
     private String detUImmigrationActInd;
     @Column(name = "DISCHARGE_ADDRESS_LINE_1")
@@ -122,7 +126,7 @@ public class OasysSet {
     @Column(name = "DISCHARGE_TELEPHONE_NUM")
     private String dischargeTelephoneNum;
     @Column(name = "FACILITY_LIC_ELIG_DATE")
-    private Time facilityLicEligDate;
+    private Timestamp facilityLicEligDate;
     @Column(name = "FAMILY_NAME")
     private String familyName;
     @Column(name = "FORENAME_1")
@@ -132,17 +136,17 @@ public class OasysSet {
     @Column(name = "FORENAME_3")
     private String forename3;
     @Column(name = "HOME_DETN_CURFEW_DATE")
-    private Time homeDetnCurfewDate;
+    private Timestamp homeDetnCurfewDate;
     @Column(name = "INITIATION_DATE")
-    private Time initiationDate;
+    private Timestamp initiationDate;
     @Column(name = "INTERPRETER_REQUIRED_IND")
     private String interpreterRequiredInd;
     @Column(name = "LICENCE_EXPIRY_DATE")
-    private Time licenceExpiryDate;
+    private Timestamp licenceExpiryDate;
     @Column(name = "LICENCE_REQUIRE_RELEASE")
     private String licenceRequireRelease;
     @Column(name = "NON_PAROLE_DATE")
-    private Time nonParoleDate;
+    private Timestamp nonParoleDate;
     @Column(name = "OASYS_FORM_VERSION")
     private Long oasysFormVersion;
     @Column(name = "OASYS_SCORING_ALG_VERSION")
@@ -150,7 +154,7 @@ public class OasysSet {
     @Column(name = "OFFDR_IDENT_PERSIST_IND")
     private String offdrIdentPersistInd;
     @Column(name = "PAROLE_ELIGIBILITY_DATE")
-    private Time paroleEligibilityDate;
+    private Timestamp paroleEligibilityDate;
     @Column(name = "PNC")
     private String pnc;
     @Column(name = "PRF_SPKN_LNG_OFTXT")
@@ -174,13 +178,13 @@ public class OasysSet {
     @Column(name = "DATE_COMPLETED")
     private Timestamp dateCompleted;
     @Column(name = "DATE_ASSESSMENT_REQST")
-    private Time dateAssessmentReqst;
+    private Timestamp dateAssessmentReqst;
     @Column(name = "DATE_REPORT_REQST")
-    private Time dateReportReqst;
+    private Timestamp dateReportReqst;
     @Column(name = "RESETTLE_LIC_ELIG_DATE")
-    private Time resettleLicEligDate;
+    private Timestamp resettleLicEligDate;
     @Column(name = "SENTENCE_EXPIRY_DATE")
-    private Time sentenceExpiryDate;
+    private Timestamp sentenceExpiryDate;
     @Column(name = "SOURCES_INFO_OTHER_FTXT")
     private String sourcesInfoOtherFtxt;
     @Column(name = "LOOKED_AFTER")
@@ -228,17 +232,17 @@ public class OasysSet {
     @Column(name = "COURT_OTHER_TEXT")
     private String courtOtherText;
     @Column(name = "RECALL_DATE")
-    private Time recallDate;
+    private Timestamp recallDate;
     @Column(name = "DELETED_DATE")
-    private Time deletedDate;
+    private Timestamp deletedDate;
     @Column(name = "BCS_SENT_PLAN_TEXT")
     private String bcsSentPlanText;
     @Column(name = "ARMED_FORCES_IND")
     private String armedForcesInd;
     @Column(name = "NO_SARA_DATE")
-    private Time noSaraDate;
+    private Timestamp noSaraDate;
     @Column(name = "NO_RM2000_DATE")
-    private Time noRm2000Date;
+    private Timestamp noRm2000Date;
     @Column(name = "PHYSICAL_LOCATION_OTHER")
     private String physicalLocationOther;
     @Column(name = "INVALID_SECT1_SCORE")
@@ -246,7 +250,7 @@ public class OasysSet {
     @Column(name = "AGE_FOLLOW_UP")
     private Long ageFollowUp;
     @Column(name = "CMS_LAST_EXPORT_DATE")
-    private Time cmsLastExportDate;
+    private Timestamp cmsLastExportDate;
     @Column(name = "CMS_RESEND_IND")
     private String cmsResendInd;
     @Column(name = "CLONED_LOCKED_INCOMP_IND")
@@ -262,7 +266,7 @@ public class OasysSet {
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private Timestamp lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
     @Column(name = "CMS_EVENT_NUMBER")
@@ -274,11 +278,11 @@ public class OasysSet {
     @Column(name = "POST_SENT_SUPV_DATE_IND")
     private String postSentSupvDateInd;
     @Column(name = "POST_SENT_SUPV_DATE")
-    private Time postSentSupvDate;
+    private Timestamp postSentSupvDate;
     @Column(name = "BCS_SYSTEM_CREATED_IND")
     private String bcsSystemCreatedInd;
     @Column(name = "RECEPTION_DATE")
-    private Time receptionDate;
+    private Timestamp receptionDate;
 
     @OneToOne
     @JoinColumns({
@@ -390,7 +394,7 @@ public class OasysSet {
             @JoinColumn(name = "OGRS3_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
             @JoinColumn(name = "OGRS3_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
     })
-        private RefElement ogrs3RiskRecon;
+    private RefElement ogrs3RiskRecon;
 
     @OneToOne
     @JoinColumn(name = "ORIGINATING_AREAEST_CODE", referencedColumnName = "CT_AREA_EST_CODE", insertable = false, updatable = false)
@@ -510,7 +514,7 @@ public class OasysSet {
     @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK")
     private OasysAssessmentGroup group;
 
-    @OneToOne (mappedBy = "oasysSet")
+    @OneToOne(mappedBy = "oasysSet")
     private QaReview qaReview;
 
     @OneToMany

@@ -8,6 +8,6 @@ import java.util.List;
 @Value
 @Builder
 public class BasicSentencePlan {
-    private final Long oasysSetId;
+    private final Long sentencePlanId;
     private List<BasicSentencePlanItem> basicSentencePlanItemItems;
 }

@@ -18,7 +18,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.Assessment;
-import uk.gov.justice.digital.oasys.api.AssessmentResource;
+import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
@@ -32,7 +32,7 @@ import static org.mockito.ArgumentMatchers.eq;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("dev")
-public class AssessmentsControllerTest {
+public class SentencePlansControllerTest {
 
     @LocalServerPort
     int port;
@@ -77,312 +77,303 @@ public class AssessmentsControllerTest {
     }
 
     @Test
-    public void healthEndpointIsUnauthorised() {
-        given()
-                .when()
-                .get("/health")
-                .then()
-                .statusCode(200);
-    }
-
-    @Test
-    public void canGetAssessmentsForOffenderPk() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderPk() {
+        BasicSentencePlan[] sentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/assessments", 1L)
+                .get("/offenders/oasysOffenderId/{0}/sentencePlans", 1L)
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).hasSize(2);
+        assertThat(sentencePlans).hasSize(2);
     }
 
     @Test
-    public void canGetLatestAssessmentForOffenderPk() {
-        Assessment assessments = given()
+    public void canGetLatestSentencePlanForOffenderPk() {
+        BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/assessments/latest", 1L)
+                .get("/offenders/oasysOffenderId/{0}/sentencePlans/latest", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(BasicSentencePlan.class);
+
+        assertThat(sentencePlan).extracting("sentencePlanId").containsOnly(2L);
+    }
+
+    @Test
+    public void getSentencePlanForUnknownOffenderPkGivesNotFound() {
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/oasysOffenderId/{0}/sentencePlans", 2L)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void canGetSentencePlansForOffenderCRN() {
+        BasicSentencePlan[] SentencePlans = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/crn/{0}/sentencePlans", "crn1")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(BasicSentencePlan[].class);
+
+        assertThat(SentencePlans).hasSize(2);
+    }
+
+    @Test
+    public void canGetLatestSentencePlanForOffenderCrn() {
+        Assessment SentencePlans = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/crn/{0}/sentencePlans/latest", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
     }
 
+
     @Test
-    public void getAssessmentForUnknownOffenderPkGivesNotFound() {
+    public void getSentencePlansForUnknownOffenderCRNGivesNotFound() {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/assessments", 2L)
+                .get("/offenders/crn/{0}/sentencePlans", "crn2")
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRN() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderPNC() {
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/pnc/{0}/sentencePlans", "pnc1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).hasSize(2);
+        assertThat(SentencePlans).hasSize(2);
     }
 
     @Test
-    public void canGetLatestAssessmentForOffenderCrn() {
-        Assessment assessments = given()
+    public void canGetLatestSentencePlansForOffenderPnc() {
+        Assessment SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/assessments/latest", "crn1")
+                .get("/offenders/pnc/{0}/sentencePlans/latest", "pnc1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
     }
 
 
     @Test
-    public void getAssessmentForUnknownOffenderCRNGivesNotFound() {
+    public void getSentencePlansForUnknownOffenderPNCGivesNotFound() {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/assessments", "crn2")
+                .get("/offenders/pnc/{0}/sentencePlans", "pnc2")
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderPNC() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderNomisId() {
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/assessments", "pnc1")
+                .get("/offenders/nomisId/{0}/sentencePlans", "nomisId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).hasSize(2);
+        assertThat(SentencePlans).hasSize(2);
     }
 
     @Test
-    public void canGetLatestAssessmentForOffenderPnc() {
-        Assessment assessments = given()
+    public void canGetLatestSentencePlansForOffenderNmisId() {
+        Assessment SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/assessments/latest", "pnc1")
+                .get("/offenders/nomisId/{0}/sentencePlans/latest", "nomisId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
     }
 
 
     @Test
-    public void getAssessmentForUnknownOffenderPNCGivesNotFound() {
+    public void getSentencePlansForUnknownOffenderNomisIdGivesNotFound() {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/assessments", "pnc2")
+                .get("/offenders/nomisId/{0}/sentencePlans", "nomisId2")
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderNomisId() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderBookingId() {
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/assessments", "nomisId1")
+                .get("/offenders/bookingId/{0}/sentencePlans", "bookingId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).hasSize(2);
+        assertThat(SentencePlans).hasSize(2);
     }
 
     @Test
-    public void canGetLatestAssessmentForOffenderNmisId() {
-        Assessment assessments = given()
+    public void canGetLatestSentencePlansForOffenderBookingId() {
+        Assessment SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/assessments/latest", "nomisId1")
+                .get("/offenders/bookingId/{0}/sentencePlans/latest", "bookingId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
     }
 
 
     @Test
-    public void getAssessmentForUnknownOffenderNomisIdGivesNotFound() {
+    public void getSentencePlansForUnknownOffenderBookingIdGivesNotFound() {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/assessments", "nomisId2")
+                .get("/offenders/bookingId/{0}/sentencePlans", "bookingId2")
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderBookingId() {
-        AssessmentResource[] assessments = given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/assessments", "bookingId1")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(AssessmentResource[].class);
-
-        assertThat(assessments).hasSize(2);
-    }
-
-    @Test
-    public void canGetLatestAssessmentForOffenderBookingId() {
-        Assessment assessments = given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/assessments/latest", "bookingId1")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(Assessment.class);
-
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
-    }
-
-
-    @Test
-    public void getAssessmentForUnknownOffenderBookingIdGivesNotFound() {
-        given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/assessments", "bookingId2")
-                .then()
-                .statusCode(404);
-    }
-
-    @Test
-    public void canGetAssessmentsForOffenderCRNFilteredByAssessmentType() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderCRNFilteredByAssessmentType() {
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("assessmentType", "oasys")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/sentencePlans", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).extracting("assessment.assessmentType").containsOnly("oasys");
+        assertThat(SentencePlans).extracting("assessment.assessmentType").containsOnly("oasys");
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByHistoricStatus() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderCRNFlteredByHistoricStatus() {
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("historicStatus", "CURRENT")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/sentencePlans", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).extracting("assessment.historicStatus").containsOnly("CURRENT");
+        assertThat(SentencePlans).extracting("assessment.historicStatus").containsOnly("CURRENT");
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredByAssessmentStatus() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderCRNFlteredBySentencePlanstatus() {
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .param("assessmentStatus", "COMPLETE")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .param("SentencePlanstatus", "COMPLETE")
+                .get("/offenders/crn/{0}/sentencePlans", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).extracting("assessment.assessmentStatus").containsOnly("COMPLETE");
+        assertThat(SentencePlans).extracting("assessment.SentencePlanstatus").containsOnly("COMPLETE");
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredBVoided() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderCRNFlteredBVoided() {
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("voided", "true")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/sentencePlans", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).extracting("assessment.voided").containsOnly(true);
+        assertThat(SentencePlans).extracting("assessment.voided").containsOnly(true);
     }
 
     @Test
-    public void canGetAssessmentsForOffenderCRNFlteredBNotVoided() {
-        AssessmentResource[] assessments = given()
+    public void canGetSentencePlansForOffenderCRNFlteredBNotVoided() {
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("voided", "false")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/sentencePlans", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).extracting("assessment.voided").containsOnly(false);
+        assertThat(SentencePlans).extracting("assessment.voided").containsOnly(false);
     }
 
     @Test
     public void assessmentResourceForValidAssessmentContainsValidLink() {
-        AssessmentResource[] assessments = given()
+        BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("voided", "false")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/sentencePlans", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(BasicSentencePlan[].class);
 
-        assertThat(assessments).extracting("links").isNotEmpty();
+        assertThat(SentencePlans).extracting("links").isNotEmpty();
     }
 
     @Test
@@ -390,7 +381,7 @@ public class AssessmentsControllerTest {
         Assessment assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/assessments/sentencePlanId/{0}", 0L)
+                .get("/sentencePlans/sentencePlanId/{0}", 0L)
                 .then()
                 .statusCode(200)
                 .extract()
