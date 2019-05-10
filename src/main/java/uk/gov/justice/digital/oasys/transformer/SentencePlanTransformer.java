@@ -28,7 +28,7 @@ public class SentencePlanTransformer {
 
     public BasicSentencePlan basicSentencePlanOf(List<BasicSentencePlanItem> basicSentencePlanItems) {
         return BasicSentencePlan.builder()
-                .oasysSetId(basicSentencePlanItems.stream().map(BasicSentencePlanItem::getOasysSetId).findFirst().orElse(null))
+                .sentencePlanId(basicSentencePlanItems.stream().map(BasicSentencePlanItem::getOasysSetId).findFirst().orElse(null))
                 .basicSentencePlanItemItems(basicSentencePlanItems)
                 .build();
     }

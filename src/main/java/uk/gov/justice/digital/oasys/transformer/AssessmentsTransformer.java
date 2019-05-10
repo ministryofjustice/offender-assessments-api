@@ -10,7 +10,15 @@ import uk.gov.justice.digital.oasys.api.AssessmentVersion;
 import uk.gov.justice.digital.oasys.api.Question;
 import uk.gov.justice.digital.oasys.api.Section;
 import uk.gov.justice.digital.oasys.controller.AssessmentsController;
-import uk.gov.justice.digital.oasys.jpa.entity.*;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysBcsPart;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
+import uk.gov.justice.digital.oasys.jpa.entity.QaReview;
+import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,17 +40,17 @@ public class AssessmentsTransformer {
     public Assessment assessmentOf(OasysSet oasysSet) {
         return Assessment.builder()
                 .createdDateTime(typesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
-                .assessmentType(oasysSet.getAssessmentType().getRefElementCode())
+                .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
                 .assessmentVersion(assessmentVersionOf(oasysSet.getRefAssVersion()))
-                .completed(oasysSet.getDateCompleted() != null)
+                .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
                 .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
                 .oasysSetId(oasysSet.getOasysSetPk())
                 .oasysBcsParts(oasysBcsPartsOf(oasysSet.getOasysBcsParts()))
                 .qaReview(QaReviewOf(oasysSet.getQaReview()))
                 .sections(sectionsOf(oasysSet.getOasysSections()))
-                .voided(oasysSet.getAssessmentVoidedDate() != null)
+                .voided(Optional.ofNullable(oasysSet.getAssessmentVoidedDate()).isPresent())
                 .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
-                .assessmentStatus(oasysSet.getAssessmentStatus().getRefElementCode())
+                .assessmentStatus(Optional.ofNullable(oasysSet.getAssessmentStatus()).map(RefElement::getRefElementCode).orElse(null))
                 .build();
     }
 
@@ -130,14 +138,14 @@ public class AssessmentsTransformer {
         final AssessmentResource assessmentResource = AssessmentResource.builder()
                 .assessment(AssessmentSummary.builder()
                         .createdDateTime(typesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
-                        .assessmentType(oasysSet.getAssessmentType().getRefElementCode())
+                        .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
                         .assessmentVersion(assessmentVersionOf(oasysSet.getRefAssVersion()))
-                        .completed(oasysSet.getDateCompleted() != null)
+                        .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
                         .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
                         .oasysSetId(oasysSet.getOasysSetPk())
-                        .voided(oasysSet.getAssessmentVoidedDate() != null)
+                        .voided(Optional.ofNullable(oasysSet.getAssessmentVoidedDate()).isPresent())
                         .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
-                        .assessmentStatus(oasysSet.getAssessmentStatus().getRefElementCode())
+                        .assessmentStatus(Optional.ofNullable(oasysSet.getAssessmentStatus()).map(RefElement::getRefElementCode).orElse(null))
                         .build()).build();
 
         assessmentResource.add(linkTo(methodOn(AssessmentsController.class).getAssessment(oasysSet.getOasysSetPk())).withSelfRel());

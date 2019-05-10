@@ -18,7 +18,7 @@ public class AssessmentFilters {
 
     public static final BiFunction<Boolean, Stream<OasysSet>, Stream<OasysSet>> byVoided =
             (isVoided, oasysSets) -> oasysSets
-                    .filter(set -> isVoided ? set.getAssessmentVoidedDate() != null : set.getAssessmentVoidedDate() == null);
+                    .filter(set -> isVoided == (set.getAssessmentVoidedDate() != null));
 
     public static final BiFunction<String, Stream<OasysSet>, Stream<OasysSet>> byAssessmentStatus =
             (assessmentStatus, oasysSets) -> oasysSets

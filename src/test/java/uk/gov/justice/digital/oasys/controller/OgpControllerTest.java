@@ -67,7 +67,7 @@ public class OgpControllerTest {
                 .body()
                 .as(Ogp[].class);
 
-        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+        assertThat(ogps).extracting("sentencePlanId").containsExactly(1L, 2L);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class OgpControllerTest {
                 .body()
                 .as(Ogp[].class);
 
-        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+        assertThat(ogps).extracting("sentencePlanId").containsExactly(1L, 2L);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class OgpControllerTest {
                 .body()
                 .as(Ogp[].class);
 
-        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+        assertThat(ogps).extracting("sentencePlanId").containsExactly(1L, 2L);
     }
 
     @Test
@@ -142,7 +142,7 @@ public class OgpControllerTest {
                 .body()
                 .as(Ogp[].class);
 
-        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+        assertThat(ogps).extracting("sentencePlanId").containsExactly(1L, 2L);
     }
 
     @Test
@@ -167,7 +167,7 @@ public class OgpControllerTest {
                 .body()
                 .as(Ogp[].class);
 
-        assertThat(ogps).extracting("oasysSetId").containsExactly(1L, 2L);
+        assertThat(ogps).extracting("sentencePlanId").containsExactly(1L, 2L);
     }
 
     @Test
