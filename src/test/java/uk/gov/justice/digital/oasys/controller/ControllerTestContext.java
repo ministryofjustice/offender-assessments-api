@@ -2,6 +2,7 @@ package uk.gov.justice.digital.oasys.controller;
 
 import com.google.common.collect.ImmutableList;
 import org.mockito.Mockito;
+import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
@@ -69,6 +70,7 @@ public class ControllerTestContext {
                         .ovpSexWesc(BigDecimal.ONE)
                         .group(aGroup("HISTORIC"))
                         .assessmentStatus(anAssessmentStatus("OPEN"))
+                        .basicSentencePlanList(aSentencePlan(1L))
                         .build(),
                 OasysSet.builder()
                         .createDate(new Timestamp(System.currentTimeMillis()))
@@ -94,7 +96,20 @@ public class ControllerTestContext {
                         .group(aGroup("CURRENT"))
                         .assessmentStatus(anAssessmentStatus("COMPLETE"))
                         .assessmentVoidedDate(new Timestamp(System.currentTimeMillis()))
+                        .basicSentencePlanList(aSentencePlan(2L))
                         .build());
+    }
+
+    private static List<BasicSentencePlanObj> aSentencePlan(long l) {
+        return ImmutableList.of(
+                BasicSentencePlanObj.builder()
+                        .objectiveText("obj" + l)
+                        .measureText("measure" + l)
+                        .timescalesText("timescales" + l)
+                        .whoWillDoWorkText("who" + l)
+                        .whatWorkText("what" + l)
+                        .oasysSetPk(l).build()
+        );
     }
 
     private static RefElement anAssessmentStatus(String status) {

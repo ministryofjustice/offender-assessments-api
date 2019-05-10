@@ -66,7 +66,7 @@ public class OgrsControllerTest {
                 .body()
                 .as(Ogrs[].class);
 
-        assertThat(ogrss).extracting("sentencePlanId").containsExactly(1L, 2L);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class OgrsControllerTest {
                 .body()
                 .as(Ogrs[].class);
 
-        assertThat(ogrss).extracting("sentencePlanId").containsExactly(1L, 2L);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class OgrsControllerTest {
                 .body()
                 .as(Ogrs[].class);
 
-        assertThat(ogrss).extracting("sentencePlanId").containsExactly(1L, 2L);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class OgrsControllerTest {
                 .body()
                 .as(Ogrs[].class);
 
-        assertThat(ogrss).extracting("sentencePlanId").containsExactly(1L, 2L);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test
@@ -166,7 +166,7 @@ public class OgrsControllerTest {
                 .body()
                 .as(Ogrs[].class);
 
-        assertThat(ogrss).extracting("sentencePlanId").containsExactly(1L, 2L);
+        assertThat(ogrss).extracting("oasysSetId").containsExactly(1L, 2L);
     }
 
     @Test

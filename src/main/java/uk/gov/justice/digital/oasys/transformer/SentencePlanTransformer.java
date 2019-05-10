@@ -52,7 +52,7 @@ public class SentencePlanTransformer {
     }
 
     public RefElement refElementOf(uk.gov.justice.digital.oasys.jpa.entity.RefElement offenceBehaviourLink) {
-        return Optional.of(offenceBehaviourLink).map(obl -> RefElement
+        return Optional.ofNullable(offenceBehaviourLink).map(obl -> RefElement
                 .builder()
                 .code(obl.getRefElementCode())
                 .description(obl.getRefElementDesc())
