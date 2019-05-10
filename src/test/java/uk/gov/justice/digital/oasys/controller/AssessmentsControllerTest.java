@@ -112,7 +112,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
     }
 
     @Test
@@ -152,7 +152,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
     }
 
 
@@ -193,7 +193,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
     }
 
 
@@ -234,7 +234,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
     }
 
 
@@ -275,7 +275,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
     }
 
 
@@ -390,14 +390,14 @@ public class AssessmentsControllerTest {
         Assessment assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/assessments/sentencePlanId/{0}", 0L)
+                .get("/assessments/oasysSetId/{0}", 0L)
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessment).extracting("sentencePlanId").containsExactly(0L);
+        assertThat(assessment).extracting("oasysSetId").containsExactly(0L);
 
     }
 

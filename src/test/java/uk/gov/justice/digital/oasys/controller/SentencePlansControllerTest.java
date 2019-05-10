@@ -17,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.justice.digital.oasys.api.Assessment;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
@@ -133,7 +132,7 @@ public class SentencePlansControllerTest {
 
     @Test
     public void canGetLatestSentencePlanForOffenderCrn() {
-        Assessment SentencePlans = given()
+        BasicSentencePlan SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/sentencePlans/latest", "crn1")
@@ -141,7 +140,7 @@ public class SentencePlansControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(BasicSentencePlan.class);
 
         assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
     }
@@ -174,7 +173,7 @@ public class SentencePlansControllerTest {
 
     @Test
     public void canGetLatestSentencePlansForOffenderPnc() {
-        Assessment SentencePlans = given()
+        BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/sentencePlans/latest", "pnc1")
@@ -182,9 +181,9 @@ public class SentencePlansControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(BasicSentencePlan.class);
 
-        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").containsOnly(2L);
     }
 
 
@@ -214,8 +213,8 @@ public class SentencePlansControllerTest {
     }
 
     @Test
-    public void canGetLatestSentencePlansForOffenderNmisId() {
-        Assessment SentencePlans = given()
+    public void canGetLatestSentencePlanForOffenderNomisId() {
+        BasicSentencePlan SentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/sentencePlans/latest", "nomisId1")
@@ -223,9 +222,9 @@ public class SentencePlansControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(BasicSentencePlan.class);
 
-        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(SentencePlan).extracting("sentencePlanId").containsOnly(2L);
     }
 
 
@@ -255,8 +254,8 @@ public class SentencePlansControllerTest {
     }
 
     @Test
-    public void canGetLatestSentencePlansForOffenderBookingId() {
-        Assessment SentencePlans = given()
+    public void canGetLatestSentencePlanForOffenderBookingId() {
+        BasicSentencePlan SentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/sentencePlans/latest", "bookingId1")
@@ -264,9 +263,9 @@ public class SentencePlansControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(BasicSentencePlan.class);
 
-        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(SentencePlan).extracting("sentencePlanId").containsOnly(2L);
     }
 
 
@@ -282,7 +281,7 @@ public class SentencePlansControllerTest {
 
     @Test
     public void canGetSentencePlansForOffenderCRNFilteredByAssessmentType() {
-        BasicSentencePlan[] SentencePlans = given()
+        BasicSentencePlan[] sentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("assessmentType", "oasys")
@@ -293,7 +292,7 @@ public class SentencePlansControllerTest {
                 .body()
                 .as(BasicSentencePlan[].class);
 
-        assertThat(SentencePlans).extracting("assessment.assessmentType").containsOnly("oasys");
+        assertThat(sentencePlans).extracting("sentencePlanId").containsOnly(1l);
     }
 
     @Test
@@ -309,87 +308,7 @@ public class SentencePlansControllerTest {
                 .body()
                 .as(BasicSentencePlan[].class);
 
-        assertThat(SentencePlans).extracting("assessment.historicStatus").containsOnly("CURRENT");
-    }
-
-    @Test
-    public void canGetSentencePlansForOffenderCRNFlteredBySentencePlanstatus() {
-        BasicSentencePlan[] SentencePlans = given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .param("SentencePlanstatus", "COMPLETE")
-                .get("/offenders/crn/{0}/sentencePlans", "crn1")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(BasicSentencePlan[].class);
-
-        assertThat(SentencePlans).extracting("assessment.SentencePlanstatus").containsOnly("COMPLETE");
-    }
-
-    @Test
-    public void canGetSentencePlansForOffenderCRNFlteredBVoided() {
-        BasicSentencePlan[] SentencePlans = given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .param("voided", "true")
-                .get("/offenders/crn/{0}/sentencePlans", "crn1")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(BasicSentencePlan[].class);
-
-        assertThat(SentencePlans).extracting("assessment.voided").containsOnly(true);
-    }
-
-    @Test
-    public void canGetSentencePlansForOffenderCRNFlteredBNotVoided() {
-        BasicSentencePlan[] SentencePlans = given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .param("voided", "false")
-                .get("/offenders/crn/{0}/sentencePlans", "crn1")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(BasicSentencePlan[].class);
-
-        assertThat(SentencePlans).extracting("assessment.voided").containsOnly(false);
-    }
-
-    @Test
-    public void assessmentResourceForValidAssessmentContainsValidLink() {
-        BasicSentencePlan[] SentencePlans = given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .param("voided", "false")
-                .get("/offenders/crn/{0}/sentencePlans", "crn1")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(BasicSentencePlan[].class);
-
-        assertThat(SentencePlans).extracting("links").isNotEmpty();
-    }
-
-    @Test
-    public void canLookupAssessmentByOasysSetPk() {
-        Assessment assessment = given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .get("/sentencePlans/sentencePlanId/{0}", 0L)
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(Assessment.class);
-
-        assertThat(assessment).extracting("sentencePlanId").containsExactly(0L);
-
+        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2l);
     }
 
 }
