@@ -123,6 +123,64 @@ public class AssessmentTest {
         assertThat(ctx).jsonPathAsBoolean("$.tspEligible").isTrue();
     }
 
+    @Test
+    public void tspIneligibilityWhenTotalScore5But11_7NotScores2() throws JsonProcessingException {
+        var builder = ImmutableMap.<String, Long>builder();
+        builder.put("2.6", 1L).put("7.2", 1L).put("11.4", 1L).put("11.6", 1L).put("11.7", 1L).put("11.9", 0L).put("12.1", 0L);
+
+
+        Assessment assessment = Assessment.builder()
+                .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
+                .assessmentType("LAYER_3")
+                .build();
+        ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
+
+        final String json = objectMapper.writeValueAsString(assessment);
+
+        DocumentContext ctx = JsonPath.parse(json);
+
+        assertThat(ctx).jsonPathAsBoolean("$.tspEligible").isFalse();
+    }
+
+    @Test
+    public void tspIneligibilityWhenTotalScore5But11_6NotScores2() throws JsonProcessingException {
+        var builder = ImmutableMap.<String, Long>builder();
+        builder.put("2.6", 1L).put("7.2", 1L).put("11.4", 1L).put("11.6", 1L).put("11.7", 1L).put("11.9", 0L).put("12.1", 0L);
+
+
+        Assessment assessment = Assessment.builder()
+                .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
+                .assessmentType("LAYER_3")
+                .build();
+        ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
+
+        final String json = objectMapper.writeValueAsString(assessment);
+
+        DocumentContext ctx = JsonPath.parse(json);
+
+        assertThat(ctx).jsonPathAsBoolean("$.tspEligible").isFalse();
+    }
+
+    @Test
+    public void tspIneligibilityWhenTotalScoreLessThan5() throws JsonProcessingException {
+        var builder = ImmutableMap.<String, Long>builder();
+        builder.put("2.6", 1L).put("7.2", 0L).put("11.4", 0L).put("11.6", 0L).put("11.7", 0L).put("11.9", 0L).put("12.1", 0L);
+
+
+        Assessment assessment = Assessment.builder()
+                .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
+                .assessmentType("LAYER_3")
+                .build();
+
+        ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
+
+        final String json = objectMapper.writeValueAsString(assessment);
+
+        DocumentContext ctx = JsonPath.parse(json);
+
+        assertThat(ctx).jsonPathAsBoolean("$.tspEligible").isFalse();
+    }
+
     private Map<String, Section> sectionsWithScoresOf(Map<String, Section> sections, Map<String, Long> scores) {
         return Maps.transformValues(sections, input -> Section.builder()
                 .questions(questionsWithScoresOf(input.getQuestions(), scores))
