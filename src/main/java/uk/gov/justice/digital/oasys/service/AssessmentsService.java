@@ -7,6 +7,7 @@ import uk.gov.justice.digital.oasys.api.Assessment;
 import uk.gov.justice.digital.oasys.api.AssessmentResource;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.Question;
+import uk.gov.justice.digital.oasys.api.Section;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
@@ -126,16 +127,10 @@ public class AssessmentsService {
 
         final Optional<Assessment> maybeAssessment = latestAssessmentOf(AssessmentFilters.curry(AssessmentFilters.byAssessmentType, assessmentType), offenderRepository.getByCmsProbNumber(crn));
 
-        return maybeAssessment.flatMap(assessment -> assessment
-                .getSections()
-                .stream()
-                .filter(s -> s.getRefSectionCode().equals(section))
-                .findFirst()
-                .flatMap(s -> s.getQuestions()
-                        .stream()
-                        .filter(q -> q.getRefQuestionCode().equals(question))
-                        .findFirst())
-        );
+         return maybeAssessment.map(Assessment::getSections)
+                 .flatMap(stringSectionMap -> Optional.ofNullable(stringSectionMap.get(section)))
+                 .map(Section::getQuestions)
+                 .flatMap(stringQuestionMap -> Optional.ofNullable(stringQuestionMap.get(question)));
     }
 
     private Optional<BasicSentencePlan> latestSentencePlanOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Optional<Offender> maybeOffender) {

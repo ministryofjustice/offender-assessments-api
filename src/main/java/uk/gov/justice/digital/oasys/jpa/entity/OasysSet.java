@@ -520,5 +520,4 @@ public class OasysSet {
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private List<BasicSentencePlanObj> basicSentencePlanList;
-
 }

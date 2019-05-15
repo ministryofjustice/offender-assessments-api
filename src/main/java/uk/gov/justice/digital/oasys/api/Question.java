@@ -3,6 +3,8 @@ package uk.gov.justice.digital.oasys.api;
 import lombok.Builder;
 import lombok.Value;
 
+import java.util.Optional;
+
 @Value
 @Builder
 public class Question {
@@ -12,5 +14,6 @@ public class Question {
     private Long displayScore;
     private String questionText;
 
-    private Answer answer;
+    @Builder.Default
+    private Optional<Answer> answer = Optional.empty();
 }
