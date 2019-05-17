@@ -31,7 +31,7 @@ public class OffenderTransformer {
                 .forename1(offender.getForename1())
                 .forename2(offender.getForename2())
                 .forename3(offender.getForename3())
-                .gender(Optional.ofNullable(offender.getEthnicCategory()).map(RefElement::getRefElementDesc).orElse(null))
+                .gender(Optional.ofNullable(offender.getGender()).map(RefElement::getRefElementDesc).orElse(null))
                 .identifiers(identifiersOf(offender))
                 .lifer(booleanOf(offender.getLifeInd()))
                 .limitedAccessOffender(offender.getLimitedAccessOffender())
