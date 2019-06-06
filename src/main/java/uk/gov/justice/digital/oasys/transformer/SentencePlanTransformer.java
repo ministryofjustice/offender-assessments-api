@@ -23,13 +23,14 @@ public class SentencePlanTransformer {
                         .collect(Collectors.toList()));
 
         return basicSentencePlanItems
-                .map(this::basicSentencePlanOf);
+                .map(this::basicSentencePlanOf)
+                .map(bsp -> bsp.toBuilder().createdDate(oasysSet.getCreateDate().toLocalDateTime().toLocalDate()).build());
     }
 
     public BasicSentencePlan basicSentencePlanOf(List<BasicSentencePlanItem> basicSentencePlanItems) {
         return BasicSentencePlan.builder()
                 .sentencePlanId(basicSentencePlanItems.stream().map(BasicSentencePlanItem::getOasysSetId).findFirst().orElse(null))
-                .basicSentencePlanItemItems(basicSentencePlanItems)
+                .basicSentencePlanItems(basicSentencePlanItems)
                 .build();
     }
 
