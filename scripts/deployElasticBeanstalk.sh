@@ -8,4 +8,4 @@ cd $PWD
 
 cat ./Dockerrun.aws.json
 
-~/.local/bin/eb deploy --process --verbose
+~/.local/bin/eb deploy --process --verbose assessments-api-dev
