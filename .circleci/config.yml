@@ -61,12 +61,12 @@ jobs:
 
       - setup_remote_docker
 
-      - deploy:
-          name: Push to Docker Hub
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              ./scripts/publishDockerImage.sh offenderassessmentsapi "${BUILD_VERSION}" "${CIRCLE_BUILD_NUM}" "${CIRCLE_BUILD_URL}" "${CIRCLE_SHA1}" "${DOCKER_EMAIL}" "${DOCKER_USERNAME}" "${DOCKER_PASSWORD}"
-            fi
+#      - deploy:
+#          name: Push to Docker Hub
+#          command: |
+#            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+#              ./scripts/publishDockerImage.sh offenderassessmentsapi "${BUILD_VERSION}" "${CIRCLE_BUILD_NUM}" "${CIRCLE_BUILD_URL}" "${CIRCLE_SHA1}" "${DOCKER_EMAIL}" "${DOCKER_USERNAME}" "${DOCKER_PASSWORD}"
+#            fi
 
 #      - deploy:
 #          name: Install elastic beanstalk CLI
@@ -81,6 +81,9 @@ jobs:
 #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
 #              ./scripts/deployElasticBeanstalk.sh "${BUILD_VERSION}"
 #            fi
+      - deploy:
+          name: Push to Docker Hub
+          command: ./scripts/publishDockerImage.sh offenderassessmentsapi "${BUILD_VERSION}" "${CIRCLE_BUILD_NUM}" "${CIRCLE_BUILD_URL}" "${CIRCLE_SHA1}" "${DOCKER_EMAIL}" "${DOCKER_USERNAME}" "${DOCKER_PASSWORD}"
 
       - deploy:
           name: Install elastic beanstalk CLI
