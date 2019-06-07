@@ -84,10 +84,8 @@ jobs:
 
       - deploy:
           name: Install elastic beanstalk CLI
-          command: |
-              ./scripts/installElasticBeanstalk.sh
+          command: ./scripts/installElasticBeanstalk.sh
 
       - deploy:
           name: Deploy to Elastic Beanstalk Staging
-          command: |
-              ./scripts/deployElasticBeanstalk.sh "${BUILD_VERSION}"
+          command: ./scripts/deployElasticBeanstalk.sh "${BUILD_VERSION}"
