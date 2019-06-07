@@ -1,9 +1,6 @@
 branch-defaults:
   master:
     environment: assessments-api-dev
-  feature*:
-    environment: assessments-api-dev
-
 deploy:
   artifact: Dockerrun.aws.json
 global:
