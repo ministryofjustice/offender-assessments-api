@@ -9,7 +9,7 @@ import java.util.List;
 @Value
 @Builder
 public class Offender {
-    private Long offenderPk;
+    private Long oasysOffenderId;
     private String title;
     private String familyName;
     private String forename1;

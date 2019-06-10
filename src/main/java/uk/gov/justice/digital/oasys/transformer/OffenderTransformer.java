@@ -39,7 +39,7 @@ public class OffenderTransformer {
                 .nfa(booleanOf(offender.getNfaInd()))
                 .offenderHistoric(Optional.ofNullable(offender.getOffenderHistoric()).map(RefElement::getRefElementDesc).orElse(null))
                 .offenderManaged(booleanOf(offender.getOffenderManagedInd()))
-                .offenderPk(offender.getOffenderPk())
+                .oasysOffenderId(offender.getOffenderPk())
                 .ppo(booleanOf(offender.getPpoInd()))
                 .remand(booleanOf(offender.getRemandInd()))
                 .riskToOthers(Optional.ofNullable(offender.getRiskToOthers()).map(RefElement::getRefElementDesc).orElse(null))
