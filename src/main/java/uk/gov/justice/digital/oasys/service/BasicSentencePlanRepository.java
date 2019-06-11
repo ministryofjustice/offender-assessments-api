@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
 
 @Repository
-public interface SentencePlanRepository extends JpaRepository<BasicSentencePlanObj, Long> {
+public interface BasicSentencePlanRepository extends JpaRepository<BasicSentencePlanObj, Long> {
 }
