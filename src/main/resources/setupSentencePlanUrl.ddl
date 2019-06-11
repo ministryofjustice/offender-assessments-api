@@ -1,4 +1,7 @@
-create or replace procedure setSentencePlanWebappUrl( url in VARCHAR2 ) is
+-- This procedure is used to point an oasys environment at the appropriate matching
+-- New Tech Sentence Plan application.
+
+    create or replace procedure setSentencePlanWebappUrl( url in VARCHAR2 ) is
     cat_count number;
     ref_count number;
 begin
