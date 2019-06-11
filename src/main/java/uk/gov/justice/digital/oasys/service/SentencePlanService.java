@@ -33,17 +33,17 @@ public class SentencePlanService {
     private final OffenderRepository offenderRepository;
     private final OffenderService offenderService;
     private final OasysSetRepository oasysSetRepository;
-    private final SentencePlanRepository sentencePlanRepository;
+    private final BasicSentencePlanRepository basicSentencePlanRepository;
     private final SentencePlanTransformer sentencePlanTransformer;
     private final OasysAssessmentGroupRepository assessmentGroupRepository;
     private final CmsStubOffenderRepository cmsStubOffenderRepository;
 
     @Autowired
-    public SentencePlanService(OffenderRepository offenderRepository, OffenderService offenderService, OasysSetRepository oasysSetRepository, SentencePlanRepository sentencePlanRepository, SentencePlanTransformer sentencePlanTransformer, OasysAssessmentGroupRepository assessmentGroupRepository, CmsStubOffenderRepository cmsStubOffenderRepository) {
+    public SentencePlanService(OffenderRepository offenderRepository, OffenderService offenderService, OasysSetRepository oasysSetRepository, BasicSentencePlanRepository basicSentencePlanRepository, SentencePlanTransformer sentencePlanTransformer, OasysAssessmentGroupRepository assessmentGroupRepository, CmsStubOffenderRepository cmsStubOffenderRepository) {
         this.offenderRepository = offenderRepository;
         this.offenderService = offenderService;
         this.oasysSetRepository = oasysSetRepository;
-        this.sentencePlanRepository = sentencePlanRepository;
+        this.basicSentencePlanRepository = basicSentencePlanRepository;
         this.sentencePlanTransformer = sentencePlanTransformer;
         this.assessmentGroupRepository = assessmentGroupRepository;
         this.cmsStubOffenderRepository = cmsStubOffenderRepository;
@@ -83,7 +83,7 @@ public class SentencePlanService {
                 .whoWillDoWorkText(item.getWhoWillDoWorkText())
                 .build();
 
-        return Optional.of(sentencePlanRepository.save(basicSentencePlanObj))
+        return Optional.of(basicSentencePlanRepository.save(basicSentencePlanObj))
                 .map(sentencePlanTransformer::basicSentencePlanItemOf);
 
     }
