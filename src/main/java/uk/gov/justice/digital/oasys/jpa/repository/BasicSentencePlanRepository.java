@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.oasys.service;
+package uk.gov.justice.digital.oasys.jpa.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

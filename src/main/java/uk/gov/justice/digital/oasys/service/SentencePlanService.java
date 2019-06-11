@@ -13,6 +13,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
+import uk.gov.justice.digital.oasys.jpa.repository.BasicSentencePlanRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.CmsStubOffenderRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysAssessmentGroupRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysSetRepository;
