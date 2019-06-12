@@ -118,17 +118,8 @@ public class Assessment {
 
         for (Section section : filteredSections) {
             Map<String, String> planSection = planSections.get(section.getRefSectionCode());
-
-
-            boolean riskReoffending = false;
-            boolean riskHarm = riskHarm = Optional.ofNullable(section.getQuestions().get(planSection.get("harmQuestion"))).map(e -> e.getAnswer().get()).map(e -> e.getRefAnswerCode()).orElse("NO").equals("YES");
-
-            try {
-                riskReoffending = section.getQuestions().get(planSection.get("reoffendingQuestion")).getAnswer().get().getRefAnswerCode().equals("YES");
-            } catch (NullPointerException e) {
-
-            }
-
+            boolean riskHarm = Optional.ofNullable(section.getQuestions().get(planSection.get("harmQuestion"))).map(e -> e.getAnswer().get()).map(e -> e.getRefAnswerCode()).orElse("NO").equals("YES");
+            boolean riskReoffending =  Optional.ofNullable(section.getQuestions().get(planSection.get("reoffendingQuestion"))).map(e -> e.getAnswer().get()).map(e -> e.getRefAnswerCode()).orElse("NO").equals("YES");
             boolean overThreshold = Optional.ofNullable(section.getSectionOtherRawScore()).orElse(0L) >= Optional.ofNullable(section.getRefSection().getRefCrimNeedScoreThreshold()).orElse(Long.MAX_VALUE);
             boolean flagged = Optional.ofNullable(section.getLowScoreAttentionNeeded()).orElse(false);
             if (Stream.of(overThreshold, riskHarm, riskReoffending, flagged).anyMatch(e -> e.equals(true))) {
