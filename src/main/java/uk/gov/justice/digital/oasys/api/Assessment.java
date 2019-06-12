@@ -6,10 +6,9 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Value
 @Builder(toBuilder = true)
@@ -61,6 +60,73 @@ public class Assessment {
         } catch (NoSuchElementException nsee) {
             return null;
         }
+    }
+
+    @JsonIgnore
+    public List<AssessmentNeed> getLayer3SentencePlanNeeds() {
+
+        if (!isLayer3()) {
+            return new ArrayList<>();
+        }
+
+        Map<String, Map<String, String>> planSections = Map.of(
+                "10"
+                , Map.of(
+                        "harmQuestion", "10.98",
+                        "reoffendingQuestion", "10.99"),
+                "11"
+                , Map.of(
+                        "harmQuestion", "11.98",
+                        "reoffendingQuestion", "11.99"),
+                "12"
+                , Map.of(
+                        "harmQuestion", "12.98",
+                        "reoffendingQuestion", "12.99"),
+                "3"
+                , Map.of(
+                        "harmQuestion", "3.98",
+                        "reoffendingQuestion", "3.99"),
+                "4"
+                , Map.of(
+                        "harmQuestion", "4.96",
+                        "reoffendingQuestion", "4.98"),
+                "5"
+                , Map.of(
+                        "harmQuestion", "5.98",
+                        "reoffendingQuestion", "5.99"),
+                "6"
+                , Map.of(
+                        "harmQuestion", "6.98",
+                        "reoffendingQuestion", "6.99"),
+                "7"
+                , Map.of(
+                        "harmQuestion", "7.98",
+                        "reoffendingQuestion", "7.99"),
+                "8"
+                , Map.of(
+                        "harmQuestion", "8.97",
+                        "reoffendingQuestion", "8.98"),
+                "9"
+                , Map.of(
+                        "harmQuestion", "9.98",
+                        "reoffendingQuestion", "9.99")
+        );
+
+        List<Section> filteredSections = sections.entrySet().stream().filter(s -> planSections.containsKey(s.getKey())).map(s -> s.getValue()).collect(Collectors.toList());
+
+        List<AssessmentNeed> assessmentNeeds = new ArrayList<>();
+
+        for (Section section : filteredSections) {
+            Map<String, String> planSection = planSections.get(section.getRefSectionCode());
+            boolean riskHarm = Optional.ofNullable(section.getQuestions().get(planSection.get("harmQuestion"))).map(e -> e.getAnswer().get()).map(e -> e.getRefAnswerCode()).orElse("NO").equals("YES");
+            boolean riskReoffending =  Optional.ofNullable(section.getQuestions().get(planSection.get("reoffendingQuestion"))).map(e -> e.getAnswer().get()).map(e -> e.getRefAnswerCode()).orElse("NO").equals("YES");
+            boolean overThreshold = Optional.ofNullable(section.getSectionOtherRawScore()).orElse(0L) >= Optional.ofNullable(section.getRefSection().getRefCrimNeedScoreThreshold()).orElse(Long.MAX_VALUE);
+            boolean flagged = Optional.ofNullable(section.getLowScoreAttentionNeeded()).orElse(false);
+            if (Stream.of(overThreshold, riskHarm, riskReoffending, flagged).anyMatch(e -> e.equals(true))) {
+                assessmentNeeds.add(new AssessmentNeed(section.getRefSection().getShortDescription(), overThreshold, riskHarm, riskReoffending, flagged));
+            }
+        }
+        return assessmentNeeds;
     }
 
     @JsonIgnore

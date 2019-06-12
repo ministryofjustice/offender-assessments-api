@@ -10,6 +10,7 @@ import java.util.Map;
 public class Section {
     private Long refSectionId;
     private String refSectionCode;
+    private RefSection refSection;
     private Long oasysSectionId;
     private String status;
     private Long sectionOgpWeightedScore;

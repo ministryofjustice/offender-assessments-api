@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlanItem;
+import uk.gov.justice.digital.oasys.api.SentencePlanNeeds;
 import uk.gov.justice.digital.oasys.api.SpratSpCodes;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.service.AssessmentsService;
@@ -282,7 +283,7 @@ public class SentencePlansController {
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<BasicSentencePlanItem> addSentencePlanItem(@PathVariable("sentencePlanId") Long sentencePlanId,
-                                                                     @PathVariable("spratSpCode") SpratSpCodes spratSpCode,
+                                                                     @PathVariable("spratSpCode") SentencePlanNeeds spratSpCode,
                                                                      @RequestBody BasicSentencePlanItem sentencePlanItem) {
 
         return sentencePlanService.addSentencePlanItem(sentencePlanId, spratSpCode, sentencePlanItem)
