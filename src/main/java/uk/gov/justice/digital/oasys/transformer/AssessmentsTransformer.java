@@ -2,13 +2,7 @@ package uk.gov.justice.digital.oasys.transformer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.justice.digital.oasys.api.Answer;
-import uk.gov.justice.digital.oasys.api.Assessment;
-import uk.gov.justice.digital.oasys.api.AssessmentResource;
-import uk.gov.justice.digital.oasys.api.AssessmentSummary;
-import uk.gov.justice.digital.oasys.api.AssessmentVersion;
-import uk.gov.justice.digital.oasys.api.Question;
-import uk.gov.justice.digital.oasys.api.Section;
+import uk.gov.justice.digital.oasys.api.*;
 import uk.gov.justice.digital.oasys.controller.AssessmentsController;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysBcsPart;
@@ -77,7 +71,18 @@ public class AssessmentsTransformer {
                 .sectionOtherRawScore(section.getSectOtherRawScore())
                 .lowScoreAttentionNeeded(typesTransformer.ynToBoolean(section.getLowScoreNeedAttnInd()))
                 .questions(questionsOf(section.getOasysQuestions()))
+                .refSection(refSectionOf(section.getRefSection()))
                 .build();
+    }
+
+    public RefSection refSectionOf(uk.gov.justice.digital.oasys.jpa.entity.RefSection refSection) {
+        return RefSection.builder()
+                .refCrimNeedScoreThreshold(refSection.getCrimNeedScoreThreshold())
+                .refFormSequence(refSection.getFormSequence())
+                .refScoredForOgp(typesTransformer.ynToBoolean(refSection.getScoredForOgp()))
+                .refScoredForOvp(typesTransformer.ynToBoolean(refSection.getScoredForOvp()))
+                .refSectionCode(refSection.getRefSectionCode())
+                .shortDescription(refSection.getSectionType().getRefElementShortDesc()).build();
     }
 
     public Map<String, Question> questionsOf(List<OasysQuestion> oasysQuestions) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.AssessmentNeed;
 import uk.gov.justice.digital.oasys.api.AssessmentResource;
 import uk.gov.justice.digital.oasys.api.Question;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
@@ -265,5 +266,14 @@ public class AssessmentsController {
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
+
+    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/assessments/latest/needs", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<List<AssessmentNeed>> getLatestAssessmentNeedsForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId) {
+
+        return ResponseEntity.ok(assessmentsService.getLatestAsessementNeedsForOffenderPk(oasysOffenderId));
+    }
+
 
 }
