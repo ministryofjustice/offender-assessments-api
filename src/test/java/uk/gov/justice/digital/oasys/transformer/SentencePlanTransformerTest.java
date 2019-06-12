@@ -24,8 +24,8 @@ public class SentencePlanTransformerTest {
                 .build();
 
         final SentencePlanTransformer sentencePlanTransformer = new SentencePlanTransformer();
-        assertThat(sentencePlanTransformer.sentencePlanOf(oasysSet)).isPresent();
-        final BasicSentencePlan actual = sentencePlanTransformer.sentencePlanOf(oasysSet).get();
+        assertThat(sentencePlanTransformer.basicSentencePlanOf(oasysSet)).isPresent();
+        final BasicSentencePlan actual = sentencePlanTransformer.basicSentencePlanOf(oasysSet).get();
 
         assertThat(actual.getCreatedDate()).isEqualTo(today);
     }
