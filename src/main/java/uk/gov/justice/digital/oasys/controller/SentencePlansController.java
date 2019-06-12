@@ -50,7 +50,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getLatestSentencePlanForOffenderPk(oasysOffenderId, assessmentsFilter)
+        return sentencePlanService.getLatestBasicSentencePlanForOffenderPk(oasysOffenderId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -68,7 +68,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getLatestSentencePlanForOffenderCrn(crn, assessmentsFilter)
+        return sentencePlanService.getLatestBasicSentencePlanForOffenderCrn(crn, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -86,7 +86,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getLatestSentencePlanForOffenderPnc(pnc, assessmentsFilter)
+        return sentencePlanService.getLatestBasicSentencePlanForOffenderPnc(pnc, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -104,7 +104,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getLatestSentencePlanForOffenderNomsId(nomisId, assessmentsFilter)
+        return sentencePlanService.getLatestBasicSentencePlanForOffenderNomsId(nomisId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -122,7 +122,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getLatestSentencePlanForOffenderBookingId(bookingId, assessmentsFilter)
+        return sentencePlanService.getLatestBasicSentencePlanForOffenderBookingId(bookingId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -140,7 +140,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getSentencePlansForOffenderPk(oasysOffenderId, assessmentsFilter)
+        return sentencePlanService.getBasicSentencePlansForOffenderPk(oasysOffenderId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -158,7 +158,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getSentencePlansForOffenderCrn(crn, assessmentsFilter)
+        return sentencePlanService.getBasicSentencePlansForOffenderCrn(crn, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -176,7 +176,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getSentencePlansForOffenderPnc(pnc, assessmentsFilter)
+        return sentencePlanService.getBasicSentencePlansForOffenderPnc(pnc, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -194,7 +194,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getSentencePlansForOffenderNomsId(nomisId, assessmentsFilter)
+        return sentencePlanService.getBasicSentencePlansForOffenderNomsId(nomisId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -212,7 +212,7 @@ public class SentencePlansController {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return sentencePlanService.getSentencePlansForOffenderBookingId(bookingId, assessmentsFilter)
+        return sentencePlanService.getBasicSentencePlansForOffenderBookingId(bookingId, assessmentsFilter)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -223,7 +223,7 @@ public class SentencePlansController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId) {
 
-        return sentencePlanService.createSentencePlanForOffenderPk(oasysOffenderId)
+        return sentencePlanService.createBasicSentencePlanForOffenderPk(oasysOffenderId)
                 .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -234,7 +234,7 @@ public class SentencePlansController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderCrn(@PathVariable("crn") String crn) {
 
-        return sentencePlanService.createSentencePlanForOffenderCrn(crn)
+        return sentencePlanService.createBasicSentencePlanForOffenderCrn(crn)
                 .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -245,7 +245,7 @@ public class SentencePlansController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderPnc(@PathVariable("pnc") String pnc) {
 
-        return sentencePlanService.createSentencePlanForOffenderPnc(pnc)
+        return sentencePlanService.createBasicSentencePlanForOffenderPnc(pnc)
                 .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
 
@@ -257,7 +257,7 @@ public class SentencePlansController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderNomisId(@PathVariable("nomisId") String nomisId) {
 
-        return sentencePlanService.createSentencePlanForOffenderNomisId(nomisId)
+        return sentencePlanService.createBasicSentencePlanForOffenderNomisId(nomisId)
                 .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
 
@@ -269,7 +269,7 @@ public class SentencePlansController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderBookingId(@PathVariable("bookingId") String bookingId) {
 
-        return sentencePlanService.createSentencePlanForOffenderBookingId(bookingId)
+        return sentencePlanService.createBasicSentencePlanForOffenderBookingId(bookingId)
                 .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
@@ -282,7 +282,7 @@ public class SentencePlansController {
                                                                      @PathVariable("spratSpCode") SentencePlanNeeds spratSpCode,
                                                                      @RequestBody BasicSentencePlanItem sentencePlanItem) {
 
-        return sentencePlanService.addSentencePlanItem(sentencePlanId, spratSpCode, sentencePlanItem)
+        return sentencePlanService.addBasicSentencePlanItem(sentencePlanId, spratSpCode, sentencePlanItem)
                 .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }

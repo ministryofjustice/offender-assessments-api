@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class SentencePlanTransformer {
 
-    public Optional<BasicSentencePlan> sentencePlanOf(OasysSet oasysSet) {
+    public Optional<BasicSentencePlan> basicSentencePlanOf(OasysSet oasysSet) {
         final Optional<List<BasicSentencePlanItem>> basicSentencePlanItems = Optional.ofNullable(oasysSet.getBasicSentencePlanList())
                 .map(basicSentencePlanObjs -> basicSentencePlanObjs
                         .stream()
