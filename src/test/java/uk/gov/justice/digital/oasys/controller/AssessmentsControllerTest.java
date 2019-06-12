@@ -18,6 +18,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.AssessmentNeed;
 import uk.gov.justice.digital.oasys.api.AssessmentResource;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
@@ -399,6 +400,22 @@ public class AssessmentsControllerTest {
 
         assertThat(assessment).extracting("oasysSetId").containsExactly(0L);
 
+    }
+
+    @Test
+    public void canGetLatestAsessementNeedsForOffenderPk() {
+        AssessmentNeed[] needs = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/oasysOffenderId/{0}/assessments/latest/needs", 3L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(AssessmentNeed[].class);
+
+        assertThat(needs).hasSize(1);
+        assertThat(needs).extracting("name").containsExactly("Emotional Wellbeing");
     }
 
 }

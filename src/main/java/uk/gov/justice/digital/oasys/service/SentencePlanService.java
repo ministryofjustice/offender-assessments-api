@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlanItem;
-import uk.gov.justice.digital.oasys.api.SpratSpCodes;
+import uk.gov.justice.digital.oasys.api.SentencePlanNeeds;
 import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
 import uk.gov.justice.digital.oasys.jpa.entity.CmsStubOffender;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
@@ -65,7 +65,7 @@ public class SentencePlanService {
     }
 
     @Transactional
-    public Optional<BasicSentencePlanItem> addSentencePlanItem(Long sentencePlanId, SpratSpCodes spratSpCode,  BasicSentencePlanItem item) {
+    public Optional<BasicSentencePlanItem> addSentencePlanItem(Long sentencePlanId, SentencePlanNeeds spratSpCode, BasicSentencePlanItem item) {
 
         BasicSentencePlanObj basicSentencePlanObj = BasicSentencePlanObj
                 .builder()

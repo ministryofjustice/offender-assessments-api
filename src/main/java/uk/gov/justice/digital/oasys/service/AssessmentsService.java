@@ -3,11 +3,7 @@ package uk.gov.justice.digital.oasys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.justice.digital.oasys.api.Assessment;
-import uk.gov.justice.digital.oasys.api.AssessmentResource;
-import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
-import uk.gov.justice.digital.oasys.api.Question;
-import uk.gov.justice.digital.oasys.api.Section;
+import uk.gov.justice.digital.oasys.api.*;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
@@ -16,9 +12,7 @@ import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
 import uk.gov.justice.digital.oasys.transformer.AssessmentsTransformer;
 import uk.gov.justice.digital.oasys.transformer.SentencePlanTransformer;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,6 +27,8 @@ public class AssessmentsService {
     private final AssessmentRepository assessmentRepository;
     private final AssessmentsTransformer assessmentsTransformer;
     private final SentencePlanTransformer sentencePlanTransformer;
+
+    private final String LAYER_3_TYPE = "LAYER_3";
 
     @Autowired
     public AssessmentsService(OffenderRepository offenderRepository, AssessmentRepository assessmentRepository, AssessmentsTransformer assessmentsTransformer, SentencePlanTransformer sentencePlanTransformer) {
@@ -112,12 +108,23 @@ public class AssessmentsService {
                 .collect(Collectors.toList()));
     }
 
+    public List<AssessmentNeed> getLatestAsessementNeedsForOffenderPk(Long oasysOffenderPk) {
+        Optional<Offender> maybeOffender = offenderRepository.findById(oasysOffenderPk);
+        Optional<Assessment> maybeAssessment = latestAssessmentOf(assessmentsFilterOf(Optional.empty(),Optional.of(LAYER_3_TYPE), Optional.empty(), Optional.empty()), maybeOffender);
+
+        if(maybeAssessment.isPresent()) {
+            return maybeAssessment.get().getLayer3SentencePlanNeeds();
+        }
+        return Collections.emptyList();
+    }
+
     private Optional<Assessment> latestAssessmentOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Optional<Offender> maybeOffender) {
         return maybeOffender.map(offender -> getOasysSetStream(assessmentsFilter, offender)
                 .max(Comparator.comparing(OasysSet::getCreateDate))
                 .flatMap(a -> Optional.ofNullable(assessmentsTransformer.assessmentOf(a)))
                 .orElse(null));
     }
+
 
     public Optional<Assessment> getAssessment(Long oasysSetId) {
         return assessmentRepository.findById(oasysSetId).map(assessmentsTransformer::assessmentOf);
