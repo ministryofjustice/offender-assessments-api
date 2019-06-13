@@ -17,6 +17,8 @@ management:
   endpoints:
     web:
       base-path: /
+      exposure:
+        include: 'info, health, ping'
 
 logging.level.uk.gov: INFO
 logging.level.org.hibernate: INFO
@@ -25,4 +27,4 @@ jwt.public.key: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1NSUlCSWpBTkJna3Foa2lHOXcwQkFR
 
 application.insights.ikey:
 
-logging.uris.exclude.regex: /health|/info|/swagger.*|/webjars/.*|/v2/api-docs
+logging.uris.exclude.regex: /health|/info|/ping|/swagger.*|/webjars/.*|/v2/api-docs
