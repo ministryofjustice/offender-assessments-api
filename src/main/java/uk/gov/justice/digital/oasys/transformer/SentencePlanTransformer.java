@@ -27,12 +27,14 @@ import java.util.stream.Collectors;
 public class SentencePlanTransformer {
 
     public Optional<ProperSentencePlan> sentencePlanOf(OasysSet oasysSet) {
-        return Optional.ofNullable(oasysSet).map(os ->
-                ProperSentencePlan
-                        .builder()
-                        .objectives(objectivesOf(oasysSet.getSspObjectivesInSets()))
-                        .createdDate(earliestSspObjectveOf(os.getSspObjectivesInSets()))
-                        .build());
+        return Optional.ofNullable(oasysSet)
+                .map(os ->
+                        ProperSentencePlan
+                                .builder()
+                                .objectives(objectivesOf(oasysSet.getSspObjectivesInSets()))
+                                .createdDate(earliestSspObjectveOf(os.getSspObjectivesInSets()))
+                                .build())
+                .filter(psp -> psp.getObjectives() != null && !psp.getObjectives().isEmpty());
     }
 
     private LocalDate earliestSspObjectveOf(List<SspObjectivesInSet> sspObjectivesInSets) {
