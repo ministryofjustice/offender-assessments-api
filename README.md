@@ -34,7 +34,7 @@ SPRING_DATASOURCE_URL=jdbc:oracle:thin:@<VM Oracle IP address>:1521:XYZ SPRING_P
 ```
 
 ### Additional configuration
-The application is conigured with conventional Spring parameters.
+The application is configured with conventional Spring parameters.
 The Spring documentation can be found here:
 
 https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
@@ -46,6 +46,14 @@ To override, set server.port (eg SERVER_PORT=8099 java -jar etc etc)
 ## Documentation
 http://localhost:8080/api/swagger-ui.html
 
+## Health
+
+- `/ping`: will respond `pong` to all requests.  This should be used by dependent systems to check connectivity to offender assessment,
+rather than calling the `/health` endpoint.
+- `/health`: provides information about the application health and its dependencies.  This should only be used
+by offender assessment health monitoring (e.g. pager duty) and not other systems who wish to find out the state of offender assessment.
+- `/info`: provides information about the version of deployed application.
+
 ## Endpoints curl examples
 
 ### Get TBD
@@ -55,12 +63,17 @@ curl -X GET http://localhost:8080/api/TBD/xyz -H 'Authorization: <token>'
 
 ### Application info
 ```
-curl -X GET http://localhost:8080/api/info
+curl -X GET http://localhost:8080/info
 ```
 
 ### Application health
 ```
-curl -X GET http://localhost:8080/api/health
+curl -X GET http://localhost:8080/health
+```
+
+### Application ping
+```
+curl -X GET http://localhost:8080/ping
 ```
 
 
