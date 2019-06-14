@@ -9,8 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -48,7 +50,7 @@ public class SspObjectivesInSet {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private Timestamp createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
@@ -57,23 +59,23 @@ public class SspObjectivesInSet {
     private String lastupdUser;
 
     @OneToMany
-    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private List<SspInterventionInSet> sspInterventionInSets;
+    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
+    private List<SspObjIntervenePivot> sspObjIntervenePivots;
+
+    @OneToOne
+    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
+    private SspWhoDoWorkPivot sspWhoDoWorkPivot;
+
+    @OneToOne
+    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
+    private SspObjective sspObjective;
+
+    @OneToOne
+    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
+    private SspObjectiveMeasure sspObjectiveMeasure;
 
     @OneToMany
-    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private List<SspWhoDoWorkPivot> sspWhoDoWorkPivots;
-
-    @OneToMany
-    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private List<SspObjective> sspObjectives;
-
-    @OneToMany
-    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private List<SspObjectiveMeasure> sspObjectiveMeasures;
-
-    @OneToMany
-    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
+    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
     private List<SspCrimNeedObjPivot> sspCrimNeedObjPivots;
 
 }

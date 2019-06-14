@@ -11,7 +11,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SentencePlanTransformerTest {
+public class BasicSentencePlanTransformerTest {
 
     @Test
     public void sentencePlanHasCreatedDate() {
@@ -23,7 +23,7 @@ public class SentencePlanTransformerTest {
                 .basicSentencePlanList(Collections.emptyList())
                 .build();
 
-        final SentencePlanTransformer sentencePlanTransformer = new SentencePlanTransformer();
+        final BasicSentencePlanTransformer sentencePlanTransformer = new BasicSentencePlanTransformer();
         assertThat(sentencePlanTransformer.basicSentencePlanOf(oasysSet)).isPresent();
         final BasicSentencePlan actual = sentencePlanTransformer.basicSentencePlanOf(oasysSet).get();
 
