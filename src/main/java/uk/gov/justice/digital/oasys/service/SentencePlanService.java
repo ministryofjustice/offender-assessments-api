@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlanItem;
+import uk.gov.justice.digital.oasys.api.ProperSentencePlan;
 import uk.gov.justice.digital.oasys.api.SentencePlanNeeds;
 import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
 import uk.gov.justice.digital.oasys.jpa.entity.CmsStubOffender;
@@ -20,6 +21,7 @@ import uk.gov.justice.digital.oasys.jpa.repository.OasysSetRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
 import uk.gov.justice.digital.oasys.transformer.BasicSentencePlanTransformer;
+import uk.gov.justice.digital.oasys.transformer.SentencePlanTransformer;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -39,20 +41,20 @@ public class SentencePlanService {
     public static final String AREA_LINKED_TO_OFFENDING_BEHAVIOUR = "AREA_LINKED_TO_OFFENDING_BEHAVIOUR";
     public static final String ASSESSMENTS_API = "ASSESSMENTS_API";
     private final OffenderRepository offenderRepository;
-    private final OffenderService offenderService;
     private final OasysSetRepository oasysSetRepository;
     private final BasicSentencePlanRepository basicSentencePlanRepository;
-    private final BasicSentencePlanTransformer sentencePlanTransformer;
+    private final BasicSentencePlanTransformer basicSentencePlanTransformer;
+    private final SentencePlanTransformer properSentencePlanTransformer;
     private final OasysAssessmentGroupRepository assessmentGroupRepository;
     private final CmsStubOffenderRepository cmsStubOffenderRepository;
 
     @Autowired
-    public SentencePlanService(OffenderRepository offenderRepository, OffenderService offenderService, OasysSetRepository oasysSetRepository, BasicSentencePlanRepository basicSentencePlanRepository, BasicSentencePlanTransformer sentencePlanTransformer, OasysAssessmentGroupRepository assessmentGroupRepository, CmsStubOffenderRepository cmsStubOffenderRepository) {
+    public SentencePlanService(OffenderRepository offenderRepository, OffenderService offenderService, OasysSetRepository oasysSetRepository, BasicSentencePlanRepository basicSentencePlanRepository, BasicSentencePlanTransformer basicSentencePlanTransformer, SentencePlanTransformer properSentencePlanTransformer, OasysAssessmentGroupRepository assessmentGroupRepository, CmsStubOffenderRepository cmsStubOffenderRepository) {
         this.offenderRepository = offenderRepository;
-        this.offenderService = offenderService;
         this.oasysSetRepository = oasysSetRepository;
         this.basicSentencePlanRepository = basicSentencePlanRepository;
-        this.sentencePlanTransformer = sentencePlanTransformer;
+        this.basicSentencePlanTransformer = basicSentencePlanTransformer;
+        this.properSentencePlanTransformer = properSentencePlanTransformer;
         this.assessmentGroupRepository = assessmentGroupRepository;
         this.cmsStubOffenderRepository = cmsStubOffenderRepository;
     }
@@ -92,7 +94,7 @@ public class SentencePlanService {
                 .build();
 
         return Optional.of(basicSentencePlanRepository.save(basicSentencePlanObj))
-                .map(sentencePlanTransformer::basicSentencePlanItemOf);
+                .map(basicSentencePlanTransformer::basicSentencePlanItemOf);
 
     }
 
@@ -222,7 +224,7 @@ public class SentencePlanService {
     private Optional<BasicSentencePlan> latestBasicSentencePlanOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Optional<Offender> maybeOffender) {
         return maybeOffender.map(offender -> getOasysSetStream(assessmentsFilter, offender)
                 .max(Comparator.comparing(OasysSet::getCreateDate))
-                .flatMap(sentencePlanTransformer::basicSentencePlanOf)
+                .flatMap(basicSentencePlanTransformer::basicSentencePlanOf)
                 .orElse(null));
     }
 
@@ -291,7 +293,7 @@ public class SentencePlanService {
 
     private Optional<List<BasicSentencePlan>> basicSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Optional<Offender> maybeOffender) {
         return maybeOffender.map(o -> getOasysSetStream(assessmentsFilter, o)
-                .map(sentencePlanTransformer::basicSentencePlanOf)
+                .map(basicSentencePlanTransformer::basicSentencePlanOf)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList()));
@@ -321,5 +323,45 @@ public class SentencePlanService {
         Optional<Offender> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
 
         return basicSentencePlansOf(assessmentsFilter, maybeOffender);
+    }
+
+    public Optional<List<ProperSentencePlan>> getProperSentencePlansForOffenderPk(Long oasysOffenderId, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
+        Optional<Offender> maybeOffender = offenderRepository.findById(oasysOffenderId);
+
+        return properSentencePlansOf(assessmentsFilter, maybeOffender);
+    }
+
+    private Optional<List<ProperSentencePlan>> properSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Optional<Offender> maybeOffender) {
+        return maybeOffender.map(o -> getOasysSetStream(assessmentsFilter, o)
+                .map(properSentencePlanTransformer::sentencePlanOf)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList()));
+    }
+
+    public Optional<List<ProperSentencePlan>> getProperSentencePlansForOffenderCrn(String crn, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsProbNumber(crn);
+
+        return properSentencePlansOf(assessmentsFilter, maybeOffender);
+
+    }
+
+    public Optional<List<ProperSentencePlan>> getProperSentencePlansForOffenderPnc(String pnc, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
+        Optional<Offender> maybeOffender = offenderRepository.getByPnc(pnc);
+
+        return properSentencePlansOf(assessmentsFilter, maybeOffender);
+    }
+
+    public Optional<List<ProperSentencePlan>> getProperSentencePlansForOffenderNomsId(String nomisId, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
+        Optional<Offender> maybeOffender = offenderRepository.getByCmsPrisNumber(nomisId);
+
+        return properSentencePlansOf(assessmentsFilter, maybeOffender);
+
+    }
+
+    public Optional<List<ProperSentencePlan>> getProperSentencePlansForOffenderBookingId(String bookingId, Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter) {
+        Optional<Offender> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
+
+        return properSentencePlansOf(assessmentsFilter, maybeOffender);
     }
 }
