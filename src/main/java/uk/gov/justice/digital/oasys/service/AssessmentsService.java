@@ -15,7 +15,7 @@ import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
 import uk.gov.justice.digital.oasys.transformer.AssessmentsTransformer;
-import uk.gov.justice.digital.oasys.transformer.SentencePlanTransformer;
+import uk.gov.justice.digital.oasys.transformer.BasicSentencePlanTransformer;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,12 +34,12 @@ public class AssessmentsService {
     private final OffenderRepository offenderRepository;
     private final AssessmentRepository assessmentRepository;
     private final AssessmentsTransformer assessmentsTransformer;
-    private final SentencePlanTransformer sentencePlanTransformer;
+    private final BasicSentencePlanTransformer sentencePlanTransformer;
 
     private final String LAYER_3_TYPE = "LAYER_3";
 
     @Autowired
-    public AssessmentsService(OffenderRepository offenderRepository, AssessmentRepository assessmentRepository, AssessmentsTransformer assessmentsTransformer, SentencePlanTransformer sentencePlanTransformer) {
+    public AssessmentsService(OffenderRepository offenderRepository, AssessmentRepository assessmentRepository, AssessmentsTransformer assessmentsTransformer, BasicSentencePlanTransformer sentencePlanTransformer) {
         this.offenderRepository = offenderRepository;
         this.assessmentRepository = assessmentRepository;
         this.assessmentsTransformer = assessmentsTransformer;

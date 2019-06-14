@@ -19,7 +19,7 @@ import uk.gov.justice.digital.oasys.jpa.repository.OasysAssessmentGroupRepositor
 import uk.gov.justice.digital.oasys.jpa.repository.OasysSetRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
-import uk.gov.justice.digital.oasys.transformer.SentencePlanTransformer;
+import uk.gov.justice.digital.oasys.transformer.BasicSentencePlanTransformer;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -42,12 +42,12 @@ public class SentencePlanService {
     private final OffenderService offenderService;
     private final OasysSetRepository oasysSetRepository;
     private final BasicSentencePlanRepository basicSentencePlanRepository;
-    private final SentencePlanTransformer sentencePlanTransformer;
+    private final BasicSentencePlanTransformer sentencePlanTransformer;
     private final OasysAssessmentGroupRepository assessmentGroupRepository;
     private final CmsStubOffenderRepository cmsStubOffenderRepository;
 
     @Autowired
-    public SentencePlanService(OffenderRepository offenderRepository, OffenderService offenderService, OasysSetRepository oasysSetRepository, BasicSentencePlanRepository basicSentencePlanRepository, SentencePlanTransformer sentencePlanTransformer, OasysAssessmentGroupRepository assessmentGroupRepository, CmsStubOffenderRepository cmsStubOffenderRepository) {
+    public SentencePlanService(OffenderRepository offenderRepository, OffenderService offenderService, OasysSetRepository oasysSetRepository, BasicSentencePlanRepository basicSentencePlanRepository, BasicSentencePlanTransformer sentencePlanTransformer, OasysAssessmentGroupRepository assessmentGroupRepository, CmsStubOffenderRepository cmsStubOffenderRepository) {
         this.offenderRepository = offenderRepository;
         this.offenderService = offenderService;
         this.oasysSetRepository = oasysSetRepository;
