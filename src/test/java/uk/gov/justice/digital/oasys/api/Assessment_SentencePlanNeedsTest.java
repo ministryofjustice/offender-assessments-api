@@ -259,6 +259,33 @@ public class Assessment_SentencePlanNeedsTest {
 
     }
 
+
+    @Test
+    public void shouldIncludeSpecificQuestionsInSentencePlanNeedsWhenHarmQuestionIsYES() {
+
+        Section sectionR = Section.builder()
+                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Risk Assessment").build())
+                .lowScoreAttentionNeeded(false)
+                .refSectionCode("ROSHSUM")
+                .sectionOtherRawScore(1L)
+                .questions(ImmutableMap.of("sum6.1", Question.builder().questionText("question text").answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                .build();
+
+        Section section11 = getNotMatchSection();
+
+        Assessment assessment = Assessment.builder()
+                .sections(Map.of("ROSHSUM", sectionR, "11", section11))
+                .assessmentType("LAYER_3")
+                .build();
+
+        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        assertThat(layer3SentencePlanNeeds).hasSize(1)
+                .extracting(i->i.isRiskOfHarm()).containsExactly(true);
+        assertThat(layer3SentencePlanNeeds)
+                .extracting(i->i.getName()).containsExactly("question text");
+
+    }
+
     private Section getNotMatchSection() {
         return Section.builder()
                 .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Thinking Skills").build())
