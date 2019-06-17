@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import static uk.gov.justice.digital.oasys.service.filters.AssessmentFilters.curry;
 
 @Service
+@Transactional
 public class SentencePlanService {
     public static final String AREA_LINKED_TO_OFFENDING_BEHAVIOUR = "AREA_LINKED_TO_OFFENDING_BEHAVIOUR";
     public static final String ASSESSMENTS_API = "ASSESSMENTS_API";
