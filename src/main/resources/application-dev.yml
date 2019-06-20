@@ -10,3 +10,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+graceful:
+  shutdown:
+    enabled: false
