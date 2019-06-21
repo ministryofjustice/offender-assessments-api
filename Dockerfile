@@ -1,6 +1,20 @@
 FROM openjdk:11-slim
-MAINTAINER Mike Jackson <michael.jackson@digital.justice.gov.uk>
+MAINTAINER HMPPS Digital Studio <info@digital.justice.gov.uk>
 
-COPY build/libs/offender-assessments-api*.jar /root/offender-assessments-api.jar
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["java", "-jar", "/root/offender-assessments-api.jar"]
+ENV TZ=Europe/London
+RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
+
+RUN addgroup --gid 2000 --system appgroup && \
+    adduser --uid 2000 --system appuser --gid 2000
+
+WORKDIR /app
+
+COPY --chown=appuser:appgroup build/libs/offender-assessments-api*.jar /app/offender-assessments-api.jar
+
+USER 2000
+
+ENTRYPOINT ["java", "-jar", "/app/offender-assessments-api.jar"]
