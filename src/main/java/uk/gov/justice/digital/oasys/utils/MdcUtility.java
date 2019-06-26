@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MdcUtility {
 
+    static final String USER_ID_HEADER = "userId";
     static final String REQUEST_DURATION = "duration";
     static final String RESPONSE_STATUS = "status";
     static final String SKIP_LOGGING = "skipLogging";
