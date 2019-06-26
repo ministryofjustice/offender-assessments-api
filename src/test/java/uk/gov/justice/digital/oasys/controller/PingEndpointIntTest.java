@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static io.restassured.RestAssured.given;
@@ -33,6 +34,7 @@ public class PingEndpointIntTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(MediaType.TEXT_PLAIN_VALUE)
                 .extract()
                 .asString();
 
