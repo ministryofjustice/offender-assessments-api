@@ -2,29 +2,19 @@ package uk.gov.justice.digital.oasys.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Optional;
 
-import static uk.gov.justice.digital.oasys.utils.MdcUtility.CORRELATION_ID_HEADER;
-
+import static uk.gov.justice.digital.oasys.utils.MdcUtility.USER_ID_HEADER;
 
 @Slf4j
 @Component
 @Order(1)
-public class CorrelationMdcFilter implements Filter {
-
-    private final MdcUtility mdcUtility;
-
-    @Autowired
-    public CorrelationMdcFilter(final MdcUtility mdcUtility) {
-        this.mdcUtility = mdcUtility;
-    }
+public class UserMdcFilter implements Filter {
 
     @Override
     public void init(final FilterConfig filterConfig) {
@@ -35,19 +25,26 @@ public class CorrelationMdcFilter implements Filter {
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
             throws IOException, ServletException {
 
-        final var correlationIdOptional = Optional.ofNullable(((HttpServletRequest) request).getHeader(CORRELATION_ID_HEADER));
+        final var currentUsername = getUser((HttpServletRequest) request);
 
         try {
-            MDC.put(CORRELATION_ID_HEADER, correlationIdOptional.orElseGet(mdcUtility::generateUUID));
+            if (currentUsername != null) {
+                MDC.put(USER_ID_HEADER, currentUsername);
+            }
             chain.doFilter(request, response);
         } finally {
-            MDC.remove(CORRELATION_ID_HEADER);
+            if (currentUsername != null) {
+                MDC.remove(USER_ID_HEADER);
+            }
         }
     }
 
     @Override
     public void destroy() {
-        // destroy - no functionality
+        // Destroy - no functionality
     }
 
+    private String getUser(final HttpServletRequest req) {
+        return req.getUserPrincipal() != null ? req.getUserPrincipal().getName() : null;
+    }
 }

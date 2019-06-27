@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.oasys.controller;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,7 @@ public class PingEndpointIntTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.TEXT)
                 .extract()
                 .asString();
 
