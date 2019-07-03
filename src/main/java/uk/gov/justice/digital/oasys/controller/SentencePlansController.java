@@ -7,15 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
-import uk.gov.justice.digital.oasys.api.BasicSentencePlanItem;
 import uk.gov.justice.digital.oasys.api.ProperSentencePlan;
-import uk.gov.justice.digital.oasys.api.SentencePlanNeeds;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.service.SentencePlanService;
 
@@ -218,75 +215,75 @@ public class SentencePlansController {
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
-    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/sentencePlans", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId) {
-
-        return sentencePlanService.createBasicSentencePlanForOffenderPk(oasysOffenderId)
-                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/crn/{crn}/sentencePlans", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderCrn(@PathVariable("crn") String crn) {
-
-        return sentencePlanService.createBasicSentencePlanForOffenderCrn(crn)
-                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/pnc/{pnc}/sentencePlans", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderPnc(@PathVariable("pnc") String pnc) {
-
-        return sentencePlanService.createBasicSentencePlanForOffenderPnc(pnc)
-                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-
-    }
-
-    @RequestMapping(path = "/offenders/nomisId/{nomisId}/sentencePlans", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderNomisId(@PathVariable("nomisId") String nomisId) {
-
-        return sentencePlanService.createBasicSentencePlanForOffenderNomisId(nomisId)
-                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-
-    }
-
-    @RequestMapping(path = "/offenders/bookingId/{bookingId}/sentencePlans", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderBookingId(@PathVariable("bookingId") String bookingId) {
-
-        return sentencePlanService.createBasicSentencePlanForOffenderBookingId(bookingId)
-                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/sentencePlans/{sentencePlanId}/sentencePlanItems/{spratSpCode}", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlanItem> addSentencePlanItem(@PathVariable("sentencePlanId") Long sentencePlanId,
-                                                                     @PathVariable("spratSpCode") SentencePlanNeeds spratSpCode,
-                                                                     @RequestBody BasicSentencePlanItem sentencePlanItem) {
-
-        return sentencePlanService.addBasicSentencePlanItem(sentencePlanId, spratSpCode, sentencePlanItem)
-                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
+//    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/sentencePlans", method = RequestMethod.POST)
+//    @ApiResponses({
+//            @ApiResponse(code = 404, message = "Offender not found"),
+//            @ApiResponse(code = 200, message = "OK")})
+//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId) {
+//
+//        return sentencePlanService.createBasicSentencePlanForOffenderPk(oasysOffenderId)
+//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
+//                .orElse(new ResponseEntity<>(NOT_FOUND));
+//    }
+//
+//    @RequestMapping(path = "/offenders/crn/{crn}/sentencePlans", method = RequestMethod.POST)
+//    @ApiResponses({
+//            @ApiResponse(code = 404, message = "Offender not found"),
+//            @ApiResponse(code = 200, message = "OK")})
+//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderCrn(@PathVariable("crn") String crn) {
+//
+//        return sentencePlanService.createBasicSentencePlanForOffenderCrn(crn)
+//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
+//                .orElse(new ResponseEntity<>(NOT_FOUND));
+//    }
+//
+//    @RequestMapping(path = "/offenders/pnc/{pnc}/sentencePlans", method = RequestMethod.POST)
+//    @ApiResponses({
+//            @ApiResponse(code = 404, message = "Offender not found"),
+//            @ApiResponse(code = 200, message = "OK")})
+//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderPnc(@PathVariable("pnc") String pnc) {
+//
+//        return sentencePlanService.createBasicSentencePlanForOffenderPnc(pnc)
+//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
+//                .orElse(new ResponseEntity<>(NOT_FOUND));
+//
+//    }
+//
+//    @RequestMapping(path = "/offenders/nomisId/{nomisId}/sentencePlans", method = RequestMethod.POST)
+//    @ApiResponses({
+//            @ApiResponse(code = 404, message = "Offender not found"),
+//            @ApiResponse(code = 200, message = "OK")})
+//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderNomisId(@PathVariable("nomisId") String nomisId) {
+//
+//        return sentencePlanService.createBasicSentencePlanForOffenderNomisId(nomisId)
+//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
+//                .orElse(new ResponseEntity<>(NOT_FOUND));
+//
+//    }
+//
+//    @RequestMapping(path = "/offenders/bookingId/{bookingId}/sentencePlans", method = RequestMethod.POST)
+//    @ApiResponses({
+//            @ApiResponse(code = 404, message = "Offender not found"),
+//            @ApiResponse(code = 200, message = "OK")})
+//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderBookingId(@PathVariable("bookingId") String bookingId) {
+//
+//        return sentencePlanService.createBasicSentencePlanForOffenderBookingId(bookingId)
+//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
+//                .orElse(new ResponseEntity<>(NOT_FOUND));
+//    }
+//
+//    @RequestMapping(path = "/sentencePlans/{sentencePlanId}/sentencePlanItems/{spratSpCode}", method = RequestMethod.POST)
+//    @ApiResponses({
+//            @ApiResponse(code = 404, message = "Offender not found"),
+//            @ApiResponse(code = 200, message = "OK")})
+//    public ResponseEntity<BasicSentencePlanItem> addSentencePlanItem(@PathVariable("sentencePlanId") Long sentencePlanId,
+//                                                                     @PathVariable("spratSpCode") SentencePlanNeeds spratSpCode,
+//                                                                     @RequestBody BasicSentencePlanItem sentencePlanItem) {
+//
+//        return sentencePlanService.addBasicSentencePlanItem(sentencePlanId, spratSpCode, sentencePlanItem)
+//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
+//                .orElse(new ResponseEntity<>(NOT_FOUND));
+//    }
 
     @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/properSentencePlans", method = RequestMethod.GET)
     @ApiResponses({
