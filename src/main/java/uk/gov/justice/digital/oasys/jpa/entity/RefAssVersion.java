@@ -1,8 +1,18 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.sql.Time;
 import java.util.List;
 
@@ -10,6 +20,9 @@ import java.util.List;
 @Entity
 @Table(name = "REF_ASS_VERSION")
 @IdClass(RefAssVersionPK.class)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RefAssVersion {
     @Id
     @Column(name = "REF_ASS_VERSION_CODE")

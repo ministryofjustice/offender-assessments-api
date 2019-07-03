@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -24,6 +25,8 @@ public class OasysAssessmentGroup {
     @Id
     @Column(name = "OASYS_ASSESSMENT_GROUP_PK")
     private Long oasysAssessmentGroupPk;
+    @Column(name = "OFFENDER_PK")
+    private Long offenderPk;
     @Column(name = "ASSESSMENT_DATE_CLOSED")
     private Time assessmentDateClosed;
     @Column(name = "MIG_GUID")
@@ -33,15 +36,17 @@ public class OasysAssessmentGroup {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private Timestamp createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private Timestamp lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
     @Column(name = "HISTORIC_STATUS_ELM")
     private String historicStatusELm;
+    @Column(name = "HISTORIC_STATUS_CAT")
+    private String historicStatusCat;
 
     @OneToMany
     @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK", referencedColumnName = "OASYS_ASSESSMENT_GROUP_PK")

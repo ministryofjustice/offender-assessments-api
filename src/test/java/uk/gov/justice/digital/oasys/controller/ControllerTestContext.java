@@ -2,17 +2,12 @@ package uk.gov.justice.digital.oasys.controller;
 
 import com.google.common.collect.ImmutableList;
 import org.mockito.Mockito;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
-import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
+import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.eq;
 
 public class ControllerTestContext {
@@ -29,6 +24,7 @@ public class ControllerTestContext {
         Mockito.when(offenderRepository.getByPnc(eq("pnc2"))).thenReturn(Optional.empty());
         Mockito.when(offenderRepository.findById(eq(1L))).thenReturn(anOffender());
         Mockito.when(offenderRepository.findById(eq(2L))).thenReturn(Optional.empty());
+        Mockito.when(offenderRepository.findById(eq(3L))).thenReturn(assessedOffender());
 
     }
 
@@ -38,10 +34,23 @@ public class ControllerTestContext {
                 .build());
     }
 
+    private static Optional<Offender> assessedOffender() {
+        return Optional.ofNullable(Offender.builder()
+                .oasysAssessmentGroups(anAssessmentGrouWithSingleSet())
+                .build());
+    }
+
     private static List<OasysAssessmentGroup> anAssessmentGroup() {
         return ImmutableList.of(OasysAssessmentGroup.builder()
                 .oasysAssessmentGroupPk(1L)
                 .oasysSets(someOasysSets())
+                .build());
+    }
+
+    private static List<OasysAssessmentGroup> anAssessmentGrouWithSingleSet() {
+        return ImmutableList.of(OasysAssessmentGroup.builder()
+                .oasysAssessmentGroupPk(1L)
+                .oasysSets(List.of(layer3AssessmentOasysSet(1L)))
                 .build());
     }
 
@@ -69,6 +78,7 @@ public class ControllerTestContext {
                         .ovpSexWesc(BigDecimal.ONE)
                         .group(aGroup("HISTORIC"))
                         .assessmentStatus(anAssessmentStatus("OPEN"))
+                        .basicSentencePlanList(aSentencePlan(1L))
                         .build(),
                 OasysSet.builder()
                         .createDate(new Timestamp(System.currentTimeMillis()))
@@ -94,7 +104,20 @@ public class ControllerTestContext {
                         .group(aGroup("CURRENT"))
                         .assessmentStatus(anAssessmentStatus("COMPLETE"))
                         .assessmentVoidedDate(new Timestamp(System.currentTimeMillis()))
+                        .basicSentencePlanList(aSentencePlan(2L))
                         .build());
+    }
+
+    private static List<BasicSentencePlanObj> aSentencePlan(long l) {
+        return ImmutableList.of(
+                BasicSentencePlanObj.builder()
+                        .objectiveText("obj" + l)
+                        .measureText("measure" + l)
+                        .timescalesText("timescales" + l)
+                        .whoWillDoWorkText("who" + l)
+                        .whatWorkText("what" + l)
+                        .oasysSetPk(l).build()
+        );
     }
 
     private static RefElement anAssessmentStatus(String status) {
@@ -120,6 +143,49 @@ public class ControllerTestContext {
                 .group(OasysAssessmentGroup.builder().build())
                 .assessmentStatus(RefElement.builder().build())
                 .oasysSetPk(id).build();
+    }
+
+    public static OasysSet layer3AssessmentOasysSet(Long id) {
+        return OasysSet.builder()
+                .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
+                .group(OasysAssessmentGroup.builder().build())
+                .oasysSections(completeLayer3AssessmentSections())
+                .assessmentStatus(RefElement.builder().build())
+                .oasysSetPk(id).build();
+    }
+
+    public static List<OasysSection> completeLayer3AssessmentSections() {
+
+
+
+        OasysQuestion question1098 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
+                .refQuestion(RefQuestion.builder().refQuestionCode("10.98").build()).build();
+
+        OasysQuestion question1099 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
+                .refQuestion(RefQuestion.builder().refQuestionCode("10.99").build()).build();
+
+        OasysAnswer answer1098 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").build()).build();
+        OasysAnswer answer1099 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").build()).build();
+
+        question1098.setOasysAnswer(answer1098);
+        answer1098.setOasysQuestion(question1098);
+
+        question1099.setOasysAnswer(answer1099);
+        answer1099.setOasysQuestion(question1099);
+
+        OasysSection section10 = OasysSection.builder()
+                .refSection(RefSection.builder()
+                        .crimNeedScoreThreshold(5L).refSectionCode("10")
+                        .scoredForOgp("Y")
+                        .scoredForOvp("Y")
+                        .sectionType(
+                        RefElement.builder().refElementCode("10").refElementShortDesc("Emotional Wellbeing").build()).build())
+                .sectOvpRawScore(5L)
+                .sectOgpRawScore(5L)
+                .lowScoreNeedAttnInd("YES")
+                .sectOtherRawScore(10L)
+                .oasysQuestions(List.of(question1098, question1099)).build();
+        return List.of( section10);
     }
 
 }

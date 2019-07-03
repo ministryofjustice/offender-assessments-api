@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +13,9 @@ import java.sql.Time;
 
 @Data
 @ToString(exclude = "oasysQuestion")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "OASYS_ANSWER")
 public class OasysAnswer {

@@ -3,13 +3,14 @@ package uk.gov.justice.digital.oasys.api;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.List;
+import java.util.Map;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class Section {
     private Long refSectionId;
     private String refSectionCode;
+    private RefSection refSection;
     private Long oasysSectionId;
     private String status;
     private Long sectionOgpWeightedScore;
@@ -20,5 +21,5 @@ public class Section {
     private Long sectionOtherRawScore;
     private Boolean lowScoreAttentionNeeded;
 
-    private List<Question> questions;
+    private Map<String,Question> questions;
 }

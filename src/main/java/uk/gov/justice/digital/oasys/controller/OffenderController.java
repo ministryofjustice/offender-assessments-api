@@ -15,7 +15,7 @@ import uk.gov.justice.digital.oasys.service.OffenderService;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
-@Api(description = "Offender Sentence Plan resources", tags = "Offender Sentence Plans")
+@Api(description = "Offender resources", tags = "Offenders")
 public class OffenderController {
 
     private final OffenderService offenderService;
@@ -36,4 +36,49 @@ public class OffenderController {
 
     }
 
+    @RequestMapping(path = "/offenders/bookingNumber/{bookingNumber}", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Offender> getOffenderByBookingNumber(@PathVariable("bookingNumber") String bookingNumber) {
+
+        return offenderService.findOffenderByBookingNumber(bookingNumber)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+
+    }
+
+    @RequestMapping(path = "/offenders/crn/{crn}", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Offender> getOffenderByCrn(@PathVariable("crn") String crn) {
+
+        return offenderService.findOffenderByCrnId(crn)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+
+    }
+
+    @RequestMapping(path = "/offenders/nomisId/{nomisId}", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Offender> getOffenderByNomisId(@PathVariable("nomisId") String nomisId) {
+
+        return offenderService.findOffenderByNomisId(nomisId)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/offenders/pnc/{pnc}", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<Offender> getOffenderByPnc(@PathVariable("pnc") String pnc) {
+
+        return offenderService.findOffenderBypnc(pnc)
+                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(NOT_FOUND));
+    }
 }

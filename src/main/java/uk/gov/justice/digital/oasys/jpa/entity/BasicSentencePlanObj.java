@@ -1,22 +1,33 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.sql.Date;
 
 @Data
 @Entity
 @Table(name = "BASIC_SENTENCE_PLAN_OBJ")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class BasicSentencePlanObj {
     @Id
     @Column(name = "BASIC_SENT_PLAN_OBJ_PK")
+    @SequenceGenerator(name = "BASIC_SENTENCE_PLAN_OBJ_SEQ", sequenceName = "BASIC_SENTENCE_PLAN_OBJ_SEQ")
+    @GeneratedValue(generator = "BASIC_SENTENCE_PLAN_OBJ_SEQ", strategy = GenerationType.SEQUENCE)
     private Long basicSentPlanObjPk;
     @Column(name = "DISPLAY_SORT")
     private Long displaySort;

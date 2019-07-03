@@ -68,8 +68,8 @@ public class SwaggerConfig {
 
     private Contact contactInfo() {
         return new Contact(
-                "Benezet IT Ltd",
+                "HMPPS Digital Studio",
                 "",
-                "hmpps.enquiries@benezet.co.uk");
+                "feedback@digital.justice.gov.uk");
     }
 }
