@@ -16,26 +16,26 @@ env:
   - name: SPRING_DATASOURCE_USERNAME
     valueFrom:
       secretKeyRef:
-        name: offender-assessments-api
-        key: database_username
+        name: {{ template "app.name" . }}
+        key: SPRING_DATASOURCE_USERNAME
 
   - name: SPRING_DATASOURCE_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: offender-assessments-api
-        key: database_password
+        name: {{ template "app.name" . }}
+        key: SPRING_DATASOURCE_PASSWORD
 
   - name: SPRING_DATASOURCE_URL
     valueFrom:
       secretKeyRef:
-        name: offender-assessments-api
-        key: database_endpoint
+        name: {{ template "app.name" . }}
+        key: SPRING_DATASOURCE_URL
 
   - name: OAUTH_PUBLIC_KEY
     valueFrom:
       secretKeyRef:
-        name: offender-assessments-api
-        key: oauth_public_key
+        name: {{ template "app.name" . }}
+        key: OAUTH_PUBLIC_KEY
 
 
 
