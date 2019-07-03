@@ -109,5 +109,4 @@ dependencies {
     testImplementation 'com.revinate:assertj-json:1.2.0'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.8'
-
 }
