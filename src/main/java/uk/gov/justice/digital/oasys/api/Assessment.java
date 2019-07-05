@@ -10,6 +10,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Map.entry;
+
 @Value
 @Builder(toBuilder = true)
 public class Assessment {
@@ -62,72 +64,122 @@ public class Assessment {
         }
     }
 
-    @JsonIgnore
+
     public List<AssessmentNeed> getLayer3SentencePlanNeeds() {
 
         if (!isLayer3()) {
             return new ArrayList<>();
         }
 
-        Map<String, Map<String, String>> planSections = Map.of(
-                "10"
-                , Map.of(
-                        "harmQuestion", "10.98",
-                        "reoffendingQuestion", "10.99"),
-                "11"
-                , Map.of(
-                        "harmQuestion", "11.98",
-                        "reoffendingQuestion", "11.99"),
-                "12"
-                , Map.of(
-                        "harmQuestion", "12.98",
-                        "reoffendingQuestion", "12.99"),
-                "3"
-                , Map.of(
-                        "harmQuestion", "3.98",
-                        "reoffendingQuestion", "3.99"),
-                "4"
-                , Map.of(
-                        "harmQuestion", "4.96",
-                        "reoffendingQuestion", "4.98"),
-                "5"
-                , Map.of(
-                        "harmQuestion", "5.98",
-                        "reoffendingQuestion", "5.99"),
-                "6"
-                , Map.of(
-                        "harmQuestion", "6.98",
-                        "reoffendingQuestion", "6.99"),
-                "7"
-                , Map.of(
-                        "harmQuestion", "7.98",
-                        "reoffendingQuestion", "7.99"),
-                "8"
-                , Map.of(
-                        "harmQuestion", "8.97",
-                        "reoffendingQuestion", "8.98"),
-                "9"
-                , Map.of(
-                        "harmQuestion", "9.98",
-                        "reoffendingQuestion", "9.99")
-        );
+        Map<String, Map<String, String>> planSections = getPlanSections();
+        Map<String, String> questionHarmNeeds = getQuestionHarmNeeds();
 
-        List<Section> filteredSections = sections.entrySet().stream().filter(s -> planSections.containsKey(s.getKey())).map(s -> s.getValue()).collect(Collectors.toList());
+        List<Section> filteredSections = sections.entrySet().stream()
+                .filter(s -> planSections.containsKey(s.getKey()))
+                .filter(s-> Objects.nonNull(s.getValue().getRefSectionCode()))
+                .map(t -> t.getValue()).collect(Collectors.toList());
 
         List<AssessmentNeed> assessmentNeeds = new ArrayList<>();
 
         for (Section section : filteredSections) {
-            Map<String, String> planSection = planSections.get(section.getRefSectionCode());
-            boolean riskHarm = Optional.ofNullable(section.getQuestions().get(planSection.get("harmQuestion"))).map(e -> e.getAnswer().get()).map(e -> e.getRefAnswerCode()).orElse("NO").equals("YES");
-            boolean riskReoffending =  Optional.ofNullable(section.getQuestions().get(planSection.get("reoffendingQuestion"))).map(e -> e.getAnswer().get()).map(e -> e.getRefAnswerCode()).orElse("NO").equals("YES");
-            boolean overThreshold = Optional.ofNullable(section.getSectionOtherRawScore()).orElse(0L) >= Optional.ofNullable(section.getRefSection().getRefCrimNeedScoreThreshold()).orElse(Long.MAX_VALUE);
-            boolean flagged = Optional.ofNullable(section.getLowScoreAttentionNeeded()).orElse(false);
+            Map<String, String> planSection = Optional.ofNullable(planSections.get(section.getRefSectionCode()))
+                    .orElse(new HashMap<>());
+
+            var riskHarm = sectionHasRiskOfHarm(section, planSection);
+            var riskReoffending = sectionHasRiskOfReoffending(section, planSection);
+            var overThreshold = sectionIsOverThreshold(section);
+            var flagged = Optional.ofNullable(section.getLowScoreAttentionNeeded()).orElse(false);
+
             if (Stream.of(overThreshold, riskHarm, riskReoffending, flagged).anyMatch(e -> e.equals(true))) {
-                assessmentNeeds.add(new AssessmentNeed(section.getRefSection().getShortDescription(), overThreshold, riskHarm, riskReoffending, flagged));
+                assessmentNeeds.add(new AssessmentNeed(section.getRefSection().getShortDescription(),
+                        overThreshold, riskHarm, riskReoffending, flagged));
             }
+
+            questionHarmNeeds.entrySet().stream().filter(e -> e.getValue().equals(section.getRefSectionCode())).forEach(e -> {
+                Optional<Question> question = Optional.ofNullable(section.getQuestions().get(e.getKey()));
+                if (questionHasAnswer(question, "YES")) {
+                    assessmentNeeds.add(new AssessmentNeed(question.map(q -> q.getQuestionText()).orElse(""), false, true, false, false));
+                }
+            });
+
         }
         return assessmentNeeds;
     }
+
+
+    private boolean sectionIsOverThreshold(Section section) {
+        return Optional.ofNullable(section.getSectionOtherRawScore()).orElse(0L) >= Optional.ofNullable(section.getRefSection()).map(s->s.getRefCrimNeedScoreThreshold()).orElse(Long.MAX_VALUE);
+    }
+
+    private boolean sectionHasRiskOfReoffending(Section section, Map<String, String> planSection) {
+        return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("reoffendingQuestion")).orElse(""))),"YES");
+    }
+
+    private boolean sectionHasRiskOfHarm(Section section, Map<String, String> planSection) {
+        return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("harmQuestion")).orElse(""))), "YES");
+    }
+
+    private boolean questionHasAnswer(Optional<Question> question, String expectedAnswer) {
+        return question.map(e -> e.getAnswer().get()).map(Answer::getRefAnswerCode).orElse("NO").equals("YES");
+    }
+
+    private Map<String, Map<String, String>> getPlanSections() {
+        return Map.ofEntries(
+                    entry("10"
+                            , Map.of(
+                                    "harmQuestion", "10.98",
+                                    "reoffendingQuestion", "10.99")),
+                    entry("11"
+                            , Map.of(
+                                    "harmQuestion", "11.98",
+                                    "reoffendingQuestion", "11.99")),
+                    entry("12"
+                            , Map.of(
+                                    "harmQuestion", "12.98",
+                                    "reoffendingQuestion", "12.99")),
+                    entry("3"
+                            , Map.of(
+                                    "harmQuestion", "3.98",
+                                    "reoffendingQuestion", "3.99")),
+                    entry("4"
+                            , Map.of(
+                                    "harmQuestion", "4.96",
+                                    "reoffendingQuestion", "4.98")),
+                    entry("5"
+                            , Map.of(
+                                    "harmQuestion", "5.98",
+                                    "reoffendingQuestion", "5.99")),
+                    entry("6"
+                            , Map.of(
+                                    "harmQuestion", "6.98",
+                                    "reoffendingQuestion", "6.99")),
+                    entry("7"
+                            , Map.of(
+                                    "harmQuestion", "7.98",
+                                    "reoffendingQuestion", "7.99")),
+                    entry("8"
+                            , Map.of(
+                                    "harmQuestion", "8.97",
+                                    "reoffendingQuestion", "8.98")),
+                    entry("9"
+                            , Map.of(
+                                    "harmQuestion", "9.98",
+                                    "reoffendingQuestion", "9.99")),
+                    entry("ROSHSUM",
+                            new HashMap<>()),
+                    entry("FA31",
+                            new HashMap<>()),
+                    entry("ROSHFULL",
+                            new HashMap<>())
+            );
+    }
+
+    private Map<String, String> getQuestionHarmNeeds() {
+        return Map.of("sum6.1", "ROSHSUM", "sum6.2", "ROSHSUM",
+                "sum6.4", "ROSHSUM", "sum6.5", "ROSHSUM", "FA31", "ROSHFULL", "7.4",
+                "7", "6.7", "6", "FA51", "ROSHFULL");
+    }
+
 
     @JsonIgnore
     public boolean isLayer3() {
