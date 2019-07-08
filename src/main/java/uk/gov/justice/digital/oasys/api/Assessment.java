@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,65 +44,59 @@ public class Assessment {
         var section12 = Optional.ofNullable(sections.get("12"));
 
         var answer2_6 = section2
-                .filter(s2 -> s2.getQuestions() != null)
+                .filter(s -> s.getQuestions() != null)
                 .flatMap(s2 -> Optional.ofNullable(s2.getQuestions().get("2.6")))
                 .flatMap(Question::getAnswer);
 
-        var answer7_2 = section7.filter(s2 -> s2.getQuestions() != null)
+        var answer7_2 = section7.filter(s -> s.getQuestions() != null)
                 .flatMap(s7 -> Optional.ofNullable(s7.getQuestions().get("7.2")))
                 .flatMap(Question::getAnswer);
 
-        var answer11_4 = section11.filter(s2 -> s2.getQuestions() != null)
+        var answer11_4 = section11.filter(s -> s.getQuestions() != null)
                 .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.4")))
                 .flatMap(Question::getAnswer);
 
-        var answer11_6 = section11.filter(s2 -> s2.getQuestions() != null)
+        var answer11_6 = section11.filter(s -> s.getQuestions() != null)
                 .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.6")))
                 .flatMap(Question::getAnswer);
 
-        var answer11_7 = section11.filter(s2 -> s2.getQuestions() != null)
+        var answer11_7 = section11.filter(s -> s.getQuestions() != null)
                 .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.7")))
                 .flatMap(Question::getAnswer);
 
-        var answer11_9 = section11.filter(s2 -> s2.getQuestions() != null)
+        var answer11_9 = section11.filter(s -> s.getQuestions() != null)
                 .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.9")))
                 .flatMap(Question::getAnswer);
 
-        var answer12_1 = section12.filter(s2 -> s2.getQuestions() != null)
+        var answer12_1 = section12.filter(s -> s.getQuestions() != null)
                 .flatMap(s12 -> Optional.ofNullable(s12.getQuestions().get("12.1")))
                 .flatMap(Question::getAnswer);
 
+        var sum = ImmutableList.of(answer2_6, answer7_2, answer11_4, answer11_6, answer11_7, answer11_9, answer12_1)
+                .stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(a -> Optional.ofNullable(a.getScore()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .reduce(0L, Long::sum);
 
-        try {
+        boolean pivoted = (sum >= 7L ||
+                sum >= 5 && answer11_6.isPresent() && answer11_6.get().getScore() == 2L ||
+                sum >= 5 && answer11_7.isPresent() && answer11_7.get().getScore() == 2L);
 
-            var sum = ImmutableList.of(answer2_6, answer7_2, answer11_4, answer11_6, answer11_7, answer11_9, answer12_1)
-                    .stream()
-                    .filter(Optional::isPresent)
-                    .map(Optional::orElseThrow)
-                    .map(a -> Optional.ofNullable(a.getScore()))
-                    .map(Optional::orElseThrow)
-                    .reduce(0L, Long::sum);
+        boolean missingAnswers = ImmutableList.of(answer2_6, answer7_2, answer11_4, answer11_6, answer11_7, answer11_9, answer12_1)
+                .stream().anyMatch(Optional::isEmpty);
 
-            boolean pivoted = (sum >= 7L ||
-                    sum >= 5 && answer11_6.isPresent() && answer11_6.get().getScore() == 2L ||
-                    sum >= 5 && answer11_7.isPresent() && answer11_7.get().getScore() == 2L);
-
-            boolean missingAnswers = ImmutableList.of(answer2_6, answer7_2, answer11_4, answer11_6, answer11_7, answer11_9, answer12_1)
-                    .stream().anyMatch(Optional::isEmpty);
-
-            if (pivoted) {
-                return Optional.of(true);
-            }
-
-            if (!missingAnswers) {
-                return Optional.of(false);
-            }
-
-            return null;
-
-        } catch (NoSuchElementException nsee) {
-            return null;
+        if (pivoted) {
+            return Optional.of(true);
         }
+
+        if (!missingAnswers) {
+            return Optional.of(false);
+        }
+
+        return Optional.empty();
     }
 
     public List<AssessmentNeed> getLayer3SentencePlanNeeds() {
