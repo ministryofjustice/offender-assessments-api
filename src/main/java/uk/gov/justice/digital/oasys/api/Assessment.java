@@ -6,7 +6,13 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,42 +34,77 @@ public class Assessment {
     private List<OasysBcsPart> oasysBcsParts;
     private QaReview qaReview;
 
-    public Boolean getTspEligible() {
+    public Optional<Boolean> getTspEligible() {
         if (!isLayer3()) {
-            return null;
+            return Optional.empty();
         }
 
-        Section section2 = sections.get("2");
-        Section section7 = sections.get("7");
-        Section section11 = sections.get("11");
-        Section section12 = sections.get("12");
+        var section2 = Optional.ofNullable(sections.get("2"));
+        var section7 = Optional.ofNullable(sections.get("7"));
+        var section11 = Optional.ofNullable(sections.get("11"));
+        var section12 = Optional.ofNullable(sections.get("12"));
 
-        var answer2_6 = Optional.ofNullable(section2.getQuestions().get("2.6")).flatMap(Question::getAnswer);
-        var answer7_2 = Optional.ofNullable(section7.getQuestions().get("7.2")).flatMap(Question::getAnswer);
-        var answer11_4 = Optional.ofNullable(section11.getQuestions().get("11.4")).flatMap(Question::getAnswer);
-        var answer11_6 = Optional.ofNullable(section11.getQuestions().get("11.6")).flatMap(Question::getAnswer);
-        var answer11_7 = Optional.ofNullable(section11.getQuestions().get("11.7")).flatMap(Question::getAnswer);
-        var answer11_9 = Optional.ofNullable(section11.getQuestions().get("11.9")).flatMap(Question::getAnswer);
-        var answer12_1 = Optional.ofNullable(section12.getQuestions().get("12.1")).flatMap(Question::getAnswer);
+        var answer2_6 = section2
+                .filter(s2 -> s2.getQuestions() != null)
+                .flatMap(s2 -> Optional.ofNullable(s2.getQuestions().get("2.6")))
+                .flatMap(Question::getAnswer);
+
+        var answer7_2 = section7.filter(s2 -> s2.getQuestions() != null)
+                .flatMap(s7 -> Optional.ofNullable(s7.getQuestions().get("7.2")))
+                .flatMap(Question::getAnswer);
+
+        var answer11_4 = section11.filter(s2 -> s2.getQuestions() != null)
+                .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.4")))
+                .flatMap(Question::getAnswer);
+
+        var answer11_6 = section11.filter(s2 -> s2.getQuestions() != null)
+                .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.6")))
+                .flatMap(Question::getAnswer);
+
+        var answer11_7 = section11.filter(s2 -> s2.getQuestions() != null)
+                .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.7")))
+                .flatMap(Question::getAnswer);
+
+        var answer11_9 = section11.filter(s2 -> s2.getQuestions() != null)
+                .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.9")))
+                .flatMap(Question::getAnswer);
+
+        var answer12_1 = section12.filter(s2 -> s2.getQuestions() != null)
+                .flatMap(s12 -> Optional.ofNullable(s12.getQuestions().get("12.1")))
+                .flatMap(Question::getAnswer);
+
 
         try {
 
             var sum = ImmutableList.of(answer2_6, answer7_2, answer11_4, answer11_6, answer11_7, answer11_9, answer12_1)
                     .stream()
+                    .filter(Optional::isPresent)
                     .map(Optional::orElseThrow)
                     .map(a -> Optional.ofNullable(a.getScore()))
                     .map(Optional::orElseThrow)
                     .reduce(0L, Long::sum);
 
-            return (sum >= 7L ||
-                    sum >= 5 && answer11_6.get().getScore() == 2L ||
-                    sum >= 5 && answer11_7.get().getScore() == 2L);
+            boolean pivoted = (sum >= 7L ||
+                    sum >= 5 && answer11_6.isPresent() && answer11_6.get().getScore() == 2L ||
+                    sum >= 5 && answer11_7.isPresent() && answer11_7.get().getScore() == 2L);
+
+            boolean missingAnswers = ImmutableList.of(answer2_6, answer7_2, answer11_4, answer11_6, answer11_7, answer11_9, answer12_1)
+                    .stream().anyMatch(Optional::isEmpty);
+
+            if (pivoted) {
+                return Optional.of(true);
+            }
+
+            if (!missingAnswers) {
+                return Optional.of(false);
+            }
+
+            return null;
 
         } catch (NoSuchElementException nsee) {
             return null;
         }
     }
-
 
     public List<AssessmentNeed> getLayer3SentencePlanNeeds() {
 
@@ -76,8 +117,9 @@ public class Assessment {
 
         List<Section> filteredSections = sections.entrySet().stream()
                 .filter(s -> planSections.containsKey(s.getKey()))
-                .filter(s-> Objects.nonNull(s.getValue().getRefSectionCode()))
-                .map(t -> t.getValue()).collect(Collectors.toList());
+                .filter(s -> Objects.nonNull(s.getValue().getRefSectionCode()))
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
 
         List<AssessmentNeed> assessmentNeeds = new ArrayList<>();
 
@@ -108,11 +150,11 @@ public class Assessment {
 
 
     private boolean sectionIsOverThreshold(Section section) {
-        return Optional.ofNullable(section.getSectionOtherRawScore()).orElse(0L) >= Optional.ofNullable(section.getRefSection()).map(s->s.getRefCrimNeedScoreThreshold()).orElse(Long.MAX_VALUE);
+        return Optional.ofNullable(section.getSectionOtherRawScore()).orElse(0L) >= Optional.ofNullable(section.getRefSection()).map(s -> s.getRefCrimNeedScoreThreshold()).orElse(Long.MAX_VALUE);
     }
 
     private boolean sectionHasRiskOfReoffending(Section section, Map<String, String> planSection) {
-        return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("reoffendingQuestion")).orElse(""))),"YES");
+        return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("reoffendingQuestion")).orElse(""))), "YES");
     }
 
     private boolean sectionHasRiskOfHarm(Section section, Map<String, String> planSection) {
@@ -125,53 +167,53 @@ public class Assessment {
 
     private Map<String, Map<String, String>> getPlanSections() {
         return Map.ofEntries(
-                    entry("10"
-                            , Map.of(
-                                    "harmQuestion", "10.98",
-                                    "reoffendingQuestion", "10.99")),
-                    entry("11"
-                            , Map.of(
-                                    "harmQuestion", "11.98",
-                                    "reoffendingQuestion", "11.99")),
-                    entry("12"
-                            , Map.of(
-                                    "harmQuestion", "12.98",
-                                    "reoffendingQuestion", "12.99")),
-                    entry("3"
-                            , Map.of(
-                                    "harmQuestion", "3.98",
-                                    "reoffendingQuestion", "3.99")),
-                    entry("4"
-                            , Map.of(
-                                    "harmQuestion", "4.96",
-                                    "reoffendingQuestion", "4.98")),
-                    entry("5"
-                            , Map.of(
-                                    "harmQuestion", "5.98",
-                                    "reoffendingQuestion", "5.99")),
-                    entry("6"
-                            , Map.of(
-                                    "harmQuestion", "6.98",
-                                    "reoffendingQuestion", "6.99")),
-                    entry("7"
-                            , Map.of(
-                                    "harmQuestion", "7.98",
-                                    "reoffendingQuestion", "7.99")),
-                    entry("8"
-                            , Map.of(
-                                    "harmQuestion", "8.97",
-                                    "reoffendingQuestion", "8.98")),
-                    entry("9"
-                            , Map.of(
-                                    "harmQuestion", "9.98",
-                                    "reoffendingQuestion", "9.99")),
-                    entry("ROSHSUM",
-                            new HashMap<>()),
-                    entry("FA31",
-                            new HashMap<>()),
-                    entry("ROSHFULL",
-                            new HashMap<>())
-            );
+                entry("10"
+                        , Map.of(
+                                "harmQuestion", "10.98",
+                                "reoffendingQuestion", "10.99")),
+                entry("11"
+                        , Map.of(
+                                "harmQuestion", "11.98",
+                                "reoffendingQuestion", "11.99")),
+                entry("12"
+                        , Map.of(
+                                "harmQuestion", "12.98",
+                                "reoffendingQuestion", "12.99")),
+                entry("3"
+                        , Map.of(
+                                "harmQuestion", "3.98",
+                                "reoffendingQuestion", "3.99")),
+                entry("4"
+                        , Map.of(
+                                "harmQuestion", "4.96",
+                                "reoffendingQuestion", "4.98")),
+                entry("5"
+                        , Map.of(
+                                "harmQuestion", "5.98",
+                                "reoffendingQuestion", "5.99")),
+                entry("6"
+                        , Map.of(
+                                "harmQuestion", "6.98",
+                                "reoffendingQuestion", "6.99")),
+                entry("7"
+                        , Map.of(
+                                "harmQuestion", "7.98",
+                                "reoffendingQuestion", "7.99")),
+                entry("8"
+                        , Map.of(
+                                "harmQuestion", "8.97",
+                                "reoffendingQuestion", "8.98")),
+                entry("9"
+                        , Map.of(
+                                "harmQuestion", "9.98",
+                                "reoffendingQuestion", "9.99")),
+                entry("ROSHSUM",
+                        new HashMap<>()),
+                entry("FA31",
+                        new HashMap<>()),
+                entry("ROSHFULL",
+                        new HashMap<>())
+        );
     }
 
     private Map<String, String> getQuestionHarmNeeds() {

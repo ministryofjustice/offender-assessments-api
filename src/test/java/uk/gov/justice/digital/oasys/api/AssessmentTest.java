@@ -235,4 +235,31 @@ public class AssessmentTest {
         return ImmutableMap.<String, Section>builder().putAll(Maps.filterEntries(incompleteLayer3Sections(), s -> !s.getKey().equals("2"))).put("2", section2).build();
 
     }
+
+    @Test
+    public void tspEligibilityWhenTotalScore7OrMoreOnIncompleteAssessment() throws JsonProcessingException {
+        var builder = ImmutableMap.<String, Long>builder();
+        builder.put("2.6", 7L);
+
+
+        Assessment assessment = Assessment.builder()
+                .sections(sectionsWithScoresOf(ImmutableMap.of(
+                        "2",
+                        Section.builder()
+                                .refSectionCode("2")
+                                .questions(ImmutableMap.of("2.6", Question.builder().
+                                        answer(Optional.of(Answer.builder().ovpScore(0L).build())).build()))
+                                .build()), builder.build()))
+                .assessmentType("LAYER_3")
+                .build();
+
+        ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
+
+        final String json = objectMapper.writeValueAsString(assessment);
+
+        DocumentContext ctx = JsonPath.parse(json);
+
+        assertThat(ctx).jsonPathAsBoolean("$.tspEligible").isTrue();
+    }
+
 }
