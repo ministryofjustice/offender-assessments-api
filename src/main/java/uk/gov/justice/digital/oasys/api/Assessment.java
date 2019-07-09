@@ -106,7 +106,6 @@ public class Assessment {
         }
 
         Map<String, Map<String, String>> planSections = getPlanSections();
-        Map<String, String> questionHarmNeeds = getQuestionHarmNeeds();
 
         List<Section> filteredSections = sections.entrySet().stream()
                 .filter(s -> planSections.containsKey(s.getKey()))
@@ -129,14 +128,6 @@ public class Assessment {
                 assessmentNeeds.add(new AssessmentNeed(section.getRefSection().getShortDescription(),
                         overThreshold, riskHarm, riskReoffending, flagged));
             }
-
-            questionHarmNeeds.entrySet().stream().filter(e -> e.getValue().equals(section.getRefSectionCode())).forEach(e -> {
-                Optional<Question> question = Optional.ofNullable(section.getQuestions().get(e.getKey()));
-                if (questionHasAnswer(question, "YES")) {
-                    assessmentNeeds.add(new AssessmentNeed(question.map(q -> q.getQuestionText()).orElse(""), false, true, false, false));
-                }
-            });
-
         }
         return assessmentNeeds;
     }
@@ -199,21 +190,11 @@ public class Assessment {
                 entry("9"
                         , Map.of(
                                 "harmQuestion", "9.98",
-                                "reoffendingQuestion", "9.99")),
-                entry("ROSHSUM",
-                        new HashMap<>()),
-                entry("FA31",
-                        new HashMap<>()),
-                entry("ROSHFULL",
-                        new HashMap<>())
+                                "reoffendingQuestion", "9.99"))
         );
+
     }
 
-    private Map<String, String> getQuestionHarmNeeds() {
-        return Map.of("sum6.1", "ROSHSUM", "sum6.2", "ROSHSUM",
-                "sum6.4", "ROSHSUM", "sum6.5", "ROSHSUM", "FA31", "ROSHFULL", "7.4",
-                "7", "6.7", "6", "FA51", "ROSHFULL");
-    }
 
 
     @JsonIgnore
