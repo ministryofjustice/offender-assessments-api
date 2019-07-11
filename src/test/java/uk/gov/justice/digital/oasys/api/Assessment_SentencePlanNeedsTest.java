@@ -2,6 +2,7 @@ package uk.gov.justice.digital.oasys.api;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,19 +37,19 @@ public class Assessment_SentencePlanNeedsTest {
         assertThat(layer3SentencePlanNeeds).hasSize(1);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.getName()).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.isOverThreshold()).containsExactly(true);
+                .extracting(AssessmentNeed::getOverThreshold).containsExactly(true);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.isRiskOfHarm()).containsExactly(true);
+                .extracting(AssessmentNeed::getRiskOfHarm).containsExactly(true);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.isRiskOfReoffending()).containsExactly(true);
+                .extracting(AssessmentNeed::getRiskOfReoffending).containsExactly(true);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.isFlaggedAsNeed()).containsExactly(true);
+                .extracting(AssessmentNeed::getFlaggedAsNeed).containsExactly(true);
 
     }
 
@@ -172,9 +173,9 @@ public class Assessment_SentencePlanNeedsTest {
 
         List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1)
-                .extracting(i->i.isOverThreshold()).containsExactly(true);
+                .extracting(AssessmentNeed::getOverThreshold).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.getName()).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
 
     }
 
@@ -199,9 +200,9 @@ public class Assessment_SentencePlanNeedsTest {
 
         List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1)
-                .extracting(i->i.isOverThreshold()).containsExactly(true);
+                .extracting(AssessmentNeed::getOverThreshold).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.getName()).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
 
     }
 
@@ -226,9 +227,9 @@ public class Assessment_SentencePlanNeedsTest {
 
         List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1)
-                .extracting(i->i.isRiskOfHarm()).containsExactly(true);
+                .extracting(AssessmentNeed::getRiskOfHarm).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.getName()).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
 
     }
 
@@ -253,9 +254,9 @@ public class Assessment_SentencePlanNeedsTest {
 
         List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1)
-                .extracting(i->i.isRiskOfReoffending()).containsExactly(true);
+                .extracting(AssessmentNeed::getRiskOfReoffending).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(i->i.getName()).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
 
     }
 
