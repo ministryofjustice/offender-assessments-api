@@ -7,6 +7,7 @@ import lombok.Value;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,10 +39,10 @@ public class Assessment {
             return Optional.empty();
         }
 
-        var section2 = Optional.ofNullable(sections.get("2"));
-        var section7 = Optional.ofNullable(sections.get("7"));
-        var section11 = Optional.ofNullable(sections.get("11"));
-        var section12 = Optional.ofNullable(sections.get("12"));
+        var section2 = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("2")));
+        var section7 = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("7")));
+        var section11 = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("11")));
+        var section12 = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("12")));
 
         var answer2_6 = section2
                 .filter(s -> s.getQuestions() != null)
@@ -107,11 +108,13 @@ public class Assessment {
 
         Map<String, Map<String, String>> planSections = getPlanSections();
 
-        List<Section> filteredSections = sections.entrySet().stream()
-                .filter(s -> planSections.containsKey(s.getKey()))
-                .filter(s -> Objects.nonNull(s.getValue().getRefSectionCode()))
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+        List<Section> filteredSections = Optional.ofNullable(sections)
+                .map(s -> s.entrySet().stream()
+                        .filter(entry -> planSections.containsKey(entry.getKey()))
+                        .filter(entry -> Objects.nonNull(entry.getValue().getRefSectionCode()))
+                        .map(Map.Entry::getValue)
+                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
 
         List<AssessmentNeed> assessmentNeeds = new ArrayList<>();
 
@@ -196,6 +199,81 @@ public class Assessment {
                                 "reoffendingQuestion", "9.99"))
         );
 
+    }
+
+    public Optional<Boolean> getChildSafeguardingIndicated() {
+        if (!isLayer3()) {
+            return Optional.empty();
+        }
+
+        var sectionROSH = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("ROSH")));
+        var answerR2_1 = sectionROSH
+                .filter(s -> s.getQuestions() != null)
+                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("R2.1")))
+                .flatMap(Question::getAnswer);
+
+        var sectionROSHFULL = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("ROSHFULL")));
+
+        var answerR7_1a = sectionROSHFULL
+                .filter(s -> s.getQuestions() != null)
+                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("FA15")))
+                .flatMap(Question::getAnswer);
+
+        var answerR7_1b = sectionROSHFULL
+                .filter(s -> s.getQuestions() != null)
+                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("FA16")))
+                .flatMap(Question::getAnswer);
+
+        var answers = Stream.of(answerR2_1, answerR7_1a, answerR7_1b)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Answer::getRefAnswerCode)
+                .collect(Collectors.toList());
+
+        if (answers.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (answers.contains("YES")) {
+            return Optional.of(true);
+        }
+
+        return Optional.of(false);
+    }
+
+    public Optional<Boolean> getComplyWithChildProtectionPlanIndicated() {
+        if (!isLayer3()) {
+            return Optional.empty();
+        }
+
+        var sectionROSH = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("ROSH")));
+        var answerR2_1 = sectionROSH
+                .filter(s -> s.getQuestions() != null)
+                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("R2.1")))
+                .flatMap(Question::getAnswer);
+
+        var sectionROSHFULL = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("ROSHFULL")));
+
+        var answerR7_1b = sectionROSHFULL
+                .filter(s -> s.getQuestions() != null)
+                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("FA16")))
+                .flatMap(Question::getAnswer);
+
+        var answers = Stream.of(answerR2_1, answerR7_1b)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Answer::getRefAnswerCode)
+                .collect(Collectors.toList());
+
+        if (answers.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (answers.contains("YES")) {
+            return Optional.of(true);
+        }
+
+        return Optional.of(false);
     }
 
 
