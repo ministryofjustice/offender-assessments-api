@@ -122,31 +122,34 @@ public class Assessment {
             var riskHarm = sectionHasRiskOfHarm(section, planSection);
             var riskReoffending = sectionHasRiskOfReoffending(section, planSection);
             var overThreshold = sectionIsOverThreshold(section);
-            var flagged = Optional.ofNullable(section.getLowScoreAttentionNeeded()).orElse(false);
+            var flagged = Optional.ofNullable(section.getLowScoreAttentionNeeded());
 
-            if (Stream.of(overThreshold, riskHarm, riskReoffending, flagged).anyMatch(e -> e.equals(true))) {
+            if (Stream.of(overThreshold, riskHarm, riskReoffending, flagged).filter(Optional::isPresent).map(Optional::get).anyMatch(e -> e.equals(true))) {
                 assessmentNeeds.add(new AssessmentNeed(section.getRefSection().getShortDescription(),
-                        overThreshold, riskHarm, riskReoffending, flagged));
+                        overThreshold.orElse(null), riskHarm.orElse(null), riskReoffending.orElse(null), flagged.orElse(null)));
             }
         }
         return assessmentNeeds;
     }
 
 
-    private boolean sectionIsOverThreshold(Section section) {
-        return Optional.ofNullable(section.getSectionOtherRawScore()).orElse(0L) >= Optional.ofNullable(section.getRefSection()).map(s -> s.getRefCrimNeedScoreThreshold()).orElse(Long.MAX_VALUE);
+    private Optional<Boolean> sectionIsOverThreshold(Section section) {
+        return Optional.ofNullable(section.getSectionOtherRawScore()).map(score -> score >= Optional.ofNullable(section.getRefSection()).map(RefSection::getRefCrimNeedScoreThreshold).orElse(Long.MAX_VALUE));
     }
 
-    private boolean sectionHasRiskOfReoffending(Section section, Map<String, String> planSection) {
-        return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("reoffendingQuestion")).orElse(""))), "YES");
+    private Optional<Boolean> sectionHasRiskOfReoffending(Section section, Map<String, String> planSection) {
+        return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("reoffendingQuestion")).orElse(""))));
     }
 
-    private boolean sectionHasRiskOfHarm(Section section, Map<String, String> planSection) {
-        return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("harmQuestion")).orElse(""))), "YES");
+    private Optional<Boolean> sectionHasRiskOfHarm(Section section, Map<String, String> planSection) {
+        return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("harmQuestion")).orElse(""))));
     }
 
-    private boolean questionHasAnswer(Optional<Question> question, String expectedAnswer) {
-        return question.map(e -> e.getAnswer().get()).map(Answer::getRefAnswerCode).orElse("NO").equals("YES");
+    private Optional<Boolean> questionHasAnswer(Optional<Question> question) {
+        return question
+                .flatMap(Question::getAnswer)
+                .flatMap(a -> Optional.ofNullable(a.getRefAnswerCode()))
+                .map("YES"::equals);
     }
 
     private Map<String, Map<String, String>> getPlanSections() {
@@ -194,7 +197,6 @@ public class Assessment {
         );
 
     }
-
 
 
     @JsonIgnore
