@@ -34,11 +34,8 @@ env:
         name: {{ template "app.name" . }}
         key: SPRING_DATASOURCE_URL
 
-  - name: OAUTH_PUBLIC_KEY
-    valueFrom:
-      secretKeyRef:
-        name: {{ template "app.name" . }}
-        key: OAUTH_PUBLIC_KEY
+  - name: JWT_PUBLIC_KEY
+    value: "{{ .Values.env.JWT_PUBLIC_KEY }}"
 
 
 
