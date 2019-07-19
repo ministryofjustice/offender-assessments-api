@@ -14,7 +14,6 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     certmanager.k8s.io/cluster-issuer: letsencrypt-production
-    nginx.ingress.kubernetes.io/whitelist-source-range: "217.33.148.210/32,81.134.202.29/32,52.56.175.16/32,35.177.252.195/32"
   hosts:
     - host: dev.devtest.assessment-api.hmpps.dsd.io
       cert_secret: tls-secret
