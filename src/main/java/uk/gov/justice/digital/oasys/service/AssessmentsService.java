@@ -120,10 +120,7 @@ public class AssessmentsService {
         Optional<Offender> maybeOffender = offenderRepository.findById(oasysOffenderPk);
         Optional<Assessment> maybeAssessment = latestAssessmentOf(assessmentsFilterOf(Optional.empty(),Optional.of(LAYER_3_TYPE), Optional.empty(), Optional.empty()), maybeOffender);
 
-        if(maybeAssessment.isPresent()) {
-            return maybeAssessment.get().getLayer3SentencePlanNeeds();
-        }
-        return Collections.emptyList();
+        return maybeAssessment.map(Assessment::getLayer3SentencePlanNeeds).orElse(Collections.emptyList());
     }
 
     private Optional<Assessment> latestAssessmentOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Optional<Offender> maybeOffender) {

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class Offender {
     private Long oasysOffenderId;
     private String title;
@@ -37,4 +37,5 @@ public class Offender {
     private Boolean lifer;
     private String dischargeCode;
     private List<OffenderAlias> aliases;
+    private Sentence sentence;
 }
