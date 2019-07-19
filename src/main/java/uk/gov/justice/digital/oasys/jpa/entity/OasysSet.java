@@ -525,4 +525,6 @@ public class OasysSet {
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private List<SspObjectivesInSet> sspObjectivesInSets;
 
+    @OneToOne(mappedBy = "oasysSet", optional = false)
+    private OffenceBlock offenceBlock;
 }

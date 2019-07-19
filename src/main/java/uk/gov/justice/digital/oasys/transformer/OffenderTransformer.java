@@ -5,10 +5,18 @@ import uk.gov.justice.digital.oasys.api.Address;
 import uk.gov.justice.digital.oasys.api.Identifiers;
 import uk.gov.justice.digital.oasys.api.Offender;
 import uk.gov.justice.digital.oasys.api.OffenderAlias;
+import uk.gov.justice.digital.oasys.api.Sentence;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenceBlock;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenceSentenceDetail;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +52,42 @@ public class OffenderTransformer {
                 .remand(booleanOf(offender.getRemandInd()))
                 .riskToOthers(Optional.ofNullable(offender.getRiskToOthers()).map(RefElement::getRefElementDesc).orElse(null))
                 .riskToSelf(Optional.ofNullable(offender.getRiskToSelf()).map(RefElement::getRefElementDesc).orElse(null))
+                .sentence(sentenceOf(offender.getOasysAssessmentGroups()))
                 .build();
+    }
+
+    private Sentence sentenceOf(List<OasysAssessmentGroup> oasysAssessmentGroups) {
+        var maybeLatestSet = latestOasysSetOf(oasysAssessmentGroups);
+
+        var maybeOffenceBlock = maybeLatestSet.flatMap(s -> Optional.ofNullable(s.getOffenceBlock()));
+
+        var maybeSentenceDetail = maybeOffenceBlock.map(OffenceBlock::getOffenceSentenceDetail);
+        var maybeSentence = maybeOffenceBlock.map(OffenceBlock::getSentence);
+
+        final Optional<Sentence> sentence = maybeOffenceBlock.map(b -> Sentence.builder()
+                .activity(maybeSentenceDetail.map(OffenceSentenceDetail::getActivityDesc).orElse(null))
+                .cja(booleanOf(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getCjaInd).orElse(null)))
+                .cjaSupervisionMonths(maybeSentenceDetail.map(OffenceSentenceDetail::getCjaSupervisionMonths).orElse(null))
+                .cjaUnpaidHours(maybeSentenceDetail.map(OffenceSentenceDetail::getCjaUnpaidHours).orElse(null))
+                .custodial(booleanOf(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getCustodialInd).orElse(null)))
+                .endDate(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getEndDate).map(Timestamp::toLocalDateTime).map(LocalDateTime::toLocalDate).map(LocalDate::toString).orElse(null))
+                .orderType(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getOrderType).map(RefElement::getRefElementDesc).orElse(null))
+                .sentenceCode(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceCode).orElse(null))
+                .sentenceDescription(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceDesc).orElse(null))
+                .startDate(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getStartDate).map(Timestamp::toLocalDateTime).map(LocalDateTime::toLocalDate).map(LocalDate::toString).orElse(null))
+                .build());
+
+        return sentence
+                .orElse(null);
+    }
+
+    public Optional<OasysSet> latestOasysSetOf(List<OasysAssessmentGroup> oasysAssessmentGroups) {
+        final Optional<OasysSet> max = Optional.ofNullable(oasysAssessmentGroups).stream()
+                .flatMap(Collection::stream)
+                .flatMap(oasysAssessmentGroup -> Optional.ofNullable(oasysAssessmentGroup.getOasysSets()).stream())
+                .flatMap(Collection::stream)
+                .max(Comparator.comparing(OasysSet::getCreateDate));
+        return max;
     }
 
     private LocalDate localDateOf(Timestamp date) {

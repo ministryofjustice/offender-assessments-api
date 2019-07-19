@@ -2,12 +2,28 @@ package uk.gov.justice.digital.oasys.controller;
 
 import com.google.common.collect.ImmutableList;
 import org.mockito.Mockito;
-import uk.gov.justice.digital.oasys.jpa.entity.*;
+import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenceBlock;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenceSentenceDetail;
+import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
+import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
+import uk.gov.justice.digital.oasys.jpa.entity.RefSection;
+import uk.gov.justice.digital.oasys.jpa.entity.Sentence;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.eq;
 
 public class ControllerTestContext {
@@ -28,7 +44,7 @@ public class ControllerTestContext {
 
     }
 
-    private static Optional<Offender> anOffender() {
+    public static Optional<Offender> anOffender() {
         return Optional.ofNullable(Offender.builder()
                 .oasysAssessmentGroups(anAssessmentGroup())
                 .build());
@@ -79,6 +95,7 @@ public class ControllerTestContext {
                         .group(aGroup("HISTORIC"))
                         .assessmentStatus(anAssessmentStatus("OPEN"))
                         .basicSentencePlanList(aSentencePlan(1L))
+                        .offenceBlock(anOffenceBlock())
                         .build(),
                 OasysSet.builder()
                         .createDate(new Timestamp(System.currentTimeMillis()))
@@ -105,7 +122,30 @@ public class ControllerTestContext {
                         .assessmentStatus(anAssessmentStatus("COMPLETE"))
                         .assessmentVoidedDate(new Timestamp(System.currentTimeMillis()))
                         .basicSentencePlanList(aSentencePlan(2L))
+                        .offenceBlock(anOffenceBlock())
                         .build());
+    }
+
+    private static OffenceBlock anOffenceBlock() {
+        return OffenceBlock.builder()
+                .offenceSentenceDetail(OffenceSentenceDetail
+                        .builder()
+                        .activityDesc("activity")
+                        .cjaSupervisionMonths(10L)
+                        .cjaUnpaidHours(10L)
+                        .build())
+                .sentence(Sentence
+                        .builder()
+                        .cjaInd("Y")
+                        .custodialInd("Y")
+                        .endDate(Timestamp.from(Instant.MAX))
+                        .orderType(RefElement.builder().refElementDesc("orderType").build())
+                        .sentenceCode("sentenceCode")
+                        .sentenceDesc("sentenceDesc")
+                        .startDate(Timestamp.from(Instant.MIN))
+                        .build()
+                )
+                .build();
     }
 
     private static List<BasicSentencePlanObj> aSentencePlan(long l) {
