@@ -92,7 +92,7 @@ public class OffenceBlock {
     @Column(name = "BCS_SENTENCE_TYPE_CAT")
     private String bcsSentenceTypeCat;
 
-    @OneToOne(mappedBy = "offenceBlock", optional = false)
+    @OneToOne(mappedBy = "offenceBlock")
     private OffenceSentenceDetail offenceSentenceDetail;
 
     @OneToOne
