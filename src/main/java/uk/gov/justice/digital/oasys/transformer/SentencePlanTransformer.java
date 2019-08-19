@@ -31,6 +31,8 @@ public class SentencePlanTransformer {
                 .map(os ->
                         ProperSentencePlan
                                 .builder()
+                                .oasysSetId(oasysSet.getOasysSetPk())
+                                .completedDate(oasysSet.getDateCompleted().toLocalDateTime().toLocalDate())
                                 .objectives(objectivesOf(oasysSet.getSspObjectivesInSets()))
                                 .createdDate(earliestSspObjectveOf(os.getSspObjectivesInSets()))
                                 .build())
