@@ -14,12 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BasicSentencePlanTransformerTest {
 
     @Test
-    public void sentencePlanHasCreatedDate() {
+    public void sentencePlanHasCreatedDateAndOasysSetId() {
         var today = LocalDate.now();
         var now = Instant.now();
 
         var oasysSet = OasysSet.builder()
                 .createDate(Timestamp.from(now))
+                .oasysSetPk(12345L)
                 .basicSentencePlanList(Collections.emptyList())
                 .build();
 
@@ -28,5 +29,6 @@ public class BasicSentencePlanTransformerTest {
         final BasicSentencePlan actual = sentencePlanTransformer.basicSentencePlanOf(oasysSet).get();
 
         assertThat(actual.getCreatedDate()).isEqualTo(today);
+        assertThat(actual.getSentencePlanId()).isEqualTo(12345L);
     }
 }

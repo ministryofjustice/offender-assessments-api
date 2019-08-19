@@ -9,6 +9,8 @@ import java.util.List;
 @Builder(toBuilder = true)
 @Value
 public class ProperSentencePlan {
+    private Long oasysSetId;
     private LocalDate createdDate;
+    private LocalDate completedDate;
     private List<Objective> objectives;
 }
