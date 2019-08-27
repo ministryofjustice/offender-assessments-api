@@ -132,11 +132,11 @@ jobs:
     steps:
       - deploy_to_env:
           env: "development"
-#  deploy_preprod:
-#    executor: deployer
-#    steps:
-#      - deploy_to_env:
-#          env: "preprod"
+  deploy_preprod:
+    executor: deployer
+    steps:
+      - deploy_to_env:
+          env: "preprod"
 #  deploy_prod:
 #    executor: deployer
 #    steps:
@@ -160,14 +160,14 @@ workflows:
       - deploy_dev:
           requires:
             - build_docker
-#      - request-preprod-approval:
-#          type: approval
-#          requires:
-#            - deploy_dev
-#      - deploy_preprod:
-#          context: offender-assessments-api-preprod
-#          requires:
-#            - request-preprod-approval
+      - request-preprod-approval:
+          type: approval
+          requires:
+            - deploy_dev
+      - deploy_preprod:
+          context: offender-assessments-api-preprod
+          requires:
+            - request-preprod-approval
 #      - request-prod-approval:
 #          type: approval
 #          requires:
