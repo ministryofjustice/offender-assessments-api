@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -9,10 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 @Data
 @Entity
 @Table(name = "SSP_OBJECTIVE")
+@Builder
 public class SspObjective {
     @Id
     @Column(name = "SSP_OBJECTIVE_PK")
@@ -28,11 +31,11 @@ public class SspObjective {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private Timestamp createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private Timestamp lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 

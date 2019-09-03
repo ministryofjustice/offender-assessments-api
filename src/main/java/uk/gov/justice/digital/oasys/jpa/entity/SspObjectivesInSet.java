@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "SSP_OBJECTIVES_IN_SET")
+@Builder
 public class SspObjectivesInSet {
     @Id
     @Column(name = "SSP_OBJECTIVES_IN_SET_PK")
