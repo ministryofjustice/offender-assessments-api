@@ -6,6 +6,7 @@ import uk.gov.justice.digital.oasys.api.OasysUserAuthentication;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.transformer.OffenderTransformer;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,7 +18,14 @@ public class AuthenticationService {
     }
 
     public Optional<OasysUserAuthentication> getUserByUserId(Long oasysId) {
-        return null;
+        return Optional.ofNullable(
+                new OasysUserAuthentication("1234",
+                "1234",
+                "John",
+                "Smith",
+                "test@digital.justice.gov.uk",
+                List.of("Region 1"),
+                        true));
     }
 
     public boolean getUserAuthentication(Long oasysId, Long offenderId) {
