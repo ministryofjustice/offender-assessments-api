@@ -11,17 +11,22 @@ public class OasysUserAuthenticationTest {
     public void shouldConstructOasysUserAuthentication() {
         String userId = "anyUserId";
         String userName = "anyUserName";
+        String firstName = "first name";
+        String lastName = "last name";
         String email = "anyEmail";
-        List<String> roles = List.of();
+        boolean enabled = true;
         List<String> regions = List.of();
 
-        var user = new OasysUserAuthentication(userId, userName, email, roles, regions);
+        var user = new OasysUserAuthentication(userId, userName,firstName, lastName, email, regions, enabled);
 
         Assertions.assertThat(user.getUserId()).isEqualTo(userId);
         Assertions.assertThat(user.getUserName()).isEqualTo(userName);
+        Assertions.assertThat(user.getFirstName()).isEqualTo(firstName);
+        Assertions.assertThat(user.getLastName()).isEqualTo(lastName);
         Assertions.assertThat(user.getEmail()).isEqualTo(email);
-        Assertions.assertThat(user.getRoles()).isEqualTo(roles);
         Assertions.assertThat(user.getRegions()).isEqualTo(regions);
+        Assertions.assertThat(user.isEnabled()).isTrue();
+
 
     }
 
