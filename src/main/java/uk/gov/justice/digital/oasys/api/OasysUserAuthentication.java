@@ -8,9 +8,11 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class OasysUserAuthentication {
-    private String UserId;
+    private String userId;
     private String userName;
+    private String firstName;
+    private String lastName;
     private String email;
-    private List<String> roles;
     private List<String> regions;
+    private boolean enabled;
 }
