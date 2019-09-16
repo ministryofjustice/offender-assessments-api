@@ -1,6 +1,8 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import java.sql.Time;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "SSP_CRIM_NEED_OBJ_PIVOT")
 public class SspCrimNeedObjPivot {
     @Id
