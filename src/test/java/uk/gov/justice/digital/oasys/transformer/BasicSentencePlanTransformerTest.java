@@ -20,7 +20,7 @@ public class BasicSentencePlanTransformerTest {
 
         var oasysSet = OasysSet.builder()
                 .createDate(Timestamp.from(now))
-                .basicSentencePlanList(Collections.emptyList())
+                .basicSentencePlanList(Collections.emptySet())
                 .build();
 
         final BasicSentencePlanTransformer sentencePlanTransformer = new BasicSentencePlanTransformer();
