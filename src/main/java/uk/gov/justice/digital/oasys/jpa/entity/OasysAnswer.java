@@ -13,6 +13,7 @@ import java.sql.Time;
 
 @Data
 @ToString(exclude = "oasysQuestion")
+@EqualsAndHashCode(exclude = "oasysQuestion")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

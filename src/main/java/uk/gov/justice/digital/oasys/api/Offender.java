@@ -5,6 +5,7 @@ import lombok.Value;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Value
 @Builder(toBuilder = true)
@@ -37,5 +38,5 @@ public class Offender {
     private Boolean lifer;
     private String dischargeCode;
     private List<OffenderAlias> aliases;
-    private Sentence sentence;
+    private Set<Sentence> sentence;
 }

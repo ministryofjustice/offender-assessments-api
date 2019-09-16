@@ -17,10 +17,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.SspObjectivesInSet;
 import uk.gov.justice.digital.oasys.jpa.entity.SspWhoDoWorkPivot;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,7 +36,7 @@ public class SentencePlanTransformer {
                 .filter(psp -> psp.getObjectives() != null && !psp.getObjectives().isEmpty());
     }
 
-    private LocalDate earliestSspObjectveOf(List<SspObjectivesInSet> sspObjectivesInSets) {
+    private LocalDate earliestSspObjectveOf(Set<SspObjectivesInSet> sspObjectivesInSets) {
         return Optional.ofNullable(sspObjectivesInSets).flatMap(s -> s.stream()
                 .min(Comparator.comparing(SspObjectivesInSet::getCreateDate)))
                 .map(SspObjectivesInSet::getCreateDate)
@@ -47,7 +44,7 @@ public class SentencePlanTransformer {
                 .orElse(null);
     }
 
-    private List<Objective> objectivesOf(List<SspObjectivesInSet> sspObjectivesInSets) {
+    private List<Objective> objectivesOf(Set<SspObjectivesInSet> sspObjectivesInSets) {
 
         return Optional.ofNullable(sspObjectivesInSets).map(sspois -> sspois.stream()
                 .map(sspo -> Objective

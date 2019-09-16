@@ -15,10 +15,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,29 +53,40 @@ public class OffenderTransformer {
                 .build();
     }
 
-    private Sentence sentenceOf(List<OasysAssessmentGroup> oasysAssessmentGroups) {
-        var maybeLatestSet = latestOasysSetOf(oasysAssessmentGroups);
+    private Set<Sentence> sentenceOf(List<OasysAssessmentGroup> oasysAssessmentGroups) {
+        Optional<OasysSet> maybeLatestSet = latestOasysSetOf(oasysAssessmentGroups);
 
-        var maybeOffenceBlock = maybeLatestSet.flatMap(s -> Optional.ofNullable(s.getOffenceBlock()));
+        Set<OffenceBlock> offenceBlocks = maybeLatestSet.isPresent() ? maybeLatestSet.get().getOffenceBlock() : new HashSet<>();
 
-        var maybeSentenceDetail = maybeOffenceBlock.map(OffenceBlock::getOffenceSentenceDetail);
-        var maybeSentence = maybeOffenceBlock.map(OffenceBlock::getSentence);
+        Set<Sentence> sentences = new HashSet<>(offenceBlocks.size());
 
-        final Optional<Sentence> sentence = maybeOffenceBlock.map(b -> Sentence.builder()
-                .activity(maybeSentenceDetail.map(OffenceSentenceDetail::getActivityDesc).orElse(null))
-                .cja(booleanOf(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getCjaInd).orElse(null)))
-                .cjaSupervisionMonths(maybeSentenceDetail.map(OffenceSentenceDetail::getCjaSupervisionMonths).orElse(null))
-                .cjaUnpaidHours(maybeSentenceDetail.map(OffenceSentenceDetail::getCjaUnpaidHours).orElse(null))
-                .custodial(booleanOf(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getCustodialInd).orElse(null)))
-                .endDate(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getEndDate).map(Timestamp::toLocalDateTime).map(LocalDateTime::toLocalDate).map(LocalDate::toString).orElse(null))
-                .orderType(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getOrderType).map(RefElement::getRefElementDesc).orElse(null))
-                .sentenceCode(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceCode).orElse(null))
-                .sentenceDescription(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceDesc).orElse(null))
-                .startDate(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getStartDate).map(Timestamp::toLocalDateTime).map(LocalDateTime::toLocalDate).map(LocalDate::toString).orElse(null))
-                .build());
+        for(OffenceBlock block : offenceBlocks)
+        {
+            Optional<OffenceBlock> offenceBlock = Optional.ofNullable(block);
+            var maybeSentenceDetail = offenceBlock.map(OffenceBlock::getOffenceSentenceDetail);
+            var maybeSentence = offenceBlock.map(OffenceBlock::getSentence);
 
-        return sentence
-                .orElse(null);
+            final Optional<Sentence> sentence = offenceBlock.map(b -> Sentence.builder()
+                    .activity(maybeSentenceDetail.map(OffenceSentenceDetail::getActivityDesc).orElse(null))
+                    .cja(booleanOf(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getCjaInd).orElse(null)))
+                    .cjaSupervisionMonths(maybeSentenceDetail.map(OffenceSentenceDetail::getCjaSupervisionMonths).orElse(null))
+                    .cjaUnpaidHours(maybeSentenceDetail.map(OffenceSentenceDetail::getCjaUnpaidHours).orElse(null))
+                    .custodial(booleanOf(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getCustodialInd).orElse(null)))
+                    .endDate(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getEndDate).map(Timestamp::toLocalDateTime).map(LocalDateTime::toLocalDate).map(LocalDate::toString).orElse(null))
+                    .orderType(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getOrderType).map(RefElement::getRefElementDesc).orElse(null))
+                    .sentenceCode(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceCode).orElse(null))
+                    .sentenceDescription(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceDesc).orElse(null))
+                    .startDate(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getStartDate).map(Timestamp::toLocalDateTime).map(LocalDateTime::toLocalDate).map(LocalDate::toString).orElse(null))
+                    .build());
+
+            if(sentence.isPresent()) {
+                sentences.add(sentence.get());
+            }
+        }
+
+
+
+        return sentences;
     }
 
     public Optional<OasysSet> latestOasysSetOf(List<OasysAssessmentGroup> oasysAssessmentGroups) {
