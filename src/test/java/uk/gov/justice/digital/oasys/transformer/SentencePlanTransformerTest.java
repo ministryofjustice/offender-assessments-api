@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +23,7 @@ public class SentencePlanTransformerTest {
 
         var oasysSet = OasysSet.builder()
                 .createDate(Timestamp.valueOf(today))
-                .sspObjectivesInSets(List.of(SspObjectivesInSet.builder().createDate(Timestamp.valueOf(today)).build()))
+                .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().createDate(Timestamp.valueOf(today)).build()))
                 .build();
 
         final SentencePlanTransformer sentencePlanTransformer = new SentencePlanTransformer();
@@ -40,7 +41,7 @@ public class SentencePlanTransformerTest {
         var oasysSet = OasysSet.builder()
                 .createDate(Timestamp.valueOf(today))
                 .dateCompleted(Timestamp.valueOf(threeMonthsFromNow))
-                .sspObjectivesInSets(List.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(Timestamp.valueOf(today)).build()).build()))
+                .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(Timestamp.valueOf(today)).build()).build()))
                 .build();
 
         final SentencePlanTransformer sentencePlanTransformer = new SentencePlanTransformer();
@@ -58,7 +59,7 @@ public class SentencePlanTransformerTest {
         var oasysSet = OasysSet.builder()
                 .createDate(Timestamp.valueOf(today))
                 .dateCompleted(null)
-                .sspObjectivesInSets(List.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(Timestamp.valueOf(today)).build()).build()))
+                .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(Timestamp.valueOf(today)).build()).build()))
                 .build();
 
         final SentencePlanTransformer sentencePlanTransformer = new SentencePlanTransformer();

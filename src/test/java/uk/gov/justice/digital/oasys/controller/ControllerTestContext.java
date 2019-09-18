@@ -23,6 +23,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -126,8 +127,8 @@ public class ControllerTestContext {
                         .build());
     }
 
-    private static OffenceBlock anOffenceBlock() {
-        return OffenceBlock.builder()
+    private static Set<OffenceBlock> anOffenceBlock() {
+        return Set.of(OffenceBlock.builder()
                 .offenceSentenceDetail(OffenceSentenceDetail
                         .builder()
                         .activityDesc("activity")
@@ -145,11 +146,11 @@ public class ControllerTestContext {
                         .startDate(Timestamp.from(Instant.MIN))
                         .build()
                 )
-                .build();
+                .build());
     }
 
-    private static List<BasicSentencePlanObj> aSentencePlan(long l) {
-        return ImmutableList.of(
+    private static Set<BasicSentencePlanObj> aSentencePlan(long l) {
+        return Set.of(
                 BasicSentencePlanObj.builder()
                         .objectiveText("obj" + l)
                         .measureText("measure" + l)
@@ -194,7 +195,7 @@ public class ControllerTestContext {
                 .oasysSetPk(id).build();
     }
 
-    public static List<OasysSection> completeLayer3AssessmentSections() {
+    public static Set<OasysSection> completeLayer3AssessmentSections() {
 
 
 
@@ -224,8 +225,8 @@ public class ControllerTestContext {
                 .sectOgpRawScore(5L)
                 .lowScoreNeedAttnInd("YES")
                 .sectOtherRawScore(10L)
-                .oasysQuestions(List.of(question1098, question1099)).build();
-        return List.of( section10);
+                .oasysQuestions(Set.of(question1098, question1099)).build();
+        return Set.of( section10);
     }
 
 }

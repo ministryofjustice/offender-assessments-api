@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.sql.Time;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -81,7 +81,7 @@ public class OasysSection {
 
     @OneToMany
     @JoinColumn(name = "OASYS_SECTION_PK")
-    private List<OasysQuestion> oasysQuestions;
+    private Set<OasysQuestion> oasysQuestions;
 
     @OneToOne
     @JoinColumns({

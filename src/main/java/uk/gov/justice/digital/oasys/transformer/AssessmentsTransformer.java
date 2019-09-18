@@ -17,6 +17,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -49,7 +50,7 @@ public class AssessmentsTransformer {
                 .build();
     }
 
-    public Map<String, Section> sectionsOf(List<OasysSection> oasysSections) {
+    public Map<String, Section> sectionsOf(Set<OasysSection> oasysSections) {
         return Optional.ofNullable(oasysSections)
                 .map(sections -> sections
                         .stream()
@@ -85,7 +86,7 @@ public class AssessmentsTransformer {
                 .shortDescription(refSection.getSectionType().getRefElementShortDesc()).build();
     }
 
-    public Map<String, Question> questionsOf(List<OasysQuestion> oasysQuestions) {
+    public Map<String, Question> questionsOf(Set<OasysQuestion> oasysQuestions) {
         return Optional.ofNullable(oasysQuestions)
                 .map(sections -> sections
                         .stream()
@@ -160,7 +161,7 @@ public class AssessmentsTransformer {
 
     }
 
-    public List<uk.gov.justice.digital.oasys.api.OasysBcsPart> oasysBcsPartsOf(List<OasysBcsPart> oasysBcsParts) {
+    public List<uk.gov.justice.digital.oasys.api.OasysBcsPart> oasysBcsPartsOf(Set<OasysBcsPart> oasysBcsParts) {
         return Optional.ofNullable(oasysBcsParts)
                 .map(obpo -> oasysBcsParts
                         .stream()

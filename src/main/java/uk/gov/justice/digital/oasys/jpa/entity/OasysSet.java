@@ -20,7 +20,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @ToString(exclude = "group")
@@ -504,11 +504,11 @@ public class OasysSet {
 
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private List<OasysSection> oasysSections;
+    private Set<OasysSection> oasysSections;
 
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private List<OasysBcsPart> oasysBcsParts;
+    private Set<OasysBcsPart> oasysBcsParts;
 
     @ManyToOne
     @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK")
@@ -519,12 +519,13 @@ public class OasysSet {
 
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private List<BasicSentencePlanObj> basicSentencePlanList;
+    private Set<BasicSentencePlanObj> basicSentencePlanList;
 
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    private List<SspObjectivesInSet> sspObjectivesInSets;
+    private Set<SspObjectivesInSet> sspObjectivesInSets;
 
-    @OneToOne(mappedBy = "oasysSet", optional = false)
-    private OffenceBlock offenceBlock;
+    @OneToMany
+    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
+    private Set<OffenceBlock> offenceBlock;
 }

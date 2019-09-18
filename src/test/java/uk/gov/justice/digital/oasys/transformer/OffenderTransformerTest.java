@@ -30,6 +30,6 @@ public class OffenderTransformerTest {
                 .startDate(Timestamp.from(Instant.MIN).toLocalDateTime().toLocalDate().toString())
                 .build();
 
-        assertThat(transformer.offenderOf(offender).getSentence()).isEqualTo(expected);
+        assertThat(transformer.offenderOf(offender).getSentence().toArray()[0]).isEqualTo(expected);
     }
 }
