@@ -26,7 +26,7 @@ public class AuthenticationController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<OasysUserAuthentication> getUserByUserId(@PathVariable("oasysUserId") Long oasysUserId) {
+    public ResponseEntity<OasysUserAuthentication> getUserByUserId(@PathVariable("oasysUserId") String oasysUserId) {
 
         return authenticationService.getUserByUserId(oasysUserId)
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
@@ -37,7 +37,7 @@ public class AuthenticationController {
     @ApiResponses({
             @ApiResponse(code = 401, message = "User not authenticated for offender"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity getUserAuthorisedForOffenderId(@PathVariable("oasysUserId") Long oasysUserId, @PathVariable("offenderId") Long offenderId) {
+    public ResponseEntity getUserAuthorisedForOffenderId(@PathVariable("oasysUserId") String oasysUserId, @PathVariable("offenderId") Long offenderId) {
         boolean authorised = authenticationService.getUserAuthentication(oasysUserId, offenderId);
         return authorised ? new ResponseEntity(OK) : new ResponseEntity(UNAUTHORIZED);
     }

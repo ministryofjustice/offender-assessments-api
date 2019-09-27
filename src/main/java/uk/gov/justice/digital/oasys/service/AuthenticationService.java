@@ -17,7 +17,7 @@ public class AuthenticationService {
 
     }
 
-    public Optional<OasysUserAuthentication> getUserByUserId(Long oasysId) {
+    public Optional<OasysUserAuthentication> getUserByUserId(String oasysId) {
         return Optional.ofNullable(
                 new OasysUserAuthentication("1234",
                 "1234",
@@ -28,7 +28,7 @@ public class AuthenticationService {
                         true));
     }
 
-    public boolean getUserAuthentication(Long oasysId, Long offenderId) {
+    public boolean getUserAuthentication(String oasysId, Long offenderId) {
         return true;
     }
 
