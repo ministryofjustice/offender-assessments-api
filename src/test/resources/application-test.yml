@@ -1,0 +1,18 @@
+server:
+  use-forward-headers: true
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+
+spring:
+  datasource:
+    url: jdbc:hsqldb:mem:oasys-db;sql.syntax_ora=true;get_column_name=false;shutdown=false;sql.nulls_first=false;sql.nulls_order=false
+    username: sa
+    password:
+
+  flyway:
+    enabled: true
+
+graceful:
+  shutdown:
+    enabled: false
