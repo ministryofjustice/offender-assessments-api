@@ -19,12 +19,10 @@ import java.util.stream.Collectors;
 @Service
 public class RefAssessmentService {
     private final RefAssessmentRepository refAssessmentRepository;
-    private final TypesTransformer typesTransformer;
 
     @Autowired
-    public RefAssessmentService(RefAssessmentRepository refAssessmentRepository, TypesTransformer typesTransformer) {
+    public RefAssessmentService(RefAssessmentRepository refAssessmentRepository) {
         this.refAssessmentRepository = refAssessmentRepository;
-        this.typesTransformer = typesTransformer;
     }
 
     public Optional<ReferenceAssessment> getReferenceAssessmentOf(String type, String revision) {
@@ -62,8 +60,8 @@ public class RefAssessmentService {
         return RefSection.builder()
                 .refCrimNeedScoreThreshold(refSection.getCrimNeedScoreThreshold())
                 .refFormSequence(refSection.getFormSequence())
-                .refScoredForOgp(typesTransformer.ynToBoolean(refSection.getScoredForOgp()))
-                .refScoredForOvp(typesTransformer.ynToBoolean(refSection.getScoredForOgp()))
+                .refScoredForOgp(TypesTransformer.ynToBoolean(refSection.getScoredForOgp()))
+                .refScoredForOvp(TypesTransformer.ynToBoolean(refSection.getScoredForOgp()))
                 .refSectionCode(refSection.getRefSectionCode())
                 .refSectionId(refSection.getRefSectionUk())
                 .shortDescription(shortDescriptionOf(refSection.getSectionType()))
@@ -93,7 +91,7 @@ public class RefAssessmentService {
         return RefQuestion.builder()
                 .refCtAreaEstCode(refQuestion.getCtAreaEstCode())
                 .refDisplaySort(refQuestion.getDisplaySort())
-                .refMandatoryIndicator(typesTransformer.ynToBoolean(refQuestion.getMandatoryInd()))
+                .refMandatoryIndicator(TypesTransformer.ynToBoolean(refQuestion.getMandatoryInd()))
                 .refQAWeighting(refQuestion.getQaWeighting())
                 .refQuestionCode(refQuestion.getRefQuestionCode())
                 .refQuestionId(refQuestion.getRefQuestionUk())
@@ -122,4 +120,3 @@ public class RefAssessmentService {
 
     }
 }
-

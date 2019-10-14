@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.oasys.transformer;
 
 import org.junit.Test;
+import uk.gov.justice.digital.oasys.api.Offender;
 import uk.gov.justice.digital.oasys.api.Sentence;
 
 import java.sql.Timestamp;
@@ -15,8 +16,6 @@ public class OffenderTransformerTest {
     public void offenderHasSentenceDetail() {
         var offender = anOffender().get();
 
-        var transformer = new OffenderTransformer();
-
         var expected = Sentence.builder()
                 .activity("activity")
                 .cja(true)
@@ -30,6 +29,6 @@ public class OffenderTransformerTest {
                 .startDate(Timestamp.from(Instant.MIN).toLocalDateTime().toLocalDate().toString())
                 .build();
 
-        assertThat(transformer.offenderOf(offender).getSentence().toArray()[0]).isEqualTo(expected);
+        assertThat(Offender.from(offender).getSentence().toArray()[0]).isEqualTo(expected);
     }
 }
