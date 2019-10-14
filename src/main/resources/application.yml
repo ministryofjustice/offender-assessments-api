@@ -55,7 +55,6 @@ azure:
   application-insights:
     web:
       enable-W3C: true
-      enable-W3C-backcompat-mode: true
 
 graceful:
   shutdown:
