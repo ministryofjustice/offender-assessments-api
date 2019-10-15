@@ -8,12 +8,12 @@ spring:
     hikari:
       connectionInitSql: alter session set current_schema=EOR
 
-    flyway:
-      enabled: false
-
     properties:
       hibernate:
         show_sql: true
 
     profiles:
       include: logstash
+
+  flyway:
+    enabled: false
