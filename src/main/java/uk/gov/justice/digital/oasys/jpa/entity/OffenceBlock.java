@@ -1,9 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +12,7 @@ import javax.persistence.Table;
 import java.sql.Time;
 
 @Data
+@EqualsAndHashCode(exclude = {"offenceSentenceDetail","sentence", "oasysSet"})
 @Entity
 @Table(name = "OFFENCE_BLOCK")
 @Builder
