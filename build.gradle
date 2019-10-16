@@ -97,9 +97,8 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.8'
 
-    runtime 'com.h2database:h2:1.4.199'
-
-    testRuntime 'com.h2database:h2:1.4.199'
+    runtime 'org.hsqldb:hsqldb:2.4.1'
+    runtime 'org.flywaydb:flyway-core:5.2.4'
 
     testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
