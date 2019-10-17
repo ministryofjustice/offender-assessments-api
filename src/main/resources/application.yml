@@ -6,6 +6,9 @@ spring:
     url: 'jdbc:h2:mem:testdb;Mode=Oracle'
     type: com.zaxxer.hikari.HikariDataSource
 
+  flyway:
+    enabled: false
+
   h2:
     console:
       enabled: true
