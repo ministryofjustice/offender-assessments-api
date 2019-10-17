@@ -1,9 +1,7 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -13,8 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "OASYS_USER")
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class OasysUser {
     @Column(name = "OASYS_USER_UK")
     private Long oasysUserUk;
