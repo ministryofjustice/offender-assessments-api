@@ -2,20 +2,7 @@ package uk.gov.justice.digital.oasys.controller;
 
 import com.google.common.collect.ImmutableList;
 import org.mockito.Mockito;
-import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-import uk.gov.justice.digital.oasys.jpa.entity.OffenceBlock;
-import uk.gov.justice.digital.oasys.jpa.entity.OffenceSentenceDetail;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
-import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
-import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
-import uk.gov.justice.digital.oasys.jpa.entity.RefSection;
-import uk.gov.justice.digital.oasys.jpa.entity.Sentence;
+import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
 import java.math.BigDecimal;
@@ -227,6 +214,17 @@ public class ControllerTestContext {
                 .sectOtherRawScore(10L)
                 .oasysQuestions(Set.of(question1098, question1099)).build();
         return Set.of( section10);
+    }
+
+    public static OasysUser oasysUser(String userCode) {
+        return OasysUser.builder()
+                .oasysUserCode(userCode)
+                .userForename1("Test")
+                .userFamilyName("User")
+                .emailAddress("test@test.com")
+                .userStatus(RefElement.builder().refCategoryCode("USER_STATUS").refElementCode("ACTIVE").refElementDesc("Active").build())
+                .roles(List.of(AreaEstUserRole.builder().ctAreaEstCode("1234").build()))
+                .build();
     }
 
 }

@@ -38,7 +38,7 @@ public class AuthenticationController {
             @ApiResponse(code = 401, message = "User not authenticated for offender"),
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity getUserAuthorisedForOffenderId(@PathVariable("oasysUserId") String oasysUserId, @PathVariable("offenderId") Long offenderId) {
-        boolean authorised = authenticationService.getUserAuthentication(oasysUserId, offenderId);
+        boolean authorised = authenticationService.userCanAccessOffenderRecord(oasysUserId, offenderId);
         return authorised ? new ResponseEntity(OK) : new ResponseEntity(UNAUTHORIZED);
     }
 
@@ -47,7 +47,7 @@ public class AuthenticationController {
             @ApiResponse(code = 401, message = "Incorrect Credentials"),
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity validateUser(@RequestBody ValidateUserRequest request) {
-        boolean authorised = authenticationService.validateUser(request.getUser(), request.getPassword());
+        boolean authorised = authenticationService.validateUserCredentials(request.getUser(), request.getPassword());
         return authorised ? new ResponseEntity(OK) : new ResponseEntity(UNAUTHORIZED);
     }
 
