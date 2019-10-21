@@ -49,3 +49,11 @@ spec:
             timeoutSeconds: 30
             failureThreshold: 15
 {{ include "deployment.envs" . | nindent 10 }}
+          volumeMounts:
+          - name: keystore
+            mountPath: "/certs"
+            readOnly: true
+      volumes:
+        - name: keystore
+          secret:
+            secretName: keystore
