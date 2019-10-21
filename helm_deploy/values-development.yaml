@@ -20,6 +20,6 @@ ingress:
   path: /
 
 env:
-  JAVA_OPTS: "-Xmx512m -Duser.timezone=UTC -Djavax.net.ssl.trustStore=/certs/keystore.jks -Djavax.net.ssl.trustStorePassword=changeit -Djdk.tls.client.protocols=TLSv1.1,TLSv1.2 -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2 -Doracle.net.ssl_cipher_suites=(SSL_DH_anon_WITH_3DES_EDE_CBC_SHA,SSL_DH_anon_WITH_RC4_128_MD5,SSL_DH_anon_WITH_DES_CBC_SHA,SSL_RSA_WITH_3DES_EDE_CBC_SHA) -Dhttps.cipherSuites=SSL_DH_anon_WITH_3DES_EDE_CBC_SHA,SSL_DH_anon_WITH_RC4_128_MD5,SSL_DH_anon_WITH_DES_CBC_SHA,SSL_RSA_WITH_3DES_EDE_CBC_SHA,TLS_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_RC4_128_MD5 -Djavax.net.debug=all"
+  JAVA_OPTS: "-Xmx512m -Duser.timezone=UTC -Djavax.net.ssl.trustStore=/certs/keystore.jks -Djavax.net.ssl.trustStorePassword=changeit -Djdk.tls.client.protocols=TLSv1.1,TLSv1.2 -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2 -Djavax.net.debug=all"
   TZ: UTC
   JWT_PUBLIC_KEY: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0NCk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBemN4N1lidzJCQVd2N1NzRUlVR1ANCml5SlNJRGd0cUJ4MTlUd203dUkzVFg1elJjclpsVXhjRW1QSkdVZ3krRDJKSWhWbHFtZXF3R1YyQ05PcVpCZ0cNCmo4ZUpHQTU5aUlUemU4ZG1SSk5JYzdsNmxESmc5RE5KVk9pTHFVbFpGRENJcXplSTYzb3E2dWhjY2c1RFBpVE4NCnFPR1pjOHVwTit3NWRack52KzJHTGd4SzJwZXRNVS9CaFllV2YzS3ZZSU8xNnYxdXZuRk9HTzEzSG9XdTVCdGQNClN0L1RnY2xGaFZMRWRHdzdYYmlZSG5OWklkaHdhTlFpWWdtWG1qWlZkTXlDUERNbzEwTGtWMXAzVXkxNXBNTXgNClVwc2xKYU8wNlZIYXJtY3ZWYzNleHg5NlpHTjE2T2U4ZWZoeG5Rdmhzd0ZrbXlYT25sSForNDI1MnJHcHlKTG8NCmx3SURBUUFCDQotLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0="
