@@ -19,9 +19,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.Assessment;
 import uk.gov.justice.digital.oasys.api.AssessmentNeed;
-import uk.gov.justice.digital.oasys.api.AssessmentResource;
+import uk.gov.justice.digital.oasys.api.AssessmentSummary;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
-import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
+import uk.gov.justice.digital.oasys.service.OffenderService;
 
 import java.util.Optional;
 
@@ -39,7 +39,7 @@ public class AssessmentsControllerTest {
     int port;
 
     @MockBean
-    private OffenderRepository offenderRepository;
+    private OffenderService offenderService;
 
     @MockBean
     private AssessmentRepository assessmentRepository;
@@ -58,7 +58,7 @@ public class AssessmentsControllerTest {
                 (aClass, s) -> objectMapper
         ));
 
-        ControllerTestContext.setup(offenderRepository);
+        ControllerServiceTestContext.setup(offenderService);
 
         Mockito.when(assessmentRepository.findById(eq(0L))).thenReturn(Optional.ofNullable(ControllerTestContext.anOasysSet(0L)));
     }
@@ -88,15 +88,15 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetAssessmentsForOffenderPk() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/assessments", 1L)
+                .get("/offenders/oasysOffenderId/{0}/assessments/summary", 1L)
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
         assertThat(assessments).hasSize(2);
     }
@@ -121,22 +121,22 @@ public class AssessmentsControllerTest {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/assessments", 2L)
+                .get("/offenders/oasysOffenderId/{0}/assessments/summary", 2L)
                 .then()
                 .statusCode(404);
     }
 
     @Test
     public void canGetAssessmentsForOffenderCRN() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/assessments/summary", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
         assertThat(assessments).hasSize(2);
     }
@@ -162,22 +162,22 @@ public class AssessmentsControllerTest {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/assessments", "crn2")
+                .get("/offenders/crn/{0}/assessments/summary", "crn2")
                 .then()
                 .statusCode(404);
     }
 
     @Test
     public void canGetAssessmentsForOffenderPNC() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/assessments", "pnc1")
+                .get("/offenders/pnc/{0}/assessments/summary", "pnc1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
         assertThat(assessments).hasSize(2);
     }
@@ -203,22 +203,22 @@ public class AssessmentsControllerTest {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/assessments", "pnc2")
+                .get("/offenders/pnc/{0}/assessments/summary", "pnc2")
                 .then()
                 .statusCode(404);
     }
 
     @Test
     public void canGetAssessmentsForOffenderNomisId() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/assessments", "nomisId1")
+                .get("/offenders/nomisId/{0}/assessments/summary", "nomisId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
         assertThat(assessments).hasSize(2);
     }
@@ -244,22 +244,22 @@ public class AssessmentsControllerTest {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/assessments", "nomisId2")
+                .get("/offenders/nomisId/{0}/assessments/summary", "nomisId2")
                 .then()
                 .statusCode(404);
     }
 
     @Test
     public void canGetAssessmentsForOffenderBookingId() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/assessments", "bookingId1")
+                .get("/offenders/bookingId/{0}/assessments/summary", "bookingId1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
         assertThat(assessments).hasSize(2);
     }
@@ -285,105 +285,89 @@ public class AssessmentsControllerTest {
         given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/assessments", "bookingId2")
+                .get("/offenders/bookingId/{0}/assessments/summary", "bookingId2")
                 .then()
                 .statusCode(404);
     }
 
     @Test
     public void canGetAssessmentsForOffenderCRNFilteredByAssessmentType() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("assessmentType", "oasys")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/assessments/summary", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
-        assertThat(assessments).extracting("assessment.assessmentType").containsOnly("oasys");
+        assertThat(assessments).extracting("assessmentType").containsOnly("oasys");
     }
 
     @Test
     public void canGetAssessmentsForOffenderCRNFlteredByHistoricStatus() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("historicStatus", "CURRENT")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/assessments/summary", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
-        assertThat(assessments).extracting("assessment.historicStatus").containsOnly("CURRENT");
+        assertThat(assessments).extracting("historicStatus").containsOnly("CURRENT");
     }
 
     @Test
     public void canGetAssessmentsForOffenderCRNFlteredByAssessmentStatus() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("assessmentStatus", "COMPLETE")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/assessments/summary", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
-        assertThat(assessments).extracting("assessment.assessmentStatus").containsOnly("COMPLETE");
+        assertThat(assessments).extracting("assessmentStatus").containsOnly("COMPLETE");
     }
 
     @Test
     public void canGetAssessmentsForOffenderCRNFlteredBVoided() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("voided", "true")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/assessments/summary", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
-        assertThat(assessments).extracting("assessment.voided").containsOnly(true);
+        assertThat(assessments).extracting("voided").containsOnly(true);
     }
 
     @Test
     public void canGetAssessmentsForOffenderCRNFlteredBNotVoided() {
-        AssessmentResource[] assessments = given()
+        AssessmentSummary[] assessments = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("voided", "false")
-                .get("/offenders/crn/{0}/assessments", "crn1")
+                .get("/offenders/crn/{0}/assessments/summary", "crn1")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(AssessmentResource[].class);
+                .as(AssessmentSummary[].class);
 
-        assertThat(assessments).extracting("assessment.voided").containsOnly(false);
-    }
-
-    @Test
-    public void assessmentResourceForValidAssessmentContainsValidLink() {
-        AssessmentResource[] assessments = given()
-                .when()
-                .auth().oauth2(validOauthToken)
-                .param("voided", "false")
-                .get("/offenders/crn/{0}/assessments", "crn1")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .as(AssessmentResource[].class);
-
-        assertThat(assessments).extracting("links").isNotEmpty();
+        assertThat(assessments).extracting("voided").containsOnly(false);
     }
 
     @Test

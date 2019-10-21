@@ -1,9 +1,7 @@
 package uk.gov.justice.digital.oasys.transformer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.justice.digital.oasys.api.*;
-import uk.gov.justice.digital.oasys.controller.AssessmentsController;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysBcsPart;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
@@ -20,26 +18,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 @Component
 public class AssessmentsTransformer {
 
-    public final TypesTransformer typesTransformer;
-
-    @Autowired
-    public AssessmentsTransformer(TypesTransformer typesTransformer) {
-        this.typesTransformer = typesTransformer;
-    }
-
     public Assessment assessmentOf(OasysSet oasysSet) {
         return Assessment.builder()
-                .createdDateTime(typesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
+                .createdDateTime(TypesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
                 .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
-                .assessmentVersion(assessmentVersionOf(oasysSet.getRefAssVersion()))
+                .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersion.from(oasysSet.getRefAssVersion()))
                 .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
-                .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
+                .completedDateTime(TypesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
                 .oasysSetId(oasysSet.getOasysSetPk())
                 .oasysBcsParts(oasysBcsPartsOf(oasysSet.getOasysBcsParts()))
                 .qaReview(QaReviewOf(oasysSet.getQaReview()))
@@ -70,7 +58,7 @@ public class AssessmentsTransformer {
                 .sectionOvpRawScore(section.getSectOvpRawScore())
                 .sectionOtherWeightedScore(section.getSectOtherWeightedScore())
                 .sectionOtherRawScore(section.getSectOtherRawScore())
-                .lowScoreAttentionNeeded(typesTransformer.ynToBoolean(section.getLowScoreNeedAttnInd()))
+                .lowScoreAttentionNeeded(TypesTransformer.ynToBoolean(section.getLowScoreNeedAttnInd()))
                 .questions(questionsOf(section.getOasysQuestions()))
                 .refSection(refSectionOf(section.getRefSection()))
                 .build();
@@ -80,8 +68,8 @@ public class AssessmentsTransformer {
         return RefSection.builder()
                 .refCrimNeedScoreThreshold(refSection.getCrimNeedScoreThreshold())
                 .refFormSequence(refSection.getFormSequence())
-                .refScoredForOgp(typesTransformer.ynToBoolean(refSection.getScoredForOgp()))
-                .refScoredForOvp(typesTransformer.ynToBoolean(refSection.getScoredForOvp()))
+                .refScoredForOgp(TypesTransformer.ynToBoolean(refSection.getScoredForOgp()))
+                .refScoredForOvp(TypesTransformer.ynToBoolean(refSection.getScoredForOvp()))
                 .refSectionCode(refSection.getRefSectionCode())
                 .shortDescription(refSection.getSectionType().getRefElementShortDesc()).build();
     }
@@ -128,39 +116,6 @@ public class AssessmentsTransformer {
                 .build()).orElse(null);
     }
 
-    public AssessmentVersion assessmentVersionOf(RefAssVersion refAssVersion) {
-        return Optional.ofNullable(refAssVersion).map(
-                version -> AssessmentVersion.builder()
-                        .oasysFormVersion(refAssVersion.getOasysFormVersion())
-                        .oasysScoringAlgorithmVersion(refAssVersion.getOasysScoringAlgVersion())
-                        .refAssVersionCode(refAssVersion.getRefAssVersionCode())
-                        .refAssVersionId(refAssVersion.getRefAssVersionUk())
-                        .refModuleCode(refAssVersion.getRefModuleCode())
-                        .versionNumber(refAssVersion.getVersionNumber())
-                        .build()
-        ).orElse(null);
-    }
-
-    public AssessmentResource assessmentResourceOf(OasysSet oasysSet) {
-        final AssessmentResource assessmentResource = AssessmentResource.builder()
-                .assessment(AssessmentSummary.builder()
-                        .createdDateTime(typesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
-                        .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
-                        .assessmentVersion(assessmentVersionOf(oasysSet.getRefAssVersion()))
-                        .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
-                        .completedDateTime(typesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
-                        .oasysSetId(oasysSet.getOasysSetPk())
-                        .voided(Optional.ofNullable(oasysSet.getAssessmentVoidedDate()).isPresent())
-                        .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
-                        .assessmentStatus(Optional.ofNullable(oasysSet.getAssessmentStatus()).map(RefElement::getRefElementCode).orElse(null))
-                        .build()).build();
-
-        assessmentResource.add(linkTo(methodOn(AssessmentsController.class).getAssessment(oasysSet.getOasysSetPk())).withSelfRel());
-
-        return assessmentResource;
-
-    }
-
     public List<uk.gov.justice.digital.oasys.api.OasysBcsPart> oasysBcsPartsOf(Set<OasysBcsPart> oasysBcsParts) {
         return Optional.ofNullable(oasysBcsParts)
                 .map(obpo -> oasysBcsParts
@@ -173,20 +128,20 @@ public class AssessmentsTransformer {
     private uk.gov.justice.digital.oasys.api.OasysBcsPart oasysBcsPartOf(OasysBcsPart oasysBcsPart) {
         return Optional.ofNullable(oasysBcsPart)
                 .map(oasysBcsPart1 -> uk.gov.justice.digital.oasys.api.OasysBcsPart.builder()
-                        .bcsPartCompDate(typesTransformer.localDateTimeOf(oasysBcsPart.getCreateDate()))
+                        .bcsPartCompDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getCreateDate()))
                         .bcsPart(oasysBcsPart.getBcsPart())
                         .bcsPartStatus(oasysBcsPart.getBcsPartStatus())
                         .bcsPartUserArea(oasysBcsPart.getBcsPartUserArea())
                         .bcsPartUserPosition(oasysBcsPart.getBcsPartUserPosition())
-                        .createDate(typesTransformer.localDateTimeOf(oasysBcsPart.getCreateDate()))
+                        .createDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getCreateDate()))
                         .createUser(oasysBcsPart.getCreateUser())
-                        .lastupdDate(typesTransformer.localDateTimeOf(oasysBcsPart.getLastupdDate()))
+                        .lastupdDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getLastupdDate()))
                         .lastupdUser(oasysBcsPart.getLastupdUser())
                         .lockIncompleteOtherText(oasysBcsPart.getLockIncompleteOtherText())
                         .lockIncompleteReason(oasysBcsPart.getLockIncompleteReason())
-                        .part1CheckedDate(typesTransformer.localDateTimeOf(oasysBcsPart.getPart1CheckedDate()))
+                        .part1CheckedDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getPart1CheckedDate()))
                         .part1CheckedInd(oasysBcsPart.getPart1CheckedInd())
-                        .praCompDate(typesTransformer.localDateTimeOf(oasysBcsPart.getPraCompDate()))
+                        .praCompDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getPraCompDate()))
                         .praComplete(oasysBcsPart.getPraComplete())
                         .praCompUser(oasysBcsPart.getPraCompUser())
                         .bcsPartUser(oasysUserOf(oasysBcsPart.getBcsPartUser()))
@@ -209,9 +164,9 @@ public class AssessmentsTransformer {
     private uk.gov.justice.digital.oasys.api.QaReview QaReviewOf(QaReview qaReview) {
         return Optional.ofNullable(qaReview)
                 .map(qaReview1 -> uk.gov.justice.digital.oasys.api.QaReview.builder()
-                        .currentlyHidden(typesTransformer.ynToBoolean(qaReview.getCurrentlyHidden()))
-                        .dateCompleted(typesTransformer.localDateTimeOf(qaReview.getDateCompleted()))
-                        .dateSelected(typesTransformer.localDateTimeOf(qaReview.getDateSelected()))
+                        .currentlyHidden(TypesTransformer.ynToBoolean(qaReview.getCurrentlyHidden()))
+                        .dateCompleted(TypesTransformer.localDateTimeOf(qaReview.getDateCompleted()))
+                        .dateSelected(TypesTransformer.localDateTimeOf(qaReview.getDateSelected()))
                         .displaySort(qaReview.getDisplaySort())
                         .qaGrading(qaReview.getQaGrading())
                         .qaScore(qaReview.getQaScore())
