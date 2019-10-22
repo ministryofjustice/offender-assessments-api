@@ -85,9 +85,13 @@ public class AssessmentsController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<List<AssessmentNeed>> getLatestAssessmentNeedsForOffenderPk(@PathVariable("identityType") String identityType,
-                                                                                      @PathVariable("identity") String identity) {
+                                                                                      @PathVariable("identity") String identity,
+                                                                                      @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                                      @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                                      @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                                      @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
-        return ResponseEntity.ok(assessmentsService.getLatestAsessementNeedsForOffender(identityType, identity));
+        return ResponseEntity.ok(assessmentsService.getLatestAsessementNeedsForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus));
     }
 
 
