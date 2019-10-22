@@ -66,8 +66,8 @@ public class AssessmentsService {
         }
     }
 
-    public List<AssessmentNeed> getLatestAsessementNeedsForOffender(String identityType, String identity) {
-        Assessment assessment = getLatestAssessmentForOffender(identityType, identity, Optional.empty(), Optional.of(LAYER_3_TYPE), Optional.empty(), Optional.empty());
+    public List<AssessmentNeed> getLatestAsessementNeedsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
+        Assessment assessment = getLatestAssessmentForOffender(identityType, identity, filterGroupStatus, filterAssessmentType,filterVoided, filterAssessmentStatus);
 
         return assessment.getLayer3SentencePlanNeeds();
     }

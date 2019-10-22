@@ -34,7 +34,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/h2-console/**", "/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
                         "/swagger-ui.html", "/webjars/**", "/swagger-resources/configuration/ui", "/swagger-ui.html",
                         "/swagger-resources/configuration/security", "/health", "/info", "/ping").permitAll()
-                .antMatchers("/{apiBasePath}/**").hasAnyRole("REPORTING", "SYSTEM_READ_ONLY")
+                .antMatchers("/{apiBasePath}/**").hasAnyRole("REPORTING", "SYSTEM_READ_ONLY", "OASYS_READ_ONLY")
                 .anyRequest()
                 .permitAll();
 
