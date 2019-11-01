@@ -1,10 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -13,6 +9,8 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "CT_AREA_EST")
+@NoArgsConstructor
+@AllArgsConstructor
 public class CtAreaEst {
     @Column(name = "CT_AREA_EST_UK")
     private Long ctAreaEstUk;
