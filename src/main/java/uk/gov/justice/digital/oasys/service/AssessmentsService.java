@@ -41,7 +41,7 @@ public class AssessmentsService {
     public Stream<OasysSet> getAssessmentsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         Offender offender = offenderService.findOffender(identityType, identity);
 
-        var assessmentsFilter = assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+        var assessmentsFilter = assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
         return offender.getOasysAssessmentGroups()
                 .stream()
@@ -51,7 +51,7 @@ public class AssessmentsService {
     public Assessment getLatestAssessmentForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         Offender offender = offenderService.findOffender(identityType, identity);
 
-        var assessmentsFilter = assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+        var assessmentsFilter = assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
         var oasysSet = offender.getOasysAssessmentGroups()
                 .stream()
@@ -59,11 +59,8 @@ public class AssessmentsService {
                         oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream()))
                 .max(Comparator.comparing(OasysSet::getCreateDate));
 
-        if(oasysSet.isPresent()) {
-            return assessmentsTransformer.assessmentOf(oasysSet.get());
-        } else {
-            throw new ApplicationExceptions.EntityNotFoundException(String.format("Assessment for Offender %s: %s, not found!", identityType, identity), ASSESSMENT_NOT_FOUND);
-        }
+        return assessmentsTransformer.assessmentOf(oasysSet.orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Assessment for Offender %s: %s, not found!", identityType, identity), ASSESSMENT_NOT_FOUND)));
+
     }
 
     public List<AssessmentNeed> getLatestAsessementNeedsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
@@ -92,24 +89,5 @@ public class AssessmentsService {
         }
 
 
-    }
-
-    public Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilterOf(Optional<String> filterAssessmentStatus, Optional<String> filterAssessmentType, Optional<String> filterGroupStatus, Optional<Boolean> filterVoided) {
-
-        return filterAssessmentStatus.map(
-                assessmentStatus -> curry(AssessmentFilters.byAssessmentStatus, assessmentStatus))
-                .orElse(AssessmentFilters.identity)
-                .andThen(
-                        filterAssessmentType.map(
-                                assessmentType -> curry(AssessmentFilters.byAssessmentType, assessmentType))
-                                .orElse(AssessmentFilters.identity))
-                .andThen(
-                        filterGroupStatus.map(
-                                groupStatus -> curry(AssessmentFilters.byGroupStatus, groupStatus))
-                                .orElse(AssessmentFilters.identity))
-                .andThen(
-                        filterVoided.map(
-                                voided -> curry(AssessmentFilters.byVoided, voided))
-                                .orElse(AssessmentFilters.identity));
     }
 }
