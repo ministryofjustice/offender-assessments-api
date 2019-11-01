@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
-@Api(description = "Offender Sentence Plan resources", tags = "Offender Sentence Plans")
+@Api(description = "Offender Sentence Plan resources", tags = "Offender Basic Sentence Plans")
 public class SentencePlansController {
 
     private final SentencePlanService sentencePlanService;
@@ -35,344 +35,51 @@ public class SentencePlansController {
     }
 
 
-    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/sentencePlans/latest", method = RequestMethod.GET)
+    @RequestMapping(path = "/offenders/{identityType}/{identity}/basicSentencePlans/latest", method = RequestMethod.GET)
     @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 404, message = "Sentence Plan or Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> getLatestSentencePlanForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId,
-                                                                                @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getLatestBasicSentencePlanForOffenderPk(oasysOffenderId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/crn/{crn}/sentencePlans/latest", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> getLatestSentencePlanForOffenderCrn(@PathVariable("crn") String crn,
-                                                                                 @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                 @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                 @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                 @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getLatestBasicSentencePlanForOffenderCrn(crn, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/pnc/{pnc}/sentencePlans/latest", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> getLatestSentencePlanForOffenderPnc(@PathVariable("pnc") String pnc,
-                                                                                 @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                 @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                 @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                 @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getLatestBasicSentencePlanForOffenderPnc(pnc, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/nomisId/{nomisId}/sentencePlans/latest", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> getLatestSentencePlanForOffenderNomisId(@PathVariable("nomisId") String nomisId,
+    public ResponseEntity<BasicSentencePlan> getLatestBasicSentencePlanForOffender(@PathVariable("identityType") String identityType,
+                                                                                     @PathVariable("identity") String identity,
                                                                                      @RequestParam("historicStatus") Optional<String> filterGroupStatus,
                                                                                      @RequestParam("assessmentType") Optional<String> filterAssessmentType,
                                                                                      @RequestParam("voided") Optional<Boolean> filterVoided,
                                                                                      @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getLatestBasicSentencePlanForOffenderNomsId(nomisId, assessmentsFilter)
+        return sentencePlanService.getLatestBasicSentencePlanForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
-    @RequestMapping(path = "/offenders/bookingId/{bookingId}/sentencePlans/latest", method = RequestMethod.GET)
+
+    @RequestMapping(path = "/offenders/{identityType}/{identity}/basicSentencePlans", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<BasicSentencePlan> getLatestSentencePlanForOffenderBookingId(@PathVariable("bookingId") String bookingId,
-                                                                                       @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                       @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                       @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                       @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getLatestBasicSentencePlanForOffenderBookingId(bookingId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/sentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<BasicSentencePlan>> getSentencePlansForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId,
-                                                                                 @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                 @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                 @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                 @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getBasicSentencePlansForOffenderPk(oasysOffenderId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/crn/{crn}/sentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<BasicSentencePlan>> getSentencePlansForOffenderCrn(@PathVariable("crn") String crn,
-                                                                                  @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                  @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                  @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                  @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getBasicSentencePlansForOffenderCrn(crn, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/pnc/{pnc}/sentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<BasicSentencePlan>> getSentencePlansForOffenderPnc(@PathVariable("pnc") String pnc,
-                                                                                  @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                  @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                  @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                  @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getBasicSentencePlansForOffenderPnc(pnc, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/nomisId/{nomisId}/sentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<BasicSentencePlan>> getSentencePlansForOffenderNomisId(@PathVariable("nomisId") String nomisId,
-                                                                                      @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                      @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                      @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                      @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getBasicSentencePlansForOffenderNomsId(nomisId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/bookingId/{bookingId}/sentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<BasicSentencePlan>> getSentencePlansForOffenderBookingId(@PathVariable("bookingId") String bookingId,
+    public ResponseEntity<List<BasicSentencePlan>> getSentenceBasicPlansForOffenderBookingId(@PathVariable("identityType") String identityType,
+                                                                                        @PathVariable("identity") String identity,
                                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
                                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
                                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
                                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+        return ResponseEntity.ok(sentencePlanService.getBasicSentencePlansForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus));
 
-        return sentencePlanService.getBasicSentencePlansForOffenderBookingId(bookingId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
-//    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/sentencePlans", method = RequestMethod.POST)
-//    @ApiResponses({
-//            @ApiResponse(code = 404, message = "Offender not found"),
-//            @ApiResponse(code = 200, message = "OK")})
-//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId) {
-//
-//        return sentencePlanService.createBasicSentencePlanForOffenderPk(oasysOffenderId)
-//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-//                .orElse(new ResponseEntity<>(NOT_FOUND));
-//    }
-//
-//    @RequestMapping(path = "/offenders/crn/{crn}/sentencePlans", method = RequestMethod.POST)
-//    @ApiResponses({
-//            @ApiResponse(code = 404, message = "Offender not found"),
-//            @ApiResponse(code = 200, message = "OK")})
-//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderCrn(@PathVariable("crn") String crn) {
-//
-//        return sentencePlanService.createBasicSentencePlanForOffenderCrn(crn)
-//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-//                .orElse(new ResponseEntity<>(NOT_FOUND));
-//    }
-//
-//    @RequestMapping(path = "/offenders/pnc/{pnc}/sentencePlans", method = RequestMethod.POST)
-//    @ApiResponses({
-//            @ApiResponse(code = 404, message = "Offender not found"),
-//            @ApiResponse(code = 200, message = "OK")})
-//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderPnc(@PathVariable("pnc") String pnc) {
-//
-//        return sentencePlanService.createBasicSentencePlanForOffenderPnc(pnc)
-//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-//                .orElse(new ResponseEntity<>(NOT_FOUND));
-//
-//    }
-//
-//    @RequestMapping(path = "/offenders/nomisId/{nomisId}/sentencePlans", method = RequestMethod.POST)
-//    @ApiResponses({
-//            @ApiResponse(code = 404, message = "Offender not found"),
-//            @ApiResponse(code = 200, message = "OK")})
-//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderNomisId(@PathVariable("nomisId") String nomisId) {
-//
-//        return sentencePlanService.createBasicSentencePlanForOffenderNomisId(nomisId)
-//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-//                .orElse(new ResponseEntity<>(NOT_FOUND));
-//
-//    }
-//
-//    @RequestMapping(path = "/offenders/bookingId/{bookingId}/sentencePlans", method = RequestMethod.POST)
-//    @ApiResponses({
-//            @ApiResponse(code = 404, message = "Offender not found"),
-//            @ApiResponse(code = 200, message = "OK")})
-//    public ResponseEntity<BasicSentencePlan> createSentencePlanForOffenderBookingId(@PathVariable("bookingId") String bookingId) {
-//
-//        return sentencePlanService.createBasicSentencePlanForOffenderBookingId(bookingId)
-//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-//                .orElse(new ResponseEntity<>(NOT_FOUND));
-//    }
-//
-//    @RequestMapping(path = "/sentencePlans/{sentencePlanId}/sentencePlanItems/{spratSpCode}", method = RequestMethod.POST)
-//    @ApiResponses({
-//            @ApiResponse(code = 404, message = "Offender not found"),
-//            @ApiResponse(code = 200, message = "OK")})
-//    public ResponseEntity<BasicSentencePlanItem> addSentencePlanItem(@PathVariable("sentencePlanId") Long sentencePlanId,
-//                                                                     @PathVariable("spratSpCode") SentencePlanNeeds spratSpCode,
-//                                                                     @RequestBody BasicSentencePlanItem sentencePlanItem) {
-//
-//        return sentencePlanService.addBasicSentencePlanItem(sentencePlanId, spratSpCode, sentencePlanItem)
-//                .map(sp -> new ResponseEntity<>(sp, HttpStatus.OK))
-//                .orElse(new ResponseEntity<>(NOT_FOUND));
-//    }
 
-    @RequestMapping(path = "/offenders/oasysOffenderId/{oasysOffenderId}/properSentencePlans", method = RequestMethod.GET)
+    @RequestMapping(path = "/offenders/{identityType}/{identity}/fullSentencePlans", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<ProperSentencePlan>> getProperSentencePlansForOffenderPk(@PathVariable("oasysOffenderId") Long oasysOffenderId,
-                                                                                        @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                        @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                        @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                        @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+    public ResponseEntity<List<ProperSentencePlan>> getFullSentencePlansForOffender(@PathVariable("identityType") String identityType,
+                                                                                         @PathVariable("identity") String identity,
+                                                                                         @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                                         @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                                         @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                                         @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
 
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getProperSentencePlansForOffenderPk(oasysOffenderId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/crn/{crn}/properSentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<ProperSentencePlan>> getProperSentencePlansForOffenderCrn(@PathVariable("crn") String crn,
-                                                                                  @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                  @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                  @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                  @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getProperSentencePlansForOffenderCrn(crn, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/pnc/{pnc}/properSentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<ProperSentencePlan>> getProperSentencePlansForOffenderPnc(@PathVariable("pnc") String pnc,
-                                                                                  @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                  @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                  @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                  @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getProperSentencePlansForOffenderPnc(pnc, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/nomisId/{nomisId}/properSentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<ProperSentencePlan>> getProperSentencePlansForOffenderNomisId(@PathVariable("nomisId") String nomisId,
-                                                                                      @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                      @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                      @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                      @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getProperSentencePlansForOffenderNomsId(nomisId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
-    }
-
-    @RequestMapping(path = "/offenders/bookingId/{bookingId}/properSentencePlans", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 404, message = "Offender not found"),
-            @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<ProperSentencePlan>> getProperSentencePlansForOffenderBookingId(@PathVariable("bookingId") String bookingId,
-                                                                                        @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                        @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                        @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                        @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                sentencePlanService.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
-        return sentencePlanService.getProperSentencePlansForOffenderBookingId(bookingId, assessmentsFilter)
-                .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(NOT_FOUND));
+        return ResponseEntity.ok(sentencePlanService.getFullSentencePlansForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus));
     }
 
 }
