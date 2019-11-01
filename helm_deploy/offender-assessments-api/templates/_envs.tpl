@@ -19,19 +19,19 @@ env:
   - name: SPRING_DATASOURCE_USERNAME
     valueFrom:
       secretKeyRef:
-        name: offender-assessment-api
+        name: {{ template "app.name" . }}
         key: SPRING_DATASOURCE_USERNAME
 
   - name: SPRING_DATASOURCE_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: offender-assessment-api
+        name: {{ template "app.name" . }}
         key: SPRING_DATASOURCE_PASSWORD
 
   - name: SPRING_DATASOURCE_URL
     valueFrom:
       secretKeyRef:
-        name: offender-assessment-api
+        name: {{ template "app.name" . }}
         key: SPRING_DATASOURCE_URL
 
   - name: JWT_PUBLIC_KEY
