@@ -19,9 +19,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.*;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
+import uk.gov.justice.digital.oasys.jpa.repository.OasysAuthenticationRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
@@ -42,6 +44,10 @@ public class AuthenticationControllerTest {
 
     @MockBean
     private OasysUserRepository oasysUserRepository;
+
+
+    @MockBean
+    private OasysAuthenticationRepository oasysAuthenticationRepository;
 
     @Autowired
     @Qualifier("globalObjectMapper")
@@ -85,4 +91,51 @@ public class AuthenticationControllerTest {
 
         assertThat(oasysUser.getUserName()).isEqualTo("USER_CODE");
     }
+
+    @Test
+    public void returnsNotFoundWhenUserDoesNotExist() {
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/authentication/user/{0}", "NON_EXISTING_USER")
+                .then()
+                .statusCode(404);
+
+    }
+
+
+    @Test
+    public void returns200WhenUserIsAuthenticated() {
+
+        Mockito.when(oasysAuthenticationRepository.validateCredentials(eq("USER_CODE"), eq("PASSWORD"))).thenReturn(Optional.ofNullable("{STATE: \"SUCCESS\"}"));
+        ValidateUserRequest request = new ValidateUserRequest("USER_CODE", "PASSWORD");
+
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .header("Content-Type", "application/json")
+                .body(request)
+                .post("/authentication/user/validate")
+                .then()
+                .statusCode(200);
+
+    }
+
+    @Test
+    public void returns401WhenUserCredentialsInvalid() {
+
+        Mockito.when(oasysAuthenticationRepository.validateCredentials(eq("USER_CODE"), eq("PASSWORD"))).thenReturn(Optional.ofNullable("{STATE: \"SUCCESS\"}"));
+        ValidateUserRequest request = new ValidateUserRequest("INVALID_USER", "INVALID_PASSWORD");
+
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .header("Content-Type", "application/json")
+                .body(request)
+                .post("/authentication/user/validate")
+                .then()
+                .statusCode(401);
+    }
+
+
 }
