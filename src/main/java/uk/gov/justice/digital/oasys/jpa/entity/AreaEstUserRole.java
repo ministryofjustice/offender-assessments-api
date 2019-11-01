@@ -1,7 +1,9 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -11,6 +13,8 @@ import java.sql.Time;
 @Table(name = "AREA_EST_USER_ROLE")
 @IdClass(AreaEstUserRolePK.class)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AreaEstUserRole {
     @Column(name = "AREA_EST_USER_ROLE_UK")
     private Long areaEstUserRoleUk;
