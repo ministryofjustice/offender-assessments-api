@@ -7,6 +7,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,7 +18,7 @@ public class OasysUserAuthentication {
     private String firstName;
     private String lastName;
     private String email;
-    private List<String> regions;
+    private Set<String> regions;
     private boolean enabled;
 
 
@@ -25,7 +26,7 @@ public class OasysUserAuthentication {
 
         boolean enabled = oasysUser.getUserStatus().getRefElementCode().equals("ACTIVE");
 
-        List<String> regions = oasysUser.getRoles().stream().map(r->r.getCtAreaEstCode()).collect(Collectors.toList());
+        Set<String> regions = oasysUser.getRoles().stream().map(r->r.getCtAreaEstCode()).collect(Collectors.toSet());
 
         return new OasysUserAuthentication(
                 oasysUser.getOasysUserCode(),
