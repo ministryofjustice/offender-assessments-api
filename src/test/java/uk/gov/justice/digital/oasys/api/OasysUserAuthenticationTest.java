@@ -2,8 +2,7 @@ package uk.gov.justice.digital.oasys.api;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-
-import java.util.List;
+import java.util.Set;
 
 public class OasysUserAuthenticationTest {
 
@@ -15,7 +14,7 @@ public class OasysUserAuthenticationTest {
         String lastName = "last name";
         String email = "anyEmail";
         boolean enabled = true;
-        List<String> regions = List.of();
+        Set<String> regions = Set.of();
 
         var user = new OasysUserAuthentication(userId, userName,firstName, lastName, email, regions, enabled);
 

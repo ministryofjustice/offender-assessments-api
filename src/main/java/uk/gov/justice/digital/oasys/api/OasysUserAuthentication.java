@@ -3,10 +3,6 @@ package uk.gov.justice.digital.oasys.api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
