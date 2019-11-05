@@ -3,7 +3,7 @@
 The service provides REST access to the OASYS Oracle DB offender assessment information.
 
 ## Continuous Integration
-https://circleci.com/gh/noms-digital-studio/offender-assessment-api
+https://circleci.com/gh/ministryofjustice/offender-assessments-api/
 
 ## Gradle commands
 
