@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.oasys.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +26,8 @@ import static uk.gov.justice.digital.oasys.utils.LogEvent.*;
 public class AssessmentsService {
 
     private final OffenderService offenderService;
-
     private final AssessmentRepository assessmentRepository;
     private final AssessmentsTransformer assessmentsTransformer;
-
-    private final String LAYER_3_TYPE = "LAYER_3";
 
     @Autowired
     public AssessmentsService(OffenderService offenderService, AssessmentRepository assessmentRepository, AssessmentsTransformer assessmentsTransformer) {

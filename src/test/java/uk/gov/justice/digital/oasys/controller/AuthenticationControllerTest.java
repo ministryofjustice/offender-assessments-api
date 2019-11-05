@@ -124,7 +124,23 @@ public class AuthenticationControllerTest {
     @Test
     public void returns401WhenUserCredentialsInvalid() {
 
-        Mockito.when(oasysAuthenticationRepository.validateCredentials(eq("USER_CODE"), eq("PASSWORD"))).thenReturn(Optional.ofNullable("{STATE: \"SUCCESS\"}"));
+        Mockito.when(oasysAuthenticationRepository.validateCredentials(eq("INVALID_USER"), eq("INVALID_PASSWORD"))).thenReturn(Optional.ofNullable("{STATE: \"FAILURE\"}"));
+        ValidateUserRequest request = new ValidateUserRequest("INVALID_USER", "INVALID_PASSWORD");
+
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .header("Content-Type", "application/json")
+                .body(request)
+                .post("/authentication/user/validate")
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
+    public void returns401WhenInvalidJSONResponseReturnedFromOASys() {
+
+        Mockito.when(oasysAuthenticationRepository.validateCredentials(eq("INVALID_USER"), eq("INVALID_PASSWORD"))).thenReturn(Optional.ofNullable(null));
         ValidateUserRequest request = new ValidateUserRequest("INVALID_USER", "INVALID_PASSWORD");
 
         given()

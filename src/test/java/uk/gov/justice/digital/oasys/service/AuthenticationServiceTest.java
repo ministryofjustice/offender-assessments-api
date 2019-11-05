@@ -31,11 +31,9 @@ public class AuthenticationServiceTest {
 
     AuthenticationService service;
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
     @Before
     public void setup() {
-        service = new AuthenticationService(oasysUserRepository, oasysAuthenticationRepository, objectMapper);
+        service = new AuthenticationService(oasysUserRepository, oasysAuthenticationRepository);
     }
 
     @Test
