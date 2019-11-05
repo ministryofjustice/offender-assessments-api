@@ -56,6 +56,4 @@ public class AuthenticationController {
         return authorised ? new ResponseEntity(OK) : new ResponseEntity(UNAUTHORIZED);
     }
 
-
-
 }

@@ -124,7 +124,7 @@ public class AuthenticationControllerTest {
     @Test
     public void returns401WhenUserCredentialsInvalid() {
 
-        Mockito.when(oasysAuthenticationRepository.validateCredentials(eq("INVALID_USER"), eq("INVALID_PASSWORD"))).thenReturn(Optional.ofNullable("{STATE: \"FAILURE\"}"));
+        Mockito.when(oasysAuthenticationRepository.validateCredentials(eq("INVALID_USER"), eq("INVALID_PASSWORD"))).thenReturn(Optional.ofNullable("[{STATE: \"FAILURE\"}]"));
         ValidateUserRequest request = new ValidateUserRequest("INVALID_USER", "INVALID_PASSWORD");
 
         given()
