@@ -39,7 +39,7 @@ public class AuthenticationService {
 
     public Optional<OasysUserAuthentication> getUserByUserId(String username) {
         log.info("GRetrieving user with OASys username {}", username, value(EVENT, USER_AUTHENTICATION));
-        return oasysUserRepository.findOasysUserByOasysUserCode(username).map(user -> OasysUserAuthentication.from(user));
+        return oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(username).map(user -> OasysUserAuthentication.from(user));
     }
 
     public boolean validateUserCredentials(String username, String password) {
