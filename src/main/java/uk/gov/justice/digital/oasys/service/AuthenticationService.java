@@ -54,7 +54,7 @@ public class AuthenticationService {
             try {
                 return objectMapper.readValue(response.get(), AuthenticationStatus.class).isAuthenticated();
             } catch (IOException e) {
-                log.info("Failed to parse OASys response for user {}", username, value(EVENT, USER_AUTHENTICATION_PARSE_ERROR));
+                log.error("Failed to parse OASys response for user {}", username, value(EVENT, USER_AUTHENTICATION_PARSE_ERROR));
                 return false;
             }
         }
