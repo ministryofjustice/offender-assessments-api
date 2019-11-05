@@ -104,6 +104,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.10'
 
     testRuntime 'com.h2database:h2:1.4.199'
+    testRuntime 'org.hsqldb:hsqldb:2.4.1'
     runtime 'org.hsqldb:hsqldb:2.4.1'
     runtime 'org.flywaydb:flyway-core:5.2.4'
 
