@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.OasysUserAuthentication;
 import uk.gov.justice.digital.oasys.jpa.entity.AuthenticationStatus;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES;
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS;
 import static net.logstash.logback.argument.StructuredArguments.value;
 import static uk.gov.justice.digital.oasys.utils.LogEvent.*;
@@ -35,6 +35,7 @@ public class AuthenticationService {
         this.objectMapper = new ObjectMapper();
         objectMapper.enable(ALLOW_UNQUOTED_FIELD_NAMES);
         objectMapper.enable(UNWRAP_SINGLE_VALUE_ARRAYS);
+        objectMapper.disable(FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
     public Optional<OasysUserAuthentication> getUserByUserId(String username) {
@@ -54,7 +55,7 @@ public class AuthenticationService {
             try {
                 return objectMapper.readValue(response.get(), AuthenticationStatus.class).isAuthenticated();
             } catch (IOException e) {
-                log.error("Failed to parse OASys response for user {}", username, value(EVENT, USER_AUTHENTICATION_PARSE_ERROR));
+                log.error("Failed to parse OASys response for user {} response: {}", username, response.get(), value(EVENT, USER_AUTHENTICATION_PARSE_ERROR));
                 return false;
             }
         }
