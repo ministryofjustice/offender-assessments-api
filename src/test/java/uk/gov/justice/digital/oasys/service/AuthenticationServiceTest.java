@@ -48,7 +48,7 @@ public class AuthenticationServiceTest {
                 .roles(List.of(AreaEstUserRole.builder().ctAreaEstCode("1234").build()))
                 .build();
 
-        when(oasysUserRepository.findOasysUserByOasysUserCode("TEST_USER")).thenReturn(Optional.ofNullable(user));
+        when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase("TEST_USER")).thenReturn(Optional.ofNullable(user));
 
         Optional<OasysUserAuthentication> result = service.getUserByUserId("TEST_USER");
 
@@ -69,7 +69,7 @@ public class AuthenticationServiceTest {
                 .userStatus(RefElement.builder().refCategoryCode("USER_STATUS").refElementCode("DISABLED").refElementDesc("Active").build())
                 .build();
 
-        when(oasysUserRepository.findOasysUserByOasysUserCode("TEST_USER")).thenReturn(Optional.ofNullable(user));
+        when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase("TEST_USER")).thenReturn(Optional.ofNullable(user));
 
         Optional<OasysUserAuthentication> result = service.getUserByUserId("TEST_USER");
         assertThat(result.get().isEnabled()).isFalse();
@@ -84,7 +84,7 @@ public class AuthenticationServiceTest {
                 .userStatus(RefElement.builder().refCategoryCode("USER_STATUS").refElementCode("ACTIVE").refElementDesc("Active").build())
                 .build();
 
-        when(oasysUserRepository.findOasysUserByOasysUserCode("TEST_USER")).thenReturn(Optional.ofNullable(user));
+        when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase("TEST_USER")).thenReturn(Optional.ofNullable(user));
 
         Optional<OasysUserAuthentication> result = service.getUserByUserId("TEST_USER");
         assertThat(result.get().isEnabled()).isTrue();

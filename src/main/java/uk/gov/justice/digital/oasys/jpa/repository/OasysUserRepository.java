@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface OasysUserRepository extends CrudRepository<OasysUser, String> {
-    Optional<OasysUser> findOasysUserByOasysUserCode(String userCode);
+    Optional<OasysUser> findOasysUserByOasysUserCodeIgnoreCase(String userCode);
 }
