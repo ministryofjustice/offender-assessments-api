@@ -65,7 +65,7 @@ public class AuthenticationControllerTest {
 
         ControllerTestContext.setup(offenderRepository);
 
-        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCode(eq("USER_CODE"))).thenReturn(Optional.ofNullable(ControllerTestContext.oasysUser("USER_CODE")));
+        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(ControllerTestContext.oasysUser("USER_CODE")));
     }
 
     @Test

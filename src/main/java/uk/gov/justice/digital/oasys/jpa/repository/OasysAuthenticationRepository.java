@@ -26,7 +26,6 @@ public class OasysAuthenticationRepository {
                         "BEGIN " +
                         "    LV_RES := RESTFUL_API_PKG.USER_INFO(P_USER => ?, P_PASSWORD => ?); " +
                         "    ? := LV_RES; " +
-                        "    CLOG_API.INS(P_SOURCE=>'TESTING:RESTFUL_API.USER_LOGIN', P_TEXT => LV_RES, P_LEVEL => 5); " +
                         "END;";
 
         String result = session.doReturningWork(
