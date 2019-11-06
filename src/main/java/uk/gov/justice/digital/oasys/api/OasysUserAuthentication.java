@@ -22,7 +22,7 @@ public class OasysUserAuthentication {
 
         boolean enabled = oasysUser.getUserStatus().getRefElementCode().equals("ACTIVE");
 
-        Set<String> regions = oasysUser.getRoles().stream().map(r->r.getCtAreaEstCode()).collect(Collectors.toSet());
+        Set<String> regions = oasysUser.getRoles().stream().map(r->r.getCtAreaEstCode()).limit(10).collect(Collectors.toSet());
 
         return new OasysUserAuthentication(
                 oasysUser.getOasysUserCode(),
