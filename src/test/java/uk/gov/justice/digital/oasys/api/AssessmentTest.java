@@ -272,10 +272,12 @@ public class AssessmentTest {
                         "ROSH",
                         Section.builder()
                                 .refSectionCode("ROSH")
-                                .questions(ImmutableMap.of("R2.1", Question.builder().
-                                        answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
-                                .build()
-                ))
+                                .questions(ImmutableMap.of(
+                                        "R2.1", Question.builder().
+                                                answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
+                                        "R2.2", Question.builder().
+                                                answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
+                                .build()))
                 .assessmentType("LAYER_3")
                 .build();
 
@@ -286,53 +288,7 @@ public class AssessmentTest {
     }
 
     @Test
-    public void childSafeguardingIsIndicatedWhenR7_1a_YES() throws JsonProcessingException {
-
-        ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
-
-        var assessment = Assessment.builder()
-                .sections(ImmutableMap.of(
-                        "ROSHFULL",
-                        Section.builder()
-                                .refSectionCode("ROSHFULL")
-                                .questions(ImmutableMap.of("FA15", Question.builder().
-                                        answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
-                                .build()
-                ))
-                .assessmentType("LAYER_3")
-                .build();
-
-
-        final String json = objectMapper.writeValueAsString(assessment);
-        DocumentContext ctx = JsonPath.parse(json);
-        assertThat(ctx).jsonPathAsBoolean("$.childSafeguardingIndicated").isTrue();
-    }
-
-    @Test
-    public void childSafeguardingIsIndicatedWhenR7_1b_YES() throws JsonProcessingException {
-
-        ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
-
-        var assessment = Assessment.builder()
-                .sections(ImmutableMap.of(
-                        "ROSHFULL",
-                        Section.builder()
-                                .refSectionCode("ROSHFULL")
-                                .questions(ImmutableMap.of("FA16", Question.builder().
-                                        answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
-                                .build()
-                ))
-                .assessmentType("LAYER_3")
-                .build();
-
-
-        final String json = objectMapper.writeValueAsString(assessment);
-        DocumentContext ctx = JsonPath.parse(json);
-        assertThat(ctx).jsonPathAsBoolean("$.childSafeguardingIndicated").isTrue();
-    }
-
-    @Test
-    public void childProtectionIsIndicatedWhenR2_1_YES() throws JsonProcessingException {
+    public void childSafeguardingIsIndicatedWhenR2_2_YES() throws JsonProcessingException {
 
         ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
 
@@ -341,40 +297,44 @@ public class AssessmentTest {
                         "ROSH",
                         Section.builder()
                                 .refSectionCode("ROSH")
-                                .questions(ImmutableMap.of("R2.1", Question.builder().
-                                        answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
-                                .build()
-                ))
+                                .questions(ImmutableMap.of(
+                                        "R2.1", Question.builder().
+                                                answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build(),
+                                        "R2.2", Question.builder().
+                                                answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                                .build()))
                 .assessmentType("LAYER_3")
                 .build();
 
 
         final String json = objectMapper.writeValueAsString(assessment);
         DocumentContext ctx = JsonPath.parse(json);
-        assertThat(ctx).jsonPathAsBoolean("$.complyWithChildProtectionPlanIndicated").isTrue();
+        assertThat(ctx).jsonPathAsBoolean("$.childSafeguardingIndicated").isTrue();
     }
 
     @Test
-    public void childProtectionIsIndicatedWhenR7_1b_YES() throws JsonProcessingException {
+    public void childSafeguardingIsIndicatedWhenR2_1_YESAndR2_2_YES() throws JsonProcessingException {
 
         ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
 
         var assessment = Assessment.builder()
                 .sections(ImmutableMap.of(
-                        "ROSHFULL",
+                        "ROSH",
                         Section.builder()
-                                .refSectionCode("ROSHFULL")
-                                .questions(ImmutableMap.of("FA16", Question.builder().
-                                        answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
-                                .build()
-                ))
+                                .refSectionCode("ROSH")
+                                .questions(ImmutableMap.of(
+                                        "R2.1", Question.builder().
+                                                answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
+                                        "R2.2", Question.builder().
+                                                answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                                .build()))
                 .assessmentType("LAYER_3")
                 .build();
 
 
         final String json = objectMapper.writeValueAsString(assessment);
         DocumentContext ctx = JsonPath.parse(json);
-        assertThat(ctx).jsonPathAsBoolean("$.complyWithChildProtectionPlanIndicated").isTrue();
+        assertThat(ctx).jsonPathAsBoolean("$.childSafeguardingIndicated").isTrue();
     }
 
     @Test
@@ -387,18 +347,12 @@ public class AssessmentTest {
                         "ROSH",
                         Section.builder()
                                 .refSectionCode("ROSH")
-                                .questions(ImmutableMap.of("R2.1", Question.builder().
-                                        answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
-                                .build(),
-                        "ROSHFULL",
-                        Section.builder()
-                                .refSectionCode("ROSHFULL")
-                                .questions(ImmutableMap.of("FA15", Question.builder().
+                                .questions(ImmutableMap.of(
+                                        "R2.1", Question.builder().
                                                 answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build(),
-                                        "FA16", Question.builder().
+                                        "R2.2", Question.builder().
                                                 answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
-                                .build()
-                ))
+                                .build()))
                 .assessmentType("LAYER_3")
                 .build();
 
@@ -408,35 +362,6 @@ public class AssessmentTest {
         assertThat(ctx).jsonPathAsBoolean("$.childSafeguardingIndicated").isFalse();
     }
 
-    @Test
-    public void childProtectionIsFalseWhenNotIndicated() throws JsonProcessingException {
-
-        ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
-
-        var assessment = Assessment.builder()
-                .sections(ImmutableMap.of(
-                        "ROSH",
-                        Section.builder()
-                                .refSectionCode("ROSH")
-                                .questions(ImmutableMap.of("R2.1", Question.builder().
-                                        answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
-                                .build(),
-                        "ROSHFULL",
-                        Section.builder()
-                                .refSectionCode("ROSHFULL")
-                                .questions(ImmutableMap.of(
-                                        "FA16", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
-                                .build()
-                ))
-                .assessmentType("LAYER_3")
-                .build();
-
-
-        final String json = objectMapper.writeValueAsString(assessment);
-        DocumentContext ctx = JsonPath.parse(json);
-        assertThat(ctx).jsonPathAsBoolean("$.complyWithChildProtectionPlanIndicated").isFalse();
-    }
 
     @Test
     public void childIndicatorsAreAbsentWhenInsufficientDataInAssessment() throws JsonProcessingException {
@@ -448,7 +373,6 @@ public class AssessmentTest {
 
 
         final String json = objectMapper.writeValueAsString(assessment);
-        Assertions.assertThat(json.contains("complyWithChildProtectionPlanIndicated")).isFalse();
         Assertions.assertThat(json.contains("childSafeguardingIndicated")).isFalse();
     }
 

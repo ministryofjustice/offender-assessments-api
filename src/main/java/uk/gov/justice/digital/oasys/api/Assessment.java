@@ -212,19 +212,12 @@ public class Assessment {
                 .flatMap(s -> Optional.ofNullable(s.getQuestions().get("R2.1")))
                 .flatMap(Question::getAnswer);
 
-        var sectionROSHFULL = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("ROSHFULL")));
-
-        var answerR7_1a = sectionROSHFULL
+        var answerR2_2 = sectionROSH
                 .filter(s -> s.getQuestions() != null)
-                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("FA15")))
+                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("R2.2")))
                 .flatMap(Question::getAnswer);
 
-        var answerR7_1b = sectionROSHFULL
-                .filter(s -> s.getQuestions() != null)
-                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("FA16")))
-                .flatMap(Question::getAnswer);
-
-        var answers = Stream.of(answerR2_1, answerR7_1a, answerR7_1b)
+        var answers = Stream.of(answerR2_1, answerR2_2)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(Answer::getRefAnswerCode)
@@ -240,42 +233,6 @@ public class Assessment {
 
         return Optional.of(false);
     }
-
-    public Optional<Boolean> getComplyWithChildProtectionPlanIndicated() {
-        if (!isLayer3()) {
-            return Optional.empty();
-        }
-
-        var sectionROSH = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("ROSH")));
-        var answerR2_1 = sectionROSH
-                .filter(s -> s.getQuestions() != null)
-                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("R2.1")))
-                .flatMap(Question::getAnswer);
-
-        var sectionROSHFULL = Optional.ofNullable(sections).flatMap(s -> Optional.ofNullable(s.get("ROSHFULL")));
-
-        var answerR7_1b = sectionROSHFULL
-                .filter(s -> s.getQuestions() != null)
-                .flatMap(s -> Optional.ofNullable(s.getQuestions().get("FA16")))
-                .flatMap(Question::getAnswer);
-
-        var answers = Stream.of(answerR2_1, answerR7_1b)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(Answer::getRefAnswerCode)
-                .collect(Collectors.toList());
-
-        if (answers.isEmpty()) {
-            return Optional.empty();
-        }
-
-        if (answers.contains("YES")) {
-            return Optional.of(true);
-        }
-
-        return Optional.of(false);
-    }
-
 
     @JsonIgnore
     public boolean isLayer3() {
