@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.List.of;
 import static org.mockito.ArgumentMatchers.eq;
 
 public class ControllerTestContext {
@@ -45,21 +46,21 @@ public class ControllerTestContext {
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGroup() {
-        return ImmutableList.of(OasysAssessmentGroup.builder()
+        return List.of(OasysAssessmentGroup.builder()
                 .oasysAssessmentGroupPk(1L)
                 .oasysSets(someOasysSets())
                 .build());
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGrouWithSingleSet() {
-        return ImmutableList.of(OasysAssessmentGroup.builder()
+        return List.of(OasysAssessmentGroup.builder()
                 .oasysAssessmentGroupPk(1L)
                 .oasysSets(List.of(layer3AssessmentOasysSet(1L)))
                 .build());
     }
 
     private static List<OasysSet> someOasysSets() {
-        return ImmutableList.of(OasysSet.builder()
+        return List.of(OasysSet.builder()
                         .createDate(new Timestamp(System.currentTimeMillis() - oneDay()))
                         .assessmentType(assessmentType("oasys"))
                         .oasysSetPk(1L)
@@ -223,8 +224,19 @@ public class ControllerTestContext {
                 .userFamilyName("User")
                 .emailAddress("test@test.com")
                 .userStatus(RefElement.builder().refCategoryCode("USER_STATUS").refElementCode("ACTIVE").refElementDesc("Active").build())
-                .roles(List.of(AreaEstUserRole.builder().ctAreaEstCode("1234").build()))
+                .roles(of(AreaEstUserRole.builder().ctAreaEstCode("1234").build()))
                 .build();
     }
 
+    public static List<RefElement> interventions() {
+        return List.of(RefElement.builder()
+                .refElementCode("INV1")
+                .refElementDesc("Intervention 1")
+                .refElementShortDesc("Inv 1").build(),
+                RefElement.builder()
+                        .refElementCode("INV1")
+                        .refElementDesc("Intervention 1")
+                        .refElementShortDesc("Inv 1").build());
+
+    }
 }
