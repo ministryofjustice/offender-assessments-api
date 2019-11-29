@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -37,17 +38,17 @@ public class RefElement {
     @Column(name = "DISPLAY_SORT")
     private Long displaySort;
     @Column(name = "START_DATE")
-    private Time startDate;
+    private LocalDateTime startDate;
     @Column(name = "END_DATE")
-    private Time endDate;
+    private LocalDateTime endDate;
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private LocalDateTime createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private LocalDateTime lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 
