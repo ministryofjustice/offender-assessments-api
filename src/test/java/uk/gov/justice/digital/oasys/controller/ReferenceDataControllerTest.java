@@ -16,11 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
-import uk.gov.justice.digital.oasys.api.ReferenceIntervention;
+import uk.gov.justice.digital.oasys.api.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.ReferenceDataRepository;
-
-import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +28,7 @@ import static org.mockito.ArgumentMatchers.eq;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-public class RefInterventionControllerTest {
+public class ReferenceDataControllerTest {
 
     @LocalServerPort
     int port;
@@ -58,15 +55,15 @@ public class RefInterventionControllerTest {
 
     @Test
     public void canGetAllInterventions() {
-        ReferenceIntervention[] sentencePlans = given()
+        RefElement[] sentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/referenceinterventions")
+                .get("/referencedata/INTERVENTION")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(ReferenceIntervention[].class);
+                .as(RefElement[].class);
 
         assertThat(sentencePlans).hasSize(2);
     }
