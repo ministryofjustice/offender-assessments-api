@@ -11,4 +11,10 @@ public class RefElement {
     private final String shortDescription;
     private final String description;
 
+    public static RefElement from(uk.gov.justice.digital.oasys.jpa.entity.RefElement refElement) {
+        return new RefElement(
+                refElement.getRefElementCode(),
+                refElement.getRefElementShortDesc(),
+                refElement.getRefElementDesc());
+    }
 }
