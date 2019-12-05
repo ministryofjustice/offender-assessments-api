@@ -27,8 +27,30 @@ public class OffenderTransformerTest {
                 .sentenceCode("sentenceCode")
                 .sentenceDescription("sentenceDesc")
                 .startDate(Timestamp.from(Instant.MIN).toLocalDateTime().toLocalDate().toString())
+                .paroleType(false)
                 .build();
 
         assertThat(Offender.from(offender).getSentence().toArray()[0]).isEqualTo(expected);
+    }
+
+    @Test
+    public void offenderHasParoleSentenceType() {
+        var offender = anOffender().get();
+
+        var expected = Sentence.builder()
+                .activity("another activity")
+                .cja(true)
+                .cjaSupervisionMonths(5L)
+                .cjaUnpaidHours(5L)
+                .custodial(true)
+                .endDate(Timestamp.from(Instant.MAX).toLocalDateTime().toLocalDate().toString())
+                .orderType("orderType")
+                .sentenceCode("310")
+                .sentenceDescription("Life")
+                .startDate(Timestamp.from(Instant.MIN).toLocalDateTime().toLocalDate().toString())
+                .paroleType(true)
+                .build();
+
+        assertThat(Offender.from(offender).getSentence().toArray()[1]).isEqualTo(expected);
     }
 }
