@@ -16,6 +16,8 @@ import static uk.gov.justice.digital.oasys.transformer.TypesTransformer.ynToBool
 
 public class OffenderTransformer {
 
+    private static List<String> PAROLE_SENTENCE_TYPES =  List.of("310", "1200", "930", "410");
+
     public static Set<Sentence> sentenceOf(List<OasysAssessmentGroup> oasysAssessmentGroups) {
         Optional<OasysSet> maybeLatestSet = latestOasysSetOf(oasysAssessmentGroups);
 
@@ -40,6 +42,7 @@ public class OffenderTransformer {
                     .sentenceCode(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceCode).orElse(null))
                     .sentenceDescription(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceDesc).orElse(null))
                     .startDate(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getStartDate).map(Timestamp::toLocalDateTime).map(LocalDateTime::toLocalDate).map(LocalDate::toString).orElse(null))
+                    .parolable(maybeSentence.map(s-> PAROLE_SENTENCE_TYPES.contains(s.getSentenceCode())).orElse(false))
                     .build());
 
             sentence.ifPresent(sentences::add);

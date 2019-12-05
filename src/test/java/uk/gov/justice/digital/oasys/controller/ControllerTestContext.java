@@ -117,6 +117,7 @@ public class ControllerTestContext {
 
     private static Set<OffenceBlock> anOffenceBlock() {
         return Set.of(OffenceBlock.builder()
+                .offenceBlockPk(1L)
                 .offenceSentenceDetail(OffenceSentenceDetail
                         .builder()
                         .activityDesc("activity")
@@ -134,7 +135,27 @@ public class ControllerTestContext {
                         .startDate(Timestamp.from(Instant.MIN))
                         .build()
                 )
-                .build());
+                .build(),
+                OffenceBlock.builder()
+                        .offenceBlockPk(2L)
+                        .offenceSentenceDetail(OffenceSentenceDetail
+                                .builder()
+                                .activityDesc("another activity")
+                                .cjaSupervisionMonths(5L)
+                                .cjaUnpaidHours(5L)
+                                .build())
+                        .sentence(Sentence
+                                .builder()
+                                .cjaInd("Y")
+                                .custodialInd("Y")
+                                .endDate(Timestamp.from(Instant.MAX))
+                                .orderType(RefElement.builder().refElementDesc("orderType").build())
+                                .sentenceCode("310")
+                                .sentenceDesc("Life")
+                                .startDate(Timestamp.from(Instant.MIN))
+                                .build()
+                        )
+                        .build());
     }
 
     private static Set<BasicSentencePlanObj> aSentencePlan(long l) {
