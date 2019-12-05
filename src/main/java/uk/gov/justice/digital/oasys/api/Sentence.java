@@ -16,5 +16,5 @@ public class Sentence {
     private Long cjaUnpaidHours;
     private Long cjaSupervisionMonths;
     private String activity;
-    private Boolean paroleType;
+    private Boolean parolable;
 }

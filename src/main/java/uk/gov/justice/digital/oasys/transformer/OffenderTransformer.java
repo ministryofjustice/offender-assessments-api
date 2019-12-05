@@ -42,7 +42,7 @@ public class OffenderTransformer {
                     .sentenceCode(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceCode).orElse(null))
                     .sentenceDescription(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getSentenceDesc).orElse(null))
                     .startDate(maybeSentence.map(uk.gov.justice.digital.oasys.jpa.entity.Sentence::getStartDate).map(Timestamp::toLocalDateTime).map(LocalDateTime::toLocalDate).map(LocalDate::toString).orElse(null))
-                    .paroleType(maybeSentence.map(s-> PAROLE_SENTENCE_TYPES.contains(s.getSentenceCode())).orElse(false))
+                    .parolable(maybeSentence.map(s-> PAROLE_SENTENCE_TYPES.contains(s.getSentenceCode())).orElse(false))
                     .build());
 
             sentence.ifPresent(sentences::add);

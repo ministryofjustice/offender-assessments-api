@@ -27,7 +27,7 @@ public class OffenderTransformerTest {
                 .sentenceCode("sentenceCode")
                 .sentenceDescription("sentenceDesc")
                 .startDate(Timestamp.from(Instant.MIN).toLocalDateTime().toLocalDate().toString())
-                .paroleType(false)
+                .parolable(false)
                 .build();
 
         assertThat(Offender.from(offender).getSentence().toArray()[0]).isEqualTo(expected);
@@ -48,7 +48,7 @@ public class OffenderTransformerTest {
                 .sentenceCode("310")
                 .sentenceDescription("Life")
                 .startDate(Timestamp.from(Instant.MIN).toLocalDateTime().toLocalDate().toString())
-                .paroleType(true)
+                .parolable(true)
                 .build();
 
         assertThat(Offender.from(offender).getSentence().toArray()[1]).isEqualTo(expected);
