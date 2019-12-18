@@ -1,6 +1,10 @@
 spring:
   application:
     name: offender-assessment-api
+  cache:
+    cache-names: users
+    caffeine:
+      spec: expireAfterWrite=2m
 
   datasource:
     url: 'jdbc:h2:mem:testdb;Mode=Oracle'
