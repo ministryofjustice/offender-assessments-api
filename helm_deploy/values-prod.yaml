@@ -13,10 +13,13 @@ ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    certmanager.k8s.io/cluster-issuer: letsencrypt-production
   hosts:
-    - host: assessment-api.hmpps.dsd.io
-      cert_secret: assessment-api-cert
+    - host: offender-prod.aks-live-1.studio-hosting.service.hmpps.dsd.io
+      cert_secret: offender-assessments-api-prod-tls-secret
   path: /
 
 env:
-  JAVA_OPTS: "-Xmx512m"
+  JAVA_OPTS: "-Xmx512m -Duser.timezone=UTC"
+  TZ: UTC
+  JWT_PUBLIC_KEY: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFwSkdtYWp6SW9POVdSY2owM2VTbQpFeWJTYnNJaEdkNkRWVDRxUWFSRTZwN3RIN1ppSklvRWtzczRkOFphMGhuYWJwa0JqWTYwS3NnMW5teXpoZVlSCithWXVtc0gxbm1JcmJ4ZCtqV043T3A2V1pteWRBU3JMek1XWVdBYlNHOHBXMXkxY1RwdkRaMTlBSGJTYTRRL2UKSnRlcDFscCsyMnVHMW5kTVRwclRkNjRLTkcyZnRwcmV3aFExeE5xdmtUWjZoQnVRRVJKMzFhUXBkRThNQTFxSwpDWnI3VDJxTk1BTWNkTlpia0FqRjVLOXE0alZ0QkY3WXFPeXJ0T1JmTldqYUJoWHA5TlN0YWJCTXBURTdQNm8vClhJaU9rcmltNjlzaG1OdDhVRlU3WUlJN0ZvejgzM29HZnk2dmtDRjRxcGpIZ0RNc21STjc1UXRrRmRtaU8xaDgKcHdJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg

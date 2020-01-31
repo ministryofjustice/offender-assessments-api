@@ -9,16 +9,17 @@ image:
   pullPolicy: Always
   port: 8080
 
-
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    certmanager.k8s.io/cluster-issuer: letsencrypt-production
   hosts:
-    - host: preprod.assessment-api.hmpps.dsd.io
-      cert_secret: assessment-api-cert
-    path: /
+    - host: offender-preprod.aks-live-1.studio-hosting.service.hmpps.dsd.io
+      cert_secret: offender-assessments-api-preprod-tls-secret
+  path: /
 
 env:
-  JAVA_OPTS: "-Xmx512m"
-
+  JAVA_OPTS: "-Xmx512m -Duser.timezone=UTC"
+  TZ: UTC
+  JWT_PUBLIC_KEY: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFqVGR1dEtLZVBSQmVBY2tnUzZwLwpsVitkNVlxYjNxMTh6NlV3aDFNTll4cDNIcVlwWVYrOTJ5RnhlMlE1UjdLVmpJeUt5MmZHQWpzV3krZVNOMjNUCkZURVVUeXdHdnc0SkJrRGRoaUUvKy80SjR2TWFHMzBYN29GdE9JUWIwaENFQVlWM3o4emc1WVd2OGZlRkVnWGcKSndKNUJzaStTQ29qM0hkOURFeTVkZlpNOWMvcGg5c3lhaktTVmJBbytEK1dqeFBYdThSd1FKT0FTSDQ1RXByVAozSTMvTXZZcmNWb3ZDeFFWclFjcGMzYmNFNGx6WHRZUlcvcElqR1FaQSsvVmIzV2V2bkdRYmJ3UzR6enl5M2s4CkRCZ0pzQVJlVDI1eHp0ckptRGlZZXBHYkVKVHV0alRqR2NVOG1qUjRWZ3gwdHdqMk9DMzBES3dXbGlrMzhXTWwKTlFJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0t

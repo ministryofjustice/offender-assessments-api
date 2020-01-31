@@ -6,7 +6,7 @@ commands:
       - aws-cli/install
       - kubernetes/install
       - helm/install-helm-client:
-          version: v2.13.1
+          version: v3.0.2
       - run:
           name: Setup kubectl
           command: |
@@ -36,10 +36,10 @@ commands:
           name: Deploy to << parameters.env >>
           command: |
             APP_VERSION=$(cat ~/app/app_version.txt)
+            sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/sentence-planning-api/Chart.yaml
             aws secretsmanager --region ${AWS_DEFAULT_REGION} get-secret-value --secret-id ${KUBE_ENV_NAMESPACE} | jq -r .SecretString | \
             helm upgrade offender-assessments-api ~/git/helm_deploy/offender-assessments-api/. \
-              --install --wait --force --reset-values --timeout 360 \
-              --tiller-namespace=${KUBE_ENV_NAMESPACE} \
+            --install --wait --reset-values --timeout 5m --history-max 10 \
               --namespace=${KUBE_ENV_NAMESPACE} \
               --values ~/git/helm_deploy/values-<< parameters.env >>.yaml \
               --values - \
@@ -55,9 +55,9 @@ executors:
     working_directory: ~/app
 
 orbs:
-  aws-cli: circleci/aws-cli@0.1.13
-  kubernetes: circleci/kubernetes@0.3.0
-  helm: circleci/helm@0.1.2
+  aws-cli: circleci/aws-cli@0.1.18
+  kubernetes: circleci/kubernetes@0.10.1
+  helm: circleci/helm@0.2.3
 
 jobs:
   build:
@@ -132,16 +132,16 @@ jobs:
     steps:
       - deploy_to_env:
           env: "development"
-#  deploy_preprod:
-#    executor: deployer
-#    steps:
-#      - deploy_to_env:
-#          env: "preprod"
-#  deploy_prod:
-#    executor: deployer
-#    steps:
-#      - deploy_to_env:
-#          env: "prod"
+  deploy_preprod:
+    executor: deployer
+    steps:
+      - deploy_to_env:
+          env: "preprod"
+  deploy_prod:
+    executor: deployer
+    steps:
+      - deploy_to_env:
+          env: "prod"
 
 workflows:
   version: 2
@@ -160,19 +160,19 @@ workflows:
       - deploy_dev:
           requires:
             - build_docker
-#      - request-preprod-approval:
-#          type: approval
-#          requires:
-#            - deploy_dev
-#      - deploy_preprod:
-#          context: offender-assessments-api-preprod
-#          requires:
-#            - request-preprod-approval
-#      - request-prod-approval:
-#          type: approval
-#          requires:
-#            - deploy_preprod
-#      - deploy_prod:
-#          context: offender-assessments-api-prod
-#          requires:
-#            - request-prod-approval
+      - request-preprod-approval:
+          type: approval
+          requires:
+            - deploy_dev
+      - deploy_preprod:
+          context: offender-assessments-api-preprod
+          requires:
+            - request-preprod-approval
+      - request-prod-approval:
+          type: approval
+          requires:
+            - deploy_preprod
+      - deploy_prod:
+          context: offender-assessments-api-prod
+          requires:
+            - request-prod-approval
