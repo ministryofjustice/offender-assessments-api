@@ -36,7 +36,7 @@ commands:
           name: Deploy to << parameters.env >>
           command: |
             APP_VERSION=$(cat ~/app/app_version.txt)
-            sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/sentence-planning-api/Chart.yaml
+            sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/offender-assessments-api/Chart.yaml
             aws secretsmanager --region ${AWS_DEFAULT_REGION} get-secret-value --secret-id ${KUBE_ENV_NAMESPACE} | jq -r .SecretString | \
             helm upgrade offender-assessments-api ~/git/helm_deploy/offender-assessments-api/. \
             --install --wait --reset-values --timeout 5m --history-max 10 \
