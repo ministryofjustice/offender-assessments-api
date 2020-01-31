@@ -18,7 +18,7 @@ public class ReferenceDataService {
     }
 
     public List<RefElement> getActiveReferenceDataOfCategory(String categoryCode) {
-        var interventions = referenceDataRepository.findAllByRefCategoryCodeAndEndDateIsBefore(categoryCode, LocalDateTime.now());
-        return interventions.stream().map(r->RefElement.from(r)).collect(Collectors.toList());
+        var referenceData = referenceDataRepository.findAllByRefCategoryCodeAndEndDateIsBefore(categoryCode, LocalDateTime.now());
+        return referenceData.stream().map(r->RefElement.from(r)).collect(Collectors.toList());
     }
 }
