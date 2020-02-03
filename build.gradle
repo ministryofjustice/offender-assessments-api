@@ -93,9 +93,9 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.9'
 
     implementation 'net.logstash.logback:logstash-logback-encoder:6.2'
-    implementation 'com.microsoft.azure:applicationinsights-spring-boot-starter:2.5.1-BETA'
-    implementation 'com.microsoft.azure:applicationinsights-logging-logback:2.5.1-BETA'
-    agentDeps 'com.microsoft.azure:applicationinsights-agent:2.5.1-BETA'
+    implementation 'com.microsoft.azure:applicationinsights-spring-boot-starter:2.6.0-BETA.2'
+    implementation 'com.microsoft.azure:applicationinsights-logging-logback:2.6.0-BETA.2'
+    agentDeps 'com.microsoft.azure:applicationinsights-agent:2.6.0-BETA.2'
 
     compileOnly 'org.projectlombok:lombok:1.18.10'
 
