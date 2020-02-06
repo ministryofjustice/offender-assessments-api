@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +17,10 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.*;
-import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysAuthenticationRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
-import java.util.Map;
 import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
@@ -79,7 +76,7 @@ public class AuthenticationControllerTest {
 
     @Test
     public void canGetuserForUserCode() {
-        OasysUserAuthentication oasysUser = given()
+        OasysUserAuthenticationDto oasysUser = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/authentication/user/{0}", "USER_CODE")
@@ -87,7 +84,7 @@ public class AuthenticationControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(OasysUserAuthentication.class);
+                .as(OasysUserAuthenticationDto.class);
 
         assertThat(oasysUser.getUserName()).isEqualTo("USER_CODE");
     }

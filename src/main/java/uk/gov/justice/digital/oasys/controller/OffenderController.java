@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.digital.oasys.api.Offender;
-import uk.gov.justice.digital.oasys.api.OffenderSummary;
+import uk.gov.justice.digital.oasys.api.OffenderSummaryDto;
 import uk.gov.justice.digital.oasys.service.OffenderService;
 
 @RestController
@@ -36,8 +36,8 @@ public class OffenderController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<OffenderSummary> getOffenderSummaryByPk(@PathVariable("identityType") String identityType, @PathVariable("identity") String identity) {
-        return ResponseEntity.ok(OffenderSummary.from(offenderService.findOffender(identityType, identity)));
+    public ResponseEntity<OffenderSummaryDto> getOffenderSummaryByPk(@PathVariable("identityType") String identityType, @PathVariable("identity") String identity) {
+        return ResponseEntity.ok(OffenderSummaryDto.from(offenderService.findOffender(identityType, identity)));
     }
 
 }

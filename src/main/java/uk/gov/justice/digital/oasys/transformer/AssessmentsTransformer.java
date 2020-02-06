@@ -9,7 +9,6 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
 import uk.gov.justice.digital.oasys.jpa.entity.QaReview;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
 
@@ -30,7 +29,7 @@ public class AssessmentsTransformer {
         return Assessment.builder()
                 .createdDateTime(TypesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
                 .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
-                .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersion.from(oasysSet.getRefAssVersion()))
+                .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()))
                 .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
                 .completedDateTime(TypesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
                 .oasysSetId(oasysSet.getOasysSetPk())

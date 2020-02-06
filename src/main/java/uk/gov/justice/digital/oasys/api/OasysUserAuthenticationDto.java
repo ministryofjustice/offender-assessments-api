@@ -1,14 +1,16 @@
 package uk.gov.justice.digital.oasys.api;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@AllArgsConstructor
-public class OasysUserAuthentication {
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+public class OasysUserAuthenticationDto {
     private String userId;
     private String userName;
     private String firstName;
@@ -18,13 +20,13 @@ public class OasysUserAuthentication {
     private boolean enabled;
 
 
-    public static OasysUserAuthentication from(OasysUser oasysUser) {
+    public static OasysUserAuthenticationDto from(OasysUser oasysUser) {
 
         boolean enabled = oasysUser.getUserStatus().getRefElementCode().equals("ACTIVE");
 
-        Set<String> regions = oasysUser.getRoles().stream().map(r->r.getCtAreaEstCode()).limit(10).collect(Collectors.toSet());
+        Set<String> regions = oasysUser.getRoles().stream().map(AreaEstUserRole::getCtAreaEstCode).limit(10).collect(Collectors.toSet());
 
-        return new OasysUserAuthentication(
+        return new OasysUserAuthenticationDto(
                 oasysUser.getOasysUserCode(),
                 oasysUser.getOasysUserCode(),
                 oasysUser.getUserForename1(),
