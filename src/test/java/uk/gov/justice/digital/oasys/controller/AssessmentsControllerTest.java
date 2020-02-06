@@ -103,7 +103,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderPk() {
-        Assessment assessments = given()
+        Assessment assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/assessments/latest", 1L)
@@ -113,7 +113,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+        assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderCrn() {
-        Assessment assessments = given()
+        Assessment assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/assessments/latest", "crn1")
@@ -153,7 +153,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+        assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
 
 
@@ -184,7 +184,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderPnc() {
-        Assessment assessments = given()
+        Assessment assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/assessments/latest", "pnc1")
@@ -194,7 +194,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+        assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
 
 
@@ -225,7 +225,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderNmisId() {
-        Assessment assessments = given()
+        Assessment assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/assessments/latest", "nomisId1")
@@ -235,7 +235,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+        assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
 
 
@@ -266,7 +266,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderBookingId() {
-        Assessment assessments = given()
+        Assessment assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/assessments/latest", "bookingId1")
@@ -276,7 +276,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessments).extracting("oasysSetId").containsOnly(2L);
+        assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
 
 
@@ -382,7 +382,7 @@ public class AssessmentsControllerTest {
                 .body()
                 .as(Assessment.class);
 
-        assertThat(assessment).extracting("oasysSetId").containsExactly(0L);
+        assertThat(assessment).extracting("oasysSetId").isEqualTo(0L);
 
     }
 

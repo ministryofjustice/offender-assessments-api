@@ -58,6 +58,7 @@ orbs:
   aws-cli: circleci/aws-cli@0.1.18
   kubernetes: circleci/kubernetes@0.10.1
   helm: circleci/helm@0.2.3
+  owasp: entur/owasp@0.0.6
 
 jobs:
   build:
@@ -145,6 +146,17 @@ jobs:
 
 workflows:
   version: 2
+  scheduled:
+    triggers:
+      - schedule:
+          cron: "0 7 * * 1-5"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - owasp/gradle_owasp_dependency_check:
+          executor: builder
   build-test-and-deploy:
     jobs:
       - build:

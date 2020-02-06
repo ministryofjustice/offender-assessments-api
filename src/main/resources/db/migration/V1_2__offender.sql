@@ -64,7 +64,7 @@ create table CMS_STUB_OFFENDER
 	CREATE_USER VARCHAR2(100) not null,
 	LASTUPD_DATE DATE,
 	LASTUPD_USER VARCHAR2(100) not null
-)
+);
 
 
 
@@ -189,7 +189,7 @@ create table OFFENDER
 		foreign key (ORIGINATING_CMS_CAT, ORIGINATING_CMS_ELM) references REF_ELEMENT,
 	constraint OFF_ELM_FK
 		foreign key (DISCHARGE_CODE_CAT, DISCHARGE_CODE_ELM) references REF_ELEMENT
-)
+);
 
 
 create table OFFENDER_ALIAS
@@ -214,7 +214,7 @@ create table OFFENDER_ALIAS
 	CREATE_USER VARCHAR2(100) not null,
 	LASTUPD_DATE DATE,
 	LASTUPD_USER VARCHAR2(100) not null
-)
+);
 
 
 create table OFFENDER_TEAM
@@ -244,7 +244,7 @@ create table OFFENDER_TEAM
 		foreign key (TEAM_ACCESS_TYPE_CAT, TEAM_ACCESS_TYPE_ELM) references REF_ELEMENT,
 	constraint OTE_TEA
 		foreign key (DIVISION_CODE, TEAM_CODE, CT_AREA_EST_CODE) references TEAM
-)
+);
 
 create table OFFENDER_USER
 (
@@ -272,7 +272,7 @@ create table OFFENDER_USER
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK110
 		foreign key (USER_ACCESS_TYPE_CAT, USER_ACCESS_TYPE_ELM) references REF_ELEMENT
-)
+);
 
 
 

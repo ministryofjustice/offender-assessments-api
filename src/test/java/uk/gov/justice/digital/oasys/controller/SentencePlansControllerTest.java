@@ -102,7 +102,7 @@ public class SentencePlansControllerTest {
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(sentencePlan).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
     }
 
     @Test
@@ -132,7 +132,7 @@ public class SentencePlansControllerTest {
 
     @Test
     public void canGetLatestSentencePlanForOffenderCrn() {
-        BasicSentencePlan SentencePlans = given()
+        BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/basicSentencePlans/latest", "crn1")
@@ -142,7 +142,7 @@ public class SentencePlansControllerTest {
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
     }
 
 
@@ -183,7 +183,7 @@ public class SentencePlansControllerTest {
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(sentencePlan).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
     }
 
 
@@ -214,7 +214,7 @@ public class SentencePlansControllerTest {
 
     @Test
     public void canGetLatestSentencePlanForOffenderNomisId() {
-        BasicSentencePlan SentencePlan = given()
+        BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/basicSentencePlans/latest", "nomisId1")
@@ -224,7 +224,7 @@ public class SentencePlansControllerTest {
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(SentencePlan).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
     }
 
 
@@ -255,7 +255,7 @@ public class SentencePlansControllerTest {
 
     @Test
     public void canGetLatestSentencePlanForOffenderBookingId() {
-        BasicSentencePlan SentencePlan = given()
+        BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/basicSentencePlans/latest", "bookingId1")
@@ -265,7 +265,7 @@ public class SentencePlansControllerTest {
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(SentencePlan).extracting("sentencePlanId").containsOnly(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
     }
 
 
