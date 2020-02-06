@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.OasysUserAuthentication;
 import uk.gov.justice.digital.oasys.jpa.entity.AuthenticationStatus;
@@ -38,6 +39,7 @@ public class AuthenticationService {
         objectMapper.disable(FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
+    @Cacheable("users")
     public Optional<OasysUserAuthentication> getUserByUserId(String username) {
         log.info("GRetrieving user with OASys username {}", username, value(EVENT, USER_AUTHENTICATION));
         return oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(username).map(user -> OasysUserAuthentication.from(user));
