@@ -10,7 +10,7 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.justice.digital.oasys.controller.ControllerTestContext.anOffender;
 
-public class OffenderTransformerTest {
+public class OffenderEntityTransformerTest {
 
     @Test
     public void offenderHasSentenceDetail() {

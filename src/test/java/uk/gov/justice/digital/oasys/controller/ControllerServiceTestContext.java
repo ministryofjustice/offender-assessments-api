@@ -34,14 +34,14 @@ public class ControllerServiceTestContext {
 
     }
 
-    public static Offender anOffender() {
-        return Offender.builder()
+    public static OffenderEntity anOffender() {
+        return OffenderEntity.builder()
                 .oasysAssessmentGroups(anAssessmentGroup())
                 .build();
     }
 
-    private static Offender assessedOffender() {
-        return Offender.builder()
+    private static OffenderEntity assessedOffender() {
+        return OffenderEntity.builder()
                 .oasysAssessmentGroups(anAssessmentGrouWithSingleSet())
                 .build();
     }

@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "OFFENDER")
-public class Offender {
+public class OffenderEntity {
     @Id
     @Column(name = "OFFENDER_PK")
     private Long offenderPk;

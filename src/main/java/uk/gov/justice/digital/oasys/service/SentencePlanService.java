@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.ProperSentencePlan;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderEntity;
 import uk.gov.justice.digital.oasys.transformer.AssessmentsTransformer;
 import uk.gov.justice.digital.oasys.transformer.BasicSentencePlanTransformer;
 import uk.gov.justice.digital.oasys.transformer.SentencePlanTransformer;
@@ -35,14 +35,14 @@ public class SentencePlanService {
         this.properSentencePlanTransformer = properSentencePlanTransformer;
     }
 
-    private Optional<BasicSentencePlan> latestBasicSentencePlanOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Offender offender) {
-        return getOasysSetStream(assessmentsFilter, offender)
+    private Optional<BasicSentencePlan> latestBasicSentencePlanOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, OffenderEntity offenderEntity) {
+        return getOasysSetStream(assessmentsFilter, offenderEntity)
                 .max(Comparator.comparing(OasysSet::getCreateDate))
                 .flatMap(basicSentencePlanTransformer::basicSentencePlanOf);
     }
 
-    private Stream<OasysSet> getOasysSetStream(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Offender offender) {
-        return offender.getOasysAssessmentGroups()
+    private Stream<OasysSet> getOasysSetStream(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, OffenderEntity offenderEntity) {
+        return offenderEntity.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream()));
     }
@@ -52,21 +52,21 @@ public class SentencePlanService {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        Offender offender = offenderService.findOffender(identityType,identity);
+        OffenderEntity offenderEntity = offenderService.findOffender(identityType,identity);
 
-        return latestBasicSentencePlanOf(assessmentsFilter, offender);
+        return latestBasicSentencePlanOf(assessmentsFilter, offenderEntity);
     }
 
     public List<BasicSentencePlan> getBasicSentencePlansForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        Offender offender = offenderService.findOffender(identityType,identity);
-        return basicSentencePlansOf(assessmentsFilter, offender);
+        OffenderEntity offenderEntity = offenderService.findOffender(identityType,identity);
+        return basicSentencePlansOf(assessmentsFilter, offenderEntity);
     }
 
-    private List<BasicSentencePlan> basicSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Offender offender) {
-        return getOasysSetStream(assessmentsFilter, offender)
+    private List<BasicSentencePlan> basicSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, OffenderEntity offenderEntity) {
+        return getOasysSetStream(assessmentsFilter, offenderEntity)
                 .map(basicSentencePlanTransformer::basicSentencePlanOf)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -77,13 +77,13 @@ public class SentencePlanService {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        Offender offender = offenderService.findOffender(identityType, identity);
-        return fullSentencePlansOf(assessmentsFilter, offender);
+        OffenderEntity offenderEntity = offenderService.findOffender(identityType, identity);
+        return fullSentencePlansOf(assessmentsFilter, offenderEntity);
 
     }
 
-    private List<ProperSentencePlan> fullSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, Offender offender) {
-        return getOasysSetStream(assessmentsFilter, offender)
+    private List<ProperSentencePlan> fullSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, OffenderEntity offenderEntity) {
+        return getOasysSetStream(assessmentsFilter, offenderEntity)
                 .map(properSentencePlanTransformer::sentencePlanOf)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

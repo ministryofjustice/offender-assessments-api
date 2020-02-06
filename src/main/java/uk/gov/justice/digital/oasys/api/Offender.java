@@ -3,6 +3,7 @@ package uk.gov.justice.digital.oasys.api;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Value;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderEntity;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
 import java.time.LocalDate;
@@ -47,36 +48,36 @@ public class Offender {
     private List<OffenderAlias> aliases;
     private Set<Sentence> sentence;
 
-    public static Offender from(uk.gov.justice.digital.oasys.jpa.entity.Offender offender) {
+    public static Offender from(OffenderEntity offenderEntity) {
         return Offender.builder()
-                .address(Address.from(offender))
-                .aliases(offender.getOffenderAliases() == null ? null : OffenderAlias.from(offender.getOffenderAliases()))
-                .cmsEventNumber(offender.getCmsEventNumber())
-                .custody(ynToBoolean(offender.getCustodyInd()))
-                .dateOfBirth(localDateOf(offender.getDateOfBirth()))
-                .dateOfDeath(localDateOf(offender.getDateOfDeath()))
-                .dateOfDeportation(localDateOf(offender.getDateOfDeportation()))
-                .deceased(ynToBoolean(offender.getDeceasedInd()))
-                .dischargeCode(Optional.ofNullable(offender.getDischargeCode()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
-                .ethnicCategory(Optional.ofNullable(offender.getEthnicCategory()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
-                .familyName(offender.getFamilyName())
-                .forename1(offender.getForename1())
-                .forename2(offender.getForename2())
-                .forename3(offender.getForename3())
-                .gender(Optional.ofNullable(offender.getGender()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
-                .identifiers(Identifiers.from(offender))
-                .lifer(ynToBoolean(offender.getLifeInd()))
-                .limitedAccessOffender(offender.getLimitedAccessOffender())
-                .merged(ynToBoolean(offender.getMergedInd()))
-                .nfa(ynToBoolean(offender.getNfaInd()))
-                .offenderHistoric(Optional.ofNullable(offender.getOffenderHistoric()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
-                .offenderManaged(ynToBoolean(offender.getOffenderManagedInd()))
-                .oasysOffenderId(offender.getOffenderPk())
-                .ppo(ynToBoolean(offender.getPpoInd()))
-                .remand(ynToBoolean(offender.getRemandInd()))
-                .riskToOthers(Optional.ofNullable(offender.getRiskToOthers()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
-                .riskToSelf(Optional.ofNullable(offender.getRiskToSelf()).map(RefElement::getRefElementDesc).orElse(null))
-                .sentence(sentenceOf(offender.getOasysAssessmentGroups()))
+                .address(Address.from(offenderEntity))
+                .aliases(offenderEntity.getOffenderAliases() == null ? null : OffenderAlias.from(offenderEntity.getOffenderAliases()))
+                .cmsEventNumber(offenderEntity.getCmsEventNumber())
+                .custody(ynToBoolean(offenderEntity.getCustodyInd()))
+                .dateOfBirth(localDateOf(offenderEntity.getDateOfBirth()))
+                .dateOfDeath(localDateOf(offenderEntity.getDateOfDeath()))
+                .dateOfDeportation(localDateOf(offenderEntity.getDateOfDeportation()))
+                .deceased(ynToBoolean(offenderEntity.getDeceasedInd()))
+                .dischargeCode(Optional.ofNullable(offenderEntity.getDischargeCode()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
+                .ethnicCategory(Optional.ofNullable(offenderEntity.getEthnicCategory()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
+                .familyName(offenderEntity.getFamilyName())
+                .forename1(offenderEntity.getForename1())
+                .forename2(offenderEntity.getForename2())
+                .forename3(offenderEntity.getForename3())
+                .gender(Optional.ofNullable(offenderEntity.getGender()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
+                .identifiers(Identifiers.from(offenderEntity))
+                .lifer(ynToBoolean(offenderEntity.getLifeInd()))
+                .limitedAccessOffender(offenderEntity.getLimitedAccessOffender())
+                .merged(ynToBoolean(offenderEntity.getMergedInd()))
+                .nfa(ynToBoolean(offenderEntity.getNfaInd()))
+                .offenderHistoric(Optional.ofNullable(offenderEntity.getOffenderHistoric()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
+                .offenderManaged(ynToBoolean(offenderEntity.getOffenderManagedInd()))
+                .oasysOffenderId(offenderEntity.getOffenderPk())
+                .ppo(ynToBoolean(offenderEntity.getPpoInd()))
+                .remand(ynToBoolean(offenderEntity.getRemandInd()))
+                .riskToOthers(Optional.ofNullable(offenderEntity.getRiskToOthers()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
+                .riskToSelf(Optional.ofNullable(offenderEntity.getRiskToSelf()).map(RefElement::getRefElementDesc).orElse(null))
+                .sentence(sentenceOf(offenderEntity.getOasysAssessmentGroups()))
                 .build();
     }
 }

@@ -3,7 +3,7 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderEntity;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OffenderSummary {
@@ -20,14 +20,14 @@ public class OffenderSummary {
     @JsonProperty("identifiers")
     private Identifiers identifiers;
 
-    public static OffenderSummary from(Offender offender) {
-        Identifiers identifiers = Identifiers.from(offender);
+    public static OffenderSummary from(OffenderEntity offenderEntity) {
+        Identifiers identifiers = Identifiers.from(offenderEntity);
         return new OffenderSummary(
-                offender.getOffenderPk(),
-                offender.getFamilyName(),
-                offender.getForename1(),
-                offender.getForename2(),
-                offender.getForename3(),
+                offenderEntity.getOffenderPk(),
+                offenderEntity.getFamilyName(),
+                offenderEntity.getForename1(),
+                offenderEntity.getForename2(),
+                offenderEntity.getForename3(),
                 identifiers);
     }
 }

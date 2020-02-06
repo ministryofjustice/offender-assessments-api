@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import com.google.common.collect.ImmutableList;
 import org.mockito.Mockito;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
@@ -33,14 +32,14 @@ public class ControllerTestContext {
 
     }
 
-    public static Optional<Offender> anOffender() {
-        return Optional.ofNullable(Offender.builder()
+    public static Optional<OffenderEntity> anOffender() {
+        return Optional.ofNullable(OffenderEntity.builder()
                 .oasysAssessmentGroups(anAssessmentGroup())
                 .build());
     }
 
-    private static Optional<Offender> assessedOffender() {
-        return Optional.ofNullable(Offender.builder()
+    private static Optional<OffenderEntity> assessedOffender() {
+        return Optional.ofNullable(OffenderEntity.builder()
                 .oasysAssessmentGroups(anAssessmentGrouWithSingleSet())
                 .build());
     }

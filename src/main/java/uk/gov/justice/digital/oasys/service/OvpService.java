@@ -3,7 +3,7 @@ package uk.gov.justice.digital.oasys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.Ovp;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderEntity;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
@@ -24,36 +24,36 @@ public class OvpService {
     }
 
     public Optional<List<Ovp>> getOvpForOasysOffenderPk(Long oasysOffenderPk) {
-        Optional<Offender> maybeOffender = offenderRepository.findById(oasysOffenderPk);
+        Optional<OffenderEntity> maybeOffender = offenderRepository.findById(oasysOffenderPk);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ovp>> getOvpForOffenderCRN(String crn) {
-        Optional<Offender> maybeOffender = offenderRepository.getByCmsProbNumber(crn);
+        Optional<OffenderEntity> maybeOffender = offenderRepository.getByCmsProbNumber(crn);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ovp>> getOvpForOffenderPNC(String pnc) {
-        Optional<Offender> maybeOffender = offenderRepository.getByPnc(pnc);
+        Optional<OffenderEntity> maybeOffender = offenderRepository.getByPnc(pnc);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ovp>> getOvpForOffenderNomisId(String nomisId) {
-        Optional<Offender> maybeOffender = offenderRepository.getByCmsPrisNumber(nomisId);
+        Optional<OffenderEntity> maybeOffender = offenderRepository.getByCmsPrisNumber(nomisId);
 
         return mapOffender(maybeOffender);
     }
 
     public Optional<List<Ovp>> getOvpForOffenderBookingId(String bookingId) {
-        Optional<Offender> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
+        Optional<OffenderEntity> maybeOffender = offenderRepository.getByPrisonNumber(bookingId);
 
         return mapOffender(maybeOffender);
     }
 
-    private Optional<List<Ovp>> mapOffender(Optional<Offender> maybeOffender) {
+    private Optional<List<Ovp>> mapOffender(Optional<OffenderEntity> maybeOffender) {
         return maybeOffender.map(offender -> offender.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(

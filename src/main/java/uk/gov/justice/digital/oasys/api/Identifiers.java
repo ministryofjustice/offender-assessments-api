@@ -3,7 +3,7 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderEntity;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Identifiers {
@@ -22,14 +22,14 @@ public class Identifiers {
     @JsonProperty("mergePncNumber")
     private String mergePncNumber;
 
-    public static Identifiers from(Offender offender) {
+    public static Identifiers from(OffenderEntity offenderEntity) {
         return new Identifiers(
-                offender.getPnc(),
-                offender.getCmsProbNumber(),
-                offender.getCmsPrisNumber(),
-                offender.getLegacyCmsProbNumber(),
-                offender.getCroNumber(),
-                offender.getPrisonNumber(),
-                offender.getMergePncNumber());
+                offenderEntity.getPnc(),
+                offenderEntity.getCmsProbNumber(),
+                offenderEntity.getCmsPrisNumber(),
+                offenderEntity.getLegacyCmsProbNumber(),
+                offenderEntity.getCroNumber(),
+                offenderEntity.getPrisonNumber(),
+                offenderEntity.getMergePncNumber());
     }
 }

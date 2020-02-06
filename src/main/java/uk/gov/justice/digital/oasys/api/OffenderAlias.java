@@ -3,7 +3,6 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 
 import java.time.LocalDate;

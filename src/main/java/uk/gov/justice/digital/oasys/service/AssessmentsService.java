@@ -1,21 +1,18 @@
 package uk.gov.justice.digital.oasys.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.*;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderEntity;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
-import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
 import uk.gov.justice.digital.oasys.transformer.AssessmentsTransformer;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static uk.gov.justice.digital.oasys.service.filters.AssessmentFilters.curry;
@@ -37,21 +34,21 @@ public class AssessmentsService {
     }
 
     public Stream<OasysSet> getAssessmentsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        Offender offender = offenderService.findOffender(identityType, identity);
+        OffenderEntity offenderEntity = offenderService.findOffender(identityType, identity);
 
         var assessmentsFilter = assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        return offender.getOasysAssessmentGroups()
+        return offenderEntity.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream()));
     }
 
     public Assessment getLatestAssessmentForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        Offender offender = offenderService.findOffender(identityType, identity);
+        OffenderEntity offenderEntity = offenderService.findOffender(identityType, identity);
 
         var assessmentsFilter = assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
-        var oasysSet = offender.getOasysAssessmentGroups()
+        var oasysSet = offenderEntity.getOasysAssessmentGroups()
                 .stream()
                 .flatMap(
                         oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream()))
