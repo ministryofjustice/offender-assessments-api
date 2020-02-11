@@ -3,8 +3,8 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,10 +30,17 @@ public class OffenderAliasDto {
     private static OffenderAliasDto from(uk.gov.justice.digital.oasys.jpa.entity.OffenderAlias alias) {
         return new OffenderAliasDto(
                 alias.getOffenderAliasPk(),
-                TypesTransformer.localDateOf(alias.getAliasDateOfBirth()),
+                localDateOf(alias.getAliasDateOfBirth()),
                 alias.getAliasFamilyName(),
                 alias.getAliasForename1(),
                 alias.getAliasForename2());
+    }
+
+    private static LocalDate localDateOf(Timestamp timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+        return timestamp.toLocalDateTime().toLocalDate();
     }
 
 }

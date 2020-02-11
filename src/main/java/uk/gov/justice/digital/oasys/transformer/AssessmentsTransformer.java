@@ -12,6 +12,8 @@ import uk.gov.justice.digital.oasys.jpa.entity.QaReview;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,11 +29,11 @@ public class AssessmentsTransformer {
 
     public Assessment assessmentOf(OasysSet oasysSet) {
         return Assessment.builder()
-                .createdDateTime(TypesTransformer.localDateTimeOf(oasysSet.getCreateDate()))
+                .createdDateTime(localDateTimeOf(oasysSet.getCreateDate()))
                 .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
                 .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()))
                 .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
-                .completedDateTime(TypesTransformer.localDateTimeOf(oasysSet.getDateCompleted()))
+                .completedDateTime(localDateTimeOf(oasysSet.getDateCompleted()))
                 .oasysSetId(oasysSet.getOasysSetPk())
                 .oasysBcsParts(oasysBcsPartsOf(oasysSet.getOasysBcsParts()))
                 .qaReview(QaReviewOf(oasysSet.getQaReview()))
@@ -62,7 +64,7 @@ public class AssessmentsTransformer {
                 .sectionOvpRawScore(section.getSectOvpRawScore())
                 .sectionOtherWeightedScore(section.getSectOtherWeightedScore())
                 .sectionOtherRawScore(section.getSectOtherRawScore())
-                .lowScoreAttentionNeeded(TypesTransformer.ynToBoolean(section.getLowScoreNeedAttnInd()))
+                .lowScoreAttentionNeeded(ynToBoolean(section.getLowScoreNeedAttnInd()))
                 .questions(questionsOf(section.getOasysQuestions()))
                 .refSection(refSectionOf(section.getRefSection()))
                 .build();
@@ -72,8 +74,8 @@ public class AssessmentsTransformer {
         return RefSection.builder()
                 .refCrimNeedScoreThreshold(refSection.getCrimNeedScoreThreshold())
                 .refFormSequence(refSection.getFormSequence())
-                .refScoredForOgp(TypesTransformer.ynToBoolean(refSection.getScoredForOgp()))
-                .refScoredForOvp(TypesTransformer.ynToBoolean(refSection.getScoredForOvp()))
+                .refScoredForOgp(ynToBoolean(refSection.getScoredForOgp()))
+                .refScoredForOvp(ynToBoolean(refSection.getScoredForOvp()))
                 .refSectionCode(refSection.getRefSectionCode())
                 .shortDescription(refSection.getSectionType().getRefElementShortDesc()).build();
     }
@@ -132,20 +134,20 @@ public class AssessmentsTransformer {
     private uk.gov.justice.digital.oasys.api.OasysBcsPart oasysBcsPartOf(OasysBcsPart oasysBcsPart) {
         return Optional.ofNullable(oasysBcsPart)
                 .map(oasysBcsPart1 -> uk.gov.justice.digital.oasys.api.OasysBcsPart.builder()
-                        .bcsPartCompDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getCreateDate()))
+                        .bcsPartCompDate(localDateTimeOf(oasysBcsPart.getCreateDate()))
                         .bcsPart(oasysBcsPart.getBcsPart())
                         .bcsPartStatus(oasysBcsPart.getBcsPartStatus())
                         .bcsPartUserArea(oasysBcsPart.getBcsPartUserArea())
                         .bcsPartUserPosition(oasysBcsPart.getBcsPartUserPosition())
-                        .createDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getCreateDate()))
+                        .createDate(localDateTimeOf(oasysBcsPart.getCreateDate()))
                         .createUser(oasysBcsPart.getCreateUser())
-                        .lastupdDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getLastupdDate()))
+                        .lastupdDate(localDateTimeOf(oasysBcsPart.getLastupdDate()))
                         .lastupdUser(oasysBcsPart.getLastupdUser())
                         .lockIncompleteOtherText(oasysBcsPart.getLockIncompleteOtherText())
                         .lockIncompleteReason(oasysBcsPart.getLockIncompleteReason())
-                        .part1CheckedDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getPart1CheckedDate()))
+                        .part1CheckedDate(localDateTimeOf(oasysBcsPart.getPart1CheckedDate()))
                         .part1CheckedInd(oasysBcsPart.getPart1CheckedInd())
-                        .praCompDate(TypesTransformer.localDateTimeOf(oasysBcsPart.getPraCompDate()))
+                        .praCompDate(localDateTimeOf(oasysBcsPart.getPraCompDate()))
                         .praComplete(oasysBcsPart.getPraComplete())
                         .praCompUser(oasysBcsPart.getPraCompUser())
                         .bcsPartUser(oasysUserOf(oasysBcsPart.getBcsPartUser()))
@@ -168,9 +170,9 @@ public class AssessmentsTransformer {
     private uk.gov.justice.digital.oasys.api.QaReview QaReviewOf(QaReview qaReview) {
         return Optional.ofNullable(qaReview)
                 .map(qaReview1 -> uk.gov.justice.digital.oasys.api.QaReview.builder()
-                        .currentlyHidden(TypesTransformer.ynToBoolean(qaReview.getCurrentlyHidden()))
-                        .dateCompleted(TypesTransformer.localDateTimeOf(qaReview.getDateCompleted()))
-                        .dateSelected(TypesTransformer.localDateTimeOf(qaReview.getDateSelected()))
+                        .currentlyHidden(ynToBoolean(qaReview.getCurrentlyHidden()))
+                        .dateCompleted(localDateTimeOf(qaReview.getDateCompleted()))
+                        .dateSelected(localDateTimeOf(qaReview.getDateSelected()))
                         .displaySort(qaReview.getDisplaySort())
                         .qaGrading(qaReview.getQaGrading())
                         .qaScore(qaReview.getQaScore())
@@ -202,6 +204,18 @@ public class AssessmentsTransformer {
                         filterVoided.map(
                                 voided -> curry(AssessmentFilters.byVoided, voided))
                                 .orElse(AssessmentFilters.identity));
+    }
+
+    private static LocalDateTime localDateTimeOf(Timestamp timestamp) {
+        return Optional.ofNullable(timestamp)
+                .map(t -> t.toLocalDateTime())
+                .orElse(null);
+    }
+
+    private static Boolean ynToBoolean(String yn) {
+        return Optional.ofNullable(yn)
+                .map("Y"::equalsIgnoreCase)
+                .orElse(null);
     }
 
 }

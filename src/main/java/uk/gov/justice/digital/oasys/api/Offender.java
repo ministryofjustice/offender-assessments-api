@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static uk.gov.justice.digital.oasys.transformer.OffenderTransformer.sentenceOf;
-import static uk.gov.justice.digital.oasys.transformer.TypesTransformer.localDateOf;
-import static uk.gov.justice.digital.oasys.transformer.TypesTransformer.ynToBoolean;
 
 @Value
 @Builder(access = AccessLevel.PRIVATE)
@@ -78,5 +77,18 @@ public class Offender {
                 .riskToSelf(Optional.ofNullable(offender.getRiskToSelf()).map(RefElement::getRefElementDesc).orElse(null))
                 .sentence(sentenceOf(offender.getOasysAssessmentGroups()))
                 .build();
+    }
+
+    private static LocalDate localDateOf(Timestamp timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+        return timestamp.toLocalDateTime().toLocalDate();
+    }
+
+    private static Boolean ynToBoolean(String yn) {
+        return Optional.ofNullable(yn)
+                .map("Y"::equalsIgnoreCase)
+                .orElse(null);
     }
 }
