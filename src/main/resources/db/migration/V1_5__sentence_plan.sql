@@ -24,7 +24,7 @@ create table SSP_WHO_DO_WORK_PIVOT
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK23
 		foreign key (WHO_WORK_OBJ_CAT, WHO_WORK_OBJ_ELM) references REF_ELEMENT
-)
+);
 
 
 create table SSP_INTERVENTION_MEASURE
@@ -49,7 +49,7 @@ create table SSP_INTERVENTION_MEASURE
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK19
 		foreign key (INTERVENE_MEAS_CODE_CAT, INTERVENE_MEAS_CODE_ELM) references REF_ELEMENT
-)
+);
 
 
 create table SSP_OBJECTIVES_IN_SET
@@ -78,7 +78,7 @@ create table SSP_OBJECTIVES_IN_SET
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK20
 		foreign key (OBJECTIVE_TYPE_CAT, OBJECTIVE_TYPE_ELM) references REF_ELEMENT
-)
+);
 
 
 
@@ -106,7 +106,7 @@ create table SSP_CRIM_NEED_OBJ_PIVOT
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK17
 		foreign key (CRIMINOGENIC_NEED_CAT, CRIMINOGENIC_NEED_ELM) references REF_ELEMENT
-)
+);
 
 
 create table SSP_OBJECTIVE_MEASURE
@@ -130,7 +130,7 @@ create table SSP_OBJECTIVE_MEASURE
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK21
 		foreign key (OBJECTIVE_STATUS_CAT, OBJECTIVE_STATUS_ELM) references REF_ELEMENT
-)
+);
 
 
 create table SSP_OBJECTIVE
@@ -153,7 +153,7 @@ create table SSP_OBJECTIVE
 	CREATE_USER VARCHAR2(100) not null,
 	LASTUPD_DATE DATE,
 	LASTUPD_USER VARCHAR2(100) not null
-)
+);
 
 
 
@@ -181,7 +181,7 @@ create table SSP_OBJ_INTERVENE_PIVOT
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint SSP_OBJ_INTERVENE_PIVOT_UN
 		unique (SSP_OBJECTIVES_IN_SET_PK, SSP_INTERVENTION_IN_SET_PK)
-)
+);
 
 create table SSP_CONTRIBUTOR
 (
@@ -205,6 +205,6 @@ create table SSP_CONTRIBUTOR
 	CREATE_USER VARCHAR2(100) not null,
 	LASTUPD_DATE DATE,
 	LASTUPD_USER VARCHAR2(100) not null
-)
+);
 
 

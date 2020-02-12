@@ -6,9 +6,8 @@ server:
 
 spring:
   datasource:
-    url: jdbc:hsqldb:mem:oasys-db;sql.syntax_ora=true;get_column_name=false;shutdown=false;sql.nulls_first=false;sql.nulls_order=false
-    username: sa
-    password:
+    url: 'jdbc:h2:mem:testdb;Mode=Oracle'
+    type: com.zaxxer.hikari.HikariDataSource
 
   flyway:
     enabled: true
