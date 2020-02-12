@@ -10,6 +10,7 @@ import uk.gov.justice.digital.oasys.utils.LogEvent;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -84,7 +85,7 @@ public class ControllerServiceTestContext {
                         .ovpSexWesc(BigDecimal.ONE)
                         .group(aGroup("HISTORIC"))
                         .assessmentStatus(anAssessmentStatus("OPEN"))
-                        .basicSentencePlanList(aSentencePlan(1L))
+                        .basicSentencePlanList(Set.of(aSentencePlan(1L), aSentencePlan(2L)))
                         .offenceBlock(anOffenceBlock())
                         .build(),
                 OasysSet.builder()
@@ -111,7 +112,7 @@ public class ControllerServiceTestContext {
                         .group(aGroup("CURRENT"))
                         .assessmentStatus(anAssessmentStatus("COMPLETE"))
                         .assessmentVoidedDate(new Timestamp(System.currentTimeMillis()))
-                        .basicSentencePlanList(aSentencePlan(2L))
+                        .basicSentencePlanList(Set.of(aSentencePlan(2L)))
                         .offenceBlock(anOffenceBlock())
                         .build());
     }
@@ -138,16 +139,20 @@ public class ControllerServiceTestContext {
                 .build());
     }
 
-    private static Set<BasicSentencePlanObj> aSentencePlan(long l) {
-        return Set.of(
-                BasicSentencePlanObj.builder()
+    private static BasicSentencePlanObj aSentencePlan(long l) {
+                return BasicSentencePlanObj.builder()
+                        .basicSentPlanObjPk(1l)
+                        .includeInPlanInd("Y")
+                        .createDate(LocalDateTime.now().minusDays(1))
                         .objectiveText("obj" + l)
                         .measureText("measure" + l)
                         .timescalesText("timescales" + l)
                         .whoWillDoWorkText("who" + l)
                         .whatWorkText("what" + l)
-                        .oasysSetPk(l).build()
-        );
+                        .dateOpened(LocalDateTime.now().minusDays(10))
+                        .problemAreaCompInd("Y")
+                        .offenceBehaviourLink(RefElement.builder().refElementShortDesc("LINK" + l).refElementDesc("Link" + l).build())
+                        .oasysSetPk(l).build();
     }
 
     private static RefElement anAssessmentStatus(String status) {
@@ -177,10 +182,12 @@ public class ControllerServiceTestContext {
 
     public static OasysSet layer3AssessmentOasysSet(Long id) {
         return OasysSet.builder()
+                .createDate(new Timestamp(System.currentTimeMillis() - oneDay()))
                 .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
                 .group(OasysAssessmentGroup.builder().build())
                 .oasysSections(completeLayer3AssessmentSections())
                 .assessmentStatus(RefElement.builder().build())
+                .basicSentencePlanList(Set.of(aSentencePlan(1), aSentencePlan(2)))
                 .oasysSetPk(id).build();
     }
 
