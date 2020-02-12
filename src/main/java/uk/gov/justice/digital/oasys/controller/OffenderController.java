@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.justice.digital.oasys.api.Offender;
+import uk.gov.justice.digital.oasys.api.OffenderDto;
 import uk.gov.justice.digital.oasys.api.OffenderSummaryDto;
 import uk.gov.justice.digital.oasys.service.OffenderService;
 
@@ -28,8 +28,8 @@ public class OffenderController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<Offender> getOffenderByPk(@PathVariable("identityType") String identityType, @PathVariable("identity") String identity) {
-        return ResponseEntity.ok(Offender.from(offenderService.findOffender(identityType, identity)));
+    public ResponseEntity<OffenderDto> getOffenderByPk(@PathVariable("identityType") String identityType, @PathVariable("identity") String identity) {
+        return ResponseEntity.ok(offenderService.findOffender(identityType, identity));
     }
 
     @RequestMapping(path = "/offenders/{identityType}/{identity}/summary", method = RequestMethod.GET)
@@ -37,7 +37,7 @@ public class OffenderController {
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<OffenderSummaryDto> getOffenderSummaryByPk(@PathVariable("identityType") String identityType, @PathVariable("identity") String identity) {
-        return ResponseEntity.ok(OffenderSummaryDto.from(offenderService.findOffender(identityType, identity)));
+        return ResponseEntity.ok(offenderService.findOffenderSummary(identityType, identity));
     }
 
 }

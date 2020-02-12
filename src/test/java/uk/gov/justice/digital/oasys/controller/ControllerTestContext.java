@@ -8,6 +8,7 @@ import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,12 +37,14 @@ public class ControllerTestContext {
     public static Optional<Offender> anOffender() {
         return Optional.ofNullable(Offender.builder()
                 .oasysAssessmentGroups(anAssessmentGroup())
+                .offenderAliases(List.of())
                 .build());
     }
 
     private static Optional<Offender> assessedOffender() {
         return Optional.ofNullable(Offender.builder()
                 .oasysAssessmentGroups(anAssessmentGrouWithSingleSet())
+                .offenderAliases(List.of())
                 .build());
     }
 
@@ -128,11 +131,11 @@ public class ControllerTestContext {
                         .builder()
                         .cjaInd("Y")
                         .custodialInd("Y")
-                        .endDate(Timestamp.from(Instant.MAX))
+                        .endDate(LocalDate.MAX)
                         .orderType(RefElement.builder().refElementDesc("orderType").build())
                         .sentenceCode("sentenceCode")
                         .sentenceDesc("sentenceDesc")
-                        .startDate(Timestamp.from(Instant.MIN))
+                        .startDate(LocalDate.MIN)
                         .build()
                 )
                 .build(),
@@ -148,11 +151,11 @@ public class ControllerTestContext {
                                 .builder()
                                 .cjaInd("Y")
                                 .custodialInd("Y")
-                                .endDate(Timestamp.from(Instant.MAX))
+                                .endDate(LocalDate.MAX)
                                 .orderType(RefElement.builder().refElementDesc("orderType").build())
                                 .sentenceCode("310")
                                 .sentenceDesc("Life")
-                                .startDate(Timestamp.from(Instant.MIN))
+                                .startDate(LocalDate.MIN)
                                 .build()
                         )
                         .build());

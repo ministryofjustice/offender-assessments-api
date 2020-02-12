@@ -22,6 +22,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static uk.gov.justice.digital.oasys.api.DtoUtils.ynToBoolean;
 import static uk.gov.justice.digital.oasys.service.filters.AssessmentFilters.curry;
 
 @Component
@@ -209,12 +210,6 @@ public class AssessmentsTransformer {
     private static LocalDateTime localDateTimeOf(Timestamp timestamp) {
         return Optional.ofNullable(timestamp)
                 .map(t -> t.toLocalDateTime())
-                .orElse(null);
-    }
-
-    private static Boolean ynToBoolean(String yn) {
-        return Optional.ofNullable(yn)
-                .map("Y"::equalsIgnoreCase)
                 .orElse(null);
     }
 

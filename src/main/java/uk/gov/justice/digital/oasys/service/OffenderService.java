@@ -2,11 +2,15 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.OffenderIdentifierDto;
+import uk.gov.justice.digital.oasys.api.OffenderDto;
+import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
+import uk.gov.justice.digital.oasys.api.OffenderSummaryDto;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 
+import java.util.List;
 import java.util.Optional;
 
 import static uk.gov.justice.digital.oasys.utils.LogEvent.OFFENDER_NOT_FOUND;
@@ -21,12 +25,25 @@ public class OffenderService {
         this.offenderRepository = offenderRepository;
     }
 
-    public Offender findOffender(String identifierType, String identifier) {
+    public OffenderDto findOffender(String identifierType, String identifier) {
+        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
+        return OffenderDto.from(findOffenderByIdentifier(offenderIdentifier, identifier));
+    }
 
-        OffenderIdentifierDto offenderIdentifier = OffenderIdentifierDto.fromString(identifierType);
+    public OffenderSummaryDto findOffenderSummary(String identifierType, String identifier) {
+        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
+        return OffenderSummaryDto.from(findOffenderByIdentifier(offenderIdentifier, identifier));
+    }
+
+    public List<OasysAssessmentGroup> findOffenderAssessmentGroup(String identifierType, String identifier) {
+        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
+        return findOffenderByIdentifier(offenderIdentifier, identifier).getOasysAssessmentGroups();
+    }
+
+    private Offender findOffenderByIdentifier(OffenderIdentifier identifierType, String identifier) {
 
         Optional<Offender> offender;
-        switch (offenderIdentifier) {
+        switch (identifierType) {
             case CRN:
                 offender = offenderRepository.getByCmsProbNumber(identifier);
                 break;

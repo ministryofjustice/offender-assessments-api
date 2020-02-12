@@ -10,6 +10,7 @@ import uk.gov.justice.digital.oasys.utils.LogEvent;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -21,30 +22,26 @@ public class ControllerServiceTestContext {
 
     public static void setup(OffenderService offenderService) {
 
-        Mockito.when(offenderService.findOffender(any(),eq("crn1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffender(any(),eq("crn2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffender(any(),eq("nomisId1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffender(any(),eq("nomisId2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffender(any(),eq("bookingId1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffender(any(),eq("bookingId2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffender(any(),eq("pnc1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffender(any(),eq("pnc2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffender(any(),eq("1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffender(any(),eq("2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffender(any(),eq("3"))).thenReturn(assessedOffender());
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("crn1"))).thenReturn(anOffender());
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("crn2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("nomisId1"))).thenReturn(anOffender());
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("nomisId2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("bookingId1"))).thenReturn(anOffender());
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("bookingId2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("pnc1"))).thenReturn(anOffender());
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("pnc2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("1"))).thenReturn(anOffender());
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
+        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("3"))).thenReturn(assessedOffender());
 
     }
 
-    public static Offender anOffender() {
-        return Offender.builder()
-                .oasysAssessmentGroups(anAssessmentGroup())
-                .build();
+    public static List<OasysAssessmentGroup>  anOffender() {
+        return anAssessmentGroup();
     }
 
-    private static Offender assessedOffender() {
-        return Offender.builder()
-                .oasysAssessmentGroups(anAssessmentGrouWithSingleSet())
-                .build();
+    private static List<OasysAssessmentGroup>  assessedOffender() {
+        return anAssessmentGrouWithSingleSet();
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGroup() {
@@ -129,11 +126,11 @@ public class ControllerServiceTestContext {
                         .builder()
                         .cjaInd("Y")
                         .custodialInd("Y")
-                        .endDate(Timestamp.from(Instant.MAX))
+                        .endDate(LocalDate.MAX)
                         .orderType(RefElement.builder().refElementDesc("orderType").build())
                         .sentenceCode("sentenceCode")
                         .sentenceDesc("sentenceDesc")
-                        .startDate(Timestamp.from(Instant.MIN))
+                        .startDate(LocalDate.MIN)
                         .build()
                 )
                 .build());
