@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Address {
+public class AddressDto {
 
     @JsonProperty("addressLine1")
     private String addressLine1;
@@ -24,8 +24,8 @@ public class Address {
     @JsonProperty("telephoneNumber")
     private String telephoneNumber;
 
-    public static Address from (uk.gov.justice.digital.oasys.jpa.entity.Offender offender) {
-        return new Address(
+    public static AddressDto from (uk.gov.justice.digital.oasys.jpa.entity.Offender offender) {
+        return new AddressDto(
                 offender.getAddressLine1(),
                 offender.getAddressLine2(),
                 offender.getAddressLine3(),

@@ -16,7 +16,7 @@ create table REF_CATEGORY
 	CREATE_USER VARCHAR2(100) not null,
 	LASTUPD_DATE DATE,
 	LASTUPD_USER VARCHAR2(100) not null
-)
+);
 
 
 create table REF_CATEGORY_COLUMN
@@ -36,7 +36,7 @@ create table REF_CATEGORY_COLUMN
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint REF_CATEGORY_COLUMN_PK
 		primary key (TABLE_NAME, COLUMN_NAME, REF_CATEGORY_CODE)
-)
+);
 
 
 create table REF_ELEMENT
@@ -61,7 +61,7 @@ create table REF_ELEMENT
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint REF_ELEMENT_PK
 		primary key (REF_CATEGORY_CODE, REF_ELEMENT_CODE)
-)
+);
 
 
 create table COURT
@@ -89,7 +89,7 @@ create table COURT
 		foreign key (COURT_TYPE_CAT, COURT_TYPE_ELM) references REF_ELEMENT,
 	constraint ELM_FK36
 		foreign key (LOCAL_JUSTICE_AREA_CAT, LOCAL_JUSTICE_AREA_ELM) references REF_ELEMENT
-)
+);
 
 
 create table CT_AREA_EST
@@ -146,7 +146,7 @@ create table CT_AREA_EST
 		foreign key (SHOW_SDR_EVIDENCE_CAT, SHOW_SDR_EVIDENCE_ELM) references REF_ELEMENT,
 	constraint ELM_FKX50
 		foreign key (AREA_EST_TYPE_CAT, AREA_EST_TYPE_ELM) references REF_ELEMENT
-)
+);
 
 
 create table AREA_EST_COURT
@@ -167,7 +167,7 @@ create table AREA_EST_COURT
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint AREA_EST_COURT_PK
 		primary key (COURT_PK, CT_AREA_EST_CODE)
-)
+);
 
 
 create table AREA_INTERVENTION
@@ -189,7 +189,7 @@ create table AREA_INTERVENTION
 		primary key (INTERVENTION_CAT, INTERVENTION_ELM, CT_AREA_EST_CODE),
 	constraint ELM_FK42
 		foreign key (INTERVENTION_CAT, INTERVENTION_ELM) references REF_ELEMENT
-)
+);
 
 
 create table DIVISION
@@ -211,7 +211,7 @@ create table DIVISION
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint DIVISION_PK
 		primary key (CT_AREA_EST_CODE, DIVISION_CODE)
-)
+);
 
 
 
@@ -235,7 +235,7 @@ create table OBJECTIVE
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK93
 		foreign key (OBJECTIVE_HEADING_CAT, OBJECTIVE_HEADING_ELM) references REF_ELEMENT
-)
+);
 
 
 create table OFFICE
@@ -266,7 +266,7 @@ create table OFFICE
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint OFFICE_PK
 		primary key (CT_AREA_EST_CODE, OFFICE_CODE)
-)
+);
 
 create table REF_MODULE
 (
@@ -282,7 +282,7 @@ create table REF_MODULE
 	CREATE_USER VARCHAR2(100) not null,
 	LASTUPD_DATE DATE,
 	LASTUPD_USER VARCHAR2(100) not null
-)
+);
 
 
 create table REF_ASS_VERSION
@@ -310,7 +310,7 @@ create table REF_ASS_VERSION
 		primary key (REF_ASS_VERSION_CODE, VERSION_NUMBER),
 	constraint ELM_FK119
 		foreign key (ASSESSMENT_TYPE_CAT, ASSESSMENT_TYPE_ELM) references REF_ELEMENT
-)
+);
 
 
 create table REF_ROLE
@@ -335,7 +335,7 @@ create table REF_ROLE
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK127
 		foreign key (ROLE_TYPE_CAT, ROLE_TYPE_ELM) references REF_ELEMENT
-)
+);
 
 
 
@@ -379,7 +379,7 @@ create table REF_FUNCTION
 		foreign key (SIGNOFF_TYPE_CAT, SIGNOFF_TYPE_ELM) references REF_ELEMENT,
 	constraint ELM_FK125
 		foreign key (RBAC_TYPE_CAT, RBAC_TYPE_ELM) references REF_ELEMENT
-)
+);
 
 
 create table REF_ROLE_FUNCTION
@@ -403,7 +403,7 @@ create table REF_ROLE_FUNCTION
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint REF_ROLE_FUNCTION_PK
 		primary key (REF_FUNCTION_CODE, REF_ROLE_CODE)
-)
+);
 
 
 create table REF_SECTION
@@ -432,7 +432,7 @@ create table REF_SECTION
 	constraint RAV_RSE
 		foreign key (REF_ASS_VERSION_CODE, VERSION_NUMBER) references REF_ASS_VERSION
 			on delete cascade
-)
+);
 
 
 create table REF_QUESTION
@@ -469,7 +469,7 @@ create table REF_QUESTION
 	constraint RSE_RQU
 		foreign key (REF_SECTION_CODE, REF_ASS_VERSION_CODE, VERSION_NUMBER) references REF_SECTION
 			on delete cascade
-)
+);
 
 
 create table REF_ANSWER
@@ -498,4 +498,4 @@ create table REF_ANSWER
 	constraint RQU_RAN
 		foreign key (REF_ASS_VERSION_CODE, VERSION_NUMBER, REF_SECTION_CODE, REF_QUESTION_CODE) references REF_QUESTION
 			on delete cascade
-)
+);

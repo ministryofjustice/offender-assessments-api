@@ -21,7 +21,7 @@ public class AssessmentSummary {
     @JsonProperty("assessmentStatus")
     private String assessmentStatus;
     @JsonProperty("assessmentVersion")
-    private AssessmentVersion assessmentVersion;
+    private AssessmentVersionDto assessmentVersion;
     @JsonProperty("createdDateTime")
     private LocalDateTime createdDateTime;
     @JsonProperty("completed")
@@ -42,7 +42,7 @@ public class AssessmentSummary {
                 oasysSet.getAssessmentType().getRefElementCode(),
                 oasysSet.getGroup().getHistoricStatusELm(),
                 oasysSet.getAssessmentStatus().getRefElementCode(),
-                oasysSet.getRefAssVersion() == null ? null : AssessmentVersion.from(oasysSet.getRefAssVersion()),
+                oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()),
                 oasysSet.getCreateDate() == null ? null : oasysSet.getCreateDate().toLocalDateTime(),
                 oasysSet.getDateCompleted() == null ? false : true,
                 oasysSet.getDateCompleted() == null ? null : oasysSet.getDateCompleted().toLocalDateTime(),

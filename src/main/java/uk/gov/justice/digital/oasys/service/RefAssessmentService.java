@@ -10,7 +10,6 @@ import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersionPK;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.RefAssessmentRepository;
-import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,8 +59,8 @@ public class RefAssessmentService {
         return RefSection.builder()
                 .refCrimNeedScoreThreshold(refSection.getCrimNeedScoreThreshold())
                 .refFormSequence(refSection.getFormSequence())
-                .refScoredForOgp(TypesTransformer.ynToBoolean(refSection.getScoredForOgp()))
-                .refScoredForOvp(TypesTransformer.ynToBoolean(refSection.getScoredForOgp()))
+                .refScoredForOgp(ynToBoolean(refSection.getScoredForOgp()))
+                .refScoredForOvp(ynToBoolean(refSection.getScoredForOgp()))
                 .refSectionCode(refSection.getRefSectionCode())
                 .refSectionId(refSection.getRefSectionUk())
                 .shortDescription(shortDescriptionOf(refSection.getSectionType()))
@@ -91,7 +90,7 @@ public class RefAssessmentService {
         return RefQuestion.builder()
                 .refCtAreaEstCode(refQuestion.getCtAreaEstCode())
                 .refDisplaySort(refQuestion.getDisplaySort())
-                .refMandatoryIndicator(TypesTransformer.ynToBoolean(refQuestion.getMandatoryInd()))
+                .refMandatoryIndicator(ynToBoolean(refQuestion.getMandatoryInd()))
                 .refQAWeighting(refQuestion.getQaWeighting())
                 .refQuestionCode(refQuestion.getRefQuestionCode())
                 .refQuestionId(refQuestion.getRefQuestionUk())
@@ -118,5 +117,11 @@ public class RefAssessmentService {
                         .build())
                 .orElse(null);
 
+    }
+
+    private static Boolean ynToBoolean(String yn) {
+        return Optional.ofNullable(yn)
+                .map("Y"::equalsIgnoreCase)
+                .orElse(null);
     }
 }

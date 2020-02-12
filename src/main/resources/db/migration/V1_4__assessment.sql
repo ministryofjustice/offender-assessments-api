@@ -21,7 +21,7 @@ create table OASYS_ASSESSMENT_GROUP
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK54
 		foreign key (HISTORIC_STATUS_CAT, HISTORIC_STATUS_ELM) references REF_ELEMENT
-)
+);
 
 
 
@@ -301,7 +301,7 @@ create table OASYS_SET
 		foreign key (REF_ASS_VERSION_CODE, VERSION_NUMBER) references REF_ASS_VERSION,
 	constraint TEA_OAS
 		foreign key (ORIGINATING_DIVISION_CODE, ORIGINATING_TEAM_CODE, ORIGINATING_AREAEST_CODE) references TEAM
-)
+);
 
 create table QA_REVIEW
 (
@@ -342,7 +342,7 @@ create table QA_REVIEW
 		foreign key (QA_GRADING_CAT, QA_GRADING_ELM) references REF_ELEMENT,
 	constraint ELM_FK116
 		foreign key (QA_STATUS_CAT, QA_STATUS_ELM) references REF_ELEMENT
-)
+);
 
 
 create table VICTIM
@@ -378,7 +378,7 @@ create table VICTIM
 		foreign key (ETHNIC_CATEGORY_CAT, ETHNIC_CATEGORY_ELM) references REF_ELEMENT,
 	constraint ELM_FK35
 		foreign key (VICTIM_RELATION_CAT, VICTIM_RELATION_ELM) references REF_ELEMENT
-)
+);
 
 
 create table OASYS_BCS_PART
@@ -427,7 +427,7 @@ create table OASYS_BCS_PART
 		foreign key (BCS_PART_CAT, BCS_PART_ELM) references REF_ELEMENT,
 	constraint OBP_RET_FK4
 		foreign key (BCS_PART_STATUS_CAT, BCS_PART_STATUS_ELM) references REF_ELEMENT
-)
+);
 
 
 create table OASYS_SECTION
@@ -478,7 +478,7 @@ create table OASYS_SECTION
 		foreign key (SECTION_STATUS_CAT, SECTION_STATUS_ELM) references REF_ELEMENT,
 	constraint RSE_OSE
 		foreign key (REF_SECTION_CODE, REF_ASS_VERSION_CODE, VERSION_NUMBER) references REF_SECTION
-)
+);
 
 
 create table BASIC_SENTENCE_PLAN_OBJ
@@ -520,7 +520,7 @@ create table BASIC_SENTENCE_PLAN_OBJ
 	SERVICE_LEVEL NUMBER,
 	constraint ELM_FK96
 		foreign key (OFFENCE_BEHAV_LINK_CAT, OFFENCE_BEHAV_LINK_ELM) references REF_ELEMENT
-)
+);
 
 
 create table OASYS_QUESTION
@@ -552,7 +552,7 @@ create table OASYS_QUESTION
 		unique (OASYS_SECTION_PK, REF_ASS_VERSION_CODE, VERSION_NUMBER, REF_SECTION_CODE, REF_QUESTION_CODE),
 	constraint RQU_OQU
 		foreign key (REF_ASS_VERSION_CODE, VERSION_NUMBER, REF_SECTION_CODE, REF_QUESTION_CODE) references REF_QUESTION
-)
+);
 
 
 create table OASYS_ANSWER
@@ -580,7 +580,7 @@ create table OASYS_ANSWER
 		unique (OASYS_QUESTION_PK, REF_ASS_VERSION_CODE, VERSION_NUMBER, REF_SECTION_CODE, REF_QUESTION_CODE, REF_ANSWER_CODE),
 	constraint RAN_OAN
 		foreign key (REF_ASS_VERSION_CODE, VERSION_NUMBER, REF_SECTION_CODE, REF_QUESTION_CODE, REF_ANSWER_CODE) references REF_ANSWER
-)
+);
 
 
 create table OFFENCE_BLOCK
@@ -636,7 +636,7 @@ create table OFFENCE_BLOCK
 		foreign key (OFFENCE_BLOCK_TYPE_CAT, OFFENCE_BLOCK_TYPE_ELM) references REF_ELEMENT,
 	constraint ELM_FK95
 		foreign key (LEVEL_OF_SERIOUSNESS_CAT, LEVEL_OF_SERIOUSNESS_ELM) references REF_ELEMENT
-)
+);
 
 create table OFFENCE_SENTENCE_DETAIL
 (
@@ -666,7 +666,7 @@ create table OFFENCE_SENTENCE_DETAIL
 		foreign key (YES_NO_CAT, YES_NO_ELM) references REF_ELEMENT,
 	constraint ELM_FK98
 		foreign key (SENTENCE_ATTRIBUTE_CAT, SENTENCE_ATTRIBUTE_ELM) references REF_ELEMENT
-)
+);
 
 
 
@@ -696,4 +696,4 @@ create table SSP_INTERVENTION_IN_SET
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK18
 		foreign key (TIMESCALE_FOR_INT_CAT, TIMESCALE_FOR_INT_ELM) references REF_ELEMENT
-)
+);
