@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class OffenderSummary {
+public class OffenderSummaryDto {
     @JsonProperty("oasysOffenderId")
     private Long oasysOffenderId;
     @JsonProperty("familyName")
@@ -18,11 +18,11 @@ public class OffenderSummary {
     @JsonProperty("forename3")
     private String forename3;
     @JsonProperty("identifiers")
-    private Identifiers identifiers;
+    private IdentifiersDto identifiers;
 
-    public static OffenderSummary from(Offender offender) {
-        Identifiers identifiers = Identifiers.from(offender);
-        return new OffenderSummary(
+    public static OffenderSummaryDto from(Offender offender) {
+        IdentifiersDto identifiers = IdentifiersDto.from(offender);
+        return new OffenderSummaryDto(
                 offender.getOffenderPk(),
                 offender.getFamilyName(),
                 offender.getForename1(),

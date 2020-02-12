@@ -3,15 +3,14 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
-import uk.gov.justice.digital.oasys.transformer.TypesTransformer;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class OffenderAlias {
+public class OffenderAliasDto {
 
     @JsonProperty("offenderAliasPk")
     private Long offenderAliasPk;
@@ -24,17 +23,24 @@ public class OffenderAlias {
     @JsonProperty("forename2")
     private String forename2;
 
-    public static List<OffenderAlias> from(List<uk.gov.justice.digital.oasys.jpa.entity.OffenderAlias> aliases) {
-        return aliases.stream().map(OffenderAlias::from).collect(Collectors.toList());
+    public static List<OffenderAliasDto> from(List<uk.gov.justice.digital.oasys.jpa.entity.OffenderAlias> aliases) {
+        return aliases.stream().map(OffenderAliasDto::from).collect(Collectors.toList());
     }
 
-    private static OffenderAlias from(uk.gov.justice.digital.oasys.jpa.entity.OffenderAlias alias) {
-        return new OffenderAlias(
+    private static OffenderAliasDto from(uk.gov.justice.digital.oasys.jpa.entity.OffenderAlias alias) {
+        return new OffenderAliasDto(
                 alias.getOffenderAliasPk(),
-                TypesTransformer.localDateOf(alias.getAliasDateOfBirth()),
+                localDateOf(alias.getAliasDateOfBirth()),
                 alias.getAliasFamilyName(),
                 alias.getAliasForename1(),
                 alias.getAliasForename2());
+    }
+
+    private static LocalDate localDateOf(Timestamp timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+        return timestamp.toLocalDateTime().toLocalDate();
     }
 
 }

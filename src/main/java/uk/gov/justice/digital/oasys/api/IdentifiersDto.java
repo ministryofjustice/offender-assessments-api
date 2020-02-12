@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Identifiers {
+public class IdentifiersDto {
     @JsonProperty("pnc")
     private String pnc;
     @JsonProperty("crn")
@@ -22,8 +22,8 @@ public class Identifiers {
     @JsonProperty("mergePncNumber")
     private String mergePncNumber;
 
-    public static Identifiers from(Offender offender) {
-        return new Identifiers(
+    public static IdentifiersDto from(Offender offender) {
+        return new IdentifiersDto(
                 offender.getPnc(),
                 offender.getCmsProbNumber(),
                 offender.getCmsPrisNumber(),
