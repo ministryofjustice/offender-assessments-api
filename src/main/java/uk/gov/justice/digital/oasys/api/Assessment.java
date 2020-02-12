@@ -25,7 +25,7 @@ public class Assessment {
     private String assessmentType;
     private String historicStatus;
     private String assessmentStatus;
-    private AssessmentVersion assessmentVersion;
+    private AssessmentVersionDto assessmentVersion;
     private LocalDateTime createdDateTime;
     private boolean completed;
     private LocalDateTime completedDateTime;

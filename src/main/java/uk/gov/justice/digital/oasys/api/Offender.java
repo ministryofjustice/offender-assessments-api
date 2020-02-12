@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static uk.gov.justice.digital.oasys.transformer.OffenderTransformer.sentenceOf;
-import static uk.gov.justice.digital.oasys.transformer.TypesTransformer.localDateOf;
-import static uk.gov.justice.digital.oasys.transformer.TypesTransformer.ynToBoolean;
 
 @Value
 @Builder(access = AccessLevel.PRIVATE)
@@ -23,12 +22,12 @@ public class Offender {
     private String forename1;
     private String forename2;
     private String forename3;
-    private Identifiers identifiers;
+    private IdentifiersDto identifiers;
     private LocalDate dateOfBirth;
     private Boolean deceased;
     private LocalDate dateOfDeath;
     private String limitedAccessOffender;
-    private Address address;
+    private AddressDto address;
     private LocalDate dateOfDeportation;
     private Boolean offenderManaged;
     private Boolean ppo;
@@ -44,13 +43,13 @@ public class Offender {
     private Long cmsEventNumber;
     private Boolean lifer;
     private String dischargeCode;
-    private List<OffenderAlias> aliases;
+    private List<OffenderAliasDto> aliases;
     private Set<Sentence> sentence;
 
     public static Offender from(uk.gov.justice.digital.oasys.jpa.entity.Offender offender) {
         return Offender.builder()
-                .address(Address.from(offender))
-                .aliases(offender.getOffenderAliases() == null ? null : OffenderAlias.from(offender.getOffenderAliases()))
+                .address(AddressDto.from(offender))
+                .aliases(offender.getOffenderAliases() == null ? null : OffenderAliasDto.from(offender.getOffenderAliases()))
                 .cmsEventNumber(offender.getCmsEventNumber())
                 .custody(ynToBoolean(offender.getCustodyInd()))
                 .dateOfBirth(localDateOf(offender.getDateOfBirth()))
@@ -64,7 +63,7 @@ public class Offender {
                 .forename2(offender.getForename2())
                 .forename3(offender.getForename3())
                 .gender(Optional.ofNullable(offender.getGender()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
-                .identifiers(Identifiers.from(offender))
+                .identifiers(IdentifiersDto.from(offender))
                 .lifer(ynToBoolean(offender.getLifeInd()))
                 .limitedAccessOffender(offender.getLimitedAccessOffender())
                 .merged(ynToBoolean(offender.getMergedInd()))
@@ -78,5 +77,18 @@ public class Offender {
                 .riskToSelf(Optional.ofNullable(offender.getRiskToSelf()).map(RefElement::getRefElementDesc).orElse(null))
                 .sentence(sentenceOf(offender.getOasysAssessmentGroups()))
                 .build();
+    }
+
+    private static LocalDate localDateOf(Timestamp timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+        return timestamp.toLocalDateTime().toLocalDate();
+    }
+
+    private static Boolean ynToBoolean(String yn) {
+        return Optional.ofNullable(yn)
+                .map("Y"::equalsIgnoreCase)
+                .orElse(null);
     }
 }

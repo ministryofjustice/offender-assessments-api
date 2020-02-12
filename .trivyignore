@@ -1,0 +1,13 @@
+# Accept the risk
+
+# Not applicable in our usage scenario. N.B. Using a smaller base image may remove the need for these suppressions
+CVE-2005-2541
+CVE-2017-11164
+CVE-2018-1000654
+CVE-2019-5481
+CVE-2019-5482
+CVE-2019-9893
+CVE-2019-18224
+CVE-2019-18276
+CVE-2019-1010022
+CVE-2020-1712

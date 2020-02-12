@@ -2,7 +2,7 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
+import uk.gov.justice.digital.oasys.api.OffenderIdentifierDto;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
@@ -23,7 +23,7 @@ public class OffenderService {
 
     public Offender findOffender(String identifierType, String identifier) {
 
-        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
+        OffenderIdentifierDto offenderIdentifier = OffenderIdentifierDto.fromString(identifierType);
 
         Optional<Offender> offender;
         switch (offenderIdentifier) {

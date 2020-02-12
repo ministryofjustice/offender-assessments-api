@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class AssessmentVersion {
+public class AssessmentVersionDto {
     @JsonProperty("refAssVersionId")
     private Long refAssVersionId;
     @JsonProperty("refAssVersionCode")
@@ -20,8 +20,8 @@ public class AssessmentVersion {
     @JsonProperty("refModuleCode")
     private String refModuleCode;
 
-    public static AssessmentVersion from(RefAssVersion refAssVersion) {
-        return new AssessmentVersion(
+    public static AssessmentVersionDto from(RefAssVersion refAssVersion) {
+        return new AssessmentVersionDto(
                 refAssVersion.getRefAssVersionUk(),
                 refAssVersion.getRefAssVersionCode(),
                 refAssVersion.getVersionNumber(),
