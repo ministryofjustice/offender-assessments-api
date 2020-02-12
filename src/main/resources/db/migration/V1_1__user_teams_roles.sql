@@ -41,7 +41,7 @@ create table OASYS_USER
 		foreign key (MIGRATION_SOURCE_CAT, MIGRATION_SOURCE_ELM) references REF_ELEMENT,
 	constraint ELM_FK90
 		foreign key (USER_STATUS_CAT, USER_STATUS_ELM) references REF_ELEMENT
-)
+);
 
 create table AREA_EST_USER_ROLE
 (
@@ -66,7 +66,7 @@ create table AREA_EST_USER_ROLE
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint OASYS_USER_ROLE_PK
 		primary key (OASYS_USER_CODE, REF_ROLE_CODE, CT_AREA_EST_CODE)
-)
+);
 
 
 create table TEAM
@@ -91,7 +91,7 @@ create table TEAM
 		primary key (DIVISION_CODE, TEAM_CODE, CT_AREA_EST_CODE),
 	constraint DIV_TEA
 		foreign key (CT_AREA_EST_CODE, DIVISION_CODE) references DIVISION
-)
+);
 
 
 create table USER_AREA
@@ -140,7 +140,7 @@ create table USER_AREA
 		foreign key (DIVISION_CODE, TEAM_CODE, DEFAULT_TEAM_AREA_EST_CODE) references TEAM,
 	constraint UAR_UAR
 		foreign key (DEF_CNTRSGN_USER, DEF_CNTRSIGN_USER_AREA) references USER_AREA
-)
+);
 
 
 create table USER_TEAM
@@ -165,5 +165,5 @@ create table USER_TEAM
 		primary key (OASYS_USER_CODE, TEAM_CODE, DIVISION_CODE, CT_AREA_EST_CODE),
 	constraint TEA_UTE
 		foreign key (DIVISION_CODE, TEAM_CODE, CT_AREA_EST_CODE) references TEAM
-)
+);
 

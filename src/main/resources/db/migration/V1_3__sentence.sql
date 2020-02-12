@@ -22,7 +22,7 @@ create table SENTENCE
 	LASTUPD_USER VARCHAR2(100) not null,
 	constraint ELM_FK15
 		foreign key (ORDER_TYPE_CAT, ORDER_TYPE_ELM) references REF_ELEMENT
-)
+);
 
 
 
