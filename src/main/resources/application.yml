@@ -13,9 +13,6 @@ spring:
   flyway:
     enabled: false
 
-  h2:
-    console:
-      enabled: true
   jpa:
     hibernate:
       ddl-auto: none
