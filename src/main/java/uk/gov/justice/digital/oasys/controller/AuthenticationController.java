@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uk.gov.justice.digital.oasys.api.OasysUserAuthentication;
+import uk.gov.justice.digital.oasys.api.OasysUserAuthenticationDto;
 import uk.gov.justice.digital.oasys.api.ValidateUserRequest;
 import uk.gov.justice.digital.oasys.service.AuthenticationService;
 
@@ -30,7 +30,7 @@ public class AuthenticationController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<OasysUserAuthentication> getUserByUserId(@PathVariable("oasysUserId") String oasysUserId) {
+    public ResponseEntity<OasysUserAuthenticationDto> getUserByUserId(@PathVariable("oasysUserId") String oasysUserId) {
 
         return authenticationService.getUserByUserId(oasysUserId)
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))

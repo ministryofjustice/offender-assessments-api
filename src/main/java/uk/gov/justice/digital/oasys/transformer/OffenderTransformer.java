@@ -12,8 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static uk.gov.justice.digital.oasys.transformer.TypesTransformer.ynToBoolean;
-
 public class OffenderTransformer {
 
     private static List<String> PAROLE_SENTENCE_TYPES =  List.of("310", "1200", "930", "410");
@@ -59,6 +57,12 @@ public class OffenderTransformer {
                 .flatMap(oasysAssessmentGroup -> Optional.ofNullable(oasysAssessmentGroup.getOasysSets()).stream())
                 .flatMap(Collection::stream)
                 .max(Comparator.comparing(OasysSet::getCreateDate));
+    }
+
+    private static Boolean ynToBoolean(String yn) {
+        return Optional.ofNullable(yn)
+                .map("Y"::equalsIgnoreCase)
+                .orElse(null);
     }
 
 }

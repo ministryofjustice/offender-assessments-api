@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.OasysUserAuthentication;
+import uk.gov.justice.digital.oasys.api.OasysUserAuthenticationDto;
 import uk.gov.justice.digital.oasys.jpa.entity.AuthenticationStatus;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysAuthenticationRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
@@ -40,9 +40,9 @@ public class AuthenticationService {
     }
 
     @Cacheable("users")
-    public Optional<OasysUserAuthentication> getUserByUserId(String username) {
+    public Optional<OasysUserAuthenticationDto> getUserByUserId(String username) {
         log.info("GRetrieving user with OASys username {}", username, value(EVENT, USER_AUTHENTICATION));
-        return oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(username).map(user -> OasysUserAuthentication.from(user));
+        return oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(username).map(user -> OasysUserAuthenticationDto.from(user));
     }
 
     public boolean validateUserCredentials(String username, String password) {

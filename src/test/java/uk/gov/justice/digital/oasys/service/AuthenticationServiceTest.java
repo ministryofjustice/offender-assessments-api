@@ -1,13 +1,12 @@
 package uk.gov.justice.digital.oasys.service;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.justice.digital.oasys.api.OasysUserAuthentication;
+import uk.gov.justice.digital.oasys.api.OasysUserAuthenticationDto;
 import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
@@ -50,7 +49,7 @@ public class AuthenticationServiceTest {
 
         when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase("TEST_USER")).thenReturn(Optional.ofNullable(user));
 
-        Optional<OasysUserAuthentication> result = service.getUserByUserId("TEST_USER");
+        Optional<OasysUserAuthenticationDto> result = service.getUserByUserId("TEST_USER");
 
         assertThat(result.get().getFirstName()).isEqualTo("Test");
         assertThat(result.get().getLastName()).isEqualTo("User");
@@ -71,7 +70,7 @@ public class AuthenticationServiceTest {
 
         when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase("TEST_USER")).thenReturn(Optional.ofNullable(user));
 
-        Optional<OasysUserAuthentication> result = service.getUserByUserId("TEST_USER");
+        Optional<OasysUserAuthenticationDto> result = service.getUserByUserId("TEST_USER");
         assertThat(result.get().isEnabled()).isFalse();
     }
 
@@ -86,7 +85,7 @@ public class AuthenticationServiceTest {
 
         when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase("TEST_USER")).thenReturn(Optional.ofNullable(user));
 
-        Optional<OasysUserAuthentication> result = service.getUserByUserId("TEST_USER");
+        Optional<OasysUserAuthenticationDto> result = service.getUserByUserId("TEST_USER");
         assertThat(result.get().isEnabled()).isTrue();
     }
 
