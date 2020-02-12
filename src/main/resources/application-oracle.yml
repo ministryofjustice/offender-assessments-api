@@ -10,7 +10,7 @@ spring:
 
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
 
     profiles:
       include: logstash
