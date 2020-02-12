@@ -3,19 +3,16 @@ package uk.gov.justice.digital.oasys.api;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Value;
+import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-
-import static uk.gov.justice.digital.oasys.transformer.OffenderTransformer.sentenceOf;
 
 @Value
 @Builder(access = AccessLevel.PRIVATE)
-public class Offender {
+public class OffenderDto {
     private Long oasysOffenderId;
     private String title;
     private String familyName;
@@ -44,51 +41,53 @@ public class Offender {
     private Boolean lifer;
     private String dischargeCode;
     private List<OffenderAliasDto> aliases;
-    private Set<Sentence> sentence;
+    private Set<SentenceDto> sentence;
 
-    public static Offender from(uk.gov.justice.digital.oasys.jpa.entity.Offender offender) {
-        return Offender.builder()
+    public static OffenderDto from(Offender offender) {
+
+        return OffenderDto.builder()
                 .address(AddressDto.from(offender))
-                .aliases(offender.getOffenderAliases() == null ? null : OffenderAliasDto.from(offender.getOffenderAliases()))
+                .aliases(OffenderAliasDto.from(offender.getOffenderAliases()))
                 .cmsEventNumber(offender.getCmsEventNumber())
                 .custody(ynToBoolean(offender.getCustodyInd()))
-                .dateOfBirth(localDateOf(offender.getDateOfBirth()))
-                .dateOfDeath(localDateOf(offender.getDateOfDeath()))
-                .dateOfDeportation(localDateOf(offender.getDateOfDeportation()))
+                .dateOfBirth(offender.getDateOfBirth())
+                .dateOfDeath(offender.getDateOfDeath())
+                .dateOfDeportation(offender.getDateOfDeportation())
                 .deceased(ynToBoolean(offender.getDeceasedInd()))
-                .dischargeCode(Optional.ofNullable(offender.getDischargeCode()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
-                .ethnicCategory(Optional.ofNullable(offender.getEthnicCategory()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
+                .dischargeCode(refElementDesc(offender.getDischargeCode()))
+                .ethnicCategory(refElementDesc(offender.getEthnicCategory()))
                 .familyName(offender.getFamilyName())
                 .forename1(offender.getForename1())
                 .forename2(offender.getForename2())
                 .forename3(offender.getForename3())
-                .gender(Optional.ofNullable(offender.getGender()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
+                .gender(refElementDesc(offender.getGender()))
                 .identifiers(IdentifiersDto.from(offender))
                 .lifer(ynToBoolean(offender.getLifeInd()))
                 .limitedAccessOffender(offender.getLimitedAccessOffender())
                 .merged(ynToBoolean(offender.getMergedInd()))
                 .nfa(ynToBoolean(offender.getNfaInd()))
-                .offenderHistoric(Optional.ofNullable(offender.getOffenderHistoric()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
+                .offenderHistoric(refElementDesc(offender.getOffenderHistoric()))
                 .offenderManaged(ynToBoolean(offender.getOffenderManagedInd()))
                 .oasysOffenderId(offender.getOffenderPk())
                 .ppo(ynToBoolean(offender.getPpoInd()))
                 .remand(ynToBoolean(offender.getRemandInd()))
-                .riskToOthers(Optional.ofNullable(offender.getRiskToOthers()).map(uk.gov.justice.digital.oasys.jpa.entity.RefElement::getRefElementDesc).orElse(null))
-                .riskToSelf(Optional.ofNullable(offender.getRiskToSelf()).map(RefElement::getRefElementDesc).orElse(null))
-                .sentence(sentenceOf(offender.getOasysAssessmentGroups()))
+                .riskToOthers(refElementDesc(offender.getRiskToOthers()))
+                .riskToSelf(refElementDesc(offender.getRiskToSelf()))
+                .sentence(SentenceDto.from(offender.getOasysAssessmentGroups()))
                 .build();
     }
 
-    private static LocalDate localDateOf(Timestamp timestamp) {
-        if (timestamp == null) {
+    private static Boolean ynToBoolean(String ynValue) {
+        if(ynValue == null) {
             return null;
         }
-        return timestamp.toLocalDateTime().toLocalDate();
+        return ynValue.equalsIgnoreCase("Y");
     }
 
-    private static Boolean ynToBoolean(String yn) {
-        return Optional.ofNullable(yn)
-                .map("Y"::equalsIgnoreCase)
-                .orElse(null);
+    private static String refElementDesc(RefElement refElement) {
+        if(refElement == null) {
+            return null;
+        }
+        return refElement.getRefElementDesc();
     }
 }

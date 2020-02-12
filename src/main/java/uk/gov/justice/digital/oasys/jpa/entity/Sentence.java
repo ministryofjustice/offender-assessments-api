@@ -13,7 +13,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -38,9 +38,9 @@ public class Sentence {
     @Column(name = "CJA_IND")
     private String cjaInd;
     @Column(name = "START_DATE")
-    private Timestamp startDate;
+    private LocalDate startDate;
     @Column(name = "END_DATE")
-    private Timestamp endDate;
+    private LocalDate endDate;
     @OneToOne
     @JoinColumns({
             @JoinColumn(name = "ORDER_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
