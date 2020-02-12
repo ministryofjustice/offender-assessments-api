@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -55,9 +56,9 @@ public class BasicSentencePlanObj {
     @Column(name = "OASYS_SET_PK")
     private Long oasysSetPk;
     @Column(name = "DATE_OPENED")
-    private Date dateOpened;
+    private LocalDateTime dateOpened;
     @Column(name = "DATE_COMPLETED")
-    private Date dateCompleted;
+    private LocalDateTime dateCompleted;
     @Column(name = "PROBLEM_AREA_COMP_IND")
     private String problemAreaCompInd;
     @Column(name = "MIG_GUID")
@@ -67,11 +68,11 @@ public class BasicSentencePlanObj {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Date createDate;
+    private LocalDateTime createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Date lastupdDate;
+    private LocalDateTime lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
     @Column(name = "CF_LAST_BCS_INT")

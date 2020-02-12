@@ -8,7 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,13 +18,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
-import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
-
-import java.util.Optional;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,9 +29,6 @@ public class SentencePlansControllerTest {
 
     @LocalServerPort
     int port;
-
-    @MockBean
-    private OffenderRepository offenderRepository;
 
     @MockBean
     private AssessmentRepository assessmentRepository;
@@ -55,10 +46,6 @@ public class SentencePlansControllerTest {
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (aClass, s) -> objectMapper
         ));
-
-        ControllerTestContext.setup(offenderRepository);
-
-        Mockito.when(assessmentRepository.findById(eq(0L))).thenReturn(Optional.ofNullable(ControllerTestContext.anOasysSet(0L)));
     }
 
 
@@ -88,6 +75,7 @@ public class SentencePlansControllerTest {
                 .as(BasicSentencePlan[].class);
 
         assertThat(sentencePlans).hasSize(2);
+        assertThat(sentencePlans).extracting("sentencePlanId").containsOnly(1L, 2L);
     }
 
     @Test
@@ -120,7 +108,7 @@ public class SentencePlansControllerTest {
         BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/basicSentencePlans", "crn1")
+                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ12345")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -135,7 +123,7 @@ public class SentencePlansControllerTest {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/basicSentencePlans/latest", "crn1")
+                .get("/offenders/crn/{0}/basicSentencePlans/latest", "XYZ12345")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -161,7 +149,7 @@ public class SentencePlansControllerTest {
         BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/basicSentencePlans", "pnc1")
+                .get("/offenders/pnc/{0}/basicSentencePlans", "PNC1234")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -176,7 +164,7 @@ public class SentencePlansControllerTest {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/basicSentencePlans/latest", "pnc1")
+                .get("/offenders/pnc/{0}/basicSentencePlans/latest", "PNC1234")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -202,7 +190,7 @@ public class SentencePlansControllerTest {
         BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/basicSentencePlans", "nomisId1")
+                .get("/offenders/nomisId/{0}/basicSentencePlans", "NOMIS123456")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -217,7 +205,7 @@ public class SentencePlansControllerTest {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/basicSentencePlans/latest", "nomisId1")
+                .get("/offenders/nomisId/{0}/basicSentencePlans/latest", "NOMIS123456")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -243,7 +231,7 @@ public class SentencePlansControllerTest {
         BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/basicSentencePlans", "bookingId1")
+                .get("/offenders/bookingId/{0}/basicSentencePlans", "Book12")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -258,7 +246,7 @@ public class SentencePlansControllerTest {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/basicSentencePlans/latest", "bookingId1")
+                .get("/offenders/bookingId/{0}/basicSentencePlans/latest", "Book12")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -284,15 +272,15 @@ public class SentencePlansControllerTest {
         BasicSentencePlan[] sentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .param("assessmentType", "oasys")
-                .get("/offenders/crn/{0}/basicSentencePlans", "crn1")
+                .param("assessmentType", "LAYER_3")
+                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ12345")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan[].class);
 
-        assertThat(sentencePlans).extracting("sentencePlanId").containsOnly(1l);
+        assertThat(sentencePlans).extracting("sentencePlanId").containsOnly(1l, 2l);
     }
 
     @Test
@@ -301,14 +289,14 @@ public class SentencePlansControllerTest {
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("historicStatus", "CURRENT")
-                .get("/offenders/crn/{0}/basicSentencePlans", "crn1")
+                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ12345")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan[].class);
 
-        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(2l);
+        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(1l, 2l);
     }
 
 }
