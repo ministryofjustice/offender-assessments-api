@@ -4,11 +4,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
-import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+
+import static uk.gov.justice.digital.oasys.api.DtoUtils.refElementDesc;
+import static uk.gov.justice.digital.oasys.api.DtoUtils.ynToBoolean;
 
 @Value
 @Builder(access = AccessLevel.PRIVATE)
@@ -75,19 +77,5 @@ public class OffenderDto {
                 .riskToSelf(refElementDesc(offender.getRiskToSelf()))
                 .sentence(SentenceDto.from(offender.getOasysAssessmentGroups()))
                 .build();
-    }
-
-    private static Boolean ynToBoolean(String ynValue) {
-        if(ynValue == null) {
-            return null;
-        }
-        return ynValue.equalsIgnoreCase("Y");
-    }
-
-    private static String refElementDesc(RefElement refElement) {
-        if(refElement == null) {
-            return null;
-        }
-        return refElement.getRefElementDesc();
     }
 }

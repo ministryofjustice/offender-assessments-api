@@ -5,11 +5,13 @@ import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.OffenceBlock;
-import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static uk.gov.justice.digital.oasys.api.DtoUtils.refElementDesc;
+import static uk.gov.justice.digital.oasys.api.DtoUtils.ynToBoolean;
 
 @Value
 @Builder
@@ -54,20 +56,6 @@ public class SentenceDto {
                 .startDate(sentence.getStartDate())
                 .parolable(PAROLE_SENTENCE_TYPES.contains(sentence.getSentenceCode()))
                 .build();
-    }
-
-    private static Boolean ynToBoolean(String ynValue) {
-        if(ynValue == null) {
-            return null;
-        }
-        return ynValue.equalsIgnoreCase("Y");
-    }
-
-    private static String refElementDesc(RefElement refElement) {
-        if(refElement == null) {
-            return null;
-        }
-        return refElement.getRefElementDesc();
     }
 }
 
