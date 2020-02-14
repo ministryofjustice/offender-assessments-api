@@ -26,6 +26,8 @@ import java.util.Optional;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static uk.gov.justice.digital.oasys.api.OffenderPermissionLevel.WRITE;
+import static uk.gov.justice.digital.oasys.api.OffenderPermissionResource.SENTENCE_PLAN;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -62,7 +64,6 @@ public class AuthenticationControllerTest {
 
         ControllerTestContext.setup(offenderRepository);
 
-        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(ControllerTestContext.oasysUser("USER_CODE")));
     }
 
     @Test
@@ -76,6 +77,7 @@ public class AuthenticationControllerTest {
 
     @Test
     public void canGetuserForUserCode() {
+        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(ControllerTestContext.oasysUser("USER_CODE")));
         OasysUserAuthenticationDto oasysUser = given()
                 .when()
                 .auth().oauth2(validOauthToken)
@@ -149,6 +151,26 @@ public class AuthenticationControllerTest {
                 .then()
                 .statusCode(401);
     }
+
+    @Test
+    public void canGetUserAuthorisationForSentencePlan() {
+        Mockito.when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession(eq("USER_CODE"),eq(1l),eq(123456l))).thenReturn(Optional.of("[{STATE: \"EDIT\"}]"));
+        AuthorisationDto authorisationDto = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/authentication/user/{0}/offender/{1}/SENTENCE_PLAN?sessionId={2}", "USER_CODE", 1l, 123456l)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(AuthorisationDto.class);
+
+        assertThat(authorisationDto.getOffenderPermissionLevel()).isEqualTo(WRITE);
+        assertThat(authorisationDto.getOasysUserCode()).isEqualTo("USER_CODE");
+        assertThat(authorisationDto.getOasysOffenderId()).isEqualTo(1l);
+        assertThat(authorisationDto.getOffenderPermissionResource()).isEqualTo(SENTENCE_PLAN);
+    }
+
 
 
 }

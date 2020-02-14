@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.gov.justice.digital.oasys.api.AuthorisationDto;
 import uk.gov.justice.digital.oasys.api.OasysUserAuthenticationDto;
+import uk.gov.justice.digital.oasys.api.OffenderPermissionResource;
 import uk.gov.justice.digital.oasys.api.ValidateUserRequest;
 import uk.gov.justice.digital.oasys.service.AuthenticationService;
 
@@ -37,13 +39,15 @@ public class AuthenticationController {
                 .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
-    @RequestMapping(path = "/authentication/user/{oasysUserId}/offender/{offenderId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/authentication/user/{oasysUserId}/offender/{offenderId}/{resource}", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 401, message = "User not authenticated for offender"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity getUserAuthorisedForOffenderId(@PathVariable("oasysUserId") String oasysUserId, @PathVariable("offenderId") Long offenderId) {
-        boolean authorised = authenticationService.userCanAccessOffenderRecord(oasysUserId, offenderId);
-        return authorised ? new ResponseEntity(OK) : new ResponseEntity(FORBIDDEN);
+    public ResponseEntity<AuthorisationDto> getUserAuthorisedForOffenderId(@PathVariable("oasysUserId") String oasysUserId,
+                                                                           @PathVariable("offenderId") Long offenderId,
+                                                                           @PathVariable("resource") OffenderPermissionResource resource,
+                                                                           @RequestParam("sessionId") Long sessionId) {
+        return  ResponseEntity.ok(authenticationService.userCanAccessOffenderRecord(oasysUserId, offenderId, sessionId, resource));
     }
 
     @RequestMapping(path = "/authentication/user/validate", method = RequestMethod.POST)

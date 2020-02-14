@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.justice.digital.oasys.api.OasysUserAuthenticationDto;
+import uk.gov.justice.digital.oasys.api.OffenderPermissionResource;
 import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import static uk.gov.justice.digital.oasys.api.OffenderPermissionLevel.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuthenticationServiceTest {
@@ -75,7 +77,7 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void getUserShouldSetEnabledeWhenStatusIsActive() {
+    public void getUserShouldSetEnabledWhenStatusIsActive() {
 
         OasysUser user = OasysUser.builder()
                 .oasysUserCode("TEST_USER")
@@ -146,5 +148,35 @@ public class AuthenticationServiceTest {
         verifyNoMoreInteractions(oasysAuthenticationRepository);
     }
 
+    @Test
+    public void authoriseUserSentencePlanShouldReturnWRITEWhenUserHasEditPermission() {
+        when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"EDIT\"}"));
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, 123456l, OffenderPermissionResource.SENTENCE_PLAN);
+        assertThat(result.getOffenderPermissionLevel()).isEqualTo(WRITE);
+        verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
+    }
 
+    @Test
+    public void authoriseUserSentencePlanShouldReturnREAD_ONLYWhenUserHasReadPermission() {
+        when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"READ\"}"));
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, 123456l, OffenderPermissionResource.SENTENCE_PLAN);
+        assertThat(result.getOffenderPermissionLevel()).isEqualTo(READ_ONLY);
+        verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
+    }
+
+    @Test
+    public void authoriseUserSentencePlanShouldReturnUNAUTHORISEDWhenUserHasNoAccess() {
+        when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"NO_ACCESS\"}"));
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, 123456l, OffenderPermissionResource.SENTENCE_PLAN);
+        assertThat(result.getOffenderPermissionLevel()).isEqualTo(UNAUTHORISED);
+        verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
+    }
+
+    @Test
+    public void authoriseUserSentencePlanShouldReturnUNAUTHORISEDWhenResultNotParsed() {
+        when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"INVALID_RESULT\"}"));
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, 123456l, OffenderPermissionResource.SENTENCE_PLAN);
+        assertThat(result.getOffenderPermissionLevel()).isEqualTo(UNAUTHORISED);
+        verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
+    }
 }
