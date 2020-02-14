@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -24,7 +25,7 @@ public class OffenderAlias {
     @Column(name = "DISPLAY_SORT")
     private Long displaySort;
     @Column(name = "ALIAS_DATE_OF_BIRTH")
-    private Timestamp aliasDateOfBirth;
+    private LocalDate aliasDateOfBirth;
     @Column(name = "ALIAS_FAMILY_NAME")
     private String aliasFamilyName;
     @Column(name = "NAME_SOUNDSLIKE")
