@@ -6,10 +6,6 @@ spring:
     caffeine:
       spec: expireAfterWrite=2m
 
-  datasource:
-    url: 'jdbc:h2:mem:testdb;Mode=Oracle'
-    type: com.zaxxer.hikari.HikariDataSource
-
   flyway:
     enabled: false
 

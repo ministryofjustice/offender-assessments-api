@@ -13,10 +13,6 @@ spring:
     console:
       enabled: true
 
-  h2:
-    console:
-      enabled: true
-
   flyway:
     enabled: true
 

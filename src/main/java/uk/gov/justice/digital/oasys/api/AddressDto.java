@@ -3,6 +3,7 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AddressDto {
@@ -24,7 +25,7 @@ public class AddressDto {
     @JsonProperty("telephoneNumber")
     private String telephoneNumber;
 
-    public static AddressDto from (uk.gov.justice.digital.oasys.jpa.entity.Offender offender) {
+    public static AddressDto from (Offender offender) {
         return new AddressDto(
                 offender.getAddressLine1(),
                 offender.getAddressLine2(),
