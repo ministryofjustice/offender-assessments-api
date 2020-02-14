@@ -68,7 +68,7 @@ public class SentenceDtoTest {
         Assertions.assertThat(firstResult.getCjaSupervisionMonths()).isEqualTo(15L);
         Assertions.assertThat(firstResult.getCjaUnpaidHours()).isEqualTo(10L);
         Assertions.assertThat(firstResult.getActivity()).isEqualTo("activity");
-        Assertions.assertThat(firstResult.getParolable()).isFalse();
+        Assertions.assertThat(firstResult.getParolable()).isNull();
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGroupValid() {

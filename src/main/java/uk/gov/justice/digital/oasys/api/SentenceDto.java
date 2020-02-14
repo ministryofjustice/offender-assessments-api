@@ -66,7 +66,7 @@ public class SentenceDto {
                 .sentenceCode(sentence.map(Sentence::getSentenceCode).orElse(null))
                 .sentenceDescription(sentence.map(Sentence::getSentenceDesc).orElse(null))
                 .startDate(sentence.map(Sentence::getStartDate).orElse(null))
-                .parolable(PAROLE_SENTENCE_TYPES.contains(sentence.map(Sentence::getSentenceCode).orElse("")))
+                .parolable(sentence.map(s -> PAROLE_SENTENCE_TYPES.contains(s.getSentenceCode())).orElse(null))
                 .build();
     }
 }
