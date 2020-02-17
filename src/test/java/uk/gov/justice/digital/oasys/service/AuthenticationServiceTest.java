@@ -179,4 +179,11 @@ public class AuthenticationServiceTest {
         assertThat(result.getOffenderPermissionLevel()).isEqualTo(UNAUTHORISED);
         verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
     }
+
+    @Test
+    public void authoriseUserSentencePlanShouldReturnUNAUTHORISEDWhenNoSessionIdProvided() {
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, null, OffenderPermissionResource.SENTENCE_PLAN);
+        assertThat(result.getOffenderPermissionLevel()).isEqualTo(UNAUTHORISED);
+        verifyNoInteractions(oasysAuthenticationRepository);
+    }
 }

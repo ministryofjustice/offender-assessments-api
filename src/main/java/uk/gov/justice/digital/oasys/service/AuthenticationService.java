@@ -16,6 +16,7 @@ import uk.gov.justice.digital.oasys.jpa.repository.OasysAuthenticationRepository
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES;
@@ -72,8 +73,13 @@ public class AuthenticationService {
         return false;
     }
 
-    public AuthorisationDto userCanAccessOffenderRecord(String oasysUserCode, long offenderId, long sessionId, OffenderPermissionResource resource) {
+    public AuthorisationDto userCanAccessOffenderRecord(String oasysUserCode, Long offenderId, Long sessionId, OffenderPermissionResource resource) {
         log.info("Attempting to authorise user user {} for offender {}", oasysUserCode, offenderId, value(EVENT, USER_AUTHENTICATION_ATTEMPT));
+
+        if(Objects.isNull(sessionId)) {
+            log.error("Failed to authorise user {} for offender {} because no Session ID was provided", oasysUserCode, offenderId, value(EVENT, USER_AUTHENTICATION_PARSE_ERROR));
+            return new AuthorisationDto(UNAUTHORISED);
+        }
 
         Optional<String> response = authoriseSentencePlan(oasysUserCode, offenderId, sessionId);
 
@@ -92,10 +98,9 @@ public class AuthenticationService {
                         log.error("Failed to authorise user {} for offender {} with status {}", oasysUserCode, offenderId, authStatus.getState(), value(EVENT, USER_AUTHENTICATION_PARSE_ERROR));
                         return new AuthorisationDto(oasysUserCode, offenderId, UNAUTHORISED, SENTENCE_PLAN);
                 }
-
             } catch (IOException e) {
                 log.error("Failed to parse OASys response for user {} response: {}", oasysUserCode, response.get(), value(EVENT, USER_AUTHENTICATION_PARSE_ERROR));
-                return new AuthorisationDto(UNAUTHORISED);
+                return new AuthorisationDto(oasysUserCode, offenderId, UNAUTHORISED, SENTENCE_PLAN);
             }
         }
         return new AuthorisationDto(oasysUserCode, offenderId, UNAUTHORISED, SENTENCE_PLAN);
