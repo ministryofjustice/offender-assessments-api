@@ -13,7 +13,7 @@ import java.util.Optional;
 public class BasicSentencePlanItem {
     private final Long basicSentPlanObjId;
     private final Boolean includeInPlan;
-    private final RefElement offenceBehaviourLink;
+    private final RefElementDto offenceBehaviourLink;
     private final String objectiveText;
     private final String measureText;
     private final String whatWorkText;
@@ -30,7 +30,7 @@ public class BasicSentencePlanItem {
         return new BasicSentencePlanItem(
                 item.getBasicSentPlanObjPk(),
                 Optional.ofNullable(item.getIncludeInPlanInd()).map("Y"::equalsIgnoreCase).orElse(null),
-                Optional.ofNullable(item.getOffenceBehaviourLink()).map(RefElement::from).orElse(null),
+                Optional.ofNullable(item.getOffenceBehaviourLink()).map(RefElementDto::from).orElse(null),
                 item.getObjectiveText(),
                 item.getMeasureText(),
                 item.getWhatWorkText(),

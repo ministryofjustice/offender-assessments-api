@@ -1,15 +1,14 @@
 package uk.gov.justice.digital.oasys.transformer;
 
 import org.junit.Test;
-import uk.gov.justice.digital.oasys.api.ProperSentencePlan;
+import uk.gov.justice.digital.oasys.api.ProperSentencePlanDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjective;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjectivesInSet;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,18 +18,16 @@ public class SentencePlanTransformerTest {
 
     @Test
     public void sentencePlanHasCreatedDate() {
-        var today = LocalDateTime.now();
+        var today = LocalDate.now();
 
         var oasysSet = OasysSet.builder()
-                .createDate(Timestamp.valueOf(today))
-                .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().createDate(Timestamp.valueOf(today)).build()))
+                .createDate(Timestamp.valueOf(LocalDateTime.MIN))
+                .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().createDate(today).build()))
                 .build();
 
-        final SentencePlanTransformer sentencePlanTransformer = new SentencePlanTransformer();
-        assertThat(sentencePlanTransformer.sentencePlanOf(oasysSet)).isPresent();
-        final ProperSentencePlan actual = sentencePlanTransformer.sentencePlanOf(oasysSet).get();
+        final ProperSentencePlanDto actual = ProperSentencePlanDto.from(oasysSet);
 
-        assertThat(actual.getCreatedDate()).isEqualTo(today.toLocalDate());
+        assertThat(actual.getCreatedDate()).isEqualTo(today);
     }
 
     @Test
@@ -44,9 +41,7 @@ public class SentencePlanTransformerTest {
                 .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(Timestamp.valueOf(today)).build()).build()))
                 .build();
 
-        final SentencePlanTransformer sentencePlanTransformer = new SentencePlanTransformer();
-        assertThat(sentencePlanTransformer.sentencePlanOf(oasysSet)).isPresent();
-        final ProperSentencePlan actual = sentencePlanTransformer.sentencePlanOf(oasysSet).get();
+        final ProperSentencePlanDto actual = ProperSentencePlanDto.from(oasysSet);
 
         assertThat(actual.getCompletedDate()).isEqualTo(threeMonthsFromNow.toLocalDate());
     }
@@ -62,9 +57,7 @@ public class SentencePlanTransformerTest {
                 .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(Timestamp.valueOf(today)).build()).build()))
                 .build();
 
-        final SentencePlanTransformer sentencePlanTransformer = new SentencePlanTransformer();
-        assertThat(sentencePlanTransformer.sentencePlanOf(oasysSet)).isPresent();
-        final ProperSentencePlan actual = sentencePlanTransformer.sentencePlanOf(oasysSet).get();
+        final ProperSentencePlanDto actual = ProperSentencePlanDto.from(oasysSet);
 
         assertThat(actual.getCompletedDate()).isNull();
     }

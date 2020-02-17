@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.justice.digital.oasys.api.RefElement;
+import uk.gov.justice.digital.oasys.api.RefElementDto;
 import uk.gov.justice.digital.oasys.service.ReferenceDataService;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class ReferenceDataController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK")})
 
-    public ResponseEntity<List<RefElement>> getReferenceDataByCategoryCode(@PathVariable("category") String refDataCategoryCode) {
+    public ResponseEntity<List<RefElementDto>> getReferenceDataByCategoryCode(@PathVariable("category") String refDataCategoryCode) {
         return ResponseEntity.ok(referenceDataService.getActiveReferenceDataOfCategory(refDataCategoryCode));
     }
 }

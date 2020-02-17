@@ -1,7 +1,7 @@
 package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.RefElement;
+import uk.gov.justice.digital.oasys.api.RefElementDto;
 import uk.gov.justice.digital.oasys.jpa.repository.ReferenceDataRepository;
 
 import java.time.LocalDateTime;
@@ -17,8 +17,8 @@ public class ReferenceDataService {
         this.referenceDataRepository = referenceDataRepository;
     }
 
-    public List<RefElement> getActiveReferenceDataOfCategory(String categoryCode) {
+    public List<RefElementDto> getActiveReferenceDataOfCategory(String categoryCode) {
         var referenceData = referenceDataRepository.findAllByRefCategoryCodeAndEndDateIsBefore(categoryCode, LocalDateTime.now());
-        return referenceData.stream().map(r->RefElement.from(r)).collect(Collectors.toList());
+        return referenceData.stream().map(r-> RefElementDto.from(r)).collect(Collectors.toList());
     }
 }
