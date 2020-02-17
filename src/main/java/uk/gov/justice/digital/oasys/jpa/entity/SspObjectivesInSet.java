@@ -43,7 +43,7 @@ public class SspObjectivesInSet {
     private RefElement objectiveType;
 
     @Column(name = "LAST_UPDATE_DATE")
-    private LocalTime lastUpdateDate;
+    private LocalDateTime lastUpdateDate;
     @Column(name = "OASYS_SET_PK")
     private Long oasysSetPk;
     @Column(name = "MIG_GUID")
@@ -57,11 +57,11 @@ public class SspObjectivesInSet {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private LocalDate createDate;
+    private LocalDateTime createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private LocalTime lastupdDate;
+    private LocalDateTime lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 

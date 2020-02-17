@@ -45,7 +45,7 @@ public class AssessmentSummary {
                 oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()),
                 oasysSet.getCreateDate() == null ? null : oasysSet.getCreateDate().toLocalDateTime(),
                 oasysSet.getDateCompleted() == null ? false : true,
-                oasysSet.getDateCompleted() == null ? null : oasysSet.getDateCompleted().toLocalDateTime(),
+                oasysSet.getDateCompleted(),
                 oasysSet.getAssessmentVoidedDate() == null ? false : true);
 
     }

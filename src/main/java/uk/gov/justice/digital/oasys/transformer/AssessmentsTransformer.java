@@ -34,7 +34,7 @@ public class AssessmentsTransformer {
                 .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
                 .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()))
                 .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
-                .completedDateTime(localDateTimeOf(oasysSet.getDateCompleted()))
+                .completedDateTime(oasysSet.getDateCompleted())
                 .oasysSetId(oasysSet.getOasysSetPk())
                 .oasysBcsParts(oasysBcsPartsOf(oasysSet.getOasysBcsParts()))
                 .qaReview(QaReviewOf(oasysSet.getQaReview()))

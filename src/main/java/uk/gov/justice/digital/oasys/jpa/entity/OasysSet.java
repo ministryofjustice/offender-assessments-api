@@ -20,6 +20,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -176,7 +177,7 @@ public class OasysSet {
     @Column(name = "REQUESTED_BY")
     private String requestedBy;
     @Column(name = "DATE_COMPLETED")
-    private Timestamp dateCompleted;
+    private LocalDateTime dateCompleted;
     @Column(name = "DATE_ASSESSMENT_REQST")
     private Timestamp dateAssessmentReqst;
     @Column(name = "DATE_REPORT_REQST")

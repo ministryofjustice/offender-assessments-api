@@ -1,11 +1,10 @@
 package uk.gov.justice.digital.oasys.service;
 
-import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
-import uk.gov.justice.digital.oasys.api.ProperSentencePlanDto;
+import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.transformer.AssessmentsTransformer;
@@ -48,7 +47,7 @@ public class SentencePlanService {
         return basicSentencePlansOf(assessmentsFilter, assessmentGroups);
     }
 
-    public List<ProperSentencePlanDto> getFullSentencePlansForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
+    public List<FullSentencePlanDto> getFullSentencePlansForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
                 assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
 
@@ -68,9 +67,9 @@ public class SentencePlanService {
                 .collect(Collectors.toList());
     }
 
-    private List<ProperSentencePlanDto> fullSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, List<OasysAssessmentGroup> assessmentGroups) {
+    private List<FullSentencePlanDto> fullSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, List<OasysAssessmentGroup> assessmentGroups) {
         return getOasysSetStream(assessmentsFilter, assessmentGroups)
-                .map(ProperSentencePlanDto::from)
+                .map(FullSentencePlanDto::from)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
