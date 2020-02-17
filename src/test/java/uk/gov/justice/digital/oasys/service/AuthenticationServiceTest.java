@@ -156,6 +156,7 @@ public class AuthenticationServiceTest {
         verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
     }
 
+
     @Test
     public void authoriseUserSentencePlanShouldReturnREAD_ONLYWhenUserHasReadPermission() {
         when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"READ\"}"));
@@ -179,7 +180,7 @@ public class AuthenticationServiceTest {
         assertThat(result.getOffenderPermissionLevel()).isEqualTo(UNAUTHORISED);
         verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
     }
-
+  
     @Test
     public void authoriseUserSentencePlanShouldReturnUNAUTHORISEDWhenNoSessionIdProvided() {
         var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, null, OffenderPermissionResource.SENTENCE_PLAN);

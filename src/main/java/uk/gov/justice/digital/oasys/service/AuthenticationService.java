@@ -80,7 +80,6 @@ public class AuthenticationService {
             log.error("Failed to authorise user {} for offender {} because no Session ID was provided", oasysUserCode, offenderId, value(EVENT, USER_AUTHENTICATION_PARSE_ERROR));
             return new AuthorisationDto(UNAUTHORISED);
         }
-
         Optional<String> response = authoriseSentencePlan(oasysUserCode, offenderId, sessionId);
 
         if (response.isPresent()) {
