@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Data
@@ -26,21 +27,21 @@ public class OasysBcsPart {
     @Column(name = "PART1_CHECKED_IND")
     private String part1CheckedInd;
     @Column(name = "PART1_CHECKED_DATE")
-    private Timestamp part1CheckedDate;
+    private LocalDateTime part1CheckedDate;
     @Column(name = "BCS_PART_USER_AREA")
     private String bcsPartUserArea;
     @Column(name = "BCS_PART_USER_POSITION")
     private String bcsPartUserPosition;
     @Column(name = "BCS_PART_COMP_DATE")
-    private Timestamp bcsPartCompDate;
+    private LocalDateTime bcsPartCompDate;
     @Column(name = "OASYS_SET_PK")
     private Long oasysSetPk;
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Timestamp createDate;
+    private LocalDateTime createDate;
     @Column(name = "LASTUPD_DATE")
-    private Timestamp lastupdDate;
+    private LocalDateTime lastupdDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_USER")
@@ -50,7 +51,7 @@ public class OasysBcsPart {
     @Column(name = "PRA_COMP_USER")
     private String praCompUser;
     @Column(name = "PRA_COMP_DATE")
-    private Timestamp praCompDate;
+    private LocalDateTime praCompDate;
     @Column(name = "LOCK_INCOMPLETE_REASON_CAT")
     private String lockIncompleteReasonCat;
     @Column(name = "LOCK_INCOMPLETE_REASON_ELM")

@@ -17,4 +17,11 @@ public final class DtoUtils {
         }
         return refElement.getRefElementDesc();
     }
+
+    public static String refElementCode(RefElement refElement) {
+        if(refElement == null) {
+            return null;
+        }
+        return refElement.getRefElementCode();
+    }
 }

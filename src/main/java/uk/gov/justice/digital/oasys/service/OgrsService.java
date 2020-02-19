@@ -72,7 +72,7 @@ public class OgrsService {
                                         .reconvictionRisk(Optional.ofNullable(oasysSet.getOgrs3RiskRecon())
                                                 .map(RefElement::getRefElementDesc)
                                                 .orElse(null))
-                                        .completedDate(Optional.ofNullable(oasysSet.getDateCompleted()).map(Timestamp::toLocalDateTime).orElse(null))
+                                        .completedDate(oasysSet.getDateCompleted())
                                         .assessmentCompleted(oasysSet.getDateCompleted() != null)
                                         .assessmentVoided(oasysSet.getAssessmentVoidedDate() != null)
                                         .build()))

@@ -14,8 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -42,7 +43,7 @@ public class SspObjectivesInSet {
     private RefElement objectiveType;
 
     @Column(name = "LAST_UPDATE_DATE")
-    private Time lastUpdateDate;
+    private LocalDateTime lastUpdateDate;
     @Column(name = "OASYS_SET_PK")
     private Long oasysSetPk;
     @Column(name = "MIG_GUID")
@@ -56,11 +57,11 @@ public class SspObjectivesInSet {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Timestamp createDate;
+    private LocalDateTime createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private LocalDateTime lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 

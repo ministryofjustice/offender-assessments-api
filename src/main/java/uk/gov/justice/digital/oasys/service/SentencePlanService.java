@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
-import uk.gov.justice.digital.oasys.api.ProperSentencePlan;
+import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-import uk.gov.justice.digital.oasys.transformer.AssessmentsTransformer;
-import uk.gov.justice.digital.oasys.transformer.SentencePlanTransformer;
+import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -22,64 +22,48 @@ import java.util.stream.Stream;
 public class SentencePlanService {
 
     private final OffenderService offenderService;
-    private final AssessmentsTransformer assessmentsTransformer;
-    private final SentencePlanTransformer properSentencePlanTransformer;
 
     @Autowired
-    public SentencePlanService(OffenderService offenderService, AssessmentsTransformer assessmentsTransformer, SentencePlanTransformer properSentencePlanTransformer) {
+    public SentencePlanService(OffenderService offenderService) {
         this.offenderService = offenderService;
-        this.assessmentsTransformer = assessmentsTransformer;
-        this.properSentencePlanTransformer = properSentencePlanTransformer;
     }
 
     public Optional<BasicSentencePlan> getLatestBasicSentencePlanForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
         List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
-        return latestBasicSentencePlanOf(assessmentsFilter, assessmentGroups);
+        return latestBasicSentencePlanOf(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
     }
 
     public List<BasicSentencePlan> getBasicSentencePlansForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
         List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
-        return basicSentencePlansOf(assessmentsFilter, assessmentGroups);
+        return basicSentencePlansOf(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
     }
 
-    public List<ProperSentencePlan> getFullSentencePlansForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        final Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter =
-                assessmentsTransformer.assessmentsFilterOf(filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
-
+    public List<FullSentencePlanDto> getFullSentencePlansForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
-        return fullSentencePlansOf(assessmentsFilter, assessmentGroups);
+        return fullSentencePlansOf(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
 
     }
 
-    private Optional<BasicSentencePlan> latestBasicSentencePlanOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, List<OasysAssessmentGroup> assessmentGroups) {
-        return getOasysSetStream(assessmentsFilter, assessmentGroups).max(Comparator.comparing(OasysSet::getCreateDate))
+    private Optional<BasicSentencePlan> latestBasicSentencePlanOf(List<OasysAssessmentGroup> assessmentGroups, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
+        return getOasysSetStream(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus).max(Comparator.comparing(OasysSet::getCreateDate))
                 .map(BasicSentencePlan::from);
     }
 
-    private List<BasicSentencePlan> basicSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, List<OasysAssessmentGroup> assessmentGroups) {
-        return getOasysSetStream(assessmentsFilter, assessmentGroups)
+    private List<BasicSentencePlan> basicSentencePlansOf(List<OasysAssessmentGroup> assessmentGroups, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
+        return getOasysSetStream(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus)
                 .map(BasicSentencePlan::from)
                 .collect(Collectors.toList());
     }
 
-    private List<ProperSentencePlan> fullSentencePlansOf(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, List<OasysAssessmentGroup> assessmentGroups) {
-        return getOasysSetStream(assessmentsFilter, assessmentGroups)
-                .map(properSentencePlanTransformer::sentencePlanOf)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+    private List<FullSentencePlanDto> fullSentencePlansOf(List<OasysAssessmentGroup> assessmentGroups, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
+        return getOasysSetStream(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus)
+                .map(FullSentencePlanDto::from)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    private Stream<OasysSet> getOasysSetStream(Function<Stream<OasysSet>, Stream<OasysSet>> assessmentsFilter, List<OasysAssessmentGroup> assessmentGroups) {
-        return assessmentGroups
-                .stream()
-                .flatMap(oasysAssessmentGroup -> assessmentsFilter.apply(oasysAssessmentGroup.getOasysSets().stream()));
+    private Stream<OasysSet> getOasysSetStream(List<OasysAssessmentGroup> assessmentGroups, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
+        var oasysSets = assessmentGroups.stream().flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream());
+        return AssessmentFilters.assessmentsFilterOf(oasysSets, filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
     }
 }

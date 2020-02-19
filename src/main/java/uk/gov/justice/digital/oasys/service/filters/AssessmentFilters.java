@@ -1,37 +1,35 @@
 package uk.gov.justice.digital.oasys.service.filters;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import uk.gov.justice.digital.oasys.api.DtoUtils;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AssessmentFilters {
 
-    public static final BiFunction<String, Stream<OasysSet>, Stream<OasysSet>> byAssessmentType =
-            (type, oasysSets) -> oasysSets
-                    .filter(set -> set.getAssessmentType().getRefElementCode().equals(type));
+    public static Stream<OasysSet> assessmentsFilterOf(Stream<OasysSet> sets, Optional<String> filterAssessmentStatus, Optional<String> filterAssessmentType, Optional<String> filterGroupStatus, Optional<Boolean> filterVoided) {
 
-    public static final BiFunction<String, Stream<OasysSet>, Stream<OasysSet>> byGroupStatus =
-            (groupStatus, oasysSets) -> oasysSets
-                    .filter(set -> set.getGroup().getHistoricStatusELm().equals(groupStatus));
+        if(filterAssessmentStatus.isPresent()) {
+            sets = sets.filter(set -> filterAssessmentStatus.get().equals(DtoUtils.refElementCode(set.getAssessmentStatus())));
+        }
 
-    public static final BiFunction<Boolean, Stream<OasysSet>, Stream<OasysSet>> byVoided =
-            (isVoided, oasysSets) -> oasysSets
-                    .filter(set -> isVoided == (set.getAssessmentVoidedDate() != null));
+        if(filterAssessmentType.isPresent()) {
+            sets = sets.filter(set -> filterAssessmentType.get().equals(DtoUtils.refElementCode(set.getAssessmentType())));
+        }
 
-    public static final BiFunction<String, Stream<OasysSet>, Stream<OasysSet>> byAssessmentStatus =
-            (assessmentStatus, oasysSets) -> oasysSets
-                    .filter(set -> set.getAssessmentStatus().getRefElementCode().equals(assessmentStatus));
+        if(filterGroupStatus.isPresent()) {
+            sets = sets.filter(set -> filterGroupStatus.get().equals(set.getGroup() == null ? null : set.getGroup().getHistoricStatusELm()));
+        }
 
-    public static final Function<Stream<OasysSet>, Stream<OasysSet>> identity = (oasysSets -> oasysSets);
+        if(filterVoided.isPresent()) {
+            sets = sets.filter(set -> filterVoided.get() == (Objects.nonNull(set.getAssessmentVoidedDate())));
+        }
 
-    public static Function<Stream<OasysSet>, Stream<OasysSet>> curry(BiFunction<String, Stream<OasysSet>, Stream<OasysSet>> f, String x) {
-        return y -> f.apply(x, y);
+        return sets;
     }
-
-    public static Function<Stream<OasysSet>, Stream<OasysSet>> curry(BiFunction<Boolean, Stream<OasysSet>, Stream<OasysSet>> f, Boolean x) {
-        return y -> f.apply(x, y);
-    }
-
 }

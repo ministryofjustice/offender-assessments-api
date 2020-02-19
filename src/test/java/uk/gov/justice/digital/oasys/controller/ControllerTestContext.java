@@ -1,14 +1,12 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import com.google.common.collect.ImmutableList;
 import org.mockito.Mockito;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -64,7 +62,7 @@ public class ControllerTestContext {
 
     private static List<OasysSet> someOasysSets() {
         return List.of(OasysSet.builder()
-                        .createDate(new Timestamp(System.currentTimeMillis() - oneDay()))
+                        .createDate(LocalDateTime.now().minusDays(1))
                         .assessmentType(assessmentType("oasys"))
                         .oasysSetPk(1L)
                         .ogrs31Year(BigDecimal.ONE)
@@ -90,7 +88,7 @@ public class ControllerTestContext {
                         .offenceBlock(anOffenceBlock())
                         .build(),
                 OasysSet.builder()
-                        .createDate(new Timestamp(System.currentTimeMillis()))
+                        .createDate(LocalDateTime.now())
                         .assessmentType(assessmentType("sara"))
                         .oasysSetPk(2L)
                         .ogrs31Year(BigDecimal.TEN)
@@ -112,7 +110,7 @@ public class ControllerTestContext {
                         .ovpSexWesc(BigDecimal.TEN)
                         .group(aGroup("CURRENT"))
                         .assessmentStatus(anAssessmentStatus("COMPLETE"))
-                        .assessmentVoidedDate(new Timestamp(System.currentTimeMillis()))
+                        .assessmentVoidedDate(LocalDateTime.now())
                         .basicSentencePlanList(aSentencePlan(2L))
                         .offenceBlock(anOffenceBlock())
                         .build());
@@ -183,9 +181,6 @@ public class ControllerTestContext {
                 .build();
     }
 
-    private static long oneDay() {
-        return 1000 * 60 * 60 * 24;
-    }
     private static RefElement assessmentType(String type) {
         return RefElement.builder().refElementCode(type).build();
     }

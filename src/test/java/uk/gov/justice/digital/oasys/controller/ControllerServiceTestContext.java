@@ -8,8 +8,6 @@ import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,7 +58,7 @@ public class ControllerServiceTestContext {
 
     private static List<OasysSet> someOasysSets() {
         return ImmutableList.of(OasysSet.builder()
-                        .createDate(new Timestamp(System.currentTimeMillis() - oneDay()))
+                        .createDate(LocalDateTime.now().minusDays(1))
                         .assessmentType(assessmentType("oasys"))
                         .oasysSetPk(1L)
                         .ogrs31Year(BigDecimal.ONE)
@@ -86,7 +84,7 @@ public class ControllerServiceTestContext {
                         .offenceBlock(anOffenceBlock())
                         .build(),
                 OasysSet.builder()
-                        .createDate(new Timestamp(System.currentTimeMillis()))
+                        .createDate(LocalDateTime.now())
                         .assessmentType(assessmentType("sara"))
                         .oasysSetPk(2L)
                         .ogrs31Year(BigDecimal.TEN)
@@ -108,7 +106,7 @@ public class ControllerServiceTestContext {
                         .ovpSexWesc(BigDecimal.TEN)
                         .group(aGroup("CURRENT"))
                         .assessmentStatus(anAssessmentStatus("COMPLETE"))
-                        .assessmentVoidedDate(new Timestamp(System.currentTimeMillis()))
+                        .assessmentVoidedDate(LocalDateTime.now())
                         .basicSentencePlanList(Set.of(aSentencePlan(2L)))
                         .offenceBlock(anOffenceBlock())
                         .build());
@@ -138,7 +136,7 @@ public class ControllerServiceTestContext {
 
     private static BasicSentencePlanObj aSentencePlan(long l) {
                 return BasicSentencePlanObj.builder()
-                        .basicSentPlanObjPk(1l)
+                        .basicSentPlanObjPk(1L)
                         .includeInPlanInd("Y")
                         .createDate(LocalDateTime.now().minusDays(1))
                         .objectiveText("obj" + l)
@@ -162,24 +160,13 @@ public class ControllerServiceTestContext {
                 .build();
     }
 
-    private static long oneDay() {
-        return 1000 * 60 * 60 * 24;
-    }
     private static RefElement assessmentType(String type) {
         return RefElement.builder().refElementCode(type).build();
     }
 
-    public static OasysSet anOasysSet(Long id) {
-        return OasysSet.builder()
-                .assessmentType(RefElement.builder().build())
-                .group(OasysAssessmentGroup.builder().build())
-                .assessmentStatus(RefElement.builder().build())
-                .oasysSetPk(id).build();
-    }
-
     public static OasysSet layer3AssessmentOasysSet(Long id) {
         return OasysSet.builder()
-                .createDate(new Timestamp(System.currentTimeMillis() - oneDay()))
+                .createDate(LocalDateTime.now().minusDays(1))
                 .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
                 .group(OasysAssessmentGroup.builder().build())
                 .oasysSections(completeLayer3AssessmentSections())

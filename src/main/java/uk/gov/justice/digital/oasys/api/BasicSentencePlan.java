@@ -27,6 +27,6 @@ public class BasicSentencePlan {
         return BasicSentencePlan.builder()
                 .basicSentencePlanItems(basicSentencePlanItems)
                 .sentencePlanId(oasysSet.getOasysSetPk())
-                .createdDate(oasysSet.getCreateDate().toLocalDateTime().toLocalDate()).build();
+                .createdDate(oasysSet.getCreateDate().toLocalDate()).build();
     }
 }

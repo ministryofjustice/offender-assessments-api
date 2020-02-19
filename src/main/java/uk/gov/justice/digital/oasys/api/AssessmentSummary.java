@@ -43,10 +43,10 @@ public class AssessmentSummary {
                 oasysSet.getGroup().getHistoricStatusELm(),
                 oasysSet.getAssessmentStatus().getRefElementCode(),
                 oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()),
-                oasysSet.getCreateDate() == null ? null : oasysSet.getCreateDate().toLocalDateTime(),
-                oasysSet.getDateCompleted() == null ? false : true,
-                oasysSet.getDateCompleted() == null ? null : oasysSet.getDateCompleted().toLocalDateTime(),
-                oasysSet.getAssessmentVoidedDate() == null ? false : true);
+                oasysSet.getCreateDate(),
+                oasysSet.getDateCompleted() != null,
+                oasysSet.getDateCompleted(),
+                oasysSet.getAssessmentVoidedDate() != null);
 
     }
 }

@@ -78,7 +78,7 @@ public class OvpService {
                                         .ovpNonViolentWeightedScore(oasysSet.getOvpNonVioWesc())
                                         .ovpAgeWeightedScore(oasysSet.getOvpAgeWesc())
                                         .ovpSexWeightedScore(oasysSet.getOvpSexWesc())
-                                        .completedDate(Optional.ofNullable(oasysSet.getDateCompleted()).map(Timestamp::toLocalDateTime).orElse(null))
+                                        .completedDate(oasysSet.getDateCompleted())
                                         .assessmentCompleted(oasysSet.getDateCompleted() != null)
                                         .assessmentVoided(oasysSet.getAssessmentVoidedDate() != null)
                                         .build()))

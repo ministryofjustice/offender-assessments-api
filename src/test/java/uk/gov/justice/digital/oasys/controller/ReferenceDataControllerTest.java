@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.justice.digital.oasys.api.RefElement;
+import uk.gov.justice.digital.oasys.api.RefElementDto;
 import uk.gov.justice.digital.oasys.jpa.repository.ReferenceDataRepository;
 
 import static io.restassured.RestAssured.given;
@@ -55,7 +55,7 @@ public class ReferenceDataControllerTest {
 
     @Test
     public void canGetAllInterventions() {
-        RefElement[] sentencePlans = given()
+        RefElementDto[] sentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/referencedata/INTERVENTION")
@@ -63,7 +63,7 @@ public class ReferenceDataControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(RefElement[].class);
+                .as(RefElementDto[].class);
 
         assertThat(sentencePlans).hasSize(2);
     }
