@@ -45,7 +45,7 @@ public class OasysSet {
     @Column(name = "ASSESSMENT_VOIDED_BY")
     private String assessmentVoidedBy;
     @Column(name = "ASSESSMENT_VOIDED_DATE")
-    private Timestamp assessmentVoidedDate;
+    private LocalDateTime assessmentVoidedDate;
     @Column(name = "ASSESSOR_NAME")
     private String assessorName;
     @Column(name = "ASSESSOR_OFFICE")
@@ -59,15 +59,15 @@ public class OasysSet {
     @Column(name = "ASSESSOR_POSITION")
     private String assessorPosition;
     @Column(name = "ASSESSOR_SIGNED_DATE")
-    private Timestamp assessorSignedDate;
+    private LocalDateTime assessorSignedDate;
     @Column(name = "AUTOMATIC_RELEASE_DATE")
-    private Timestamp automaticReleaseDate;
+    private LocalDateTime automaticReleaseDate;
     @Column(name = "CHARGES_PENDING_DTL")
     private String chargesPendingDtl;
     @Column(name = "CHARGES_PENDING_IND")
     private String chargesPendingInd;
     @Column(name = "CONDITIONAL_RELEASE_DATE")
-    private Timestamp conditionalReleaseDate;
+    private LocalDateTime conditionalReleaseDate;
     @Column(name = "COUNTERSIGNER_NAME")
     private String countersignerName;
     @Column(name = "COUNTERSIGNER_OFFICE")
@@ -77,7 +77,7 @@ public class OasysSet {
     @Column(name = "COUNTERSIGNER_POSITION")
     private String countersignerPosition;
     @Column(name = "COUNTERSIGNER_SIGNED_DATE")
-    private Timestamp countersignerSignedDate;
+    private LocalDateTime countersignerSignedDate;
     @Column(name = "COUNTERSIGNER_COMMENTS")
     private String countersignerComments;
     @Column(name = "CMS_PROB_NUMBER")
@@ -105,9 +105,9 @@ public class OasysSet {
     @Column(name = "CURRENT_TELEPHONE_NUMBER")
     private String currentTelephoneNumber;
     @Column(name = "DATE_OF_ACTUAL_RELEASE")
-    private Timestamp dateOfActualRelease;
+    private LocalDateTime dateOfActualRelease;
     @Column(name = "DATE_OF_BIRTH")
-    private Timestamp dateOfBirth;
+    private LocalDateTime dateOfBirth;
     @Column(name = "DET_U_IMMIGRATION_ACT_IND")
     private String detUImmigrationActInd;
     @Column(name = "DISCHARGE_ADDRESS_LINE_1")
@@ -127,7 +127,7 @@ public class OasysSet {
     @Column(name = "DISCHARGE_TELEPHONE_NUM")
     private String dischargeTelephoneNum;
     @Column(name = "FACILITY_LIC_ELIG_DATE")
-    private Timestamp facilityLicEligDate;
+    private LocalDateTime facilityLicEligDate;
     @Column(name = "FAMILY_NAME")
     private String familyName;
     @Column(name = "FORENAME_1")
@@ -137,17 +137,17 @@ public class OasysSet {
     @Column(name = "FORENAME_3")
     private String forename3;
     @Column(name = "HOME_DETN_CURFEW_DATE")
-    private Timestamp homeDetnCurfewDate;
+    private LocalDateTime homeDetnCurfewDate;
     @Column(name = "INITIATION_DATE")
-    private Timestamp initiationDate;
+    private LocalDateTime initiationDate;
     @Column(name = "INTERPRETER_REQUIRED_IND")
     private String interpreterRequiredInd;
     @Column(name = "LICENCE_EXPIRY_DATE")
-    private Timestamp licenceExpiryDate;
+    private LocalDateTime licenceExpiryDate;
     @Column(name = "LICENCE_REQUIRE_RELEASE")
     private String licenceRequireRelease;
     @Column(name = "NON_PAROLE_DATE")
-    private Timestamp nonParoleDate;
+    private LocalDateTime nonParoleDate;
     @Column(name = "OASYS_FORM_VERSION")
     private Long oasysFormVersion;
     @Column(name = "OASYS_SCORING_ALG_VERSION")
@@ -155,7 +155,7 @@ public class OasysSet {
     @Column(name = "OFFDR_IDENT_PERSIST_IND")
     private String offdrIdentPersistInd;
     @Column(name = "PAROLE_ELIGIBILITY_DATE")
-    private Timestamp paroleEligibilityDate;
+    private LocalDateTime paroleEligibilityDate;
     @Column(name = "PNC")
     private String pnc;
     @Column(name = "PRF_SPKN_LNG_OFTXT")
@@ -179,13 +179,13 @@ public class OasysSet {
     @Column(name = "DATE_COMPLETED")
     private LocalDateTime dateCompleted;
     @Column(name = "DATE_ASSESSMENT_REQST")
-    private Timestamp dateAssessmentReqst;
+    private LocalDateTime dateAssessmentReqst;
     @Column(name = "DATE_REPORT_REQST")
-    private Timestamp dateReportReqst;
+    private LocalDateTime dateReportReqst;
     @Column(name = "RESETTLE_LIC_ELIG_DATE")
-    private Timestamp resettleLicEligDate;
+    private LocalDateTime resettleLicEligDate;
     @Column(name = "SENTENCE_EXPIRY_DATE")
-    private Timestamp sentenceExpiryDate;
+    private LocalDateTime sentenceExpiryDate;
     @Column(name = "SOURCES_INFO_OTHER_FTXT")
     private String sourcesInfoOtherFtxt;
     @Column(name = "LOOKED_AFTER")
@@ -233,17 +233,17 @@ public class OasysSet {
     @Column(name = "COURT_OTHER_TEXT")
     private String courtOtherText;
     @Column(name = "RECALL_DATE")
-    private Timestamp recallDate;
+    private LocalDateTime recallDate;
     @Column(name = "DELETED_DATE")
-    private Timestamp deletedDate;
+    private LocalDateTime deletedDate;
     @Column(name = "BCS_SENT_PLAN_TEXT")
     private String bcsSentPlanText;
     @Column(name = "ARMED_FORCES_IND")
     private String armedForcesInd;
     @Column(name = "NO_SARA_DATE")
-    private Timestamp noSaraDate;
+    private LocalDateTime noSaraDate;
     @Column(name = "NO_RM2000_DATE")
-    private Timestamp noRm2000Date;
+    private LocalDateTime noRm2000Date;
     @Column(name = "PHYSICAL_LOCATION_OTHER")
     private String physicalLocationOther;
     @Column(name = "INVALID_SECT1_SCORE")
@@ -251,7 +251,7 @@ public class OasysSet {
     @Column(name = "AGE_FOLLOW_UP")
     private Long ageFollowUp;
     @Column(name = "CMS_LAST_EXPORT_DATE")
-    private Timestamp cmsLastExportDate;
+    private LocalDateTime cmsLastExportDate;
     @Column(name = "CMS_RESEND_IND")
     private String cmsResendInd;
     @Column(name = "CLONED_LOCKED_INCOMP_IND")
@@ -263,11 +263,11 @@ public class OasysSet {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Timestamp createDate;
+    private LocalDateTime createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Timestamp lastupdDate;
+    private LocalDateTime lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
     @Column(name = "CMS_EVENT_NUMBER")
@@ -279,11 +279,11 @@ public class OasysSet {
     @Column(name = "POST_SENT_SUPV_DATE_IND")
     private String postSentSupvDateInd;
     @Column(name = "POST_SENT_SUPV_DATE")
-    private Timestamp postSentSupvDate;
+    private LocalDateTime postSentSupvDate;
     @Column(name = "BCS_SYSTEM_CREATED_IND")
     private String bcsSystemCreatedInd;
     @Column(name = "RECEPTION_DATE")
-    private Timestamp receptionDate;
+    private LocalDateTime receptionDate;
 
     @OneToOne
     @JoinColumns({

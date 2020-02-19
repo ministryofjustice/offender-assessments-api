@@ -20,7 +20,7 @@ public class SentencePlanTransformerTest {
         var today = LocalDateTime.now();
 
         var oasysSet = OasysSet.builder()
-                .createDate(Timestamp.valueOf(LocalDateTime.MIN))
+                .createDate(LocalDateTime.MIN)
                 .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().createDate(today).build()))
                 .build();
 
@@ -35,7 +35,7 @@ public class SentencePlanTransformerTest {
         var threeMonthsFromNow = LocalDateTime.now().plusMonths(30);
 
         var oasysSet = OasysSet.builder()
-                .createDate(Timestamp.valueOf(today))
+                .createDate(today)
                 .dateCompleted(threeMonthsFromNow)
                 .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(Timestamp.valueOf(today)).build()).build()))
                 .build();
@@ -51,7 +51,7 @@ public class SentencePlanTransformerTest {
 
 
         var oasysSet = OasysSet.builder()
-                .createDate(Timestamp.valueOf(today))
+                .createDate(today)
                 .dateCompleted(null)
                 .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(Timestamp.valueOf(today)).build()).build()))
                 .build();

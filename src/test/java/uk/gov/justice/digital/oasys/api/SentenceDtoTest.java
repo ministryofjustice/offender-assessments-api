@@ -86,21 +86,21 @@ public class SentenceDtoTest {
     private static List<OasysSet> anOasysSetValid() {
         return ImmutableList.of(OasysSet.builder()
                 .offenceBlock(anOffenceBlockValid())
-                .createDate(Timestamp.valueOf(LocalDateTime.now()))
+                .createDate(LocalDateTime.now())
                 .build());
     }
 
     private static List<OasysSet> anOasysSetNullDetails() {
         return ImmutableList.of(OasysSet.builder()
                 .offenceBlock(anOffenceBlockNullDetail())
-                .createDate(Timestamp.valueOf(LocalDateTime.now()))
+                .createDate(LocalDateTime.now())
                 .build());
     }
 
     private static List<OasysSet> anOasysSetNullSentence() {
         return ImmutableList.of(OasysSet.builder()
                 .offenceBlock(anOffenceBlockNullSentence())
-                .createDate(Timestamp.valueOf(LocalDateTime.now()))
+                .createDate(LocalDateTime.now())
                 .build());
     }
 

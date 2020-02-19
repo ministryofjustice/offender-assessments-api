@@ -22,6 +22,6 @@ public final class DtoUtils {
         if(refElement == null) {
             return null;
         }
-        return refElement.getRefElementDesc();
+        return refElement.getRefElementCode();
     }
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Data
@@ -21,9 +22,9 @@ public class QaReview {
     @Column(name = "QA_STATUS_ELM")
     private String qaStatus;
     @Column(name = "DATE_SELECTED")
-    private Timestamp dateSelected;
+    private LocalDateTime dateSelected;
     @Column(name = "DATE_COMPLETED")
-    private Timestamp dateCompleted;
+    private LocalDateTime dateCompleted;
     @Column(name = "QA_SUBSTITUTION_REASON")
     private String qaSubstitutionReason;
 //    @Column(name = "OASYS_SET_PK")
