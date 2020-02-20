@@ -3,6 +3,7 @@ package uk.gov.justice.digital.oasys.api;
 import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ public class BasicSentencePlan {
                 .map(BasicSentencePlanItem::from)
                 .collect(Collectors.toList());
 
-        if(basicSentencePlanItems.isEmpty()) {
+        if (basicSentencePlanItems.isEmpty()) {
             return null;
         }
 

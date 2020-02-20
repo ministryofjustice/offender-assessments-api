@@ -7,7 +7,9 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjectivesInSet;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Value
@@ -25,7 +27,7 @@ public class FullSentencePlanDto {
                 oasysSet.getDateCompleted(),
                 ObjectiveDto.from(oasysSet.getSspObjectivesInSets()));
 
-        if(sp.getObjectives() == null || sp.getObjectives().isEmpty()){
+        if (sp.getObjectives() == null || sp.getObjectives().isEmpty()) {
             return null;
         }
 

@@ -14,7 +14,7 @@ public class WhoDoingWorkDto {
     private String comments;
 
     public static WhoDoingWorkDto from(SspWhoDoWorkPivot sspWhoDoWorkPivot) {
-        if(sspWhoDoWorkPivot == null) {
+        if (sspWhoDoWorkPivot == null) {
             return null;
         }
         return WhoDoingWorkDto.builder()

@@ -1,6 +1,8 @@
 package uk.gov.justice.digital.oasys.api;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
 
@@ -38,7 +40,7 @@ public class QuestionDto {
     }
 
     public static QuestionDto from(OasysQuestion question) {
-        if(question == null)  {
+        if (question == null) {
             return null;
         }
         var refQuestion = Optional.ofNullable(question.getRefQuestion());
@@ -49,7 +51,7 @@ public class QuestionDto {
                 question.getOasysQuestionPk(),
                 question.getDisplayScore(),
                 refQuestion.map(RefQuestion::getRefSectionQuestion).orElse(null),
-                AnswerDto.from(question,question.getOasysAnswer()));
+                AnswerDto.from(question, question.getOasysAnswer()));
 
     }
 }

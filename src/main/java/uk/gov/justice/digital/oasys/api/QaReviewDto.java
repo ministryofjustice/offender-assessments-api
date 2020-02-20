@@ -27,22 +27,22 @@ public class QaReviewDto {
     private OasysUserDto qaUser;
 
     public static QaReviewDto from(QaReview qaReview) {
-            return Optional.ofNullable(qaReview)
-                    .map(qaReview1 -> QaReviewDto.builder()
-                            .currentlyHidden(ynToBoolean(qaReview.getCurrentlyHidden()))
-                            .dateCompleted(qaReview.getDateCompleted())
-                            .dateSelected(qaReview.getDateSelected())
-                            .displaySort(qaReview.getDisplaySort())
-                            .qaGrading(qaReview.getQaGrading())
-                            .qaScore(qaReview.getQaScore())
-                            .qaStatus(qaReview.getQaStatus())
-                            .qaSubstitutionReason(qaReview.getQaSubstitutionReason())
-                            .qaUser(OasysUserDto.from(qaReview.getQaUser()))
-                            .refPeriodMonth(qaReview.getRefPeriodMonth())
-                            .refPeriodQtr(qaReview.getRefPeriodQtr())
-                            .refPeriodYear(qaReview.getRefPeriodYear())
-                            .build()
-                    )
-                    .orElse(null);
+        return Optional.ofNullable(qaReview)
+                .map(qaReview1 -> QaReviewDto.builder()
+                        .currentlyHidden(ynToBoolean(qaReview.getCurrentlyHidden()))
+                        .dateCompleted(qaReview.getDateCompleted())
+                        .dateSelected(qaReview.getDateSelected())
+                        .displaySort(qaReview.getDisplaySort())
+                        .qaGrading(qaReview.getQaGrading())
+                        .qaScore(qaReview.getQaScore())
+                        .qaStatus(qaReview.getQaStatus())
+                        .qaSubstitutionReason(qaReview.getQaSubstitutionReason())
+                        .qaUser(OasysUserDto.from(qaReview.getQaUser()))
+                        .refPeriodMonth(qaReview.getRefPeriodMonth())
+                        .refPeriodQtr(qaReview.getRefPeriodQtr())
+                        .refPeriodYear(qaReview.getRefPeriodYear())
+                        .build()
+                )
+                .orElse(null);
     }
 }

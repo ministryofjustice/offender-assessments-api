@@ -6,7 +6,9 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
 
-/** Adds version data to the /health endpoint. This is called by the UI to display API details */
+/**
+ * Adds version data to the /health endpoint. This is called by the UI to display API details
+ */
 @Component
 public class HealthInfo implements HealthIndicator {
 
@@ -18,7 +20,7 @@ public class HealthInfo implements HealthIndicator {
         return Health.up().withDetail("version", getVersion()).build();
     }
 
-    private String getVersion(){
+    private String getVersion() {
         return buildProperties == null ? "version not available" : buildProperties.getVersion();
     }
 

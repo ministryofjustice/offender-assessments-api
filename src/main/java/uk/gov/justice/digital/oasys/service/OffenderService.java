@@ -48,7 +48,7 @@ public class OffenderService {
                 offender = offenderRepository.getByCmsProbNumber(identifier);
                 break;
             case PNC:
-                offender =  offenderRepository.getByPnc(identifier);
+                offender = offenderRepository.getByPnc(identifier);
                 break;
             case NOMIS:
                 offender = offenderRepository.getByCmsPrisNumber(identifier);

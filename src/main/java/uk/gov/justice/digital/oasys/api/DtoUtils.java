@@ -5,21 +5,21 @@ import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 public final class DtoUtils {
 
     public static Boolean ynToBoolean(String ynValue) {
-        if(ynValue == null) {
+        if (ynValue == null) {
             return null;
         }
         return ynValue.equalsIgnoreCase("Y");
     }
 
     public static String refElementDesc(RefElement refElement) {
-        if(refElement == null) {
+        if (refElement == null) {
             return null;
         }
         return refElement.getRefElementDesc();
     }
 
     public static String refElementCode(RefElement refElement) {
-        if(refElement == null) {
+        if (refElement == null) {
             return null;
         }
         return refElement.getRefElementCode();

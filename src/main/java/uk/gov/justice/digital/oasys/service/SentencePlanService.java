@@ -8,6 +8,7 @@ import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -28,17 +29,17 @@ public class SentencePlanService {
     }
 
     public Optional<BasicSentencePlan> getLatestBasicSentencePlanForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
+        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType, identity);
         return latestBasicSentencePlanOf(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
     }
 
     public List<BasicSentencePlan> getBasicSentencePlansForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
+        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType, identity);
         return basicSentencePlansOf(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
     }
 
     public List<FullSentencePlanDto> getFullSentencePlansForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
+        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType, identity);
         return fullSentencePlansOf(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
 
     }
