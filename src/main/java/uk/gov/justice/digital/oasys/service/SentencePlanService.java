@@ -51,6 +51,7 @@ public class SentencePlanService {
     private List<BasicSentencePlan> basicSentencePlansOf(List<OasysAssessmentGroup> assessmentGroups, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         return getOasysSetStream(assessmentGroups, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus)
                 .map(BasicSentencePlan::from)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
