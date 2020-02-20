@@ -9,9 +9,9 @@ import com.jayway.jsonpath.JsonPath;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import uk.gov.justice.digital.oasys.OffenderAssessmentsApi;
+import uk.gov.justice.digital.oasys.jpa.entity.*;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static com.revinate.assertj.json.JsonPathAssert.assertThat;
 
@@ -19,7 +19,7 @@ public class AssessmentTest {
 
     @Test
     public void tspEligibilityIsIndicatedOnCompletedLayer3() throws JsonProcessingException {
-        Assessment assessment = Assessment.builder().
+        AssessmentDto assessment = AssessmentDto.builder().
                 sections(completeLayer3Sections())
                 .assessmentType("LAYER_3")
                 .build();
@@ -35,7 +35,7 @@ public class AssessmentTest {
 
     @Test
     public void tspEligibilityIsAbsentOnNotLayer3() throws JsonProcessingException {
-        Assessment assessment = Assessment.builder().
+        AssessmentDto assessment = AssessmentDto.builder().
                 sections(completeLayer3Sections())
                 .assessmentType("LAYER_666")
                 .build();
@@ -49,7 +49,7 @@ public class AssessmentTest {
 
     @Test
     public void tspEligibilityIsAbsentWhenLayer3ButIncomplete() throws JsonProcessingException {
-        Assessment assessment = Assessment.builder().
+        AssessmentDto assessment = AssessmentDto.builder().
                 sections(incompleteLayer3Sections())
                 .assessmentType("LAYER_3")
                 .build();
@@ -67,7 +67,7 @@ public class AssessmentTest {
         builder.put("2.6", 1L).put("7.2", 1L).put("11.4", 1L).put("11.6", 1L).put("11.7", 1L).put("11.9", 1L).put("12.1", 1L);
 
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -90,7 +90,7 @@ public class AssessmentTest {
         builder.put("2.6", 1L).put("7.2", 1L).put("11.4", 1L).put("11.6", 2L).put("11.7", 0L).put("11.9", 0L).put("12.1", 0L);
 
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -109,7 +109,7 @@ public class AssessmentTest {
         builder.put("2.6", 1L).put("7.2", 1L).put("11.4", 1L).put("11.6", 0L).put("11.7", 2L).put("11.9", 0L).put("12.1", 0L);
 
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -129,7 +129,7 @@ public class AssessmentTest {
         builder.put("2.6", 1L).put("7.2", 1L).put("11.4", 1L).put("11.6", 1L).put("11.7", 1L).put("11.9", 0L).put("12.1", 0L);
 
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -148,7 +148,7 @@ public class AssessmentTest {
         builder.put("2.6", 1L).put("7.2", 1L).put("11.4", 1L).put("11.6", 1L).put("11.7", 1L).put("11.9", 0L).put("12.1", 0L);
 
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -167,7 +167,7 @@ public class AssessmentTest {
         builder.put("2.6", 1L).put("7.2", 0L).put("11.4", 0L).put("11.6", 0L).put("11.7", 0L).put("11.9", 0L).put("12.1", 0L);
 
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(sectionsWithScoresOf(completeLayer3Sections(), builder.build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -181,58 +181,51 @@ public class AssessmentTest {
         assertThat(ctx).jsonPathAsBoolean("$.tspEligible").isFalse();
     }
 
-    private Map<String, Section> sectionsWithScoresOf(Map<String, Section> sections, Map<String, Long> scores) {
-        return Maps.transformValues(sections, input -> Section.builder()
+    private Map<String, SectionDto> sectionsWithScoresOf(Map<String, SectionDto> sections, Map<String, Long> scores) {
+        return Maps.transformValues(sections, input -> SectionDto.builder()
                 .questions(questionsWithScoresOf(input.getQuestions(), scores))
                 .build());
     }
 
-    private Map<String, Question> questionsWithScoresOf(Map<String, Question> questions, Map<String, Long> scores) {
-        return Maps.transformEntries(questions, (key, value) -> Question.builder().answer(Optional.of(Answer.builder().ovpScore(scores.get(key)).build())).build());
+    private Map<String, QuestionDto> questionsWithScoresOf(Map<String, QuestionDto> questions, Map<String, Long> scores) {
+        return Maps.transformEntries(questions, (key, value) -> answerOGP(scores.get(key)));
     }
 
-    private Map<String, Section> incompleteLayer3Sections() {
+    private Map<String, SectionDto> incompleteLayer3Sections() {
 
-        Section section2 = Section.builder()
+        SectionDto section2 = SectionDto.builder()
                 .refSectionCode("2")
-                .questions(ImmutableMap.of("2.6", Question.builder().build()))
+                .questions(ImmutableMap.of("2.6", new QuestionDto()))
                 .build();
 
-        Section section7 = Section.builder()
+        SectionDto section7 = SectionDto.builder()
                 .refSectionCode("7")
-                .questions(ImmutableMap.of("7.2", Question.builder().
-                        answer(Optional.of(Answer.builder().ogpScore(0L).build())).build()))
+                .questions(ImmutableMap.of("7.2", answerOGPZero()))
                 .build();
 
-        Section section11 = Section.builder()
+        SectionDto section11 = SectionDto.builder()
                 .refSectionCode("11")
-                .questions(ImmutableMap.of("11.4", Question.builder().
-                                answer(Optional.of(Answer.builder().ogpScore(0L).build())).build(),
-                        "11.6", Question.builder().
-                                answer(Optional.of(Answer.builder().ogpScore(0L).build())).build(),
-                        "11.7", Question.builder().
-                                answer(Optional.of(Answer.builder().ogpScore(0L).build())).build(),
-                        "11.9", Question.builder().
-                                answer(Optional.of(Answer.builder().ogpScore(0L).build())).build()))
+                .questions(ImmutableMap.of("11.4", answerOGPZero(),
+                        "11.6", answerOGPZero(),
+                        "11.7", answerOGPZero(),
+                        "11.9", answerOGPZero()))
                 .build();
 
-        Section section12 = Section.builder()
+        SectionDto section12 = SectionDto.builder()
                 .refSectionCode("12")
-                .questions(ImmutableMap.of("12.1", Question.builder().
-                        answer(Optional.of(Answer.builder().ogpScore(0L).build())).build()))
+                .questions(ImmutableMap.of("12.1", answerOGPZero()))
                 .build();
 
         return ImmutableMap.of("2", section2, "7", section7, "11", section11, "12", section12);
     }
 
-    private Map<String, Section> completeLayer3Sections() {
-        Section section2 = Section.builder()
+    private Map<String, SectionDto> completeLayer3Sections() {
+        SectionDto section2 = SectionDto.builder()
                 .refSectionCode("2")
-                .questions(ImmutableMap.of("2.6", Question.builder().
-                        answer(Optional.of(Answer.builder().ovpScore(0L).build())).build()))
+                .questions(ImmutableMap.of("2.6", answerOVPZero()))
                 .build();
 
-        return ImmutableMap.<String, Section>builder().putAll(Maps.filterEntries(incompleteLayer3Sections(), s -> !s.getKey().equals("2"))).put("2", section2).build();
+        return ImmutableMap.<String, SectionDto>builder().putAll(Maps.filterEntries(incompleteLayer3Sections(), s -> !s.getKey().equals("2"))).put("2", section2).build();
 
     }
 
@@ -242,13 +235,12 @@ public class AssessmentTest {
         builder.put("2.6", 7L);
 
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(sectionsWithScoresOf(ImmutableMap.of(
                         "2",
-                        Section.builder()
+                        SectionDto.builder()
                                 .refSectionCode("2")
-                                .questions(ImmutableMap.of("2.6", Question.builder().
-                                        answer(Optional.of(Answer.builder().ovpScore(0L).build())).build()))
+                                .questions(ImmutableMap.of("2.6", answerOVPZero()))
                                 .build()), builder.build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -267,16 +259,14 @@ public class AssessmentTest {
 
         ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
 
-        var assessment = Assessment.builder()
+        var assessment = AssessmentDto.builder()
                 .sections(ImmutableMap.of(
                         "ROSH",
-                        Section.builder()
+                        SectionDto.builder()
                                 .refSectionCode("ROSH")
                                 .questions(ImmutableMap.of(
-                                        "R2.1", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
-                                        "R2.2", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
+                                        "R2.1", answerYes(),
+                                        "R2.2", answerNo()))
                                 .build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -292,16 +282,14 @@ public class AssessmentTest {
 
         ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
 
-        var assessment = Assessment.builder()
+        var assessment = AssessmentDto.builder()
                 .sections(ImmutableMap.of(
                         "ROSH",
-                        Section.builder()
+                        SectionDto.builder()
                                 .refSectionCode("ROSH")
                                 .questions(ImmutableMap.of(
-                                        "R2.1", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build(),
-                                        "R2.2", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                                        "R2.1", answerNo(),
+                                        "R2.2", answerYes()))
                                 .build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -317,16 +305,14 @@ public class AssessmentTest {
 
         ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
 
-        var assessment = Assessment.builder()
+        var assessment = AssessmentDto.builder()
                 .sections(ImmutableMap.of(
                         "ROSH",
-                        Section.builder()
+                        SectionDto.builder()
                                 .refSectionCode("ROSH")
                                 .questions(ImmutableMap.of(
-                                        "R2.1", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
-                                        "R2.2", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                                        "R2.1", answerYes(),
+                                        "R2.2", answerYes()))
                                 .build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -342,16 +328,14 @@ public class AssessmentTest {
 
         ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
 
-        var assessment = Assessment.builder()
+        var assessment = AssessmentDto.builder()
                 .sections(ImmutableMap.of(
                         "ROSH",
-                        Section.builder()
+                        SectionDto.builder()
                                 .refSectionCode("ROSH")
                                 .questions(ImmutableMap.of(
-                                        "R2.1", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build(),
-                                        "R2.2", Question.builder().
-                                                answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
+                                        "R2.1", answerNo(),
+                                        "R2.2", answerNo()))
                                 .build()))
                 .assessmentType("LAYER_3")
                 .build();
@@ -367,13 +351,57 @@ public class AssessmentTest {
     public void childIndicatorsAreAbsentWhenInsufficientDataInAssessment() throws JsonProcessingException {
         ObjectMapper objectMapper = new OffenderAssessmentsApi().objectMapper();
 
-        var assessment = Assessment.builder()
+        var assessment = AssessmentDto.builder()
                 .assessmentType("LAYER_3")
                 .build();
 
 
         final String json = objectMapper.writeValueAsString(assessment);
         Assertions.assertThat(json.contains("childSafeguardingIndicated")).isFalse();
+    }
+
+    private static QuestionDto answerNo(){
+        OasysAnswer oasysAnswer = new OasysAnswer();
+        uk.gov.justice.digital.oasys.jpa.entity.RefAnswer refAnswer = new uk.gov.justice.digital.oasys.jpa.entity.RefAnswer();
+        refAnswer.setRefAnswerCode("NO");
+        oasysAnswer.setRefAnswer(refAnswer);
+        OasysQuestion oasysQuestion = new OasysQuestion();
+        oasysQuestion.setOasysAnswer(oasysAnswer);
+        return QuestionDto.from(oasysQuestion);
+    }
+
+    private static QuestionDto answerYes(){
+        OasysAnswer oasysAnswer = new OasysAnswer();
+        uk.gov.justice.digital.oasys.jpa.entity.RefAnswer refAnswer = new RefAnswer();
+        refAnswer.setRefAnswerCode("YES");
+        oasysAnswer.setRefAnswer(refAnswer);
+        OasysQuestion oasysQuestion = new OasysQuestion();
+        oasysQuestion.setOasysAnswer(oasysAnswer);
+        return QuestionDto.from(oasysQuestion);
+    }
+
+    private static QuestionDto answerOVPZero(){
+        OasysAnswer oasysAnswer = new OasysAnswer();
+        uk.gov.justice.digital.oasys.jpa.entity.RefAnswer refAnswer = new uk.gov.justice.digital.oasys.jpa.entity.RefAnswer();
+        refAnswer.setOvpScore(0L);
+        oasysAnswer.setRefAnswer(refAnswer);
+        OasysQuestion oasysQuestion = new OasysQuestion();
+        oasysQuestion.setOasysAnswer(oasysAnswer);
+        return QuestionDto.from(oasysQuestion);
+    }
+
+    private static QuestionDto answerOGPZero(){
+        return answerOGP(0);
+    }
+
+    private static QuestionDto answerOGP(long score){
+        OasysAnswer oasysAnswer = new OasysAnswer();
+        uk.gov.justice.digital.oasys.jpa.entity.RefAnswer refAnswer = new uk.gov.justice.digital.oasys.jpa.entity.RefAnswer();
+        refAnswer.setOgpScore(score);
+        oasysAnswer.setRefAnswer(refAnswer);
+        OasysQuestion oasysQuestion = new OasysQuestion();
+        oasysQuestion.setOasysAnswer(oasysAnswer);
+        return QuestionDto.from(oasysQuestion);
     }
 
 }

@@ -35,7 +35,7 @@ public class AssessmentsController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Assessment not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<Assessment> getAssessment(@PathVariable("oasysSetId") Long oasysSetId) {
+    public ResponseEntity<AssessmentDto> getAssessment(@PathVariable("oasysSetId") Long oasysSetId) {
 
         return assessmentsService.getAssessment(oasysSetId).map(
                 assessment -> new ResponseEntity<>(assessment, OK)).orElse(new ResponseEntity<>(NOT_FOUND));
@@ -59,12 +59,12 @@ public class AssessmentsController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<Assessment> getAssessmentsForOffenderPkLatest(@PathVariable("identityType") String identityType,
-                                                                        @PathVariable("identity") String identity,
-                                                                        @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                        @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                        @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                        @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+    public ResponseEntity<AssessmentDto> getAssessmentsForOffenderPkLatest(@PathVariable("identityType") String identityType,
+                                                                           @PathVariable("identity") String identity,
+                                                                           @RequestParam("historicStatus") Optional<String> filterGroupStatus,
+                                                                           @RequestParam("assessmentType") Optional<String> filterAssessmentType,
+                                                                           @RequestParam("voided") Optional<Boolean> filterVoided,
+                                                                           @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
         return ResponseEntity.ok(assessmentsService.getLatestAssessmentForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus));
     }
 
@@ -73,11 +73,11 @@ public class AssessmentsController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<Question> getQAndAForOffenderCrnLatestAssessmentType(@PathVariable("identityType") String identityType,
-                                                                               @PathVariable("identity") String identity,
-                                                                               @PathVariable("assessmentType") String assessmentType,
-                                                                               @PathVariable("section") String section,
-                                                                               @PathVariable("question") String question) {
+    public ResponseEntity<QuestionDto> getQAndAForOffenderCrnLatestAssessmentType(@PathVariable("identityType") String identityType,
+                                                                                  @PathVariable("identity") String identity,
+                                                                                  @PathVariable("assessmentType") String assessmentType,
+                                                                                  @PathVariable("section") String section,
+                                                                                  @PathVariable("question") String question) {
         return ResponseEntity.ok(assessmentsService.getLatestQAndAforOffender(identityType, identity, assessmentType, section, question));
     }
 

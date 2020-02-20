@@ -9,7 +9,6 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 import uk.gov.justice.digital.oasys.service.filters.AssessmentFilters;
-import uk.gov.justice.digital.oasys.transformer.AssessmentsTransformer;
 
 import java.util.Comparator;
 import java.util.List;
@@ -24,13 +23,11 @@ public class AssessmentsService {
 
     private final OffenderService offenderService;
     private final AssessmentRepository assessmentRepository;
-    private final AssessmentsTransformer assessmentsTransformer;
 
     @Autowired
-    public AssessmentsService(OffenderService offenderService, AssessmentRepository assessmentRepository, AssessmentsTransformer assessmentsTransformer) {
+    public AssessmentsService(OffenderService offenderService, AssessmentRepository assessmentRepository) {
         this.offenderService = offenderService;
         this.assessmentRepository = assessmentRepository;
-        this.assessmentsTransformer = assessmentsTransformer;
     }
 
     public Stream<OasysSet> getAssessmentsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
@@ -39,26 +36,26 @@ public class AssessmentsService {
         return AssessmentFilters.assessmentsFilterOf(oasysSets, filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
     }
 
-    public Assessment getLatestAssessmentForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
+    public AssessmentDto getLatestAssessmentForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
         var oasysSets = assessmentGroups.stream().flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream()).max(Comparator.comparing(OasysSet::getCreateDate));
-        return assessmentsTransformer.assessmentOf(oasysSets.orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Assessment for Offender %s: %s, not found!", identityType, identity), ASSESSMENT_NOT_FOUND)));
+        return AssessmentDto.from(oasysSets.orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Assessment for Offender %s: %s, not found!", identityType, identity), ASSESSMENT_NOT_FOUND)));
 
     }
 
     public List<AssessmentNeed> getLatestAsessementNeedsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        Assessment assessment = getLatestAssessmentForOffender(identityType, identity, filterGroupStatus, filterAssessmentType,filterVoided, filterAssessmentStatus);
+        AssessmentDto assessment = getLatestAssessmentForOffender(identityType, identity, filterGroupStatus, filterAssessmentType,filterVoided, filterAssessmentStatus);
 
         return assessment.getLayer3SentencePlanNeeds();
     }
 
-    public Optional<Assessment> getAssessment(Long oasysSetId) {
-        return assessmentRepository.findById(oasysSetId).map(assessmentsTransformer::assessmentOf);
+    public Optional<AssessmentDto> getAssessment(Long oasysSetId) {
+        return assessmentRepository.findById(oasysSetId).map(AssessmentDto::from);
     }
 
-    public Question getLatestQAndAforOffender(String identityType, String identity, String assessmentType, String sectionRef, String questionRef) {
+    public QuestionDto getLatestQAndAforOffender(String identityType, String identity, String assessmentType, String sectionRef, String questionRef) {
 
-        final Assessment assessment = getLatestAssessmentForOffender(identityType, identity, Optional.empty(), Optional.of(assessmentType), Optional.empty(), Optional.empty());
+        final AssessmentDto assessment = getLatestAssessmentForOffender(identityType, identity, Optional.empty(), Optional.of(assessmentType), Optional.empty(), Optional.empty());
 
         if(assessment.getSections().containsKey(sectionRef)) {
             var section = assessment.getSections().get(sectionRef);

@@ -2,10 +2,12 @@ package uk.gov.justice.digital.oasys.api;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
+import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.util.Collections.EMPTY_MAP;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,18 +19,18 @@ public class Assessment_SentencePlanNeedsTest {
     public void shouldIncludeInSentencePlanNeedsWhenAllCriteriaMet() {
 
         //Matches all criteria
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .lowScoreAttentionNeeded(true)
                 .refSectionCode("10")
                 .sectionOtherRawScore(6L)
-                .questions(ImmutableMap.of("10.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
-                        "10.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                .questions(ImmutableMap.of("10.98", answerYes(),
+                        "10.99", answerYes()))
                 .build();
 
-        Section section11 = getNotMatchSection();
+        SectionDto section11 = getNotMatchSection();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10, "11", section11))
                 .assessmentType("LAYER_3")
                 .build();
@@ -57,17 +59,17 @@ public class Assessment_SentencePlanNeedsTest {
     public void shouldReturnEmptySetWhenAssessmentisNotLayer3() {
 
         //Matches all criteria
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .lowScoreAttentionNeeded(true)
                 .refSectionCode("10")
                 .sectionOtherRawScore(6L)
-                .questions(ImmutableMap.of("10.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
-                        "10.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                .questions(ImmutableMap.of("10.98", answerYes(),
+                        "10.99", answerYes()))
                 .build();
 
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10))
                 .assessmentType("LAYER_1")
                 .build();
@@ -79,15 +81,15 @@ public class Assessment_SentencePlanNeedsTest {
     @Test
     public void shouldNotFailOnMissingQuestions() {
 
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .lowScoreAttentionNeeded(true)
                 .refSectionCode("10")
                 .sectionOtherRawScore(6L)
                 .questions(EMPTY_MAP)
                 .build();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10))
                 .assessmentType("LAYER_3")
                 .build();
@@ -99,15 +101,15 @@ public class Assessment_SentencePlanNeedsTest {
     @Test
     public void shouldNotFailOnUnSetLowScoreFlagged() {
 
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .refSectionCode("10")
                 .sectionOtherRawScore(6L)
-                .questions(ImmutableMap.of("10.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
-                        "10.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                .questions(ImmutableMap.of("10.98", answerYes(),
+                        "10.99", answerYes()))
                 .build();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10))
                 .assessmentType("LAYER_3")
                 .build();
@@ -119,15 +121,14 @@ public class Assessment_SentencePlanNeedsTest {
     @Test
     public void shouldNotFailOnUnSetSectionRawScore() {
 
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .refSectionCode("10")
                 .lowScoreAttentionNeeded(true)
-                .questions(ImmutableMap.of("10.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
-                        "10.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                .questions(ImmutableMap.of("10.98", answerYes(), "10.99", answerYes()))
                 .build();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10))
                 .assessmentType("LAYER_3")
                 .build();
@@ -139,9 +140,9 @@ public class Assessment_SentencePlanNeedsTest {
     @Test
     public void shouldNotIncludeInSentencePlanNeedsWhenNoCriteriaMet() {
 
-        Section section11 = getNotMatchSection();
+        SectionDto section11 = getNotMatchSection();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("11", section11))
                 .assessmentType("LAYER_3")
                 .build();
@@ -155,18 +156,17 @@ public class Assessment_SentencePlanNeedsTest {
     public void shouldIncludeInSentencePlanNeedsWhenOverThreshold() {
 
         //Section has score of 6 which is greater than ref score of 5
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .lowScoreAttentionNeeded(false)
                 .refSectionCode("10")
                 .sectionOtherRawScore(6L)
-                .questions(ImmutableMap.of("10.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build(),
-                        "10.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
+                .questions(ImmutableMap.of("10.98", answerNo(),"10.99", answerNo()))
                 .build();
 
-        Section section11 = getNotMatchSection();
+        SectionDto section11 = getNotMatchSection();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10, "11", section11))
                 .assessmentType("LAYER_3")
                 .build();
@@ -182,18 +182,17 @@ public class Assessment_SentencePlanNeedsTest {
     @Test
     public void shouldIncludeInSentencePlanNeedsWhenFlaggedLowScore() {
 
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .lowScoreAttentionNeeded(false)
                 .refSectionCode("10")
                 .sectionOtherRawScore(6L)
-                .questions(ImmutableMap.of("10.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build(),
-                        "10.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
+                .questions(ImmutableMap.of("10.98", answerNo(),"10.99", answerNo()))
                 .build();
 
-        Section section11 = getNotMatchSection();
+        SectionDto section11 = getNotMatchSection();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10, "11", section11))
                 .assessmentType("LAYER_3")
                 .build();
@@ -209,18 +208,17 @@ public class Assessment_SentencePlanNeedsTest {
     @Test
     public void shouldIncludeInSentencePlanNeedsWhenFlaggedAsRiskHarm() {
 
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .lowScoreAttentionNeeded(false)
                 .refSectionCode("10")
                 .sectionOtherRawScore(1L)
-                .questions(ImmutableMap.of("10.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build(),
-                        "10.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
+                .questions(ImmutableMap.of("10.98", answerYes(),"10.99", answerYes()))
                 .build();
 
-        Section section11 = getNotMatchSection();
+        SectionDto section11 = getNotMatchSection();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10, "11", section11))
                 .assessmentType("LAYER_3")
                 .build();
@@ -236,18 +234,17 @@ public class Assessment_SentencePlanNeedsTest {
     @Test
     public void shouldIncludeInSentencePlanNeedsWhenFlaggedAsRiskReoffending() {
 
-        Section section10 = Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
+        SectionDto section10 = SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Emotional Wellbeing").build())
                 .lowScoreAttentionNeeded(false)
                 .refSectionCode("10")
                 .sectionOtherRawScore(1L)
-                .questions(ImmutableMap.of("10.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build(),
-                        "10.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("YES").build())).build()))
+                .questions(ImmutableMap.of("10.98", answerNo(),"10.99", answerYes()))
                 .build();
 
-        Section section11 = getNotMatchSection();
+        SectionDto section11 = getNotMatchSection();
 
-        Assessment assessment = Assessment.builder()
+        AssessmentDto assessment = AssessmentDto.builder()
                 .sections(Map.of("10", section10, "11", section11))
                 .assessmentType("LAYER_3")
                 .build();
@@ -260,15 +257,35 @@ public class Assessment_SentencePlanNeedsTest {
 
     }
 
-    private Section getNotMatchSection() {
-        return Section.builder()
-                .refSection(RefSection.builder().refCrimNeedScoreThreshold(5L).shortDescription("Thinking Skills").build())
+    private SectionDto getNotMatchSection() {
+
+        return SectionDto.builder()
+                .refSection(RefSectionDto.builder().refCrimNeedScoreThreshold(5L).shortDescription("Thinking Skills").build())
                 .lowScoreAttentionNeeded(false)
                 .refSectionCode("11")
                 .sectionOtherRawScore(1L)
-                .questions(ImmutableMap.of("11.98", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build(),
-                        "11.99", Question.builder().answer(Optional.of(Answer.builder().refAnswerCode("NO").build())).build()))
+                .questions(ImmutableMap.of("11.98", answerNo(),"11.99", answerNo()))
                 .build();
+    }
+
+    private static QuestionDto answerNo(){
+        OasysAnswer oasysAnswer = new OasysAnswer();
+        RefAnswer refAnswer = new RefAnswer();
+        refAnswer.setRefAnswerCode("NO");
+        oasysAnswer.setRefAnswer(refAnswer);
+        OasysQuestion oasysQuestion = new OasysQuestion();
+        oasysQuestion.setOasysAnswer(oasysAnswer);
+        return QuestionDto.from(oasysQuestion);
+    }
+
+    private static QuestionDto answerYes(){
+        OasysAnswer oasysAnswer = new OasysAnswer();
+        RefAnswer refAnswer = new RefAnswer();
+        refAnswer.setRefAnswerCode("YES");
+        oasysAnswer.setRefAnswer(refAnswer);
+        OasysQuestion oasysQuestion = new OasysQuestion();
+        oasysQuestion.setOasysAnswer(oasysAnswer);
+        return QuestionDto.from(oasysQuestion);
     }
 
 }
