@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 
+import static uk.gov.justice.digital.oasys.api.DtoUtils.refElementDesc;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OffenderSummaryDto {
     @JsonProperty("oasysOffenderId")
@@ -17,6 +19,8 @@ public class OffenderSummaryDto {
     private String forename2;
     @JsonProperty("forename3")
     private String forename3;
+    @JsonProperty("riskToOthers")
+    private String riskToOthers;
     @JsonProperty("identifiers")
     private IdentifiersDto identifiers;
 
@@ -28,6 +32,7 @@ public class OffenderSummaryDto {
                 offender.getForename1(),
                 offender.getForename2(),
                 offender.getForename3(),
+                refElementDesc(offender.getRiskToOthers()),
                 identifiers);
     }
 }
