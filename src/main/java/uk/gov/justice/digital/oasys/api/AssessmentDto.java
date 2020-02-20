@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
 import lombok.Builder;
 import lombok.Value;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import static java.util.Map.entry;
 
 @Value
 @Builder(toBuilder = true)
-public class Assessment {
+public class AssessmentDto {
     private Long oasysSetId;
     private String assessmentType;
     private String historicStatus;
@@ -30,9 +32,9 @@ public class Assessment {
     private boolean completed;
     private LocalDateTime completedDateTime;
     private boolean voided;
-    private Map<String, Section> sections;
-    private List<OasysBcsPart> oasysBcsParts;
-    private QaReview qaReview;
+    private Map<String, SectionDto> sections;
+    private List<OasysBcsPartDto> oasysBcsParts;
+    private QaReviewDto qaReview;
 
     public Optional<Boolean> getTspEligible() {
         if (!isLayer3()) {
@@ -47,31 +49,31 @@ public class Assessment {
         var answer2_6 = section2
                 .filter(s -> s.getQuestions() != null)
                 .flatMap(s2 -> Optional.ofNullable(s2.getQuestions().get("2.6")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var answer7_2 = section7.filter(s -> s.getQuestions() != null)
                 .flatMap(s7 -> Optional.ofNullable(s7.getQuestions().get("7.2")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var answer11_4 = section11.filter(s -> s.getQuestions() != null)
                 .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.4")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var answer11_6 = section11.filter(s -> s.getQuestions() != null)
                 .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.6")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var answer11_7 = section11.filter(s -> s.getQuestions() != null)
                 .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.7")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var answer11_9 = section11.filter(s -> s.getQuestions() != null)
                 .flatMap(s11 -> Optional.ofNullable(s11.getQuestions().get("11.9")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var answer12_1 = section12.filter(s -> s.getQuestions() != null)
                 .flatMap(s12 -> Optional.ofNullable(s12.getQuestions().get("12.1")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var sum = ImmutableList.of(answer2_6, answer7_2, answer11_4, answer11_6, answer11_7, answer11_9, answer12_1)
                 .stream()
@@ -108,7 +110,7 @@ public class Assessment {
 
         Map<String, Map<String, String>> planSections = getPlanSections();
 
-        List<Section> filteredSections = Optional.ofNullable(sections)
+        List<SectionDto> filteredSections = Optional.ofNullable(sections)
                 .map(s -> s.entrySet().stream()
                         .filter(entry -> planSections.containsKey(entry.getKey()))
                         .filter(entry -> Objects.nonNull(entry.getValue().getRefSectionCode()))
@@ -118,7 +120,7 @@ public class Assessment {
 
         List<AssessmentNeed> assessmentNeeds = new ArrayList<>();
 
-        for (Section section : filteredSections) {
+        for (SectionDto section : filteredSections) {
             Map<String, String> planSection = Optional.ofNullable(planSections.get(section.getRefSectionCode()))
                     .orElse(new HashMap<>());
 
@@ -135,22 +137,38 @@ public class Assessment {
         return assessmentNeeds;
     }
 
-
-    private Optional<Boolean> sectionIsOverThreshold(Section section) {
-        return Optional.ofNullable(section.getSectionOtherRawScore()).map(score -> score >= Optional.ofNullable(section.getRefSection()).map(RefSection::getRefCrimNeedScoreThreshold).orElse(Long.MAX_VALUE));
+    public static AssessmentDto from(OasysSet oasysSet) {
+        return AssessmentDto.builder()
+                .createdDateTime(oasysSet.getCreateDate())
+                .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
+                .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()))
+                .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
+                .completedDateTime(oasysSet.getDateCompleted())
+                .oasysSetId(oasysSet.getOasysSetPk())
+                .oasysBcsParts(OasysBcsPartDto.from(oasysSet.getOasysBcsParts()))
+                .qaReview(QaReviewDto.from(oasysSet.getQaReview()))
+                .sections(SectionDto.from(oasysSet.getOasysSections()))
+                .voided(Optional.ofNullable(oasysSet.getAssessmentVoidedDate()).isPresent())
+                .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
+                .assessmentStatus(Optional.ofNullable(oasysSet.getAssessmentStatus()).map(RefElement::getRefElementCode).orElse(null))
+                .build();
     }
 
-    private Optional<Boolean> sectionHasRiskOfReoffending(Section section, Map<String, String> planSection) {
+    private Optional<Boolean> sectionIsOverThreshold(SectionDto section) {
+        return Optional.ofNullable(section.getSectionOtherRawScore()).map(score -> score >= Optional.ofNullable(section.getRefSection()).map(RefSectionDto::getRefCrimNeedScoreThreshold).orElse(Long.MAX_VALUE));
+    }
+
+    private Optional<Boolean> sectionHasRiskOfReoffending(SectionDto section, Map<String, String> planSection) {
         return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("reoffendingQuestion")).orElse(""))));
     }
 
-    private Optional<Boolean> sectionHasRiskOfHarm(Section section, Map<String, String> planSection) {
+    private Optional<Boolean> sectionHasRiskOfHarm(SectionDto section, Map<String, String> planSection) {
         return questionHasAnswer(Optional.ofNullable(section.getQuestions().get(Optional.ofNullable(planSection.get("harmQuestion")).orElse(""))));
     }
 
-    private Optional<Boolean> questionHasAnswer(Optional<Question> question) {
+    private Optional<Boolean> questionHasAnswer(Optional<QuestionDto> question) {
         return question
-                .flatMap(Question::getAnswer)
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()))
                 .flatMap(a -> Optional.ofNullable(a.getRefAnswerCode()))
                 .map("YES"::equals);
     }
@@ -210,17 +228,17 @@ public class Assessment {
         var answerR2_1 = sectionROSH
                 .filter(s -> s.getQuestions() != null)
                 .flatMap(s -> Optional.ofNullable(s.getQuestions().get("R2.1")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var answerR2_2 = sectionROSH
                 .filter(s -> s.getQuestions() != null)
                 .flatMap(s -> Optional.ofNullable(s.getQuestions().get("R2.2")))
-                .flatMap(Question::getAnswer);
+                .flatMap(q -> Optional.ofNullable(q.getAnswer()));
 
         var answers = Stream.of(answerR2_1, answerR2_2)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(Answer::getRefAnswerCode)
+                .map(AnswerDto::getRefAnswerCode)
                 .collect(Collectors.toList());
 
         if (answers.isEmpty()) {

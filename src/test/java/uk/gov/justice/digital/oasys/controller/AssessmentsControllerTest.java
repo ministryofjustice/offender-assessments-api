@@ -17,7 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.gov.justice.digital.oasys.api.Assessment;
+import uk.gov.justice.digital.oasys.api.AssessmentDto;
 import uk.gov.justice.digital.oasys.api.AssessmentNeed;
 import uk.gov.justice.digital.oasys.api.AssessmentSummary;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
@@ -103,7 +103,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderPk() {
-        Assessment assessment = given()
+        AssessmentDto assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/oasysOffenderId/{0}/assessments/latest", 1L)
@@ -111,7 +111,7 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(AssessmentDto.class);
 
         assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
@@ -143,7 +143,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderCrn() {
-        Assessment assessment = given()
+        AssessmentDto assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/crn/{0}/assessments/latest", "crn1")
@@ -151,7 +151,7 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(AssessmentDto.class);
 
         assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
@@ -184,7 +184,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderPnc() {
-        Assessment assessment = given()
+        AssessmentDto assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/pnc/{0}/assessments/latest", "pnc1")
@@ -192,7 +192,7 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(AssessmentDto.class);
 
         assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
@@ -225,7 +225,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderNmisId() {
-        Assessment assessment = given()
+        AssessmentDto assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/nomisId/{0}/assessments/latest", "nomisId1")
@@ -233,7 +233,7 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(AssessmentDto.class);
 
         assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
@@ -266,7 +266,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canGetLatestAssessmentForOffenderBookingId() {
-        Assessment assessment = given()
+        AssessmentDto assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/offenders/bookingId/{0}/assessments/latest", "bookingId1")
@@ -274,7 +274,7 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(AssessmentDto.class);
 
         assertThat(assessment).extracting("oasysSetId").isEqualTo(2L);
     }
@@ -372,7 +372,7 @@ public class AssessmentsControllerTest {
 
     @Test
     public void canLookupAssessmentByOasysSetPk() {
-        Assessment assessment = given()
+        AssessmentDto assessment = given()
                 .when()
                 .auth().oauth2(validOauthToken)
                 .get("/assessments/oasysSetId/{0}", 0L)
@@ -380,7 +380,7 @@ public class AssessmentsControllerTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(Assessment.class);
+                .as(AssessmentDto.class);
 
         assertThat(assessment).extracting("oasysSetId").isEqualTo(0L);
 
