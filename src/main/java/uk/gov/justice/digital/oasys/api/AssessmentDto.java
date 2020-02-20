@@ -8,13 +8,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,6 +29,23 @@ public class AssessmentDto {
     private Map<String, SectionDto> sections;
     private List<OasysBcsPartDto> oasysBcsParts;
     private QaReviewDto qaReview;
+
+    public static AssessmentDto from(OasysSet oasysSet) {
+        return AssessmentDto.builder()
+                .createdDateTime(oasysSet.getCreateDate())
+                .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
+                .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()))
+                .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
+                .completedDateTime(oasysSet.getDateCompleted())
+                .oasysSetId(oasysSet.getOasysSetPk())
+                .oasysBcsParts(OasysBcsPartDto.from(oasysSet.getOasysBcsParts()))
+                .qaReview(QaReviewDto.from(oasysSet.getQaReview()))
+                .sections(SectionDto.from(oasysSet.getOasysSections()))
+                .voided(Optional.ofNullable(oasysSet.getAssessmentVoidedDate()).isPresent())
+                .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
+                .assessmentStatus(Optional.ofNullable(oasysSet.getAssessmentStatus()).map(RefElement::getRefElementCode).orElse(null))
+                .build();
+    }
 
     public Optional<Boolean> getTspEligible() {
         if (!isLayer3()) {
@@ -135,23 +146,6 @@ public class AssessmentDto {
             }
         }
         return assessmentNeeds;
-    }
-
-    public static AssessmentDto from(OasysSet oasysSet) {
-        return AssessmentDto.builder()
-                .createdDateTime(oasysSet.getCreateDate())
-                .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
-                .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()))
-                .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
-                .completedDateTime(oasysSet.getDateCompleted())
-                .oasysSetId(oasysSet.getOasysSetPk())
-                .oasysBcsParts(OasysBcsPartDto.from(oasysSet.getOasysBcsParts()))
-                .qaReview(QaReviewDto.from(oasysSet.getQaReview()))
-                .sections(SectionDto.from(oasysSet.getOasysSections()))
-                .voided(Optional.ofNullable(oasysSet.getAssessmentVoidedDate()).isPresent())
-                .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
-                .assessmentStatus(Optional.ofNullable(oasysSet.getAssessmentStatus()).map(RefElement::getRefElementCode).orElse(null))
-                .build();
     }
 
     private Optional<Boolean> sectionIsOverThreshold(SectionDto section) {

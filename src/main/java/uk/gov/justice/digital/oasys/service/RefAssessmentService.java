@@ -2,7 +2,7 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.*;
+import uk.gov.justice.digital.oasys.api.ReferenceAssessmentDto;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersionPK;
 import uk.gov.justice.digital.oasys.jpa.repository.RefAssessmentRepository;

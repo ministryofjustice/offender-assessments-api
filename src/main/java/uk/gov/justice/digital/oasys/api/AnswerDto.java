@@ -22,13 +22,8 @@ public class AnswerDto {
     private Long ovpScore;
     private Long qaRawScore;
 
-    @JsonIgnore
-    public Long getScore() {
-        return Optional.ofNullable(ogpScore).orElse(Optional.ofNullable(ovpScore).orElse(null));
-    }
-
     public static AnswerDto from(OasysQuestion question, OasysAnswer oasysAnswer) {
-        if(oasysAnswer == null) {
+        if (oasysAnswer == null) {
             return AnswerDto.from(question);
         }
 
@@ -47,10 +42,15 @@ public class AnswerDto {
     }
 
     private static AnswerDto from(OasysQuestion question) {
-        if(question == null) {
+        if (question == null) {
             return null;
         }
         return new AnswerDto(null, null, null, null, question.getFreeFormatAnswer(), null, null, null);
+    }
+
+    @JsonIgnore
+    public Long getScore() {
+        return Optional.ofNullable(ogpScore).orElse(Optional.ofNullable(ovpScore).orElse(null));
     }
 }
 

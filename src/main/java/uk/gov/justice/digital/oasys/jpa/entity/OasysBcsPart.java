@@ -1,11 +1,9 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Data
 @Entity

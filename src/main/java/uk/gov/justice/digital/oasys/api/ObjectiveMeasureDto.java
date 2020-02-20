@@ -12,10 +12,10 @@ public class ObjectiveMeasureDto {
     private RefElementDto status;
 
     public static ObjectiveMeasureDto from(SspObjectiveMeasure sspObjectiveMeasure) {
-        if(sspObjectiveMeasure == null) {
+        if (sspObjectiveMeasure == null) {
             return null;
         }
-       return builder()
+        return builder()
                 .comments(sspObjectiveMeasure.getObjectiveStatusComments())
                 .status(RefElementDto.from(sspObjectiveMeasure.getObjectiveStatus()))
                 .build();

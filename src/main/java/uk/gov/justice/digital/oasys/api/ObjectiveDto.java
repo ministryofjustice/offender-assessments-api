@@ -30,7 +30,7 @@ public class ObjectiveDto {
     }
 
     private static ObjectiveDto from(SspObjectivesInSet sspo) {
-        if(sspo == null ){
+        if (sspo == null) {
             return null;
         }
         return ObjectiveDto
@@ -47,14 +47,14 @@ public class ObjectiveDto {
     }
 
     private static String objectiveDescriptionOf(SspObjective sspObjective) {
-        if(sspObjective == null || sspObjective.getObjective() == null){
+        if (sspObjective == null || sspObjective.getObjective() == null) {
             return null;
         }
         return sspObjective.getObjective().getObjectiveDesc();
     }
 
     private static String objectiveCodeOf(SspObjective sspObjective) {
-        if(sspObjective == null || sspObjective.getObjective() == null){
+        if (sspObjective == null || sspObjective.getObjective() == null) {
             return null;
         }
         return sspObjective.getObjective().getObjectiveCode();

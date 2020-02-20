@@ -15,7 +15,8 @@ import uk.gov.justice.digital.oasys.service.AuthenticationService;
 
 import static net.logstash.logback.argument.StructuredArguments.value;
 import static org.springframework.http.HttpStatus.*;
-import static uk.gov.justice.digital.oasys.utils.LogEvent.*;
+import static uk.gov.justice.digital.oasys.utils.LogEvent.EVENT;
+import static uk.gov.justice.digital.oasys.utils.LogEvent.USER_AUTHENTICATION;
 
 @RestController
 @Api(description = "Authentication resources", tags = "Authentication")
@@ -47,7 +48,7 @@ public class AuthenticationController {
                                                                            @PathVariable("offenderId") Long offenderId,
                                                                            @PathVariable("resource") OffenderPermissionResource resource,
                                                                            @RequestParam("sessionId") Long sessionId) {
-        return  ResponseEntity.ok(authenticationService.userCanAccessOffenderRecord(oasysUserId, offenderId, sessionId, resource));
+        return ResponseEntity.ok(authenticationService.userCanAccessOffenderRecord(oasysUserId, offenderId, sessionId, resource));
     }
 
     @RequestMapping(path = "/authentication/user/validate", method = RequestMethod.POST)

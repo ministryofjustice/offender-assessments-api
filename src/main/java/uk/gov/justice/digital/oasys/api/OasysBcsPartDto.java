@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
-@Builder(access =  AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class OasysBcsPartDto {
     private String bcsPart;
     private String bcsPartStatus;

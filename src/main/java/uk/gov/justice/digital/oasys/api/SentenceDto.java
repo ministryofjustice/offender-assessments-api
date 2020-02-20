@@ -17,7 +17,7 @@ import static uk.gov.justice.digital.oasys.api.DtoUtils.ynToBoolean;
 @Builder
 public class SentenceDto {
     @JsonIgnore
-    private static List<String> PAROLE_SENTENCE_TYPES =  List.of("310", "1200", "930", "410");
+    private static List<String> PAROLE_SENTENCE_TYPES = List.of("310", "1200", "930", "410");
 
     @JsonProperty("sentenceCode")
     private String sentenceCode;
