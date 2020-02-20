@@ -3,7 +3,9 @@ package uk.gov.justice.digital.oasys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.justice.digital.oasys.api.*;
+import uk.gov.justice.digital.oasys.api.AssessmentDto;
+import uk.gov.justice.digital.oasys.api.AssessmentNeed;
+import uk.gov.justice.digital.oasys.api.QuestionDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
@@ -31,13 +33,13 @@ public class AssessmentsService {
     }
 
     public Stream<OasysSet> getAssessmentsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
+        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType, identity);
         var oasysAssessments = assessmentGroups.stream().flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream());
         return AssessmentFilters.assessmentsFilterOf(oasysAssessments, filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
     }
 
     public AssessmentDto getLatestAssessmentForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
+        List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType, identity);
         var oasysAssessments = assessmentGroups.stream().flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream());
         var filteredAssessments = AssessmentFilters.assessmentsFilterOf(oasysAssessments, filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
         var latestAssessment = filteredAssessments.max(Comparator.comparing(OasysSet::getCreateDate));
@@ -45,7 +47,7 @@ public class AssessmentsService {
     }
 
     public List<AssessmentNeed> getLatestAsessementNeedsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
-        AssessmentDto assessment = getLatestAssessmentForOffender(identityType, identity, filterGroupStatus, filterAssessmentType,filterVoided, filterAssessmentStatus);
+        AssessmentDto assessment = getLatestAssessmentForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
 
         return assessment.getLayer3SentencePlanNeeds();
     }
@@ -58,9 +60,9 @@ public class AssessmentsService {
 
         final AssessmentDto assessment = getLatestAssessmentForOffender(identityType, identity, Optional.empty(), Optional.of(assessmentType), Optional.empty(), Optional.empty());
 
-        if(assessment.getSections().containsKey(sectionRef)) {
+        if (assessment.getSections().containsKey(sectionRef)) {
             var section = assessment.getSections().get(sectionRef);
-            if(section.getQuestions().containsKey(questionRef)) {
+            if (section.getQuestions().containsKey(questionRef)) {
                 return section.getQuestions().get(questionRef);
             } else {
                 throw new ApplicationExceptions.EntityNotFoundException(String.format("Section %s for Offender %s: %s, Assessment not found!", sectionRef, identityType, identity), SECTION_NOT_FOUND);

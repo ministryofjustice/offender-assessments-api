@@ -14,19 +14,19 @@ public class AssessmentFilters {
 
     public static Stream<OasysSet> assessmentsFilterOf(Stream<OasysSet> sets, Optional<String> filterAssessmentStatus, Optional<String> filterAssessmentType, Optional<String> filterGroupStatus, Optional<Boolean> filterVoided) {
 
-        if(filterAssessmentStatus.isPresent()) {
+        if (filterAssessmentStatus.isPresent()) {
             sets = sets.filter(set -> filterAssessmentStatus.get().equals(DtoUtils.refElementCode(set.getAssessmentStatus())));
         }
 
-        if(filterAssessmentType.isPresent()) {
+        if (filterAssessmentType.isPresent()) {
             sets = sets.filter(set -> filterAssessmentType.get().equals(DtoUtils.refElementCode(set.getAssessmentType())));
         }
 
-        if(filterGroupStatus.isPresent()) {
+        if (filterGroupStatus.isPresent()) {
             sets = sets.filter(set -> filterGroupStatus.get().equals(set.getGroup() == null ? null : set.getGroup().getHistoricStatusELm()));
         }
 
-        if(filterVoided.isPresent()) {
+        if (filterVoided.isPresent()) {
             sets = sets.filter(set -> filterVoided.get() == (Objects.nonNull(set.getAssessmentVoidedDate())));
         }
 

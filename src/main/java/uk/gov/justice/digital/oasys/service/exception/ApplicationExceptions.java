@@ -24,7 +24,9 @@ public interface ApplicationExceptions {
             return event;
         }
 
-        public LogEvent getException() { return  exception; }
+        public LogEvent getException() {
+            return exception;
+        }
     }
 
     class EntityNotFoundException extends RuntimeException {
@@ -47,6 +49,8 @@ public interface ApplicationExceptions {
             return event;
         }
 
-        public LogEvent getException() { return  exception; }
+        public LogEvent getException() {
+            return exception;
+        }
     }
 }

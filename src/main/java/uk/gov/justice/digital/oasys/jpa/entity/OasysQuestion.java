@@ -2,13 +2,7 @@ package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Time;
 
 @Data
@@ -51,10 +45,10 @@ public class OasysQuestion {
 
     @OneToOne
     @JoinColumns({
-     @JoinColumn(name = "REF_ASS_VERSION_CODE", referencedColumnName = "REF_ASS_VERSION_CODE"),
-     @JoinColumn(name = "REF_QUESTION_CODE", referencedColumnName = "REF_QUESTION_CODE"),
-     @JoinColumn(name = "REF_SECTION_CODE", referencedColumnName = "REF_SECTION_CODE"),
-     @JoinColumn(name = "VERSION_NUMBER", referencedColumnName = "VERSION_NUMBER")
+            @JoinColumn(name = "REF_ASS_VERSION_CODE", referencedColumnName = "REF_ASS_VERSION_CODE"),
+            @JoinColumn(name = "REF_QUESTION_CODE", referencedColumnName = "REF_QUESTION_CODE"),
+            @JoinColumn(name = "REF_SECTION_CODE", referencedColumnName = "REF_SECTION_CODE"),
+            @JoinColumn(name = "VERSION_NUMBER", referencedColumnName = "VERSION_NUMBER")
     })
     private RefQuestion refQuestion;
 

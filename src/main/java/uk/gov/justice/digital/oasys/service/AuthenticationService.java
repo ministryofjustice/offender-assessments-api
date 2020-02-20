@@ -8,7 +8,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.AuthorisationDto;
 import uk.gov.justice.digital.oasys.api.OasysUserAuthenticationDto;
-import uk.gov.justice.digital.oasys.api.OffenderPermissionLevel;
 import uk.gov.justice.digital.oasys.api.OffenderPermissionResource;
 import uk.gov.justice.digital.oasys.jpa.entity.AuthenticationStatus;
 import uk.gov.justice.digital.oasys.jpa.entity.AuthorisationStatus;

@@ -2,13 +2,7 @@ package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Time;
 
 @Data
@@ -23,7 +17,7 @@ public class OasysAnswer {
     @Id
     @Column(name = "OASYS_ANSWER_PK")
     private Long oasysAnswerPk;
-//    @Column(name = "OASYS_QUESTION_PK")
+    //    @Column(name = "OASYS_QUESTION_PK")
 //    private Long oasysQuestionPk;
     @Column(name = "MIG_GUID")
     private String migGuid;
