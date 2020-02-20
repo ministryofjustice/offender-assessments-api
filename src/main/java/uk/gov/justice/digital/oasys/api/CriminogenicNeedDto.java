@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.oasys.api;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.SspCrimNeedObjPivot;

@@ -8,7 +8,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import java.util.Optional;
 
 @Value
-@Builder(access =  AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class RefElementDto {
 
     private final String code;

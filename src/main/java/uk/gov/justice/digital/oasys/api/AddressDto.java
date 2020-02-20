@@ -25,7 +25,7 @@ public class AddressDto {
     @JsonProperty("telephoneNumber")
     private String telephoneNumber;
 
-    public static AddressDto from (Offender offender) {
+    public static AddressDto from(Offender offender) {
         return new AddressDto(
                 offender.getAddressLine1(),
                 offender.getAddressLine2(),

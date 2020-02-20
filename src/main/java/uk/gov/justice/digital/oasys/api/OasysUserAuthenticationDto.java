@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
