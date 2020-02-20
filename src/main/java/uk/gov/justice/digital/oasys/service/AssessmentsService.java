@@ -32,15 +32,16 @@ public class AssessmentsService {
 
     public Stream<OasysSet> getAssessmentsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
-        var oasysSets = assessmentGroups.stream().flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream());
-        return AssessmentFilters.assessmentsFilterOf(oasysSets, filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+        var oasysAssessments = assessmentGroups.stream().flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream());
+        return AssessmentFilters.assessmentsFilterOf(oasysAssessments, filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
     }
 
     public AssessmentDto getLatestAssessmentForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
         List<OasysAssessmentGroup> assessmentGroups = offenderService.findOffenderAssessmentGroup(identityType,identity);
-        var oasysSets = assessmentGroups.stream().flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream()).max(Comparator.comparing(OasysSet::getCreateDate));
-        return AssessmentDto.from(oasysSets.orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Assessment for Offender %s: %s, not found!", identityType, identity), ASSESSMENT_NOT_FOUND)));
-
+        var oasysAssessments = assessmentGroups.stream().flatMap(oasysAssessmentGroup -> oasysAssessmentGroup.getOasysSets().stream());
+        var filteredAssessments = AssessmentFilters.assessmentsFilterOf(oasysAssessments, filterAssessmentStatus, filterAssessmentType, filterGroupStatus, filterVoided);
+        var latestAssessment = filteredAssessments.max(Comparator.comparing(OasysSet::getCreateDate));
+        return AssessmentDto.from(latestAssessment.orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Assessment for Offender %s: %s, not found!", identityType, identity), ASSESSMENT_NOT_FOUND)));
     }
 
     public List<AssessmentNeed> getLatestAsessementNeedsForOffender(String identityType, String identity, Optional<String> filterGroupStatus, Optional<String> filterAssessmentType, Optional<Boolean> filterVoided, Optional<String> filterAssessmentStatus) {
