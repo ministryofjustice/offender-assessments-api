@@ -6,6 +6,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -35,23 +36,23 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getOverThreshold).containsExactly(true);
+                .extracting(AssessmentNeedDto::getOverThreshold).containsExactly(true);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getRiskOfHarm).containsExactly(true);
+                .extracting(AssessmentNeedDto::getRiskOfHarm).containsExactly(true);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getRiskOfReoffending).containsExactly(true);
+                .extracting(AssessmentNeedDto::getRiskOfReoffending).containsExactly(true);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getFlaggedAsNeed).containsExactly(true);
+                .extracting(AssessmentNeedDto::getFlaggedAsNeed).containsExactly(true);
 
     }
 
@@ -74,7 +75,7 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_1")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(0);
     }
 
@@ -94,7 +95,7 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1);
     }
 
@@ -114,7 +115,7 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1);
     }
 
@@ -133,7 +134,7 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1);
     }
 
@@ -147,7 +148,7 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).isEmpty();
 
     }
@@ -171,11 +172,11 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1)
-                .extracting(AssessmentNeed::getOverThreshold).containsExactly(true);
+                .extracting(AssessmentNeedDto::getOverThreshold).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
 
     }
 
@@ -197,11 +198,11 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1)
-                .extracting(AssessmentNeed::getOverThreshold).containsExactly(true);
+                .extracting(AssessmentNeedDto::getOverThreshold).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
 
     }
 
@@ -223,11 +224,11 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1)
-                .extracting(AssessmentNeed::getRiskOfHarm).containsExactly(true);
+                .extracting(AssessmentNeedDto::getRiskOfHarm).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
 
     }
 
@@ -249,11 +250,11 @@ public class Assessment_SentencePlanNeedsTest {
                 .assessmentType("LAYER_3")
                 .build();
 
-        List<AssessmentNeed> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
+        Collection<AssessmentNeedDto> layer3SentencePlanNeeds = assessment.getLayer3SentencePlanNeeds();
         assertThat(layer3SentencePlanNeeds).hasSize(1)
-                .extracting(AssessmentNeed::getRiskOfReoffending).containsExactly(true);
+                .extracting(AssessmentNeedDto::getRiskOfReoffending).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeed::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
 
     }
 

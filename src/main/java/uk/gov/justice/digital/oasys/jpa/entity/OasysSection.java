@@ -1,13 +1,14 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -74,6 +75,7 @@ public class OasysSection {
 
     @OneToMany
     @JoinColumn(name = "OASYS_SECTION_PK")
+    @Getter(value =  AccessLevel.NONE)
     private Set<OasysQuestion> oasysQuestions;
 
     @OneToOne
@@ -83,4 +85,16 @@ public class OasysSection {
             @JoinColumn(name = "REF_SECTION_CODE", referencedColumnName = "REF_SECTION_CODE")})
     private RefSection refSection;
 
+    @Transient
+    @Getter(value =  AccessLevel.NONE)
+    private Map<String, OasysQuestion> oasysQuestionMap = null;
+
+    public Map<String,OasysQuestion> getOasysQuestionMap(){
+        if(Objects.isNull(oasysQuestionMap)) {
+            oasysQuestionMap = new HashMap<>(oasysQuestions.size());
+            var newValues = oasysQuestions.stream().filter(q -> q.getRefQuestion() == null).collect(Collectors.toMap(o -> o.getRefQuestion().getRefSectionCode(), section -> section));
+            oasysQuestionMap.putAll(newValues);
+        }
+        return oasysQuestionMap;
+    }
 }

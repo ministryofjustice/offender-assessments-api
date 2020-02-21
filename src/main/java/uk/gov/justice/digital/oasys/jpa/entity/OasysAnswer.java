@@ -3,7 +3,7 @@ package uk.gov.justice.digital.oasys.jpa.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 @Data
 @ToString(exclude = "oasysQuestion")
@@ -26,11 +26,11 @@ public class OasysAnswer {
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private LocalDateTime createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private LocalDateTime lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 
