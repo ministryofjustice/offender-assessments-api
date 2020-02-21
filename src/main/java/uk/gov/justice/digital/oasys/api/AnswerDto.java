@@ -1,17 +1,16 @@
 package uk.gov.justice.digital.oasys.api;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
 
 import java.util.Optional;
 
-@Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class AnswerDto {
     private Long refAnswerId;
     private String refAnswerCode;
@@ -46,11 +45,6 @@ public class AnswerDto {
             return null;
         }
         return new AnswerDto(null, null, null, null, question.getFreeFormatAnswer(), null, null, null);
-    }
-
-    @JsonIgnore
-    public Long getScore() {
-        return Optional.ofNullable(ogpScore).orElse(Optional.ofNullable(ovpScore).orElse(null));
     }
 }
 

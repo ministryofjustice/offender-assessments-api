@@ -4,9 +4,10 @@ import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Value
@@ -27,13 +28,13 @@ public class SectionDto {
 
     private Map<String, QuestionDto> questions;
 
-    public static Map<String, SectionDto> from(Set<OasysSection> oasysSections) {
+    public static Map<String, SectionDto> from(Collection<OasysSection> oasysSections) {
         return Optional.ofNullable(oasysSections)
                 .map(sections -> sections
                         .stream()
                         .map(SectionDto::from)
                         .collect(Collectors.toMap(SectionDto::getRefSectionCode, section -> section)))
-                .orElse(null);
+                .orElse(new HashMap<>());
     }
 
     public static SectionDto from(OasysSection section) {
@@ -48,7 +49,7 @@ public class SectionDto {
                 .sectionOtherWeightedScore(section.getSectOtherWeightedScore())
                 .sectionOtherRawScore(section.getSectOtherRawScore())
                 .lowScoreAttentionNeeded(DtoUtils.ynToBoolean(section.getLowScoreNeedAttnInd()))
-                .questions(QuestionDto.from(section.getOasysQuestions()))
+                .questions(QuestionDto.from(section.getOasysQuestionMap().values()))
                 .refSection(RefSectionDto.from(section.getRefSection()))
                 .build();
     }

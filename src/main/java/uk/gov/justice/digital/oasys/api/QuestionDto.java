@@ -6,9 +6,10 @@ import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -30,13 +31,13 @@ public class QuestionDto {
         answer = null;
     }
 
-    public static Map<String, QuestionDto> from(Set<OasysQuestion> oasysQuestions) {
+    public static Map<String, QuestionDto> from(Collection<OasysQuestion> oasysQuestions) {
         return Optional.ofNullable(oasysQuestions)
                 .map(sections -> sections
                         .stream()
                         .map(QuestionDto::from)
                         .collect(Collectors.toMap(QuestionDto::getRefQuestionCode, question -> question)))
-                .orElse(null);
+                .orElse(new HashMap<>());
     }
 
     public static QuestionDto from(OasysQuestion question) {
