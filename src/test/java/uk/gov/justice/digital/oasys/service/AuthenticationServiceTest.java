@@ -151,7 +151,7 @@ public class AuthenticationServiceTest {
     @Test
     public void authoriseUserSentencePlanShouldReturnWRITEWhenUserHasEditPermission() {
         when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"EDIT\"}"));
-        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, 123456l, OffenderPermissionResource.SENTENCE_PLAN);
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, Optional.ofNullable(123456l), OffenderPermissionResource.SENTENCE_PLAN);
         assertThat(result.getOffenderPermissionLevel()).isEqualTo(WRITE);
         verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
     }
@@ -159,7 +159,7 @@ public class AuthenticationServiceTest {
     @Test
     public void authoriseUserSentencePlanShouldReturnREAD_ONLYWhenUserHasReadPermission() {
         when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"READ\"}"));
-        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, 123456l, OffenderPermissionResource.SENTENCE_PLAN);
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, Optional.ofNullable(123456l), OffenderPermissionResource.SENTENCE_PLAN);
         assertThat(result.getOffenderPermissionLevel()).isEqualTo(READ_ONLY);
         verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
     }
@@ -167,7 +167,7 @@ public class AuthenticationServiceTest {
     @Test
     public void authoriseUserSentencePlanShouldReturnUNAUTHORISEDWhenUserHasNoAccess() {
         when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"NO_ACCESS\"}"));
-        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, 123456l, OffenderPermissionResource.SENTENCE_PLAN);
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, Optional.ofNullable(123456l), OffenderPermissionResource.SENTENCE_PLAN);
         assertThat(result.getOffenderPermissionLevel()).isEqualTo(UNAUTHORISED);
         verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
     }
@@ -175,8 +175,27 @@ public class AuthenticationServiceTest {
     @Test
     public void authoriseUserSentencePlanShouldReturnUNAUTHORISEDWhenResultNotParsed() {
         when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"INVALID_RESULT\"}"));
-        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, 123456l, OffenderPermissionResource.SENTENCE_PLAN);
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, Optional.ofNullable(123456l), OffenderPermissionResource.SENTENCE_PLAN);
         assertThat(result.getOffenderPermissionLevel()).isEqualTo(UNAUTHORISED);
+        verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
+    }
+
+    @Test
+    public void authoriseUserSentencePlanShouldAttemptToRetrieveCurentSessionWhenNoSessionProvided() {
+        when(oasysUserRepository.findCurrentUserSessionForOffender(1, "TEST_USER")).thenReturn(Optional.ofNullable(123456l));
+        when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"READ\"}"));
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, Optional.empty(), OffenderPermissionResource.SENTENCE_PLAN);
+        assertThat(result.getOffenderPermissionLevel()).isEqualTo(READ_ONLY);
+        verify(oasysUserRepository, times(1)).findCurrentUserSessionForOffender(1, "TEST_USER");
+        verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
+    }
+
+    @Test
+    public void authoriseUserSentencePlanShouldNotAttemptToRetrieveCurentSessionWhenSessionIdProvided() {
+        when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession("TEST_USER", 1, 123456)).thenReturn(Optional.ofNullable("{STATE: \"READ\"}"));
+        var result = service.userCanAccessOffenderRecord("TEST_USER", 1l, Optional.ofNullable(123456l), OffenderPermissionResource.SENTENCE_PLAN);
+        assertThat(result.getOffenderPermissionLevel()).isEqualTo(READ_ONLY);
+        verify(oasysUserRepository, never()).findCurrentUserSessionForOffender(1, "TEST_USER");
         verify(oasysAuthenticationRepository, times(1)).validateUserSentencePlanAccessWithSession("TEST_USER", 1l, 123456l);
     }
 }
