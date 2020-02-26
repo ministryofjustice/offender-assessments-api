@@ -12,7 +12,7 @@ public interface OasysUserRepository extends CrudRepository<OasysUser, String> {
     Optional<OasysUser> findOasysUserByOasysUserCodeIgnoreCase(String userCode);
 
     @Query(value = "SELECT SESSION_SNAPSHOT_PK FROM SESSION_SNAPSHOT WHERE SESSION_STATE_KEY='OFFENDER_PK' AND SESSION_STATE_VALUE=?1 AND SESSION_SNAPSHOT_PK IN (\n" +
-            "SELECT SESSION_SNAPSHOT_PK from SESSION_SNAPSHOT where SESSION_STATE_KEY='UNAME' AND SESSION_STATE_VALUE=?)\n" +
+            "SELECT SESSION_SNAPSHOT_PK from SESSION_SNAPSHOT where SESSION_STATE_KEY='UNAME' AND SESSION_STATE_VALUE=?2)\n" +
             "AND ROWNUM <= 1\n" +
             "ORDER BY TIME_STAMP DESC", nativeQuery = true)
     Optional<Long> findCurrentUserSessionForOffender(long oasysOffenderId, String userCode);
