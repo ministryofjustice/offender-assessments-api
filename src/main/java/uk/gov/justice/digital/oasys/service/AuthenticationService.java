@@ -20,6 +20,7 @@ import java.util.Optional;
 import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS;
+import static java.util.Objects.isNull;
 import static net.logstash.logback.argument.StructuredArguments.value;
 import static uk.gov.justice.digital.oasys.api.OffenderPermissionLevel.*;
 import static uk.gov.justice.digital.oasys.api.OffenderPermissionResource.SENTENCE_PLAN;
@@ -71,10 +72,14 @@ public class AuthenticationService {
         return false;
     }
 
-    public AuthorisationDto userCanAccessOffenderRecord(String oasysUserCode, long offenderId, long sessionId, OffenderPermissionResource resource) {
+    public AuthorisationDto userCanAccessOffenderRecord(String oasysUserCode, long offenderId, Optional<Long> sessionId, OffenderPermissionResource resource) {
         log.info("Attempting to authorise user user {} for offender {}", oasysUserCode, offenderId, value(EVENT, USER_AUTHENTICATION_ATTEMPT));
 
-        Optional<String> response = authoriseSentencePlan(oasysUserCode, offenderId, sessionId);
+        if(sessionId.isEmpty()) {
+           sessionId = oasysUserRepository.findCurrentUserSessionForOffender(offenderId, oasysUserCode);
+        }
+
+        Optional<String> response = authoriseSentencePlan(oasysUserCode, offenderId, sessionId.orElse(0l));
 
         if (response.isPresent()) {
             try {
