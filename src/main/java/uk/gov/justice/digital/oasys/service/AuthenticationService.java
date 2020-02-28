@@ -47,7 +47,7 @@ public class AuthenticationService {
 
     @Cacheable("users")
     public Optional<OasysUserAuthenticationDto> getUserByUserId(String username) {
-        log.info("GRetrieving user with OASys username {}", username, value(EVENT, USER_AUTHENTICATION));
+        log.info("Retrieving user with OASys username {}", username, value(EVENT, USER_AUTHENTICATION));
         return oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(username).map(user -> OasysUserAuthenticationDto.from(user));
     }
 

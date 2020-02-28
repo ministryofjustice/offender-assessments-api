@@ -3,12 +3,14 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 
 import static uk.gov.justice.digital.oasys.api.DtoUtils.refElementDesc;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OffenderSummaryDto {
+    @Getter
     @JsonProperty("oasysOffenderId")
     private Long oasysOffenderId;
     @JsonProperty("familyName")
