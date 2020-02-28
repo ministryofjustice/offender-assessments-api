@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @Api(description = "Offender Assessment resources", tags = "Offender Assessments")
 @Slf4j
@@ -43,7 +40,7 @@ public class AssessmentsController {
         var assessmentDtoOpt = assessmentsService.getAssessment(oasysSetId);
         if(assessmentDtoOpt.isPresent()) {
             var assessmentDto = assessmentDtoOpt.get();
-            log.info("Found Assessment type: {} status: {}, {} sections, for oasysSetId: {}", assessmentDto.getAssessmentType(), assessmentDto.getAssessmentStatus(), assessmentDto.getSections().size(), oasysSetId, LogEvent.GET_ASSESSMENT_FOUND);
+            log.info("Found Assessment type: {} status: {} for oasysSetId: {}", assessmentDto.getAssessmentType(), assessmentDto.getAssessmentStatus(), oasysSetId, LogEvent.GET_ASSESSMENT_FOUND);
             return ResponseEntity.ok(assessmentDto);
         } else {
             return ResponseEntity.notFound().build();
@@ -63,7 +60,7 @@ public class AssessmentsController {
                                                                             @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
         log.info("Fetching Assessment summary for identity: {},{}", identityType, identity, LogEvent.GET_ASSESSMENT_SUMMARY);
         var assessmentSummaryDto = AssessmentSummary.from(assessmentsService.getAssessmentsForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus));
-        log.info("Found {} Assessment summaries for identity: {},{}", assessmentSummaryDto.size(), identityType, identity, LogEvent.GET_ASSESSMENT_SUMMARY_FOUND);
+        log.info("Found Assessment summaries for identity: {},{}", identityType, identity, LogEvent.GET_ASSESSMENT_SUMMARY_FOUND);
         return ResponseEntity.ok(assessmentSummaryDto);
     }
 
@@ -79,7 +76,7 @@ public class AssessmentsController {
                                                                            @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
         log.info("Fetching latest Assessment for identity: {},{}", identityType, identity, LogEvent.GET_LATEST_ASSESSMENT);
         var latestAssessment = assessmentsService.getLatestAssessmentForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
-        log.info("Found latest Assessment type: {} status: {}, {} sections, for identity: {},{}", latestAssessment.getAssessmentType(), latestAssessment.getAssessmentStatus(), latestAssessment.getSections().size(), identityType, identity, LogEvent.GET_LATEST_ASSESSMENT_FOUND);
+        log.info("Found latest Assessment type: {} status: {} for identity: {},{}", latestAssessment.getAssessmentType(), latestAssessment.getAssessmentStatus(), identityType, identity, LogEvent.GET_LATEST_ASSESSMENT_FOUND);
         return ResponseEntity.ok(latestAssessment);
     }
 

@@ -23,7 +23,7 @@ public class ReferenceDataService {
     public List<RefElementDto> getActiveReferenceDataOfCategory(String categoryCode) {
         log.info("Retrieving reference data of category: {}", categoryCode, LogEvent.GET_REF_DATA_BY_CATEGORY);
         var referenceData = referenceDataRepository.findAllByRefCategoryCodeAndEndDateIsBefore(categoryCode, LocalDateTime.now());
-        log.info("Found {} reference data of category: {}", referenceData.size(), categoryCode, LogEvent.GET_REF_DATA_BY_CATEGORY);
+        log.info("Found reference data of category: {}", categoryCode, LogEvent.GET_REF_DATA_BY_CATEGORY);
         return referenceData.stream().map(RefElementDto::from).collect(Collectors.toList());
     }
 }

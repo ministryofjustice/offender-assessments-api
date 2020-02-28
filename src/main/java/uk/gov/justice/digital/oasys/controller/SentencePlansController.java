@@ -76,7 +76,7 @@ public class SentencePlansController {
                                                                                      @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
         log.info("Retrieving Full Sentence Plans for Identity {},{}", identityType, identity, LogEvent.GET_FULL_SP_LIST);
         var plans = sentencePlanService.getFullSentencePlansForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
-        log.info("Found {} Full Sentence Plans for Identity {},{}", plans.size(), identityType, identity, LogEvent.GET_FULL_SP_LIST_FOUND);
+        log.info("Found Full Sentence Plans for Identity {},{}", identityType, identity, LogEvent.GET_FULL_SP_LIST_FOUND);
         return ResponseEntity.ok(plans);
     }
 
