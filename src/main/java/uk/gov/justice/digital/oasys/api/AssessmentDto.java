@@ -3,6 +3,7 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
@@ -16,6 +17,7 @@ import static java.util.Map.entry;
 
 @Value
 @Builder(toBuilder = true)
+@Getter
 public class AssessmentDto {
     private Long oasysSetId;
     private String assessmentType;
