@@ -153,7 +153,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void canGetUserAuthorisationForSentencePlan() {
+    public void canGetUserAuthorisationForSentencePlanWithPassedInSessionKey() {
         Mockito.when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession(eq("USER_CODE"),eq(1l),eq(123456l))).thenReturn(Optional.of("[{STATE: \"EDIT\"}]"));
         AuthorisationDto authorisationDto = given()
                 .when()
@@ -171,6 +171,26 @@ public class AuthenticationControllerTest {
         assertThat(authorisationDto.getOffenderPermissionResource()).isEqualTo(SENTENCE_PLAN);
     }
 
+    @Test
+    public void canGetUserAuthorisationForSentencePlanWithoutPassedInSessionKey() {
+        Mockito.when(oasysAuthenticationRepository.validateUserSentencePlanAccessWithSession(eq("USER_CODE"),eq(1l),eq(123456l))).thenReturn(Optional.of("[{STATE: \"EDIT\"}]"));
+        Mockito.when(oasysUserRepository.findCurrentUserSessionForOffender(eq(1l),eq("USER_CODE"))).thenReturn(Optional.of(123456l));
+
+        AuthorisationDto authorisationDto = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/authentication/user/{0}/offender/{1}/SENTENCE_PLAN", "USER_CODE", 1l)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(AuthorisationDto.class);
+
+        assertThat(authorisationDto.getOffenderPermissionLevel()).isEqualTo(WRITE);
+        assertThat(authorisationDto.getOasysUserCode()).isEqualTo("USER_CODE");
+        assertThat(authorisationDto.getOasysOffenderId()).isEqualTo(1l);
+        assertThat(authorisationDto.getOffenderPermissionResource()).isEqualTo(SENTENCE_PLAN);
+    }
 
 
 }
