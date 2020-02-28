@@ -203,6 +203,7 @@ public class Offender {
 
     @Column(name = "HOST_CPA")
     private String hostCpa;
+
     @OneToMany
     @JoinColumn(name = "OFFENDER_PK", referencedColumnName = "OFFENDER_PK")
     private List<OasysAssessmentGroup> oasysAssessmentGroups;

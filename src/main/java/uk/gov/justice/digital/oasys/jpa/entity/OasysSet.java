@@ -1,16 +1,11 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import com.google.common.collect.ImmutableList;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.Map.entry;
 
 @Entity
 @Getter
@@ -19,14 +14,6 @@ import static java.util.Map.entry;
 @AllArgsConstructor
 @Table(name = "OASYS_SET")
 public class OasysSet {
-
-    @Transient
-    @Builder.Default
-    private static final String REOFFENDING_QUESTION = "reoffendingQuestion";
-
-    @Transient
-    @Builder.Default
-    private static final String HARM_QUESTION = "harmQuestion";
 
     @Id
     @Column(name = "OASYS_SET_PK")
@@ -500,7 +487,6 @@ public class OasysSet {
 
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
-    @Getter(value =  AccessLevel.NONE)
     private Set<OasysSection> oasysSections;
 
     @OneToMany
@@ -526,166 +512,7 @@ public class OasysSet {
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private Set<OffenceBlock> offenceBlock;
 
-    @Transient
-    @Getter(value =  AccessLevel.NONE)
-    @Builder.Default
-    private Map<String, OasysSection> oasysSectionMap = null;
-
-
-    public Map<String,OasysSection> getOasysSectionMap(){
-        if(Objects.isNull(oasysSectionMap)) {
-            oasysSectionMap = new HashMap<>(oasysSections.size());
-            var newValues = oasysSections.stream().filter(o -> o.getRefSection() == null).collect(Collectors.toMap(o -> o.getRefSection().getRefSectionCode(), section -> section));
-            oasysSectionMap.putAll(newValues);
-        }
-        return oasysSectionMap;
-    }
-
-    public Optional<Boolean> getTspEligible() {
-        if (isNotLayer3()) {
-            return Optional.empty();
-        }
-
-        var oasysSectionsMap = getOasysSectionMap();
-        var section2 = oasysSectionsMap.get("2");
-        var section7 = oasysSectionsMap.get("7");
-        var section11 = oasysSectionsMap.get("11");
-        var section12 = oasysSectionsMap.get("12");
-
-        var answer2_6 = getAnswerAsScore(section2,"2.6");
-        var answer7_2 = getAnswerAsScore(section7,"7.2");
-        var answer11_4 = getAnswerAsScore(section11,"11.4");
-        var answer11_6 = getAnswerAsScore(section11,"11.6");
-        var answer11_7 = getAnswerAsScore(section11,"11.7");
-        var answer11_9 = getAnswerAsScore(section11,"11.9");
-        var answer12_1 = getAnswerAsScore(section12,"12.1");
-
-        var answers = ImmutableList.of(answer2_6, answer7_2, answer11_4, answer11_6, answer11_7, answer11_9, answer12_1);
-
-        if(isPivotedScore(answers, answer11_6, answer11_7)) {
-            return Optional.of(true);
-        }
-
-        if(answers.stream().anyMatch(a -> a == 0)) {
-            return Optional.of(false);
-        }
-
-        return Optional.empty();
-    }
-
-    public Optional<Boolean> getChildSafeguardingIndicated() {
-        if (isNotLayer3()) {
-            return Optional.empty();
-        }
-
-        var oasysSectionsMap = getOasysSectionMap();
-        var sectionROSH = oasysSectionsMap.get("ROSH");
-
-        var answerR2_1 = getAnswer(sectionROSH, "R2.1");
-        var answerR2_2 = getAnswer(sectionROSH, "R2.2");
-
-        var answers = Stream.of(answerR2_1, answerR2_2)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(RefAnswer::getRefAnswerCode)
-                .collect(Collectors.toList());
-
-        if (answers.isEmpty()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(answers.contains("YES"));
-    }
-
-    public Set<OasysSection> getLayer3SentencePlanNeeds() {
-
-        if (isNotLayer3()) {
-            return new HashSet<>();
-        }
-
-        var planSections = getPlanSections();
-        var oasysSectionsMap = getOasysSectionMap();
-
-        return Optional.ofNullable(oasysSectionsMap)
-                .map(s -> s.entrySet().stream()
-                        .filter(entry -> planSections.containsKey(entry.getKey()))
-                        .filter(entry -> Objects.nonNull(entry.getValue().getRefSection().getRefSectionCode()))
-                        .map(Map.Entry::getValue)
-                        .collect(Collectors.toSet()))
-                .orElse(new HashSet<>());
-    }
-
-    public static Map<String, Map<String, String>> getPlanSections() {
-
-        return Map.ofEntries(
-                entry("10"
-                        , Map.of(
-                                HARM_QUESTION, "10.98",
-                                REOFFENDING_QUESTION, "10.99")),
-                entry("11"
-                        , Map.of(
-                                HARM_QUESTION, "11.98",
-                                REOFFENDING_QUESTION, "11.99")),
-                entry("12"
-                        , Map.of(
-                                HARM_QUESTION, "12.98",
-                                REOFFENDING_QUESTION, "12.99")),
-                entry("3"
-                        , Map.of(
-                                HARM_QUESTION, "3.98",
-                                REOFFENDING_QUESTION, "3.99")),
-                entry("4"
-                        , Map.of(
-                                HARM_QUESTION, "4.96",
-                                REOFFENDING_QUESTION, "4.98")),
-                entry("5"
-                        , Map.of(
-                                HARM_QUESTION, "5.98",
-                                REOFFENDING_QUESTION, "5.99")),
-                entry("6"
-                        , Map.of(
-                                HARM_QUESTION, "6.98",
-                                REOFFENDING_QUESTION, "6.99")),
-                entry("7"
-                        , Map.of(
-                                HARM_QUESTION, "7.98",
-                                REOFFENDING_QUESTION, "7.99")),
-                entry("8"
-                        , Map.of(
-                                HARM_QUESTION, "8.97",
-                                REOFFENDING_QUESTION, "8.98")),
-                entry("9"
-                        , Map.of(
-                                HARM_QUESTION, "9.98",
-                                REOFFENDING_QUESTION, "9.99"))
-        );
-
-    }
-
-    private boolean isNotLayer3() {
+    public boolean isNotLayer3() {
         return !"LAYER_3".equals(Optional.ofNullable(assessmentType).map(RefElement::getRefElementCode).orElse(null));
-    }
-
-    private static Long getAnswerAsScore(OasysSection section, String question) {
-        return getAnswer(section,question).map(a -> RefAnswer.getScore(a.getOgpScore(), a.getOvpScore())).orElse(0L);
-    }
-
-    private static Optional<RefAnswer> getAnswer(OasysSection section, String question) {
-        return Optional.ofNullable(section).filter(s -> !s.getOasysQuestionMap().isEmpty())
-                .flatMap(s2 -> Optional.ofNullable(s2.getOasysQuestionMap().get(question)))
-                .flatMap(q -> Optional.ofNullable(q.getOasysAnswer()))
-                .flatMap(a -> Optional.ofNullable(a.getRefAnswer()));
-    }
-
-    private static boolean isPivotedScore(Collection<Long> allScores, Long elevenSixScore, Long elevenSevenScore) {
-        Long scoreSum = allScores.stream().reduce(0L, Long::sum);
-
-        if(scoreSum >= 7L) {
-            return true;
-        }
-        if (scoreSum >= 5 && (elevenSixScore > 0 || elevenSevenScore > 0)) {
-            return elevenSixScore == 2L || elevenSevenScore == 2L;
-        }
-        return false;
     }
 }

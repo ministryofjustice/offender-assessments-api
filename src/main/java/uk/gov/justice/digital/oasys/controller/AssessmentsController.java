@@ -16,9 +16,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @Api(description = "Offender Assessment resources", tags = "Offender Assessments")
 public class AssessmentsController {
@@ -36,9 +33,7 @@ public class AssessmentsController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<AssessmentDto> getAssessment(@PathVariable("oasysSetId") Long oasysSetId) {
 
-        return assessmentsService.getAssessment(oasysSetId).map(
-                assessment -> new ResponseEntity<>(assessment, OK)).orElse(new ResponseEntity<>(NOT_FOUND));
-
+        return ResponseEntity.ok(assessmentsService.getAssessment(oasysSetId));
     }
 
     @RequestMapping(path = "/offenders/{identityType}/{identity}/assessments/summary", method = RequestMethod.GET)

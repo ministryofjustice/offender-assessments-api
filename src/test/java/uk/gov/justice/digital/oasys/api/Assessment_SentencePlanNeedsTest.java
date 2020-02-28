@@ -5,9 +5,9 @@ import org.junit.Test;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
+import uk.gov.justice.digital.oasys.service.domain.Section;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.EMPTY_MAP;
@@ -40,7 +40,7 @@ public class Assessment_SentencePlanNeedsTest {
         assertThat(layer3SentencePlanNeeds).hasSize(1);
 
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getSection).containsExactly(Section.EMOTIONAL_WELL_BEING);
 
         assertThat(layer3SentencePlanNeeds)
                 .extracting(AssessmentNeedDto::getOverThreshold).containsExactly(true);
@@ -176,7 +176,7 @@ public class Assessment_SentencePlanNeedsTest {
         assertThat(layer3SentencePlanNeeds).hasSize(1)
                 .extracting(AssessmentNeedDto::getOverThreshold).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getSection).containsExactly(Section.EMOTIONAL_WELL_BEING);
 
     }
 
@@ -202,7 +202,7 @@ public class Assessment_SentencePlanNeedsTest {
         assertThat(layer3SentencePlanNeeds).hasSize(1)
                 .extracting(AssessmentNeedDto::getOverThreshold).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getSection).containsExactly(Section.EMOTIONAL_WELL_BEING);
 
     }
 
@@ -228,7 +228,7 @@ public class Assessment_SentencePlanNeedsTest {
         assertThat(layer3SentencePlanNeeds).hasSize(1)
                 .extracting(AssessmentNeedDto::getRiskOfHarm).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getSection).containsExactly(Section.EMOTIONAL_WELL_BEING);
 
     }
 
@@ -254,7 +254,7 @@ public class Assessment_SentencePlanNeedsTest {
         assertThat(layer3SentencePlanNeeds).hasSize(1)
                 .extracting(AssessmentNeedDto::getRiskOfReoffending).containsExactly(true);
         assertThat(layer3SentencePlanNeeds)
-                .extracting(AssessmentNeedDto::getName).containsExactly("Emotional Wellbeing");
+                .extracting(AssessmentNeedDto::getSection).containsExactly(Section.EMOTIONAL_WELL_BEING);
 
     }
 

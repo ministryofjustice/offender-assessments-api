@@ -48,5 +48,7 @@ public class OasysAnswer {
     })
     private RefAnswer refAnswer;
 
-
+    public boolean hasRefAnswer(){
+        return refAnswer != null;
+    }
 }

@@ -49,7 +49,7 @@ public class SectionDto {
                 .sectionOtherWeightedScore(section.getSectOtherWeightedScore())
                 .sectionOtherRawScore(section.getSectOtherRawScore())
                 .lowScoreAttentionNeeded(DtoUtils.ynToBoolean(section.getLowScoreNeedAttnInd()))
-                .questions(QuestionDto.from(section.getOasysQuestionMap().values()))
+                .questions(QuestionDto.from(section.getOasysQuestions()))
                 .refSection(RefSectionDto.from(section.getRefSection()))
                 .build();
     }
