@@ -14,6 +14,8 @@ import uk.gov.justice.digital.oasys.api.ValidateUserRequest;
 import uk.gov.justice.digital.oasys.service.AuthenticationService;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
+import java.util.Optional;
+
 import static net.logstash.logback.argument.StructuredArguments.value;
 import static org.springframework.http.HttpStatus.*;
 import static uk.gov.justice.digital.oasys.utils.LogEvent.EVENT;
@@ -47,7 +49,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthorisationDto> getUserAuthorisedForOffenderId(@PathVariable("oasysUserId") String oasysUserId,
                                                                            @PathVariable("offenderId") Long offenderId,
                                                                            @PathVariable("resource") OffenderPermissionResource resource,
-                                                                           @RequestParam("sessionId") Long sessionId) {
+                                                                           @RequestParam("sessionId") Optional<Long> sessionId) {
         return ResponseEntity.ok(authenticationService.userCanAccessOffenderRecord(oasysUserId, offenderId, sessionId, resource));
     }
 
