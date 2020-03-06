@@ -55,4 +55,8 @@ public class SspInterventionInSet {
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 
+    @ManyToOne
+    @JoinColumn(name = "SSP_INTERVENTION_IN_SET_PK", referencedColumnName = "SSP_INTERVENTION_IN_SET_PK", insertable = false, updatable = false)
+    private SspWhoDoWorkPivot sspWhoDoWorkPivot;
+
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
@@ -14,7 +15,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Table(name = "SSP_OBJECTIVE")
 @Builder
-public class SspObjective {
+public class SspObjective implements Serializable {
     @Id
     @Column(name = "SSP_OBJECTIVE_PK")
     private Long sspObjectivePk;

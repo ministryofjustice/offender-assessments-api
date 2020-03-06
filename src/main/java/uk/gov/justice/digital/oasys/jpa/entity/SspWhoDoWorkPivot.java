@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Time;
 
 @Data
@@ -12,7 +13,7 @@ import java.sql.Time;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "SSP_WHO_DO_WORK_PIVOT")
-public class SspWhoDoWorkPivot {
+public class SspWhoDoWorkPivot implements Serializable {
     @Id
     @Column(name = "SSP_WHO_DO_WORK_PIVOT_PK")
     private Long sspWhoDoWorkPivotPk;

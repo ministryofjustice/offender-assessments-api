@@ -17,6 +17,7 @@ public class QuestionDto {
     private Long refQuestionId;
     private String refQuestionCode;
     private Long oasysQuestionId;
+    private Long displayOrder;
     private Long displayScore;
     private String questionText;
     private AnswerDto answer;
@@ -49,9 +50,10 @@ public class QuestionDto {
                 refQuestion.map(RefQuestion::getRefQuestionUk).orElse(null),
                 refQuestion.map(RefQuestion::getRefQuestionCode).orElse(null),
                 question.getOasysQuestionPk(),
+                refQuestion.map(RefQuestion::getDisplaySort).orElse(null),
                 question.getDisplayScore(),
                 refQuestion.map(RefQuestion::getRefSectionQuestion).orElse(null),
-                AnswerDto.from(question, question.getOasysAnswer()));
+                AnswerDto.from(question));
 
     }
 }
