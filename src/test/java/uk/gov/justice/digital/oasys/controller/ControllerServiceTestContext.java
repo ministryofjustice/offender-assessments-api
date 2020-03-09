@@ -249,7 +249,7 @@ public class ControllerServiceTestContext {
                         .build()).build();
 
 
-        OasysAnswer answerIP1 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").build()).build();
+        OasysAnswer answerIP1 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").refSectionAnswer("Yes").build()).build();
 
         questionIP1.setOasysAnswer(answerIP1);
         answerIP1.setOasysQuestion(questionIP1);
