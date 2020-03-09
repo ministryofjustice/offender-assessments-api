@@ -299,7 +299,7 @@ public class ControllerServiceTestContext {
 
     }
 
-    private static List<SspCrimNeedObjPivot> getNeeds() {
+    private static Set<SspCrimNeedObjPivot> getNeeds() {
         var need1 = SspCrimNeedObjPivot.builder()
                 .sspCrimNeedObjPivotPk(1l)
                 .criminogenicNeed(refElementFrom("I10", "Need 1", null)).build();
@@ -308,10 +308,10 @@ public class ControllerServiceTestContext {
                 .sspCrimNeedObjPivotPk(2l)
                 .criminogenicNeed(refElementFrom("I20", "Need 2", null)).build();
 
-        return List.of(need1,need2);
+        return Set.of(need1,need2);
     }
 
-    public static List<SspObjIntervenePivot> getInterventions(long objectiveInSetPK) {
+    public static Set<SspObjIntervenePivot> getInterventions(long objectiveInSetPK) {
 
         var intervention1 = SspObjIntervenePivot.builder()
                 .sspObjectivesInSetPk(objectiveInSetPK)
@@ -339,7 +339,7 @@ public class ControllerServiceTestContext {
                                 .whoDoWork(refElementFrom("IX1", "Prison Officer", null)).build()
                         ).build()).build();
 
-        return List.of(intervention1,intervention2);
+        return Set.of(intervention1,intervention2);
     }
 
 
