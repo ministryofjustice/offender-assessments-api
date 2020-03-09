@@ -13,19 +13,19 @@ import java.util.stream.Collectors;
 @Value
 @Builder(access = AccessLevel.PRIVATE)
 public class ObjectiveDto {
-    private List<CriminogenicNeedDto> criminogenicNeeds;
-    private List<InterventionDto> interventions;
+    private Set<CriminogenicNeedDto> criminogenicNeeds;
+    private Set<InterventionDto> interventions;
     private ObjectiveMeasureDto objectiveMeasure;
     private RefElementDto objectiveType;
     private String objectiveCode;
     private String objectiveDescription;
     private String howMeasured;
 
-    public static List<ObjectiveDto> from(Set<SspObjectivesInSet> sspObjectivesInSets) {
+    public static Set<ObjectiveDto> from(Set<SspObjectivesInSet> sspObjectivesInSets) {
 
         return sspObjectivesInSets.stream()
                 .map(ObjectiveDto::from)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     private static ObjectiveDto from(SspObjectivesInSet sspo) {

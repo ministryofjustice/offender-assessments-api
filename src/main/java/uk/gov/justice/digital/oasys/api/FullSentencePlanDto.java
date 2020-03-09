@@ -17,7 +17,7 @@ public class FullSentencePlanDto {
     private Long oasysSetId;
     private LocalDateTime createdDate;
     private LocalDateTime completedDate;
-    private List<ObjectiveDto> objectives;
+    private Set<ObjectiveDto> objectives;
     private Map<String, QuestionDto> questions;
 
     public static FullSentencePlanDto from(OasysSet oasysSet) {
