@@ -22,8 +22,11 @@ public class FullSentencePlanDto {
 
     public static FullSentencePlanDto from(OasysSet oasysSet) {
 
+        if (oasysSet.getSspObjectivesInSets() == null || oasysSet.getSspObjectivesInSets().isEmpty()) {
+            return null;
+        }
         var questions = Optional.ofNullable(oasysSet.getOasysSections()).orElse(Collections.emptySet()).stream()
-                .filter(s->s.getRefSection().getRefSectionCode().equals("ISP")).findFirst() //get the section
+                .filter(s->s.getRefSection().getRefSectionCode().equals("ISP") || s.getRefSection().getRefSectionCode().equals("RSP")).findFirst() //get the section
                 .map(OasysSection::getOasysQuestions).orElse(Collections.emptySet()).stream() // get the questions for the section
                 .sorted(Comparator.comparingLong(q-> q.getRefQuestion().getDisplaySort())) // sort by display order
                 .collect(Collectors.toList());
@@ -37,9 +40,7 @@ public class FullSentencePlanDto {
                 ObjectiveDto.from(oasysSet.getSspObjectivesInSets()),
                 sentencePlanFields);
 
-        if (sp.getObjectives() == null || sp.getObjectives().isEmpty()) {
-            return null;
-        }
+
 
         return sp;
     }

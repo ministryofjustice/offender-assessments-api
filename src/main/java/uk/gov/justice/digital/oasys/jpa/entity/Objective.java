@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.sql.Time;
 
 @Data
 @Entity
+@Builder
 @Table(name = "OBJECTIVE")
 public class Objective {
     @Column(name = "OBJECTIVE_UK")
