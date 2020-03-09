@@ -16,36 +16,31 @@ public class AnswerDto {
     private Long refAnswerId;
     private String refAnswerCode;
     private Long oasysAnswerId;
+    private Long displayOrder;
     private String staticText;
-    private String freeformText;
+    private String freeFormText;
     private Long ogpScore;
     private Long ovpScore;
     private Long qaRawScore;
 
-    public static AnswerDto from(OasysQuestion question, OasysAnswer oasysAnswer) {
-        if (oasysAnswer == null) {
-            return AnswerDto.from(question);
+    public static AnswerDto from(OasysQuestion question) {
+        if (question.getOasysAnswer() == null) {
+            return new AnswerDto(null, null, null,null,null, question.getFreeFormatAnswer(), null, null, null);
         }
 
-        var refAnswer = Optional.ofNullable(oasysAnswer.getRefAnswer());
-        var questionFromAnswer = (Optional.ofNullable(oasysAnswer.getOasysQuestion()));
+        var refAnswer = Optional.ofNullable(question.getOasysAnswer().getRefAnswer());
+        var questionFromAnswer = (Optional.ofNullable(question.getOasysAnswer().getOasysQuestion()));
 
         return new AnswerDto(
                 refAnswer.map(RefAnswer::getRefAnswerUk).orElse(null),
                 refAnswer.map(RefAnswer::getRefAnswerCode).orElse(null),
-                oasysAnswer.getOasysAnswerPk(),
+                question.getOasysAnswer().getOasysAnswerPk(),
+                refAnswer.map(RefAnswer::getDisplaySort).orElse(null),
                 refAnswer.map(RefAnswer::getRefSectionAnswer).orElse(null),
                 questionFromAnswer.map(OasysQuestion::getFreeFormatAnswer).orElse(null),
                 refAnswer.map(RefAnswer::getOgpScore).orElse(null),
                 refAnswer.map(RefAnswer::getOvpScore).orElse(null),
                 refAnswer.map(RefAnswer::getQaRawScore).orElse(null));
-    }
-
-    private static AnswerDto from(OasysQuestion question) {
-        if (question == null) {
-            return null;
-        }
-        return new AnswerDto(null, null, null, null, question.getFreeFormatAnswer(), null, null, null);
     }
 
     @JsonIgnore

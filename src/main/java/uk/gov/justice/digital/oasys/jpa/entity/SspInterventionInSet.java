@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.sql.Time;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "SSP_INTERVENTION_IN_SET")
@@ -54,5 +56,9 @@ public class SspInterventionInSet {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @ManyToOne
+    @JoinColumn(name = "SSP_INTERVENTION_IN_SET_PK", referencedColumnName = "SSP_INTERVENTION_IN_SET_PK", insertable = false, updatable = false)
+    private SspWhoDoWorkPivot sspWhoDoWorkPivot;
 
 }

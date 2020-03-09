@@ -1,18 +1,21 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Time;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "SSP_WHO_DO_WORK_PIVOT")
-public class SspWhoDoWorkPivot {
+public class SspWhoDoWorkPivot implements Serializable {
     @Id
     @Column(name = "SSP_WHO_DO_WORK_PIVOT_PK")
     private Long sspWhoDoWorkPivotPk;

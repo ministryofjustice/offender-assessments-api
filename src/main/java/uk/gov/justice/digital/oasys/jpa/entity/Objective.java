@@ -1,13 +1,19 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
 
 @Data
 @Entity
+@Builder
 @Table(name = "OBJECTIVE")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Objective {
     @Column(name = "OBJECTIVE_UK")
     private Long objectiveUk;

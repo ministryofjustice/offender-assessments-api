@@ -8,8 +8,11 @@ import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -208,5 +211,153 @@ public class ControllerServiceTestContext {
                 .oasysQuestions(Set.of(question1098, question1099)).build();
         return Set.of( section10);
     }
+
+    public static OasysSet layer3AssessmentOasysSetWithFullSentencePlan(Long id) {
+
+        Set<OasysSection> sections = new HashSet<>();
+        sections.addAll(completeLayer3AssessmentSections());
+        sections.add(getSentencePlanSection());
+
+        return OasysSet.builder()
+                .createDate(LocalDateTime.now().minusDays(1))
+                .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
+                .group(OasysAssessmentGroup.builder().build())
+                .oasysSections(sections)
+
+                .sspObjectivesInSets(getObjectivesInSet())
+                .assessmentStatus(RefElement.builder().build())
+                .basicSentencePlanList(Set.of(aSentencePlan(1), aSentencePlan(2)))
+                .oasysSetPk(id).build();
+    }
+
+    private static OasysSection getSentencePlanSection() {
+
+
+        OasysQuestion questionIP1 = OasysQuestion.builder()
+                .refQuestion(RefQuestion.builder()
+                        .refQuestionCode("IP.1")
+                        .displaySort(1l)
+                        .refQuestionCode("IP.2")
+                .build()).build();
+
+        OasysQuestion questionIP2 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
+                .additionalNote("Additional note")
+                .refQuestion(RefQuestion.builder()
+                        .refQuestionCode("IP.1")
+                        .displaySort(2l)
+                        .refQuestionCode("IP.1")
+                        .build()).build();
+
+
+        OasysAnswer answerIP1 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").refSectionAnswer("Yes").build()).build();
+
+        questionIP1.setOasysAnswer(answerIP1);
+        answerIP1.setOasysQuestion(questionIP1);
+
+        var section =  OasysSection.builder()
+                    .refSection(RefSection.builder()
+                            .refSectionCode("ISP")
+                            .sectionType(refElementFrom("ISP", "Initial Sentence Plan", "Initial Sentence Plan")).build())
+                    .oasysQuestions(Set.of(questionIP1, questionIP2)).build();
+
+        return  section;
+    }
+
+    public static Set<SspObjectivesInSet> getObjectivesInSet() {
+
+        var objective1 = SspObjectivesInSet.builder().objectiveType(refElementFrom("CURRENT",
+                "Current", null ))
+                .sspObjectiveMeasure(SspObjectiveMeasure.builder().objectiveStatus(
+                        refElementFrom("R", "Ongoing", null))
+                        .objectiveStatusComments("Status Comments")
+                        .sspObjectiveMeasurePk(1l).build())
+                .howProgressMeasured("Progress measured")
+                .sspObjective(SspObjective.builder().objectiveDesc("Objective description")
+                        .sspObjectivePk(1l)
+                        .objective(getObjective("100","Objective 1", "Objective 1 Heading")).build())
+                .sspObjectivesInSetPk(1l)
+                .createDate(LocalDateTime.of(2019, 12,28, 9, 00))
+                .sspCrimNeedObjPivots(getNeeds()).build();
+
+        var objective2 = SspObjectivesInSet.builder().objectiveType(refElementFrom("CURRENT",
+                "Current", null ))
+                .sspObjectiveMeasure(SspObjectiveMeasure.builder().objectiveStatus(
+                        refElementFrom("R", "Ongoing", null))
+                        .objectiveStatusComments("Status Comments")
+                        .sspObjectiveMeasurePk(2l).build())
+                .howProgressMeasured("Progress measured")
+                .sspObjective(SspObjective.builder().objectiveDesc("Objective description")
+                        .sspObjectivePk(2l)
+                        .objective(getObjective("100","Objective 1", "Objective 1 Heading")).build())
+                .sspObjIntervenePivots(getInterventions(2l))
+                .createDate(LocalDateTime.of(2019, 11,28, 9, 00))
+                .sspObjectivesInSetPk(2l).build();
+
+
+        return Set.of(objective1, objective2);
+
+
+    }
+
+    private static List<SspCrimNeedObjPivot> getNeeds() {
+        var need1 = SspCrimNeedObjPivot.builder()
+                .sspCrimNeedObjPivotPk(1l)
+                .criminogenicNeed(refElementFrom("I10", "Need 1", null)).build();
+
+        var need2 = SspCrimNeedObjPivot.builder()
+                .sspCrimNeedObjPivotPk(2l)
+                .criminogenicNeed(refElementFrom("I20", "Need 2", null)).build();
+
+        return List.of(need1,need2);
+    }
+
+    public static List<SspObjIntervenePivot> getInterventions(long objectiveInSetPK) {
+
+        var intervention1 = SspObjIntervenePivot.builder()
+                .sspObjectivesInSetPk(objectiveInSetPK)
+                .sspObjIntervenePivotPk(1l)
+                .sspInterventionInSet(SspInterventionInSet.builder()
+                        .sspInterventionInSetPk(1l)
+                        .interventionComment("Intervention Comment")
+                        .intervention(refElementFrom("V1", "Intervention 1", "Inv 1"))
+                        .sspWhoDoWorkPivot(SspWhoDoWorkPivot.builder()
+                                .sspWhoDoWorkPivotPk(1l)
+                                .comments("Who do work comment")
+                                .whoDoWork(refElementFrom("IX1", "Offender", null)).build()
+                        ).build()).build();
+
+        var intervention2 = SspObjIntervenePivot.builder()
+                .sspObjectivesInSetPk(objectiveInSetPK)
+                .sspObjIntervenePivotPk(2l)
+                .sspInterventionInSet(SspInterventionInSet.builder()
+                        .sspInterventionInSetPk(2l)
+                        .interventionComment("Intervention Comment")
+                        .intervention(refElementFrom("V2", "Intervention 2", "Inv 2"))
+                        .sspWhoDoWorkPivot(SspWhoDoWorkPivot.builder()
+                                .sspWhoDoWorkPivotPk(1l)
+                                .comments("Who do work comment 2")
+                                .whoDoWork(refElementFrom("IX1", "Prison Officer", null)).build()
+                        ).build()).build();
+
+        return List.of(intervention1,intervention2);
+    }
+
+
+    public static Objective getObjective(String code, String description, String heading) {
+        return Objective.builder()
+                .objectiveCode(code)
+                .objectiveDesc(description)
+                .objectiveHeading(refElementFrom(code, heading, heading))
+                .build();
+    }
+
+    public static RefElement refElementFrom(String code, String description, String shortDescription ) {
+        return RefElement.builder()
+                .refElementCode(code)
+                .refElementDesc(description)
+                .refElementShortDesc(shortDescription).build();
+    }
+
+
 
 }

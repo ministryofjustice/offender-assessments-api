@@ -59,16 +59,12 @@ public class SspObjectivesInSet {
     @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
     private List<SspObjIntervenePivot> sspObjIntervenePivots;
 
-    @OneToOne
-    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
-    private SspWhoDoWorkPivot sspWhoDoWorkPivot;
-
-    @OneToOne
-    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
+    @ManyToOne
+    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK",insertable=false, updatable=false)
     private SspObjective sspObjective;
 
-    @OneToOne
-    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
+    @ManyToOne
+    @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK",insertable=false, updatable=false)
     private SspObjectiveMeasure sspObjectiveMeasure;
 
     @OneToMany

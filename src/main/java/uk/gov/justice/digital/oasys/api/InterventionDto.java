@@ -17,6 +17,7 @@ public class InterventionDto {
     private RefElementDto timescale;
     private String interventionCode;
     private String interventionDescription;
+    private WhoDoingWorkDto whoDoingWork;
 
     public static List<InterventionDto> from(List<SspObjIntervenePivot> sspObjIntervenePivots) {
         return Optional.ofNullable(sspObjIntervenePivots)
@@ -30,6 +31,7 @@ public class InterventionDto {
                                 .interventionDescription(DtoUtils.refElementDesc(intervention.getIntervention()))
                                 .timescale(RefElementDto.from(intervention.getTimescaleForIntervention()))
                                 .interventionComment(intervention.getInterventionComment())
+                                .whoDoingWork(WhoDoingWorkDto.from(intervention.getSspWhoDoWorkPivot()))
                                 .build())
                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());

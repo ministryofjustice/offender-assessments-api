@@ -17,7 +17,6 @@ public class ObjectiveDto {
     private List<InterventionDto> interventions;
     private ObjectiveMeasureDto objectiveMeasure;
     private RefElementDto objectiveType;
-    private WhoDoingWorkDto whoDoingWork;
     private String objectiveCode;
     private String objectiveDescription;
     private String howMeasured;
@@ -42,7 +41,6 @@ public class ObjectiveDto {
                 .objectiveDescription(objectiveDescriptionOf(sspo.getSspObjective()))
                 .objectiveMeasure(ObjectiveMeasureDto.from(sspo.getSspObjectiveMeasure()))
                 .objectiveType(RefElementDto.from(sspo.getObjectiveType()))
-                .whoDoingWork(WhoDoingWorkDto.from(sspo.getSspWhoDoWorkPivot()))
                 .build();
     }
 
