@@ -80,4 +80,18 @@ public class SentencePlansController {
         return ResponseEntity.ok(plans);
     }
 
+
+    @RequestMapping(path = "/offenders/{identityType}/{identity}/fullSentencePlans/{oasysSetPk}", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
+    public ResponseEntity<FullSentencePlanDto> getFullSentencePlanForOffender(@PathVariable("identityType") String identityType,
+                                                                                     @PathVariable("identity") String identity,
+                                                                                     @PathVariable("oasysSetPk") Long oasysSetPk) {
+        log.info("Retrieving Full Sentence Plans for Identity {},{}", identityType, identity, LogEvent.GET_FULL_SP);
+        var plan = sentencePlanService.getFullSentencePlan(identityType, identity, oasysSetPk);
+        log.info("Found Full Sentence Plans for Identity {},{}", identityType, identity, LogEvent.GET_FULL_SP_FOUND);
+        return ResponseEntity.ok(plan);
+    }
+
 }

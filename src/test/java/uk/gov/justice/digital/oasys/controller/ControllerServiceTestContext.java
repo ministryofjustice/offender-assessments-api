@@ -180,23 +180,6 @@ public class ControllerServiceTestContext {
 
     public static Set<OasysSection> completeLayer3AssessmentSections() {
 
-
-
-        OasysQuestion question1098 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
-                .refQuestion(RefQuestion.builder().refQuestionCode("10.98").build()).build();
-
-        OasysQuestion question1099 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
-                .refQuestion(RefQuestion.builder().refQuestionCode("10.99").build()).build();
-
-        OasysAnswer answer1098 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").build()).build();
-        OasysAnswer answer1099 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").build()).build();
-
-        question1098.setOasysAnswer(answer1098);
-        answer1098.setOasysQuestion(question1098);
-
-        question1099.setOasysAnswer(answer1099);
-        answer1099.setOasysQuestion(question1099);
-
         OasysSection section10 = OasysSection.builder()
                 .refSection(RefSection.builder()
                         .crimNeedScoreThreshold(5L).refSectionCode("10")
@@ -208,9 +191,63 @@ public class ControllerServiceTestContext {
                 .sectOgpRawScore(5L)
                 .lowScoreNeedAttnInd("YES")
                 .sectOtherRawScore(10L)
-                .oasysQuestions(Set.of(question1098, question1099)).build();
+                .oasysQuestions(getOASysQuestions()).build();
         return Set.of( section10);
     }
+
+    public static Set<OasysQuestion> getOASysQuestions() {
+        OasysQuestion question1098 = OasysQuestion.builder()
+                .oasysQuestionPk(1l)
+                .displayScore(1l)
+                .refQuestion(RefQuestion.builder()
+                        .refQuestionUk(1l)
+                        .refSectionQuestion("Question 10.98")
+                        .refQuestionCode("10.98")
+                        .displaySort(1l).build()).build();
+
+        OasysQuestion question1099 = OasysQuestion.builder()
+                .oasysQuestionPk(2l)
+                .displayScore(2l)
+                .refQuestion(RefQuestion.builder()
+                        .refQuestionUk(2l)
+                        .refSectionQuestion("Question 10.99")
+                        .refQuestionCode("10.99")
+                        .displaySort(2l).build()).build();
+
+        OasysAnswer answer1098 = OasysAnswer.builder().refAnswer(RefAnswer.builder().
+                refAnswerCode("YES")
+                .defaultDisplayScore(1l)
+                .displaySort(1l)
+                .refSectionAnswer("Yes").build()).build();
+
+        OasysAnswer answer1099 = OasysAnswer.builder().refAnswer(RefAnswer.builder()
+                .refAnswerCode("NO")
+                .defaultDisplayScore(2l)
+                .displaySort(2l)
+                .ogpScore(1l)
+                .ovpScore(2l)
+                .qaRawScore(3l)
+                .refSectionAnswer("No").build()).build();
+
+        question1098.setOasysAnswer(answer1098);
+        answer1098.setOasysQuestion(question1098);
+
+        question1099.setOasysAnswer(answer1099);
+        answer1099.setOasysQuestion(question1099);
+
+        OasysQuestion questionIP2 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
+                .additionalNote("Additional note")
+                .refQuestion(RefQuestion.builder()
+                        .refQuestionCode("IP.1")
+                        .displaySort(3l)
+                        .refQuestionCode("IP.1")
+                        .build()).build();
+
+        return Set.of(question1098, question1099, questionIP2);
+    }
+
+
+
 
     public static OasysSet layer3AssessmentOasysSetWithFullSentencePlan(Long id) {
 
@@ -230,7 +267,7 @@ public class ControllerServiceTestContext {
                 .oasysSetPk(id).build();
     }
 
-    private static OasysSection getSentencePlanSection() {
+    public static OasysSection getSentencePlanSection() {
 
 
         OasysQuestion questionIP1 = OasysQuestion.builder()
@@ -272,7 +309,8 @@ public class ControllerServiceTestContext {
                         .objectiveStatusComments("Status Comments")
                         .sspObjectiveMeasurePk(1l).build())
                 .howProgressMeasured("Progress measured")
-                .sspObjective(SspObjective.builder().objectiveDesc("Objective description")
+                .sspObjIntervenePivots(getInterventions(1l))
+                .sspObjective(SspObjective.builder().objectiveDesc("Objective 1 description")
                         .sspObjectivePk(1l)
                         .objective(getObjective("100","Objective 1", "Objective 1 Heading")).build())
                 .sspObjectivesInSetPk(1l)
@@ -286,9 +324,10 @@ public class ControllerServiceTestContext {
                         .objectiveStatusComments("Status Comments")
                         .sspObjectiveMeasurePk(2l).build())
                 .howProgressMeasured("Progress measured")
-                .sspObjective(SspObjective.builder().objectiveDesc("Objective description")
+                .sspObjIntervenePivots(getInterventions(2l))
+                .sspObjective(SspObjective.builder().objectiveDesc("Objective 2 description")
                         .sspObjectivePk(2l)
-                        .objective(getObjective("100","Objective 1", "Objective 1 Heading")).build())
+                        .objective(getObjective("200","Objective 2", "Objective 2 Heading")).build())
                 .sspObjIntervenePivots(getInterventions(2l))
                 .createDate(LocalDateTime.of(2019, 11,28, 9, 00))
                 .sspObjectivesInSetPk(2l).build();
@@ -299,7 +338,7 @@ public class ControllerServiceTestContext {
 
     }
 
-    private static Set<SspCrimNeedObjPivot> getNeeds() {
+    public static Set<SspCrimNeedObjPivot> getNeeds() {
         var need1 = SspCrimNeedObjPivot.builder()
                 .sspCrimNeedObjPivotPk(1l)
                 .criminogenicNeed(refElementFrom("I10", "Need 1", null)).build();
@@ -320,11 +359,11 @@ public class ControllerServiceTestContext {
                         .sspInterventionInSetPk(1l)
                         .interventionComment("Intervention Comment")
                         .intervention(refElementFrom("V1", "Intervention 1", "Inv 1"))
-                        .sspWhoDoWorkPivot(SspWhoDoWorkPivot.builder()
+                        .sspWhoDoWorkPivot(Set.of(SspWhoDoWorkPivot.builder()
                                 .sspWhoDoWorkPivotPk(1l)
                                 .comments("Who do work comment")
                                 .whoDoWork(refElementFrom("IX1", "Offender", null)).build()
-                        ).build()).build();
+                        )).build()).build();
 
         var intervention2 = SspObjIntervenePivot.builder()
                 .sspObjectivesInSetPk(objectiveInSetPK)
@@ -333,11 +372,11 @@ public class ControllerServiceTestContext {
                         .sspInterventionInSetPk(2l)
                         .interventionComment("Intervention Comment")
                         .intervention(refElementFrom("V2", "Intervention 2", "Inv 2"))
-                        .sspWhoDoWorkPivot(SspWhoDoWorkPivot.builder()
+                        .sspWhoDoWorkPivot(Set.of(SspWhoDoWorkPivot.builder()
                                 .sspWhoDoWorkPivotPk(1l)
                                 .comments("Who do work comment 2")
                                 .whoDoWork(refElementFrom("IX1", "Prison Officer", null)).build()
-                        ).build()).build();
+                        )).build()).build();
 
         return Set.of(intervention1,intervention2);
     }
