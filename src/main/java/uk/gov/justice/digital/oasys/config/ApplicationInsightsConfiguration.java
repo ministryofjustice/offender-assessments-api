@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.oasys.config;
 
 import com.microsoft.applicationinsights.TelemetryClient;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotatedTypeMetadata;
@@ -10,6 +11,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  * we don't get a telemetry bean and application won't start.  Therefore need this backup configuration.
  */
 @Configuration
+@Slf4j
 public class ApplicationInsightsConfiguration {
 
 
@@ -24,6 +26,9 @@ public class ApplicationInsightsConfiguration {
         @Override
         public boolean matches(final ConditionContext context, final AnnotatedTypeMetadata metadata) {
             final var telemetryKey = context.getEnvironment().getProperty("appinsights.instrumentationkey");
+            if(StringUtils.isBlank(telemetryKey)) {
+                log.warn("Application Insights Implementation Key is blank");
+            }
             return StringUtils.isBlank(telemetryKey);
         }
     }

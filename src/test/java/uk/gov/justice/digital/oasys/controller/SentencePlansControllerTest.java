@@ -17,6 +17,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
+import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
 import uk.gov.justice.digital.oasys.jpa.repository.AssessmentRepository;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -297,6 +298,37 @@ public class SentencePlansControllerTest {
                 .as(BasicSentencePlan[].class);
 
         assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(1l, 2l);
+    }
+
+    @Test
+    public void canGetFullSentencePlansForOffenderPk() {
+        FullSentencePlanDto[] sentencePlans = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/oasysOffenderId/{0}/fullSentencePlans", 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(FullSentencePlanDto[].class);
+
+        assertThat(sentencePlans).hasSize(1);
+        assertThat(sentencePlans).extracting("oasysSetId").containsOnly(1L);
+    }
+
+    @Test
+    public void canGetFullSentencePlanForOasysSetPk() {
+        FullSentencePlanDto sentencePlan = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/oasysOffenderId/{0}/fullSentencePlans/{1}", 1L, 1L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(FullSentencePlanDto.class);
+
+                assertThat(sentencePlan.getOasysSetId()).isEqualTo(1L);
     }
 
 }

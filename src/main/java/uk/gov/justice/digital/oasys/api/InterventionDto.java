@@ -7,6 +7,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.SspObjIntervenePivot;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Builder
@@ -17,9 +18,10 @@ public class InterventionDto {
     private RefElementDto timescale;
     private String interventionCode;
     private String interventionDescription;
-    private WhoDoingWorkDto whoDoingWork;
+    private Set<WhoDoingWorkDto> whoDoingWork;
+    private InterventionMeasureDto interventionMeasure;
 
-    public static List<InterventionDto> from(List<SspObjIntervenePivot> sspObjIntervenePivots) {
+    public static Set<InterventionDto> from(Set<SspObjIntervenePivot> sspObjIntervenePivots) {
         return Optional.ofNullable(sspObjIntervenePivots)
                 .map(x -> x.stream()
                         .filter(y -> y.getSspInterventionInSet() != null)
@@ -32,9 +34,10 @@ public class InterventionDto {
                                 .timescale(RefElementDto.from(intervention.getTimescaleForIntervention()))
                                 .interventionComment(intervention.getInterventionComment())
                                 .whoDoingWork(WhoDoingWorkDto.from(intervention.getSspWhoDoWorkPivot()))
+                                .interventionMeasure(InterventionMeasureDto.from(intervention.getSspInterventionMeasure()))
                                 .build())
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+                        .collect(Collectors.toSet()))
+                .orElse(Collections.emptySet());
     }
 
 

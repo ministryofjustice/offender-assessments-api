@@ -17,7 +17,7 @@ public class FullSentencePlanDto {
     private Long oasysSetId;
     private LocalDateTime createdDate;
     private LocalDateTime completedDate;
-    private List<ObjectiveDto> objectives;
+    private Set<ObjectiveDto> objectives;
     private Map<String, QuestionDto> questions;
 
     public static FullSentencePlanDto from(OasysSet oasysSet) {
@@ -33,16 +33,14 @@ public class FullSentencePlanDto {
 
         Map<String, QuestionDto> sentencePlanFields = new HashMap<>();
         questions.forEach(question -> sentencePlanFields.put(question.getRefQuestion().getRefQuestionCode(), QuestionDto.from(question)));
-        var sp = new FullSentencePlanDto(
+
+        return new FullSentencePlanDto(
                 oasysSet.getOasysSetPk(),
                 earliestSspObjectiveOf(oasysSet.getSspObjectivesInSets()),
                 oasysSet.getDateCompleted(),
                 ObjectiveDto.from(oasysSet.getSspObjectivesInSets()),
                 sentencePlanFields);
 
-
-
-        return sp;
     }
 
     private static LocalDateTime earliestSspObjectiveOf(Set<SspObjectivesInSet> sspObjectivesInSets) {

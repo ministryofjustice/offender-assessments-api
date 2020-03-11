@@ -19,6 +19,14 @@ public class FullSentencePlanDtoTest {
         assertThat(sentencePlan.getOasysSetId()).isEqualTo(123l);
         assertThat(sentencePlan.getObjectives()).hasSize(2);
         assertThat(sentencePlan.getQuestions()).hasSize(2);
+    }
+
+    @Test
+    public void shouldUseEarliestObjectiveDateForStartDate() {
+
+        OasysSet oasysSet = ControllerServiceTestContext.layer3AssessmentOasysSetWithFullSentencePlan(123L);
+
+        var sentencePlan = FullSentencePlanDto.from(oasysSet);
         assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringSeconds(LocalDateTime.of(2019, 11,28, 9, 00));
     }
 
@@ -43,6 +51,22 @@ public class FullSentencePlanDtoTest {
         assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringMinutes(LocalDateTime.now().minusDays(10));
         assertThat(sentencePlan.getCompletedDate()).isEqualToIgnoringMinutes(LocalDateTime.now().minusDays(1));
 
+    }
+
+    @Test
+    public void sentencePlanHasNullCompletedDateIfNotPresent() {
+        var today = LocalDateTime.now();
+
+
+        var oasysSet = OasysSet.builder()
+                .createDate(today)
+                .dateCompleted(null)
+                .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(today).build()).build()))
+                .build();
+
+        final FullSentencePlanDto actual = FullSentencePlanDto.from(oasysSet);
+
+        assertThat(actual.getCompletedDate()).isNull();
     }
 
 }

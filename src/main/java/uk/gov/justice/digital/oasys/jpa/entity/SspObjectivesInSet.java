@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -57,7 +58,7 @@ public class SspObjectivesInSet {
 
     @OneToMany
     @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
-    private List<SspObjIntervenePivot> sspObjIntervenePivots;
+    private Set<SspObjIntervenePivot> sspObjIntervenePivots;
 
     @ManyToOne
     @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK",insertable=false, updatable=false)
@@ -69,6 +70,6 @@ public class SspObjectivesInSet {
 
     @OneToMany
     @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
-    private List<SspCrimNeedObjPivot> sspCrimNeedObjPivots;
+    private Set<SspCrimNeedObjPivot> sspCrimNeedObjPivots;
 
 }

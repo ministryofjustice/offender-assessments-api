@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.Set;
 
 @Data
 @Entity
@@ -57,8 +58,12 @@ public class SspInterventionInSet {
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "SSP_INTERVENTION_IN_SET_PK", referencedColumnName = "SSP_INTERVENTION_IN_SET_PK", insertable = false, updatable = false)
-    private SspWhoDoWorkPivot sspWhoDoWorkPivot;
+    private Set<SspWhoDoWorkPivot> sspWhoDoWorkPivot;
+
+    @ManyToOne
+    @JoinColumn(name = "SSP_INTERVENTION_IN_SET_PK", referencedColumnName = "SSP_INTERVENTION_IN_SET_PK",insertable=false, updatable=false)
+    private SspInterventionMeasure sspInterventionMeasure;
 
 }
