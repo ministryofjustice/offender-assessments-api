@@ -1,8 +1,8 @@
 package uk.gov.justice.digital.oasys.config;
 
 import com.microsoft.applicationinsights.TelemetryClient;
-import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
@@ -26,7 +26,7 @@ public class ApplicationInsightsConfiguration {
         @Override
         public boolean matches(final ConditionContext context, final AnnotatedTypeMetadata metadata) {
             final var telemetryKey = context.getEnvironment().getProperty("appinsights.instrumentationkey");
-            if(com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.StringUtils.isBlank(telemetryKey)) {
+            if(StringUtils.isBlank(telemetryKey)) {
                 log.warn("Application Insights Implementation Key is blank");
             }
             return StringUtils.isBlank(telemetryKey);
