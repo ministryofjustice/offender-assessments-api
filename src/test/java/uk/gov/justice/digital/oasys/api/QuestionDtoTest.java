@@ -3,7 +3,6 @@ package uk.gov.justice.digital.oasys.api;
 import org.junit.Test;
 import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuestionDtoTest {
@@ -60,7 +59,7 @@ public class QuestionDtoTest {
         assertThat(questions.get("10.98").getAnswer().getDisplayOrder()).isEqualTo(1l);
         assertThat(questions.get("10.98").getAnswer().getScore()).isNull();
     }
-
+  
     @Test
     public void shouldReturnQuestionForRefQuestion() {
 
@@ -76,6 +75,4 @@ public class QuestionDtoTest {
         assertThat(question.getRefQuestionId()).isEqualTo(1l);
         assertThat(question.getQuestionText()).isEqualTo("Ref Question Text");
     }
-
-
 }

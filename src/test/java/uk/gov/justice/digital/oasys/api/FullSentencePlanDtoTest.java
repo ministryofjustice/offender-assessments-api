@@ -73,6 +73,7 @@ public class FullSentencePlanDtoTest {
         assertThat(actual.getCompletedDate()).isNull();
     }
 
+
     @Test
     public void shouldReturnRefQuestionsForSPSectionsInAdditionToOASysQuestions() {
 
@@ -98,5 +99,4 @@ public class FullSentencePlanDtoTest {
         assertThat(sentencePlan.getQuestions()).hasSize(3);
         assertThat(sentencePlan.getQuestions()).containsOnlyKeys("IP.40", "IP.1", "IP.2");
     }
-
 }

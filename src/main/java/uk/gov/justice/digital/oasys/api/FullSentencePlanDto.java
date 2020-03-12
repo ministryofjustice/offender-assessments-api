@@ -42,6 +42,7 @@ public class FullSentencePlanDto {
             }
         }
 
+
         return new FullSentencePlanDto(
                 oasysSet.getOasysSetPk(),
                 earliestSspObjectiveOf(oasysSet.getSspObjectivesInSets()),
