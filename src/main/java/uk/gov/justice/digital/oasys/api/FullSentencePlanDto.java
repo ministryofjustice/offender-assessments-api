@@ -25,14 +25,22 @@ public class FullSentencePlanDto {
         if (oasysSet.getSspObjectivesInSets() == null || oasysSet.getSspObjectivesInSets().isEmpty()) {
             return null;
         }
-        var questions = Optional.ofNullable(oasysSet.getOasysSections()).orElse(Collections.emptySet()).stream()
-                .filter(s->s.getRefSection().getRefSectionCode().equals("ISP") || s.getRefSection().getRefSectionCode().equals("RSP")).findFirst() //get the section
-                .map(OasysSection::getOasysQuestions).orElse(Collections.emptySet()).stream() // get the questions for the section
-                .sorted(Comparator.comparingLong(q-> q.getRefQuestion().getDisplaySort())) // sort by display order
-                .collect(Collectors.toList());
+
+        var section = oasysSet.getOasysSections().stream()
+                .filter(s->s.getRefSection().getRefSectionCode().equals("ISP") || s.getRefSection().getRefSectionCode().equals("RSP")).findFirst(); //get the section
 
         Map<String, QuestionDto> sentencePlanFields = new HashMap<>();
-        questions.forEach(question -> sentencePlanFields.put(question.getRefQuestion().getRefQuestionCode(), QuestionDto.from(question)));
+        if(section.isPresent()) {
+            var questions = section.map(OasysSection::getOasysQuestions).orElse(Collections.emptySet()).stream() // get the questions for the section
+                    .sorted(Comparator.comparingLong(q -> q.getRefQuestion().getDisplaySort())) // sort by display order
+                    .collect(Collectors.toList());
+            questions.forEach(question -> sentencePlanFields.put(question.getRefQuestion().getRefQuestionCode(), QuestionDto.from(question)));
+
+            if(Objects.nonNull(section.get().getRefSection())) {
+                section.get().getRefSection().getRefQuestions().forEach(questionRef ->
+                        sentencePlanFields.putIfAbsent(questionRef.getRefQuestionCode(), QuestionDto.from(questionRef)));
+            }
+        }
 
         return new FullSentencePlanDto(
                 oasysSet.getOasysSetPk(),

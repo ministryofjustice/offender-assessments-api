@@ -2,6 +2,8 @@ package uk.gov.justice.digital.oasys.api;
 
 import org.junit.Test;
 import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
+import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuestionDtoTest {
@@ -58,5 +60,22 @@ public class QuestionDtoTest {
         assertThat(questions.get("10.98").getAnswer().getDisplayOrder()).isEqualTo(1l);
         assertThat(questions.get("10.98").getAnswer().getScore()).isNull();
     }
+
+    @Test
+    public void shouldReturnQuestionForRefQuestion() {
+
+        var refQuestion = RefQuestion.builder()
+                .refQuestionUk(1l)
+                .refQuestionCode("IP.40")
+                .displaySort(1l)
+                .refSectionQuestion("Ref Question Text").build();
+        var question = QuestionDto.from(refQuestion);
+
+        assertThat(question.getRefQuestionCode()).isEqualTo("IP.40");
+        assertThat(question.getDisplayOrder()).isEqualTo(1l);
+        assertThat(question.getRefQuestionId()).isEqualTo(1l);
+        assertThat(question.getQuestionText()).isEqualTo("Ref Question Text");
+    }
+
 
 }
