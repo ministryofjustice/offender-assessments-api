@@ -1,11 +1,9 @@
 package uk.gov.justice.digital.oasys.api;
 
-import com.google.common.collect.ImmutableList;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -72,33 +70,33 @@ public class SentenceDtoTest {
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGroupValid() {
-        return ImmutableList.of(OasysAssessmentGroup.builder().oasysSets(anOasysSetValid()).build());
+        return List.of(OasysAssessmentGroup.builder().oasysSets(anOasysSetValid()).build());
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGroupNullDetails() {
-        return ImmutableList.of(OasysAssessmentGroup.builder().oasysSets(anOasysSetNullDetails()).build());
+        return List.of(OasysAssessmentGroup.builder().oasysSets(anOasysSetNullDetails()).build());
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGroupNullSentence() {
-        return ImmutableList.of(OasysAssessmentGroup.builder().oasysSets(anOasysSetNullSentence()).build());
+        return List.of(OasysAssessmentGroup.builder().oasysSets(anOasysSetNullSentence()).build());
     }
 
     private static List<OasysSet> anOasysSetValid() {
-        return ImmutableList.of(OasysSet.builder()
+        return List.of(OasysSet.builder()
                 .offenceBlock(anOffenceBlockValid())
                 .createDate(LocalDateTime.now())
                 .build());
     }
 
     private static List<OasysSet> anOasysSetNullDetails() {
-        return ImmutableList.of(OasysSet.builder()
+        return List.of(OasysSet.builder()
                 .offenceBlock(anOffenceBlockNullDetail())
                 .createDate(LocalDateTime.now())
                 .build());
     }
 
     private static List<OasysSet> anOasysSetNullSentence() {
-        return ImmutableList.of(OasysSet.builder()
+        return List.of(OasysSet.builder()
                 .offenceBlock(anOffenceBlockNullSentence())
                 .createDate(LocalDateTime.now())
                 .build());

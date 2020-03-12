@@ -35,14 +35,12 @@ public class ControllerTestContext {
     public static Optional<Offender> anOffender() {
         return Optional.ofNullable(Offender.builder()
                 .oasysAssessmentGroups(anAssessmentGroup())
-                .offenderAliases(List.of())
                 .build());
     }
 
     private static Optional<Offender> assessedOffender() {
         return Optional.ofNullable(Offender.builder()
                 .oasysAssessmentGroups(anAssessmentGrouWithSingleSet())
-                .offenderAliases(List.of())
                 .build());
     }
 

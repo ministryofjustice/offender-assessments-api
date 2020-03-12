@@ -7,6 +7,7 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -22,6 +23,7 @@ import java.util.Properties;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
+@Profile(value = "default")
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {

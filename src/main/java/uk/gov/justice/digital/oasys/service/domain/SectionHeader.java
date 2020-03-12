@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.oasys.service.domain;
 
-public enum Section {
+public enum SectionHeader {
     OFFENDING_INFO("1"),
     ANALYSIS_OF_OFFENCES("2"),
     ACCOMMODATION("3"),
@@ -17,12 +17,12 @@ public enum Section {
 
     private String value;
 
-    Section(String value){
+    SectionHeader(String value){
         this.value = value;
     }
 
-    public static Section findByValue(String value) {
-        for (Section section: Section.values()) {
+    public static SectionHeader findByValue(String value) {
+        for (SectionHeader section: SectionHeader.values()) {
             if(section.value.equals(value)) {
                 return section;
             }

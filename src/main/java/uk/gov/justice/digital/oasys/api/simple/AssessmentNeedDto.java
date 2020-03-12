@@ -1,31 +1,35 @@
-package uk.gov.justice.digital.oasys.api;
+package uk.gov.justice.digital.oasys.api.simple;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uk.gov.justice.digital.oasys.service.domain.AssessmentNeed;
-import uk.gov.justice.digital.oasys.service.domain.Section;
+import uk.gov.justice.digital.oasys.service.domain.SectionHeader;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
-public
-class AssessmentNeedDto {
-
-    private Section section;
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class AssessmentNeedDto {
+    @JsonProperty("section")
+    private SectionHeader section;
+    @JsonProperty("overThreshold")
     private Boolean overThreshold;
+    @JsonProperty("riskOfHarm")
     private Boolean riskOfHarm;
+    @JsonProperty("riskOfReoffending")
     private Boolean riskOfReoffending;
+    @JsonProperty("flaggedAsNeed")
     private Boolean flaggedAsNeed;
 
-    public static List<AssessmentNeedDto> from(Stream<AssessmentNeed> needs) {
+    public static Collection<AssessmentNeedDto> from(Collection<AssessmentNeed> needs) {
         return Optional.ofNullable(needs)
-                .map(need -> needs
+                .map(n -> n
+                        .stream()
                         .map(AssessmentNeedDto::from)
-                        .collect(Collectors.toList()))
+                        .collect(Collectors.toSet()))
                 .orElse(null);
     }
 

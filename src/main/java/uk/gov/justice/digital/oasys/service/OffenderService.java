@@ -2,12 +2,12 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.OffenderDto;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
-import uk.gov.justice.digital.oasys.api.OffenderSummaryDto;
+import uk.gov.justice.digital.oasys.api.simple.OffenderDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
+import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleOffenderRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 
 import java.util.List;
@@ -18,23 +18,25 @@ import static uk.gov.justice.digital.oasys.utils.LogEvent.OFFENDER_NOT_FOUND;
 @Service
 public class OffenderService {
 
+    private final SimpleOffenderRepository simpleOffenderRepository;
     private final OffenderRepository offenderRepository;
 
     @Autowired
-    public OffenderService(OffenderRepository offenderRepository) {
+    public OffenderService(OffenderRepository offenderRepository, SimpleOffenderRepository simpleOffenderRepository) {
         this.offenderRepository = offenderRepository;
+        this.simpleOffenderRepository = simpleOffenderRepository;
     }
 
-    public OffenderDto findOffender(String identifierType, String identifier) {
-        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
-        return OffenderDto.from(findOffenderByIdentifier(offenderIdentifier, identifier));
+    public Long getOffenderIdByIdentifier(String identifierType, String identifier) {
+        return simpleOffenderRepository.getOffender(identifierType, identifier).getOffenderPk();
     }
 
-    public OffenderSummaryDto findOffenderSummary(String identifierType, String identifier) {
-        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
-        return OffenderSummaryDto.from(findOffenderByIdentifier(offenderIdentifier, identifier));
+    public OffenderDto getOffender(String identifierType, String identifier) {
+        return OffenderDto.from(simpleOffenderRepository.getOffender(identifierType, identifier));
     }
 
+    // only used for sentence plans now
+    @Deprecated(forRemoval = true)
     public List<OasysAssessmentGroup> findOffenderAssessmentGroup(String identifierType, String identifier) {
         OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
         return findOffenderByIdentifier(offenderIdentifier, identifier).getOasysAssessmentGroups();

@@ -1,19 +1,22 @@
 package uk.gov.justice.digital.oasys.service.domain;
 
-import org.springframework.stereotype.Service;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import static java.util.Map.entry;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NeedsConfig {
 
     private static final String REOFFENDING_QUESTION = "reoffendingQuestion";
     private static final String HARM_QUESTION = "harmQuestion";
 
-    public static Set<String> getNeedsSectionHeadings() {
-        return needsSections().keySet();
+    public static String[] getNeedsSectionHeadings() {
+        return needsSections().keySet().toArray(new String[0]);
     }
 
     public static String getHarmQuestion(String section) {

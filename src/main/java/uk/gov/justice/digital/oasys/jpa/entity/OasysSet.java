@@ -394,8 +394,10 @@ public class OasysSet {
     private Team originatingTeam;
 
     @OneToOne
-    @JoinColumn(name = "OTHER_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE")
-    @JoinColumn(name = "OTHER_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    @JoinColumns({
+            @JoinColumn(name = "OTHER_RISK_RECON_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "OTHER_RISK_RECON_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
     private RefElement otherRiskRecon;
 
     @OneToOne
@@ -448,7 +450,7 @@ public class OasysSet {
             @JoinColumn(name = "REF_ASS_VERSION_CODE", referencedColumnName = "REF_ASS_VERSION_CODE"),
             @JoinColumn(name = "VERSION_NUMBER", referencedColumnName = "VERSION_NUMBER")
     })
-    private RefAssVersion refAssVersion;
+    private RefAssessmentVersion refAssessmentVersion;
 
     @OneToOne
     @JoinColumns({
@@ -511,8 +513,4 @@ public class OasysSet {
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private Set<OffenceBlock> offenceBlock;
-
-    public boolean isNotLayer3() {
-        return !"LAYER_3".equals(Optional.ofNullable(assessmentType).map(RefElement::getRefElementCode).orElse(null));
-    }
 }
