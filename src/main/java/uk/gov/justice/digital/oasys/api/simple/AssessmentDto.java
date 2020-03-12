@@ -52,6 +52,9 @@ public class AssessmentDto {
     private Collection<AssessmentNeedDto> layer3SentencePlanNeeds;
 
     public static AssessmentDto from(Assessment assessmentSummary, Boolean childSafeguardingIndicated, Collection<AssessmentNeed> needs) {
+        if (assessmentSummary == null) {
+            return null;
+        }
         var assessmentVersion = assessmentSummary.getAssessmentVersion();
         return new AssessmentDto(
                 assessmentSummary.getOasysSetPk(),

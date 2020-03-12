@@ -8,6 +8,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.justice.digital.oasys.service.domain.AssessmentNeed;
 import uk.gov.justice.digital.oasys.service.domain.SectionHeader;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +35,22 @@ public class AssessmentNeedDtoTest {
         assertThat(dto.getRiskOfHarm()).isEqualTo(assessmentNeed.getRiskOfHarm());
         assertThat(dto.getRiskOfReoffending()).isEqualTo(assessmentNeed.getRiskOfReoffending());
         assertThat(dto.getFlaggedAsNeed()).isEqualTo(assessmentNeed.getFlaggedAsNeed());
+    }
+
+    @Test
+    public void shouldBuildValidDtoNull() {
+        var dto = AssessmentNeedDto.from(null);
+
+        assertThat(dto).isNull();
+    }
+
+    @Test
+    public void shouldBuildValidDtoSetNull() {
+        Set<AssessmentNeed> needs = new HashSet<>();
+        needs.add(null);
+        var dto = AssessmentNeedDto.from(needs);
+
+        assertThat(dto).isEmpty();
     }
 
     private void setupAssessmentNeed() {

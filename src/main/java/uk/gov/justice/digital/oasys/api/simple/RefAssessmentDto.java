@@ -27,6 +27,9 @@ public class RefAssessmentDto {
     private Collection<RefSectionDto> refSections;
 
     public static RefAssessmentDto from(RefAssessmentVersion refAssessmentVersion) {
+        if (refAssessmentVersion == null) {
+            return null;
+        }
         return new RefAssessmentDto(
                 refAssessmentVersion.getRefAssVersionUk(),
                 refAssessmentVersion.getRefAssVersionCode(),

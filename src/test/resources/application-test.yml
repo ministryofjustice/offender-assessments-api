@@ -15,10 +15,3 @@ spring:
 graceful:
   shutdown:
     enabled: false
-
-jpa:
-  hibernate:
-    ddl-auto: none
-  properties:
-    hibernate:
-      show_sql: true

@@ -42,6 +42,9 @@ public class OffenderDto {
     private String mergePncNumber;
 
     public static OffenderDto from(OffenderSummary offender) {
+        if (offender == null) {
+            return null;
+        }
         return new OffenderDto(
                 offender.getOffenderPk(),
                 DtoUtils.ynToBoolean(offender.getLimitedAccessOffender()),

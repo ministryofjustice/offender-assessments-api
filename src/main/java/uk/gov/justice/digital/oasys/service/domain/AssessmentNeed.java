@@ -14,7 +14,7 @@ public class AssessmentNeed {
     private Boolean flaggedAsNeed;
 
     public boolean anyRiskFlagged() {
-        return riskOfHarm || riskOfReoffending || overThreshold || flaggedAsNeed;
+        return Boolean.TRUE.equals(riskOfHarm) || Boolean.TRUE.equals(riskOfReoffending) || Boolean.TRUE.equals(overThreshold) || Boolean.TRUE.equals(flaggedAsNeed);
     }
 
 }

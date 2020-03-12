@@ -2,7 +2,6 @@ package uk.gov.justice.digital.oasys.service.filters;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import uk.gov.justice.digital.oasys.api.DtoUtils;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 
 import java.util.Objects;
@@ -15,11 +14,13 @@ public class AssessmentFilters {
     public static Stream<OasysSet> assessmentsFilterOf(Stream<OasysSet> sets, String filterAssessmentStatus, String filterAssessmentType, String filterGroupStatus, Boolean filterVoided) {
 
         if (Optional.ofNullable(filterAssessmentStatus).isPresent()) {
-            sets = sets.filter(set -> filterAssessmentStatus.equals(DtoUtils.refElementCode(set.getAssessmentStatus())));
+            sets = sets.filter(set -> filterAssessmentStatus.equals(
+                    Objects.nonNull(set.getAssessmentStatus()) ? set.getAssessmentStatus().getRefElementCode() : null));
         }
 
         if (Optional.ofNullable(filterAssessmentType).isPresent()) {
-            sets = sets.filter(set -> filterAssessmentType.equals(DtoUtils.refElementCode(set.getAssessmentType())));
+            sets = sets.filter(set -> filterAssessmentType.equals(
+                    Objects.nonNull(set.getAssessmentStatus()) ? set.getAssessmentType().getRefElementCode() : null));
         }
 
         if (Optional.ofNullable(filterGroupStatus).isPresent()) {

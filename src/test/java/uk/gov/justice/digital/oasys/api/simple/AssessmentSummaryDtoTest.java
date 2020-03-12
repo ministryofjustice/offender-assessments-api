@@ -10,6 +10,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.AssessmentGroup;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,6 +50,22 @@ public class AssessmentSummaryDtoTest {
         assertThat(dto.getOasysScoringAlgorithmVersion()).isEqualTo(assessment.getAssessmentVersion().getOasysScoringAlgVersion());
         assertThat(dto.getCompletedDateTime()).isEqualTo(assessment.getDateCompleted());
         assertThat(dto.getVoidedDateTime()).isEqualTo(assessment.getAssessmentVoidedDate());
+    }
+
+    @Test
+    public void shouldBuildValidNull() {
+        var dto = AssessmentSummaryDto.from(null);
+
+        assertThat(dto).isNull();
+    }
+
+    @Test
+    public void shouldBuildValidSetNull() {
+        Set<Assessment> assessments = new HashSet<>();
+        assessments.add(null);
+        var dto = AssessmentSummaryDto.from(assessments);
+
+        assertThat(dto).isEmpty();
     }
 
     private void setupVersion() {

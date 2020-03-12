@@ -23,15 +23,6 @@ public class RefAssessmentDtoTest {
         setupVersion();
     }
 
-    private void setupVersion() {
-        when(version.getRefAssVersionUk()).thenReturn(12L);
-        when(version.getRefAssVersionCode()).thenReturn("Any Code");
-        when(version.getVersionNumber()).thenReturn("Any Version");
-        when(version.getOasysScoringAlgVersion()).thenReturn(2L);
-        when(version.getRefModuleCode()).thenReturn("Any Module Code");
-        when(version.getRefSections()).thenReturn(List.of());
-    }
-
     @Test
     public void shouldBuildValidDto() {
         var dto = RefAssessmentDto.from(version);
@@ -42,5 +33,21 @@ public class RefAssessmentDtoTest {
         assertThat(dto.getOasysScoringAlgorithmVersion()).isEqualTo(version.getOasysScoringAlgVersion());
         assertThat(dto.getRefModuleCode()).isEqualTo(version.getRefModuleCode());
         assertThat(dto.getRefSections().size()).isEqualTo(version.getRefSections().size());
+    }
+
+    @Test
+    public void shouldBuildValidDtoNull() {
+        var dto = RefAssessmentDto.from(null);
+
+        assertThat(dto).isNull();
+    }
+
+    private void setupVersion() {
+        when(version.getRefAssVersionUk()).thenReturn(12L);
+        when(version.getRefAssVersionCode()).thenReturn("Any Code");
+        when(version.getVersionNumber()).thenReturn("Any Version");
+        when(version.getOasysScoringAlgVersion()).thenReturn(2L);
+        when(version.getRefModuleCode()).thenReturn("Any Module Code");
+        when(version.getRefSections()).thenReturn(List.of());
     }
 }

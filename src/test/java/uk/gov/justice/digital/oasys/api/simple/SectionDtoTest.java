@@ -56,6 +56,22 @@ public class SectionDtoTest {
         assertThat(dto.getQuestions()).hasSize(section.getOasysQuestions().size());
     }
 
+    @Test
+    public void shouldBuildValidDtoNull() {
+        var dto = SectionDto.from(null);
+
+        assertThat(dto).isNull();
+    }
+
+    @Test
+    public void shouldBuildValidDtoSetNull() {
+        Set<Section> sections = new HashSet<>();
+        sections.add(null);
+        var dto = SectionDto.from(sections);
+
+        assertThat(dto).isEmpty();
+    }
+
     private void setupSection() {
         when(section.getOasysSectionPk()).thenReturn(1L);
         when(section.getOasysSetPk()).thenReturn(2L);

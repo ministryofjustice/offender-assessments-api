@@ -7,7 +7,9 @@ import lombok.Getter;
 import uk.gov.justice.digital.oasys.api.QuestionDto;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Getter
@@ -48,6 +50,7 @@ public class SectionDto {
         return Optional.ofNullable(sections)
                 .map(s -> s
                         .stream()
+                        .filter(Objects::nonNull)
                         .map(SectionDto::from)
                         .collect(Collectors.toSet()))
                 .orElse(null);
@@ -71,7 +74,7 @@ public class SectionDto {
                 section.getSectOtherRawScore(),
                 section.getLowScoreNeedAttnInd(),
                 QuestionDto.from(section.getOasysQuestions())
-                );
+        );
     }
 
 }

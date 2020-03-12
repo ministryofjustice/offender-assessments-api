@@ -58,6 +58,58 @@ public class AssessmentDtoTest {
         assertThat(dto.getLayer3SentencePlanNeeds()).hasSize(needs.size());
     }
 
+    @Test
+    public void shouldBuildValidDtoNull() {
+        var needs = new HashSet<AssessmentNeed>();
+        var dto = AssessmentDto.from(null, null, null);
+
+        assertThat(dto).isNull();
+    }
+
+    @Test
+    public void shouldBuildValidDtoSafeguardingNull() {
+        var needs = new HashSet<AssessmentNeed>();
+        var dto = AssessmentDto.from(assessment, null, needs);
+
+        assertThat(dto.getAssessmentId()).isEqualTo(assessment.getOasysSetPk());
+        assertThat(dto.getAssessorName()).isEqualTo(assessment.getAssessorName());
+        assertThat(dto.getAssessmentType()).isEqualTo(assessment.getAssessmentType());
+        assertThat(dto.getHistoricStatus()).isEqualTo(assessment.getGroup().getHistoricStatus());
+        assertThat(dto.getAssessmentStatus()).isEqualTo(assessment.getAssessmentStatus());
+        assertThat(dto.getCreatedDateTime()).isEqualTo(assessment.getCreateDate());
+        assertThat(dto.getRefAssessmentId()).isEqualTo(assessment.getAssessmentVersion().getRefAssVersionUk());
+        assertThat(dto.getRefAssessmentVersionCode()).isEqualTo(assessment.getAssessmentVersion().getRefAssVersionCode());
+        assertThat(dto.getRefAssessmentVersionNumber()).isEqualTo(assessment.getAssessmentVersion().getVersionNumber());
+        assertThat(dto.getRefAssessmentOasysScoringAlgorithmVersion()).isEqualTo(assessment.getAssessmentVersion().getOasysScoringAlgVersion());
+        assertThat(dto.getCompletedDateTime()).isEqualTo(assessment.getDateCompleted());
+        assertThat(dto.getVoidedDateTime()).isEqualTo(assessment.getAssessmentVoidedDate());
+        assertThat(dto.getSections()).hasSize(assessment.getOasysSections().size());
+        assertThat(dto.getChildSafeguardingIndicated()).isNull();
+        assertThat(dto.getLayer3SentencePlanNeeds()).hasSize(needs.size());
+    }
+
+    @Test
+    public void shouldBuildValidDtoNeedsgNull() {
+        var needs = new HashSet<AssessmentNeed>();
+        var dto = AssessmentDto.from(assessment, true, null);
+
+        assertThat(dto.getAssessmentId()).isEqualTo(assessment.getOasysSetPk());
+        assertThat(dto.getAssessorName()).isEqualTo(assessment.getAssessorName());
+        assertThat(dto.getAssessmentType()).isEqualTo(assessment.getAssessmentType());
+        assertThat(dto.getHistoricStatus()).isEqualTo(assessment.getGroup().getHistoricStatus());
+        assertThat(dto.getAssessmentStatus()).isEqualTo(assessment.getAssessmentStatus());
+        assertThat(dto.getCreatedDateTime()).isEqualTo(assessment.getCreateDate());
+        assertThat(dto.getRefAssessmentId()).isEqualTo(assessment.getAssessmentVersion().getRefAssVersionUk());
+        assertThat(dto.getRefAssessmentVersionCode()).isEqualTo(assessment.getAssessmentVersion().getRefAssVersionCode());
+        assertThat(dto.getRefAssessmentVersionNumber()).isEqualTo(assessment.getAssessmentVersion().getVersionNumber());
+        assertThat(dto.getRefAssessmentOasysScoringAlgorithmVersion()).isEqualTo(assessment.getAssessmentVersion().getOasysScoringAlgVersion());
+        assertThat(dto.getCompletedDateTime()).isEqualTo(assessment.getDateCompleted());
+        assertThat(dto.getVoidedDateTime()).isEqualTo(assessment.getAssessmentVoidedDate());
+        assertThat(dto.getSections()).hasSize(assessment.getOasysSections().size());
+        assertThat(dto.getChildSafeguardingIndicated()).isTrue();
+        assertThat(dto.getLayer3SentencePlanNeeds()).isNull();
+    }
+
     private void setupAssessmentGroup() {
         when(assessmentGroup.getHistoricStatus()).thenReturn("Any HistoricStatus");
     }

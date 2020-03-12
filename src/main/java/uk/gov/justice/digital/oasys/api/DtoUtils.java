@@ -11,17 +11,20 @@ public final class DtoUtils {
         if (ynValue == null) {
             return null;
         }
+        if (!(ynValue.equalsIgnoreCase("Y") || ynValue.equalsIgnoreCase("N"))) {
+            return null;
+        }
         return ynValue.equalsIgnoreCase("Y");
     }
 
-    public static String refElementDesc(RefElement refElement) {
+    static String refElementDesc(RefElement refElement) {
         if (refElement == null) {
             return null;
         }
         return refElement.getRefElementDesc();
     }
 
-    public static String refElementCode(RefElement refElement) {
+    static String refElementCode(RefElement refElement) {
         if (refElement == null) {
             return null;
         }

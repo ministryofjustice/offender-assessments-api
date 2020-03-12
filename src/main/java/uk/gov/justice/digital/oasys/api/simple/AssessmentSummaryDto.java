@@ -9,6 +9,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,13 @@ public class AssessmentSummaryDto {
     private LocalDateTime voidedDateTime;
 
     public static Set<AssessmentSummaryDto> from(Collection<Assessment> assessmentSummaries) {
-        return assessmentSummaries.stream().map(AssessmentSummaryDto::from).collect(Collectors.toSet());
+        return Optional.ofNullable(assessmentSummaries)
+                .map(as -> as
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .map(AssessmentSummaryDto::from)
+                        .collect(Collectors.toSet()))
+                .orElse(null);
     }
 
     private static AssessmentSummaryDto from(Assessment assessmentSummary) {

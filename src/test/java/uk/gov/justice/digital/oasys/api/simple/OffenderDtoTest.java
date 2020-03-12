@@ -7,8 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -21,24 +19,6 @@ public class OffenderDtoTest {
     @Before
     public void setUp() {
         setupOffender();
-    }
-
-    private void setupOffender() {
-        when(offender.getOffenderPk()).thenReturn(12L);
-        when(offender.getLimitedAccessOffender()).thenReturn("Y");
-        when(offender.getPnc()).thenReturn("Any PNC");
-        when(offender.getCmsProbNumber()).thenReturn("Any CMS Prob");
-        when(offender.getCmsPrisNumber()).thenReturn("Any CMS Pris");
-        when(offender.getLegacyCmsProbNumber()).thenReturn("Any Leg Prob");
-        when(offender.getCroNumber()).thenReturn("Any cro");
-        when(offender.getPrisonNumber()).thenReturn("Any prison number");
-        when(offender.getMergePncNumber()).thenReturn("Any Merge PNC");
-        when(offender.getFamilyName()).thenReturn("Family");
-        when(offender.getForename1()).thenReturn("Any f1");
-        when(offender.getForename2()).thenReturn("Any f2");
-        when(offender.getForename3()).thenReturn("Any f3");
-        when(offender.getRiskToSelf()).thenReturn("YES");
-        when(offender.getRiskToOthers()).thenReturn("YES");
     }
 
     @Test
@@ -60,5 +40,30 @@ public class OffenderDtoTest {
         assertThat(dto.getBookingNumber()).isEqualTo(offender.getPrisonNumber());
         assertThat(dto.getMergePncNumber()).isEqualTo(offender.getMergePncNumber());
         assertThat(dto.isLimitedAccessOffender()).isTrue();
+    }
+
+    @Test
+    public void shouldBuildValidDtoNull() {
+        var dto = OffenderDto.from(null);
+
+        assertThat(dto).isNull();
+    }
+
+    private void setupOffender() {
+        when(offender.getOffenderPk()).thenReturn(12L);
+        when(offender.getLimitedAccessOffender()).thenReturn("Y");
+        when(offender.getPnc()).thenReturn("Any PNC");
+        when(offender.getCmsProbNumber()).thenReturn("Any CMS Prob");
+        when(offender.getCmsPrisNumber()).thenReturn("Any CMS Pris");
+        when(offender.getLegacyCmsProbNumber()).thenReturn("Any Leg Prob");
+        when(offender.getCroNumber()).thenReturn("Any cro");
+        when(offender.getPrisonNumber()).thenReturn("Any prison number");
+        when(offender.getMergePncNumber()).thenReturn("Any Merge PNC");
+        when(offender.getFamilyName()).thenReturn("Family");
+        when(offender.getForename1()).thenReturn("Any f1");
+        when(offender.getForename2()).thenReturn("Any f2");
+        when(offender.getForename3()).thenReturn("Any f3");
+        when(offender.getRiskToSelf()).thenReturn("YES");
+        when(offender.getRiskToOthers()).thenReturn("YES");
     }
 }
