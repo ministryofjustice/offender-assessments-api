@@ -272,17 +272,15 @@ public class ControllerServiceTestContext {
 
         OasysQuestion questionIP1 = OasysQuestion.builder()
                 .refQuestion(RefQuestion.builder()
-                        .refQuestionCode("IP.1")
                         .displaySort(1l)
-                        .refQuestionCode("IP.2")
+                        .refQuestionCode("IP.1")
                 .build()).build();
 
         OasysQuestion questionIP2 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
                 .additionalNote("Additional note")
                 .refQuestion(RefQuestion.builder()
-                        .refQuestionCode("IP.1")
                         .displaySort(2l)
-                        .refQuestionCode("IP.1")
+                        .refQuestionCode("IP.2")
                         .build()).build();
 
 
@@ -294,8 +292,16 @@ public class ControllerServiceTestContext {
         var section =  OasysSection.builder()
                     .refSection(RefSection.builder()
                             .refSectionCode("ISP")
+                            .refQuestions(List.of(RefQuestion.builder()
+                                    .refQuestionUk(1l)
+                                    .refQuestionCode("IP.40")
+                                    .displaySort(1l)
+                                    .refSectionQuestion("Ref Question Text").build()))
                             .sectionType(refElementFrom("ISP", "Initial Sentence Plan", "Initial Sentence Plan")).build())
                     .oasysQuestions(Set.of(questionIP1, questionIP2)).build();
+
+
+
 
         return  section;
     }

@@ -31,6 +31,13 @@ public class QuestionDto {
         answer = null;
     }
 
+    public QuestionDto(Long refQuestionUk, String refQuestionCode, Long displaySort, String refSectionQuestion) {
+        this.refQuestionId = refQuestionUk;
+        this.refQuestionCode = refQuestionCode;
+        this.displayOrder = displaySort;
+        this.questionText = refSectionQuestion;
+    }
+
     public static Map<String, QuestionDto> from(Set<OasysQuestion> oasysQuestions) {
         return Optional.ofNullable(oasysQuestions)
                 .map(sections -> sections
@@ -54,6 +61,16 @@ public class QuestionDto {
                 question.getDisplayScore(),
                 refQuestion.map(RefQuestion::getRefSectionQuestion).orElse(null),
                 AnswerDto.from(question));
+    }
 
+    public static QuestionDto from(RefQuestion refQuestion) {
+        if (refQuestion == null) {
+            return null;
+        }
+        return new QuestionDto(
+                refQuestion.getRefQuestionUk(),
+                refQuestion.getRefQuestionCode(),
+                refQuestion.getDisplaySort(),
+                refQuestion.getRefSectionQuestion());
     }
 }
