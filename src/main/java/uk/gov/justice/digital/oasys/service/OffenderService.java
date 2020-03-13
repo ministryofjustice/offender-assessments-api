@@ -6,6 +6,7 @@ import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
 import uk.gov.justice.digital.oasys.api.simple.OffenderDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleOffenderRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
@@ -27,12 +28,12 @@ public class OffenderService {
         this.simpleOffenderRepository = simpleOffenderRepository;
     }
 
-    public Long getOffenderIdByIdentifier(String identifierType, String identifier) {
-        return simpleOffenderRepository.getOffender(identifierType, identifier).getOffenderPk();
+    public Long getOffenderIdByIdentifier(String identityType, String identity) {
+        return getOffenderSummary(identityType, identity).getOffenderPk();
     }
 
-    public OffenderDto getOffender(String identifierType, String identifier) {
-        return OffenderDto.from(simpleOffenderRepository.getOffender(identifierType, identifier));
+    public OffenderDto getOffender(String identityType, String identity) {
+        return OffenderDto.from(getOffenderSummary(identityType, identity));
     }
 
     // only used for sentence plans now
@@ -40,6 +41,11 @@ public class OffenderService {
     public List<OasysAssessmentGroup> findOffenderAssessmentGroup(String identifierType, String identifier) {
         OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
         return findOffenderByIdentifier(offenderIdentifier, identifier).getOasysAssessmentGroups();
+    }
+
+    private OffenderSummary getOffenderSummary(String identityType, String identity) {
+       return simpleOffenderRepository.getOffender(identityType, identityType)
+                .orElseThrow(() ->new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identityType, identity), OFFENDER_NOT_FOUND));
     }
 
     private Offender findOffenderByIdentifier(OffenderIdentifier identifierType, String identifier) {

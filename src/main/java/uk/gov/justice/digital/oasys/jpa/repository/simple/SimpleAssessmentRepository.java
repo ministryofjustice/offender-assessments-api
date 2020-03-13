@@ -25,17 +25,17 @@ public class SimpleAssessmentRepository {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    public Assessment getAssessment(Long oasysSetId) {
+    public Optional<Assessment> getAssessment(Long oasysSetId) {
         var query = queryFactory.selectFrom(QAssessment.assessment);
         query.where(QAssessment.assessment.oasysSetPk.eq(oasysSetId));
-        return Optional.ofNullable(query.fetchFirst()).orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Assessment for OasysSetId %s, not found!", oasysSetId), GET_ASSESSMENT_NOT_FOUND));
+        return Optional.ofNullable(query.fetchFirst());
     }
 
-    public Assessment getLatestAssessment(Long offenderId, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
+    public Optional<Assessment> getLatestAssessment(Long offenderId, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
         var query = getAssessmentsQueryForOffender(offenderId);
         filterQuery(query, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
         var assessment = query.orderBy(QAssessment.assessment.dateCompleted.desc()).fetchFirst();
-        return Optional.ofNullable(assessment).orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Latest Assessment for Offender %s, not found!", offenderId), GET_LATEST_ASSESSMENT_NOT_FOUND));
+        return Optional.ofNullable(assessment);
     }
 
     public Collection<Assessment> getAssessmentsForOffender(Long offenderId, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {

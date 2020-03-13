@@ -60,7 +60,6 @@ public class AssessmentDtoTest {
 
     @Test
     public void shouldBuildValidDtoNull() {
-        var needs = new HashSet<AssessmentNeed>();
         var dto = AssessmentDto.from(null, null, null);
 
         assertThat(dto).isNull();

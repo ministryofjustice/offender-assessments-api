@@ -13,11 +13,11 @@ import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleAssessmentReposi
 import uk.gov.justice.digital.oasys.service.domain.AssessmentNeed;
 import uk.gov.justice.digital.oasys.service.domain.NeedsConfig;
 import uk.gov.justice.digital.oasys.service.domain.SectionHeader;
+import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static net.logstash.logback.argument.StructuredArguments.value;
 import static uk.gov.justice.digital.oasys.utils.LogEvent.*;
@@ -52,13 +52,15 @@ public class AssessmentsService {
 
     public AssessmentDto getLatestAssessmentForOffender(String identityType, String identity, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
         var offenderId = offenderService.getOffenderIdByIdentifier(identityType, identity);
-        Assessment assessment = simpleAssessmentRepository.getLatestAssessment(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
+        Assessment assessment = simpleAssessmentRepository.getLatestAssessment(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus)
+                .orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Latest Assessment for Offender %s, not found!", offenderId), GET_LATEST_ASSESSMENT_NOT_FOUND));
         log.info("Found Latest Assessment type: {} status: {} for identity: ({},{})", assessment.getAssessmentType(), assessment.getAssessmentStatus(), identity, identity, value(EVENT, LogEvent.GET_LATEST_ASSESSMENT_FOUND));
         return populateAssessmentDto(assessment);
     }
 
     public AssessmentDto getAssessment(Long oasysSetId) {
-        Assessment assessment = simpleAssessmentRepository.getAssessment(oasysSetId);
+        Assessment assessment = simpleAssessmentRepository.getAssessment(oasysSetId)
+                .orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Assessment for OasysSetId %s, not found!", oasysSetId), GET_ASSESSMENT_NOT_FOUND));
         log.info("Found Assessment type: {} status: {} for oasysSetId: {}", assessment.getAssessmentType(), assessment.getAssessmentStatus(), oasysSetId, value(EVENT, LogEvent.GET_ASSESSMENT_FOUND));
         return populateAssessmentDto(assessment);
     }

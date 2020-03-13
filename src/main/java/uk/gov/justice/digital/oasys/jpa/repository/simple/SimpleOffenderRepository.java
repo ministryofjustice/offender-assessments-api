@@ -6,13 +6,10 @@ import org.springframework.stereotype.Repository;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.QOffenderSummary;
-import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 
 import javax.persistence.EntityManager;
 
 import java.util.Optional;
-
-import static uk.gov.justice.digital.oasys.utils.LogEvent.OFFENDER_NOT_FOUND;
 
 @Repository
 public class SimpleOffenderRepository {
@@ -24,12 +21,12 @@ public class SimpleOffenderRepository {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    public OffenderSummary getOffender(String identifierType, String identifier) {
+    public Optional<OffenderSummary> getOffender(String identifierType, String identifier) {
         OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
         return getOffenderByIdentifier(offenderIdentifier, identifier);
     }
 
-    private OffenderSummary getOffenderByIdentifier(OffenderIdentifier identityType, String identity) {
+    private Optional<OffenderSummary> getOffenderByIdentifier(OffenderIdentifier identityType, String identity) {
         QOffenderSummary qOffender = QOffenderSummary.offenderSummary;
 
         var query = queryFactory.selectFrom(qOffender);
@@ -51,12 +48,9 @@ public class SimpleOffenderRepository {
                 query.where(qOffender.prisonNumber.eq(identity));
                 break;
             default:
-                throw throwNotFound(identityType,identity);
+                return Optional.empty();
         }
-        return Optional.ofNullable(query.fetchFirst()).orElseThrow(() -> throwNotFound(identityType,identity));
+        return Optional.ofNullable(query.fetchFirst());
     }
 
-    private RuntimeException throwNotFound(OffenderIdentifier identityType, String identity){
-        return new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identityType, identity), OFFENDER_NOT_FOUND);
-    }
 }
