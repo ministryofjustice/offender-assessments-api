@@ -88,7 +88,7 @@ public class AssessmentDtoTest {
     }
 
     @Test
-    public void shouldBuildValidDtoNeedsgNull() {
+    public void shouldBuildValidDtoNeedsNull() {
         var needs = new HashSet<AssessmentNeed>();
         var dto = AssessmentDto.from(assessment, true, null);
 
@@ -106,7 +106,7 @@ public class AssessmentDtoTest {
         assertThat(dto.getVoidedDateTime()).isEqualTo(assessment.getAssessmentVoidedDate());
         assertThat(dto.getSections()).hasSize(assessment.getOasysSections().size());
         assertThat(dto.getChildSafeguardingIndicated()).isTrue();
-        assertThat(dto.getLayer3SentencePlanNeeds()).isNull();
+        assertThat(dto.getLayer3SentencePlanNeeds()).isEmpty();
     }
 
     private void setupAssessmentGroup() {

@@ -72,7 +72,7 @@ public class AssessmentsService {
     }
 
     private Boolean calculateChildSafeguardingIndicated(String assessmentType, Long oasysSetId) {
-        if (!LAYER_3.equals(assessmentType)) {
+        if (!LAYER_3.equalsIgnoreCase(assessmentType)) {
             return null;
         }
 
@@ -114,11 +114,6 @@ public class AssessmentsService {
 
     private static boolean sectionIsOverThreshold(Section section) {
         Long rawScore = section.getSectOtherRawScore();
-
-        if(Objects.isNull(rawScore) || !section.hasRefSection()) {
-            return false;
-        }
-
         Long threshold = Optional.of(section.getRefSection()).map(RefSection::getCrimNeedScoreThreshold).orElse(Long.MAX_VALUE);
 
         return rawScore >= threshold;

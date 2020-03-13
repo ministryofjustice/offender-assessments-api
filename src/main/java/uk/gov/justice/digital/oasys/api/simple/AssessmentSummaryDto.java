@@ -41,14 +41,14 @@ public class AssessmentSummaryDto {
     @JsonProperty("voided")
     private LocalDateTime voidedDateTime;
 
-    public static Set<AssessmentSummaryDto> from(Collection<Assessment> assessmentSummaries) {
+    public static Collection<AssessmentSummaryDto> from(Collection<Assessment> assessmentSummaries) {
         return Optional.ofNullable(assessmentSummaries)
                 .map(as -> as
                         .stream()
                         .filter(Objects::nonNull)
                         .map(AssessmentSummaryDto::from)
                         .collect(Collectors.toSet()))
-                .orElse(null);
+                .orElse(Set.of());
     }
 
     private static AssessmentSummaryDto from(Assessment assessmentSummary) {

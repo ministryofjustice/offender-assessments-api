@@ -60,7 +60,7 @@ public class SectionDtoTest {
     public void shouldBuildValidDtoNull() {
         var dto = SectionDto.from(null);
 
-        assertThat(dto).isNull();
+        assertThat(dto).isEmpty();
     }
 
     @Test

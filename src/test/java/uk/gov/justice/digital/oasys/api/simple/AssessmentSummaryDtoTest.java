@@ -56,7 +56,7 @@ public class AssessmentSummaryDtoTest {
     public void shouldBuildValidNull() {
         var dto = AssessmentSummaryDto.from(null);
 
-        assertThat(dto).isNull();
+        assertThat(dto).isEmpty();
     }
 
     @Test

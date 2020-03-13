@@ -41,7 +41,7 @@ public class AssessmentNeedDtoTest {
     public void shouldBuildValidDtoNull() {
         var dto = AssessmentNeedDto.from(null);
 
-        assertThat(dto).isNull();
+        assertThat(dto).isEmpty();
     }
 
     @Test

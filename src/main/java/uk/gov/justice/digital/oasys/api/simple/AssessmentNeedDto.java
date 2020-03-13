@@ -10,6 +10,7 @@ import uk.gov.justice.digital.oasys.service.domain.SectionHeader;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -33,7 +34,7 @@ public class AssessmentNeedDto {
                         .filter(Objects::nonNull)
                         .map(AssessmentNeedDto::from)
                         .collect(Collectors.toSet()))
-                .orElse(null);
+                .orElse(Set.of());
     }
 
     private static AssessmentNeedDto from(AssessmentNeed need) {

@@ -10,6 +10,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -53,7 +54,7 @@ public class SectionDto {
                         .filter(Objects::nonNull)
                         .map(SectionDto::from)
                         .collect(Collectors.toSet()))
-                .orElse(null);
+                .orElse(Set.of());
     }
 
     private static SectionDto from(Section section) {
