@@ -1,50 +1,57 @@
 package uk.gov.justice.digital.oasys.api;
 
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.entity.RefSection;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Data
-@Builder
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RefSectionDto {
+    @JsonProperty("refSectionId")
     private Long refSectionId;
+    @JsonProperty("refSectionCode")
     private String refSectionCode;
-    private Long refFormSequence;
+    @JsonProperty("shortDescription")
     private String shortDescription;
+    @JsonProperty("description")
     private String description;
+    @JsonProperty("refCrimNeedScoreThreshold")
     private Long refCrimNeedScoreThreshold;
+    @JsonProperty("scoredForOgp")
     private boolean refScoredForOgp;
+    @JsonProperty("scoredForOvp")
     private boolean refScoredForOvp;
 
-    private List<RefQuestionDto> refQuestions;
+    @JsonProperty("refQuestions")
+    private Collection<RefQuestionDto> refQuestions;
 
-    public static List<RefSectionDto> from(List<uk.gov.justice.digital.oasys.jpa.entity.RefSection> refSections) {
+    public static Collection<RefSectionDto> from(Collection<RefSection> refSections) {
         return Optional.ofNullable(refSections)
                 .map(refSectionList -> refSections
                         .stream()
                         .map(RefSectionDto::from)
-                        .collect(Collectors.toList()))
+                        .collect(Collectors.toSet()))
                 .orElse(null);
     }
 
     public static RefSectionDto from(RefSection refSection) {
 
-        return RefSectionDto.builder()
-                .refCrimNeedScoreThreshold(refSection.getCrimNeedScoreThreshold())
-                .refFormSequence(refSection.getFormSequence())
-                .refScoredForOgp(DtoUtils.ynToBoolean(refSection.getScoredForOgp()))
-                .refScoredForOvp(DtoUtils.ynToBoolean(refSection.getScoredForOgp()))
-                .refSectionCode(refSection.getRefSectionCode())
-                .refSectionId(refSection.getRefSectionUk())
-                .shortDescription(shortDescriptionOf(refSection.getSectionType()))
-                .description(descriptionOf(refSection.getSectionType()))
-                .refQuestions(RefQuestionDto.from(refSection.getRefQuestions()))
-                .build();
+        return new RefSectionDto(
+                refSection.getCrimNeedScoreThreshold(),
+                refSection.getRefSectionCode(),
+                shortDescriptionOf(refSection.getSectionType()),
+                descriptionOf(refSection.getSectionType()),
+                refSection.getCrimNeedScoreThreshold(),
+                DtoUtils.ynToBoolean(refSection.getScoredForOgp()),
+                DtoUtils.ynToBoolean(refSection.getScoredForOgp()),
+                RefQuestionDto.from(refSection.getRefQuestions()));
     }
 
     private static String descriptionOf(RefElement sectionType) {

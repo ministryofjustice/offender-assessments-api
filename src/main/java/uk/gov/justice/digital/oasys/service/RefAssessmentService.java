@@ -2,9 +2,9 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.ReferenceAssessmentDto;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersion;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAssVersionPK;
+import uk.gov.justice.digital.oasys.api.simple.RefAssessmentDto;
+import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersion;
+import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersionPK;
 import uk.gov.justice.digital.oasys.jpa.repository.RefAssessmentRepository;
 
 import java.util.Optional;
@@ -18,13 +18,10 @@ public class RefAssessmentService {
         this.refAssessmentRepository = refAssessmentRepository;
     }
 
-    public Optional<ReferenceAssessmentDto> getReferenceAssessmentOf(String type, String revision) {
+    public Optional<RefAssessmentDto> getReferenceAssessmentOf(String type, String revision) {
 
-        Optional<RefAssVersion> maybeRefAssVersion = refAssessmentRepository.findById(RefAssVersionPK.builder()
-                .refAssVersionCode(type)
-                .versionNumber(revision)
-                .build());
+        Optional<RefAssessmentVersion> maybeRefAssVersion = refAssessmentRepository.findById(new RefAssessmentVersionPK(type, revision));
 
-        return maybeRefAssVersion.map(ReferenceAssessmentDto::from);
+        return maybeRefAssVersion.map(RefAssessmentDto::from);
     }
 }

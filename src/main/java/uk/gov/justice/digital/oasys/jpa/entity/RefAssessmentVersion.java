@@ -1,22 +1,18 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.List;
 
-@Data
 @Entity
-@Table(name = "REF_ASS_VERSION")
-@IdClass(RefAssVersionPK.class)
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
-public class RefAssVersion {
+@Getter
+@Table(name = "REF_ASS_VERSION")
+@IdClass(RefAssessmentVersionPK.class)
+public class RefAssessmentVersion {
     @Id
     @Column(name = "REF_ASS_VERSION_CODE")
     private String refAssVersionCode;
@@ -36,8 +32,6 @@ public class RefAssVersion {
     private Long oasysScoringAlgVersion;
     @Column(name = "REF_MODULE_CODE")
     private String refModuleCode;
-    @Column(name = "CHECKSUM")
-    private String checksum;
     @Column(name = "CREATE_DATE")
     private Time createDate;
     @Column(name = "CREATE_USER")

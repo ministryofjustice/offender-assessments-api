@@ -5,16 +5,16 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.*;
 
-@Data
-@ToString(exclude = "group")
+@Entity
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "OASYS_SET")
 public class OasysSet {
+
     @Id
     @Column(name = "OASYS_SET_PK")
     @SequenceGenerator(name = "OASYS_SET_SEQ", sequenceName = "OASYS_SET_SEQ")
@@ -450,7 +450,7 @@ public class OasysSet {
             @JoinColumn(name = "REF_ASS_VERSION_CODE", referencedColumnName = "REF_ASS_VERSION_CODE"),
             @JoinColumn(name = "VERSION_NUMBER", referencedColumnName = "VERSION_NUMBER")
     })
-    private RefAssVersion refAssVersion;
+    private RefAssessmentVersion refAssessmentVersion;
 
     @OneToOne
     @JoinColumns({

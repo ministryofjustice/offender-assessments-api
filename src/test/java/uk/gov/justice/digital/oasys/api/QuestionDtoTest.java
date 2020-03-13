@@ -2,7 +2,12 @@ package uk.gov.justice.digital.oasys.api;
 
 import org.junit.Test;
 import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
+
+import java.util.Collection;
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuestionDtoTest {
@@ -15,7 +20,8 @@ public class QuestionDtoTest {
 
         var questions = QuestionDto.from(oasysQuestions);
 
-        assertThat(questions).containsOnlyKeys("10.98", "10.99", "IP.1");
+        var validQuestions = Set.of("10.98", "10.99", "IP.1");
+        assertThat(questions.stream().filter(q -> !validQuestions.contains(q.getRefQuestionCode()))).isEmpty();
   }
 
 
@@ -25,7 +31,8 @@ public class QuestionDtoTest {
         var oasysQuestions = ControllerServiceTestContext.getOASysQuestions();
 
         var questions = QuestionDto.from(oasysQuestions);
-        assertThat(questions.get("IP.1").getAnswer().getFreeFormText()).isEqualTo("Free form answer");
+        var question = get(questions, "IP.1");
+        assertThat(question.getAnswer().getFreeFormText()).isEqualTo("Free form answer");
     }
 
     @Test
@@ -34,11 +41,13 @@ public class QuestionDtoTest {
         var oasysQuestions = ControllerServiceTestContext.getOASysQuestions();
 
         var questions = QuestionDto.from(oasysQuestions);
-        assertThat(questions.get("10.98").getRefQuestionId()).isEqualTo(1l);
-        assertThat(questions.get("10.98").getRefQuestionCode()).isEqualTo("10.98");
-        assertThat(questions.get("10.98").getDisplayOrder()).isEqualTo(1l);
-        assertThat(questions.get("10.98").getQuestionText()).isEqualTo("Question 10.98");
-        assertThat(questions.get("10.98").getDisplayScore()).isEqualTo(1l);
+        var question = get(questions, "10.98");
+
+        assertThat(question.getRefQuestionId()).isEqualTo(1l);
+        assertThat(question.getRefQuestionCode()).isEqualTo("10.98");
+        assertThat(question.getDisplayOrder()).isEqualTo(1l);
+        assertThat(question.getQuestionText()).isEqualTo("Question 10.98");
+        assertThat(question.getDisplayScore()).isEqualTo(1l);
     }
 
     @Test
@@ -48,16 +57,18 @@ public class QuestionDtoTest {
 
         var questions = QuestionDto.from(oasysQuestions);
 
-        assertThat(questions).containsOnlyKeys("10.98", "10.99", "IP.1");
+        var validQuestions = Set.of("10.98", "10.99", "IP.1");
+        assertThat(questions.stream().filter(q -> !validQuestions.contains(q.getRefQuestionCode()))).isEmpty();
 
-        assertThat(questions.get("10.98").getAnswer().getStaticText()).isEqualTo("Yes");
-        assertThat(questions.get("10.98").getAnswer().getFreeFormText()).isNull();
-        assertThat(questions.get("10.98").getAnswer().getRefAnswerCode()).isEqualTo("YES");
-        assertThat(questions.get("10.98").getAnswer().getOgpScore()).isNull();
-        assertThat(questions.get("10.98").getAnswer().getOvpScore()).isNull();
-        assertThat(questions.get("10.98").getAnswer().getQaRawScore()).isNull();
-        assertThat(questions.get("10.98").getAnswer().getDisplayOrder()).isEqualTo(1l);
-        assertThat(questions.get("10.98").getAnswer().getScore()).isNull();
+        var question = get(questions, "10.98");
+        assertThat(question.getAnswer().getStaticText()).isEqualTo("Yes");
+        assertThat(question.getAnswer().getFreeFormText()).isNull();
+        assertThat(question.getAnswer().getRefAnswerCode()).isEqualTo("YES");
+        assertThat(question.getAnswer().getOgpScore()).isNull();
+        assertThat(question.getAnswer().getOvpScore()).isNull();
+        assertThat(question.getAnswer().getQaRawScore()).isNull();
+        assertThat(question.getAnswer().getDisplayOrder()).isEqualTo(1l);
+        assertThat(question.getAnswer().getScore()).isNull();
     }
   
     @Test
@@ -74,5 +85,9 @@ public class QuestionDtoTest {
         assertThat(question.getDisplayOrder()).isEqualTo(1l);
         assertThat(question.getRefQuestionId()).isEqualTo(1l);
         assertThat(question.getQuestionText()).isEqualTo("Ref Question Text");
+    }
+
+    private QuestionDto get(Collection<QuestionDto> questions, String key) {
+        return questions.stream().filter(q -> q.getRefQuestionCode().equals(key)).findFirst().get();
     }
 }
