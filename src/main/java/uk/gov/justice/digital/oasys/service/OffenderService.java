@@ -41,7 +41,7 @@ public class OffenderService {
     }
 
     // only used for sentence plans now
-    @Deprecated(forRemoval = true)
+    //@Deprecated(forRemoval = true)
     public List<OasysAssessmentGroup> findOffenderAssessmentGroup(String identifierType, String identifier) {
         OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
         return findOffenderByIdentifier(offenderIdentifier, identifier).getOasysAssessmentGroups();
