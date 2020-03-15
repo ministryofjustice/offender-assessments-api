@@ -46,7 +46,7 @@ public class AssessmentsService {
     public Collection<AssessmentSummaryDto> getAssessmentsForOffender(String identityType, String identity, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
         var offenderId = offenderService.getOffenderIdByIdentifier(identityType, identity);
         Collection<Assessment> assessments = simpleAssessmentRepository.getAssessmentsForOffender(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
-        log.info("Found ({}) Assessments for identity: ({},{})", assessments.size(), identity, identity, value(EVENT, LogEvent.GET_ASSESSMENTS));
+        log.info("Found {} Assessments for identity: ({},{})", assessments.size(), identity, identityType, value(EVENT, LogEvent.GET_ASSESSMENTS));
         return AssessmentSummaryDto.from(assessments);
     }
 
@@ -54,7 +54,7 @@ public class AssessmentsService {
         var offenderId = offenderService.getOffenderIdByIdentifier(identityType, identity);
         Assessment assessment = simpleAssessmentRepository.getLatestAssessment(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus)
                 .orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Latest Assessment for Offender %s, not found!", offenderId), GET_LATEST_ASSESSMENT_NOT_FOUND));
-        log.info("Found Latest Assessment type: {} status: {} for identity: ({},{})", assessment.getAssessmentType(), assessment.getAssessmentStatus(), identity, identity, value(EVENT, LogEvent.GET_LATEST_ASSESSMENT_FOUND));
+        log.info("Found Latest Assessment type: {} status: {} for identity: ({},{})", assessment.getAssessmentType(), assessment.getAssessmentStatus(), identity, identityType, value(EVENT, LogEvent.GET_LATEST_ASSESSMENT_FOUND));
         return populateAssessmentDto(assessment);
     }
 
@@ -113,7 +113,7 @@ public class AssessmentsService {
     }
 
     private static boolean sectionIsOverThreshold(Section section) {
-        Long rawScore = section.getSectOtherRawScore();
+        Long rawScore = Optional.ofNullable(section.getSectOtherRawScore()).orElse(0L);
         Long threshold = Optional.of(section.getRefSection()).map(RefSection::getCrimNeedScoreThreshold).orElse(Long.MAX_VALUE);
 
         return rawScore >= threshold;

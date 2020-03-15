@@ -29,6 +29,10 @@ public class OffenderService {
     }
 
     public Long getOffenderIdByIdentifier(String identityType, String identity) {
+        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identityType);
+        if(offenderIdentifier.equals(OffenderIdentifier.OASYS)) {
+            return Long.valueOf(identity);
+        }
         return getOffenderSummary(identityType, identity).getOffenderPk();
     }
 
@@ -44,7 +48,7 @@ public class OffenderService {
     }
 
     private OffenderSummary getOffenderSummary(String identityType, String identity) {
-       return simpleOffenderRepository.getOffender(identityType, identityType)
+       return simpleOffenderRepository.getOffender(identityType, identity)
                 .orElseThrow(() ->new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identityType, identity), OFFENDER_NOT_FOUND));
     }
 
