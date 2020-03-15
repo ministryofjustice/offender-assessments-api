@@ -120,6 +120,7 @@ dependencies {
     implementation 'javax.activation:activation:1.1.1'
     implementation 'com.sun.xml.bind:jaxb-impl:2.3.0'
     implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+    implementation 'javax.inject:javax.inject:1'
 
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
