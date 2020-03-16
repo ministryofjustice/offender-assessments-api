@@ -2,6 +2,8 @@ package uk.gov.justice.digital.oasys.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,9 @@ public class AssessmentsController {
 
     @GetMapping(path = "/assessments/oasysSetId/{oasysSetId}")
     @ApiOperation(value = "Gets an assessment by its identity")
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Assessment or Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<AssessmentDto> getAssessment(@PathVariable("oasysSetId") Long oasysSetId) {
         log.info("Fetching Assessment for oasysSetId: {}", oasysSetId, LogEvent.GET_ASSESSMENT);
         var assessmentDto = assessmentsService.getAssessment(oasysSetId);
@@ -36,6 +41,9 @@ public class AssessmentsController {
 
     @GetMapping(path = "/offenders/{identityType}/{identity}/assessments/summary")
     @ApiOperation(value = "Gets all assessments for an offender")
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<Collection<AssessmentSummaryDto>> getAssessmentsForOffender(@PathVariable("identityType") String identityType,
                                                                             @PathVariable("identity") String identity,
                                                                             @RequestParam(value = "historicStatus", required = false) String filterGroupStatus,
@@ -50,6 +58,9 @@ public class AssessmentsController {
 
     @GetMapping(path = "/offenders/{identityType}/{identity}/assessments/latest")
     @ApiOperation(value = "Gets the latest assessment for an offender")
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Assessment or Offender not found"),
+            @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<AssessmentDto> getAssessmentsForOffenderPkLatest(@PathVariable("identityType") String identityType,
                                                                            @PathVariable("identity") String identity,
                                                                            @RequestParam(value = "historicStatus", required = false) String filterGroupStatus,
