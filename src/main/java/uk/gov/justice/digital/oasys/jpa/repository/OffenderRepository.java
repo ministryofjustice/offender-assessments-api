@@ -5,7 +5,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 
 import java.util.Optional;
 
-@Deprecated(forRemoval = true)
+//@Deprecated(forRemoval = true)
 public interface OffenderRepository extends JpaRepository<Offender, Long> {
 
     Optional<Offender> getByCmsProbNumber(String crn);

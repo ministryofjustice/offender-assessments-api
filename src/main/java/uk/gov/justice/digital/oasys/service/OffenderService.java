@@ -29,6 +29,10 @@ public class OffenderService {
     }
 
     public Long getOffenderIdByIdentifier(String identityType, String identity) {
+        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identityType);
+        if(offenderIdentifier.equals(OffenderIdentifier.OASYS)) {
+            return Long.valueOf(identity);
+        }
         return getOffenderSummary(identityType, identity).getOffenderPk();
     }
 
@@ -37,14 +41,14 @@ public class OffenderService {
     }
 
     // only used for sentence plans now
-    @Deprecated(forRemoval = true)
+    //@Deprecated(forRemoval = true)
     public List<OasysAssessmentGroup> findOffenderAssessmentGroup(String identifierType, String identifier) {
         OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
         return findOffenderByIdentifier(offenderIdentifier, identifier).getOasysAssessmentGroups();
     }
 
     private OffenderSummary getOffenderSummary(String identityType, String identity) {
-       return simpleOffenderRepository.getOffender(identityType, identityType)
+       return simpleOffenderRepository.getOffender(identityType, identity)
                 .orElseThrow(() ->new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identityType, identity), OFFENDER_NOT_FOUND));
     }
 

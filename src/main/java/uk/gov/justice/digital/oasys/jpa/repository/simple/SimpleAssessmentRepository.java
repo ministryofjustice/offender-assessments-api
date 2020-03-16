@@ -10,6 +10,7 @@ import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 import static uk.gov.justice.digital.oasys.utils.LogEvent.GET_ASSESSMENT_NOT_FOUND;
@@ -51,19 +52,19 @@ public class SimpleAssessmentRepository {
 
     private void filterQuery(JPAQuery<Assessment> query, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
 
-        if (Optional.ofNullable(filterAssessmentStatus).isPresent()) {
+        if (Objects.nonNull(filterAssessmentStatus)) {
             query.where(QAssessment.assessment.assessmentStatus.eq(filterAssessmentStatus));
         }
 
-        if (Optional.ofNullable(filterAssessmentType).isPresent()) {
+        if (Objects.nonNull(filterAssessmentType)) {
             query.where(QAssessment.assessment.assessmentType.eq(filterAssessmentType));
         }
 
-        if (Optional.ofNullable(filterGroupStatus).isPresent()) {
+        if (Objects.nonNull(filterGroupStatus)) {
             query.where(QAssessment.assessment.group.historicStatus.eq(filterGroupStatus));
         }
 
-        if (Optional.ofNullable(filterVoided).isPresent() && Boolean.TRUE.equals(filterVoided)) {
+        if (Objects.nonNull(filterVoided) && Boolean.TRUE.equals(filterVoided)) {
             query.where(QAssessment.assessment.assessmentVoidedDate.isNull());
         }
 
