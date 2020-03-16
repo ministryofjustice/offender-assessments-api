@@ -45,7 +45,6 @@ public class AssessmentDto {
     //private Collection<OasysBcsPartDto> oasysBcsParts;
     //@JsonProperty("qaReview")
     //private QaReviewDto qaReview;
-    //TODO: why specifically childsafeguarding?
     @JsonProperty("childSafeguardingIndicated")
     private Boolean childSafeguardingIndicated;
     @JsonProperty("layer3SentencePlanNeeds")

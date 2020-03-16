@@ -50,7 +50,7 @@ public class SentencePlansController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<BasicSentencePlan>> getSentenceBasicPlansForOffenderBookingId(@PathVariable("identityType") String identityType,
+    public ResponseEntity<List<BasicSentencePlan>> getSentenceBasicPlansForOffender(@PathVariable("identityType") String identityType,
                                                                                              @PathVariable("identity") String identity,
                                                                                              @RequestParam(value = "historicStatus", required = false) String filterGroupStatus,
                                                                                              @RequestParam(value = "assessmentType", required = false) String filterAssessmentType,

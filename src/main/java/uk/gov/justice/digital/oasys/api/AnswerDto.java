@@ -23,9 +23,10 @@ public class AnswerDto {
     private Long ovpScore;
     private Long qaRawScore;
 
-    public static AnswerDto from(OasysQuestion question, OasysAnswer oasysAnswer) {
+    public static AnswerDto from(OasysQuestion question) {
+        var oasysAnswer = question.getOasysAnswer();
         if (oasysAnswer == null) {
-            return AnswerDto.from(question);
+            return new AnswerDto(null, null, null, null, null, question.getFreeFormatAnswer(), null, null, null);
         }
 
         var refAnswer = Optional.ofNullable(oasysAnswer.getRefAnswer());
@@ -41,13 +42,6 @@ public class AnswerDto {
                 refAnswer.map(RefAnswer::getOgpScore).orElse(null),
                 refAnswer.map(RefAnswer::getOvpScore).orElse(null),
                 refAnswer.map(RefAnswer::getQaRawScore).orElse(null));
-    }
-
-    private static AnswerDto from(OasysQuestion question) {
-        if (question == null) {
-            return null;
-        }
-        return new AnswerDto(null, null, null, null, null, question.getFreeFormatAnswer(), null, null, null);
     }
 
     @JsonIgnore

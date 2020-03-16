@@ -25,7 +25,7 @@ public class AnswerDtoTest {
         question.setOasysAnswer(oasysAnswer);
         oasysAnswer.setOasysQuestion(question);
 
-        var answer = AnswerDto.from(question, question.getOasysAnswer());
+        var answer = AnswerDto.from(question);
 
         assertThat(answer.getStaticText()).isEqualTo("No");
         assertThat(answer.getFreeFormText()).isNull();
@@ -50,7 +50,7 @@ public class AnswerDtoTest {
         question.setOasysAnswer(oasysAnswer);
         oasysAnswer.setOasysQuestion(question);
 
-        var answer = AnswerDto.from(question, question.getOasysAnswer());
+        var answer = AnswerDto.from(question);
         assertThat(answer.getScore()).isEqualTo(1l);
 
     }
@@ -67,7 +67,7 @@ public class AnswerDtoTest {
         question.setOasysAnswer(oasysAnswer);
         oasysAnswer.setOasysQuestion(question);
 
-        var answer = AnswerDto.from(question, question.getOasysAnswer());
+        var answer = AnswerDto.from(question);
         assertThat(answer.getScore()).isEqualTo(2l);
 
     }
@@ -76,7 +76,7 @@ public class AnswerDtoTest {
     public void shouldUseQuestionFreeFormTextIfPresent() {
         OasysQuestion question = OasysQuestion.builder().freeFormatAnswer("Free form answer").build();
 
-        var answer = AnswerDto.from(question, question.getOasysAnswer());
+        var answer = AnswerDto.from(question);
         assertThat(answer.getFreeFormText()).isEqualTo("Free form answer");
     }
 
