@@ -3,15 +3,15 @@ package uk.gov.justice.digital.oasys.api;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
 
 import java.util.Optional;
 
-@Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class AnswerDto {
     private Long refAnswerId;
     private String refAnswerCode;
@@ -24,17 +24,18 @@ public class AnswerDto {
     private Long qaRawScore;
 
     public static AnswerDto from(OasysQuestion question) {
-        if (question.getOasysAnswer() == null) {
-            return new AnswerDto(null, null, null,null,null, question.getFreeFormatAnswer(), null, null, null);
+        var oasysAnswer = question.getOasysAnswer();
+        if (oasysAnswer == null) {
+            return new AnswerDto(null, null, null, null, null, question.getFreeFormatAnswer(), null, null, null);
         }
 
-        var refAnswer = Optional.ofNullable(question.getOasysAnswer().getRefAnswer());
-        var questionFromAnswer = (Optional.ofNullable(question.getOasysAnswer().getOasysQuestion()));
+        var refAnswer = Optional.ofNullable(oasysAnswer.getRefAnswer());
+        var questionFromAnswer = (Optional.ofNullable(oasysAnswer.getOasysQuestion()));
 
         return new AnswerDto(
                 refAnswer.map(RefAnswer::getRefAnswerUk).orElse(null),
                 refAnswer.map(RefAnswer::getRefAnswerCode).orElse(null),
-                question.getOasysAnswer().getOasysAnswerPk(),
+                oasysAnswer.getOasysAnswerPk(),
                 refAnswer.map(RefAnswer::getDisplaySort).orElse(null),
                 refAnswer.map(RefAnswer::getRefSectionAnswer).orElse(null),
                 questionFromAnswer.map(OasysQuestion::getFreeFormatAnswer).orElse(null),

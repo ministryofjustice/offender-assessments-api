@@ -1,18 +1,15 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
-@Data
 @Entity
-@Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "REF_ANSWER")
 @IdClass(RefAnswerPK.class)
 public class RefAnswer {
@@ -30,6 +27,7 @@ public class RefAnswer {
     private String refQuestionCode;
     @Id
     @Column(name = "REF_ANSWER_CODE")
+    @Setter
     private String refAnswerCode;
     @Column(name = "REF_ANSWER_UK")
     private Long refAnswerUk;
@@ -40,20 +38,29 @@ public class RefAnswer {
     @Column(name = "DEFAULT_DISPLAY_SCORE")
     private Long defaultDisplayScore;
     @Column(name = "OGP_SCORE")
+    @Setter
     private Long ogpScore;
     @Column(name = "OVP_SCORE")
+    @Setter
     private Long ovpScore;
     @Column(name = "CHECKSUM")
     private String checksum;
     @Column(name = "QA_RAW_SCORE")
     private Long qaRawScore;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
+    private LocalDateTime createDate;
     @Column(name = "CREATE_USER")
     private String createUser;
     @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
+    private LocalDateTime lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
 
+    public static Long getScore(Long ogpScore, Long ovpScore) {
+        if(ogpScore != null) {
+            return ogpScore;
+        } else {
+            return ovpScore;
+        }
+    }
 }

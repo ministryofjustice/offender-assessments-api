@@ -54,4 +54,12 @@ public class OasysQuestion {
 
     @OneToOne(mappedBy = "oasysQuestion")
     private OasysAnswer oasysAnswer;
+
+    public boolean hasRefQuestion(){
+        return refQuestion != null;
+    }
+
+    public boolean hasOasysAnswer(){
+        return oasysAnswer != null;
+    }
 }

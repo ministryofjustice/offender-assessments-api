@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import com.google.common.collect.ImmutableList;
 import org.mockito.Mockito;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.service.OffenderService;
@@ -46,21 +45,21 @@ public class ControllerServiceTestContext {
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGroup() {
-        return ImmutableList.of(OasysAssessmentGroup.builder()
+        return List.of(OasysAssessmentGroup.builder()
                 .oasysAssessmentGroupPk(1L)
                 .oasysSets(someOasysSets())
                 .build());
     }
 
     private static List<OasysAssessmentGroup> anAssessmentGrouWithSingleSet() {
-        return ImmutableList.of(OasysAssessmentGroup.builder()
+        return List.of(OasysAssessmentGroup.builder()
                 .oasysAssessmentGroupPk(1L)
                 .oasysSets(List.of(layer3AssessmentOasysSet(1L)))
                 .build());
     }
 
     private static List<OasysSet> someOasysSets() {
-        return ImmutableList.of(OasysSet.builder()
+        return List.of(OasysSet.builder()
                         .createDate(LocalDateTime.now().minusDays(1))
                         .assessmentType(assessmentType("oasys"))
                         .oasysSetPk(1L)

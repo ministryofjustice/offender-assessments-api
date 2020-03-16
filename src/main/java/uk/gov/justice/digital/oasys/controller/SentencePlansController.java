@@ -14,7 +14,6 @@ import uk.gov.justice.digital.oasys.service.SentencePlanService;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -37,11 +36,10 @@ public class SentencePlansController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<BasicSentencePlan> getLatestBasicSentencePlanForOffender(@PathVariable("identityType") String identityType,
                                                                                    @PathVariable("identity") String identity,
-                                                                                   @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                   @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                   @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                   @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
+                                                                                   @RequestParam(value = "historicStatus", required = false) String filterGroupStatus,
+                                                                                   @RequestParam(value = "assessmentType", required = false) String filterAssessmentType,
+                                                                                   @RequestParam(value = "voided", required = false) Boolean filterVoided,
+                                                                                   @RequestParam(value = "assessmentStatus", required = false) String filterAssessmentStatus) {
         return sentencePlanService.getLatestBasicSentencePlanForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus)
                 .map(assessment -> new ResponseEntity<>(assessment, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
@@ -52,13 +50,12 @@ public class SentencePlansController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
-    public ResponseEntity<List<BasicSentencePlan>> getSentenceBasicPlansForOffenderBookingId(@PathVariable("identityType") String identityType,
+    public ResponseEntity<List<BasicSentencePlan>> getSentenceBasicPlansForOffender(@PathVariable("identityType") String identityType,
                                                                                              @PathVariable("identity") String identity,
-                                                                                             @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                             @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                             @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                             @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
-
+                                                                                             @RequestParam(value = "historicStatus", required = false) String filterGroupStatus,
+                                                                                             @RequestParam(value = "assessmentType", required = false) String filterAssessmentType,
+                                                                                             @RequestParam(value = "voided", required = false) Boolean filterVoided,
+                                                                                             @RequestParam(value = "assessmentStatus", required = false) String filterAssessmentStatus) {
         return ResponseEntity.ok(sentencePlanService.getBasicSentencePlansForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus));
 
     }
@@ -70,24 +67,23 @@ public class SentencePlansController {
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<List<FullSentencePlanDto>> getFullSentencePlansForOffender(@PathVariable("identityType") String identityType,
                                                                                      @PathVariable("identity") String identity,
-                                                                                     @RequestParam("historicStatus") Optional<String> filterGroupStatus,
-                                                                                     @RequestParam("assessmentType") Optional<String> filterAssessmentType,
-                                                                                     @RequestParam("voided") Optional<Boolean> filterVoided,
-                                                                                     @RequestParam("assessmentStatus") Optional<String> filterAssessmentStatus) {
+                                                                                     @RequestParam(value = "historicStatus", required = false) String filterGroupStatus,
+                                                                                     @RequestParam(value = "assessmentType", required = false) String filterAssessmentType,
+                                                                                     @RequestParam(value = "voided", required = false) Boolean filterVoided,
+                                                                                     @RequestParam(value = "assessmentStatus", required = false) String filterAssessmentStatus) {
         log.info("Retrieving Full Sentence Plans for Identity {},{}", identityType, identity, LogEvent.GET_FULL_SP_LIST);
         var plans = sentencePlanService.getFullSentencePlansForOffender(identityType, identity, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
         log.info("Found Full Sentence Plans for Identity {},{}", identityType, identity, LogEvent.GET_FULL_SP_LIST_FOUND);
         return ResponseEntity.ok(plans);
     }
 
-
     @RequestMapping(path = "/offenders/{identityType}/{identity}/fullSentencePlans/{oasysSetPk}", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<FullSentencePlanDto> getFullSentencePlanForOffender(@PathVariable("identityType") String identityType,
-                                                                                     @PathVariable("identity") String identity,
-                                                                                     @PathVariable("oasysSetPk") Long oasysSetPk) {
+                                                                              @PathVariable("identity") String identity,
+                                                                              @PathVariable("oasysSetPk") Long oasysSetPk) {
         log.info("Retrieving Full Sentence Plans for Identity {},{}", identityType, identity, LogEvent.GET_FULL_SP);
         var plan = sentencePlanService.getFullSentencePlan(identityType, identity, oasysSetPk);
         log.info("Found Full Sentence Plans for Identity {},{}", identityType, identity, LogEvent.GET_FULL_SP_FOUND);

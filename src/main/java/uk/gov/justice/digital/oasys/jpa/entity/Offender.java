@@ -203,12 +203,9 @@ public class Offender {
 
     @Column(name = "HOST_CPA")
     private String hostCpa;
-    @OneToMany
-    @JoinColumn(name = "OFFENDER_PK", referencedColumnName = "OFFENDER_PK")
-    private List<OasysAssessmentGroup> oasysAssessmentGroups;
 
     @OneToMany
     @JoinColumn(name = "OFFENDER_PK", referencedColumnName = "OFFENDER_PK")
-    private List<OffenderAlias> offenderAliases;
+    private List<OasysAssessmentGroup> oasysAssessmentGroups;
 
 }

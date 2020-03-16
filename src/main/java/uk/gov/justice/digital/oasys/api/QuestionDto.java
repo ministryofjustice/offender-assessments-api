@@ -6,13 +6,13 @@ import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuestionDto {
     private Long refQuestionId;
     private String refQuestionCode;
@@ -22,15 +22,6 @@ public class QuestionDto {
     private String questionText;
     private AnswerDto answer;
 
-    public QuestionDto() {
-        refQuestionId = null;
-        refQuestionCode = null;
-        oasysQuestionId = null;
-        displayScore = null;
-        questionText = null;
-        answer = null;
-    }
-
     public QuestionDto(Long refQuestionUk, String refQuestionCode, Long displaySort, String refSectionQuestion) {
         this.refQuestionId = refQuestionUk;
         this.refQuestionCode = refQuestionCode;
@@ -38,12 +29,12 @@ public class QuestionDto {
         this.questionText = refSectionQuestion;
     }
 
-    public static Map<String, QuestionDto> from(Set<OasysQuestion> oasysQuestions) {
+    public static Set<QuestionDto> from(Collection<OasysQuestion> oasysQuestions) {
         return Optional.ofNullable(oasysQuestions)
                 .map(sections -> sections
                         .stream()
                         .map(QuestionDto::from)
-                        .collect(Collectors.toMap(QuestionDto::getRefQuestionCode, question -> question)))
+                        .collect(Collectors.toSet()))
                 .orElse(null);
     }
 

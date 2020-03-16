@@ -1,13 +1,12 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @Entity
@@ -21,12 +20,6 @@ public class OasysSection {
     private Long oasysSectionPk;
     @Column(name = "OASYS_SET_PK")
     private Long oasysSetPk;
-    //    @Column(name = "REF_ASS_VERSION_CODE")
-//    private String refAssVersionCode;
-//    @Column(name = "VERSION_NUMBER")
-//    private String versionNumber;
-//    @Column(name = "REF_SECTION_CODE")
-//    private String refSectionCode;
     @Column(name = "SECTION_STATUS_ELM")
     private String sectionStatusElm;
     @Column(name = "SECTION_STATUS_CAT")
@@ -83,4 +76,18 @@ public class OasysSection {
             @JoinColumn(name = "REF_SECTION_CODE", referencedColumnName = "REF_SECTION_CODE")})
     private RefSection refSection;
 
+    public boolean hasRefSection(){
+        return refSection != null;
+    }
+
+    public Map<String,String> getRefAnswers(String... questionKeys) {
+        var keys = Set.of(questionKeys);
+        return oasysQuestions.stream()
+                .filter(q -> q.hasRefQuestion() && keys.contains(q.getRefQuestion().getRefQuestionCode()))
+                .filter(OasysQuestion::hasOasysAnswer)
+                .map(OasysQuestion::getOasysAnswer)
+                .filter(OasysAnswer::hasRefAnswer)
+                .map(OasysAnswer::getRefAnswer)
+                .collect(Collectors.toMap(RefAnswer::getRefQuestionCode, RefAnswer::getRefAnswerCode));
+    }
 }
