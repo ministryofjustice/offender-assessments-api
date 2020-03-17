@@ -51,7 +51,7 @@ public class QuestionDto {
                 refQuestion.map(RefQuestion::getDisplaySort).orElse(null),
                 question.getDisplayScore(),
                 refQuestion.map(RefQuestion::getRefSectionQuestion).orElse(null),
-                AnswerDto.from(question, question.getOasysAnswer()));
+                AnswerDto.from(question));
     }
 
     public static QuestionDto from(RefQuestion refQuestion) {
