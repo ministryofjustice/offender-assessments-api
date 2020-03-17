@@ -7,17 +7,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AssessmentNeedTest {
 
     private SectionHeader section = SectionHeader.DRUG_MISUSE;
+    private String name = "Drug Misuse";
 
     @Test
     public void shouldConstructAssessmentNeed() {
         AssessmentNeed assessmentNeed = new AssessmentNeed(
                 section,
+                name,
                 null,
                 null,
                 null,
                 null);
 
         assertThat(assessmentNeed.getSection()).isEqualTo(section);
+        assertThat(assessmentNeed.getName()).isEqualTo(name);
 
         assertThat(assessmentNeed.anyRiskFlagged()).isFalse();
 
@@ -27,6 +30,7 @@ public class AssessmentNeedTest {
     public void shouldConstructAssessmentNeedHarm() {
         AssessmentNeed assessmentNeed = new AssessmentNeed(
                 section,
+                null,
                 true,
                 null,
                 null,
@@ -45,6 +49,7 @@ public class AssessmentNeedTest {
     public void shouldConstructAssessmentNeedReoffending() {
         AssessmentNeed assessmentNeed = new AssessmentNeed(
                 section,
+                null,
                 null,
                 true,
                 null,
@@ -65,6 +70,7 @@ public class AssessmentNeedTest {
                 section,
                 null,
                 null,
+                null,
                 true,
                 null);
 
@@ -81,6 +87,7 @@ public class AssessmentNeedTest {
     public void shouldConstructAssessmentNeedFlagged() {
         AssessmentNeed assessmentNeed = new AssessmentNeed(
                 section,
+                null,
                 null,
                 null,
                 null,
