@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.oasys.api.simple;
+package uk.gov.justice.digital.oasys.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
