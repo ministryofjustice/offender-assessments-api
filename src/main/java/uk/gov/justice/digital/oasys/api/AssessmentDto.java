@@ -1,49 +1,75 @@
 package uk.gov.justice.digital.oasys.api;
 
-import lombok.Builder;
-import lombok.Value;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
+import uk.gov.justice.digital.oasys.service.domain.AssessmentNeed;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
 
-@Value
-@Builder
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AssessmentDto {
-    private Long oasysSetId;
+    @JsonProperty("assessmentId")
+    private Long assessmentId;
+    @JsonProperty("refAssessmentVersionCode")
+    private String refAssessmentVersionCode;
+    @JsonProperty("refAssessmentVersionNumber")
+    private String refAssessmentVersionNumber;
+    @JsonProperty("refAssessmentId")
+    private Long refAssessmentId;
+    @JsonProperty("assessmentType")
     private String assessmentType;
-    private String historicStatus;
+    @JsonProperty("assessmentStatus")
     private String assessmentStatus;
-    private AssessmentVersionDto assessmentVersion;
+    @JsonProperty("groupHistoricStatus")
+    private String historicStatus;
+    @JsonProperty("refAssessmentOasysScoringAlgorithmVersion")
+    private Long refAssessmentOasysScoringAlgorithmVersion;
+    @JsonProperty("assessorName")
+    private String assessorName;
+    @JsonProperty("created")
     private LocalDateTime createdDateTime;
-    private boolean completed;
+    @JsonProperty("completed")
     private LocalDateTime completedDateTime;
-    private boolean voided;
-    private Map<String, SectionDto> sections;
-    private Collection<OasysBcsPartDto> oasysBcsParts;
-    private QaReviewDto qaReview;
-    private Boolean tspEligible;
+    @JsonProperty("voided")
+    private LocalDateTime voidedDateTime;
+    @JsonProperty("sections")
+    private Collection<SectionDto> sections;
+    //TODO: we don't need these until we get to update the sentence plan code
+    //@JsonProperty("oasysBcsParts")
+    //private Collection<OasysBcsPartDto> oasysBcsParts;
+    //@JsonProperty("qaReview")
+    //private QaReviewDto qaReview;
+    @JsonProperty("childSafeguardingIndicated")
     private Boolean childSafeguardingIndicated;
+    @JsonProperty("layer3SentencePlanNeeds")
     private Collection<AssessmentNeedDto> layer3SentencePlanNeeds;
 
-    public static AssessmentDto from(OasysSet oasysSet) {
-        return AssessmentDto.builder()
-                .createdDateTime(oasysSet.getCreateDate())
-                .assessmentType(Optional.ofNullable(oasysSet.getAssessmentType()).map(RefElement::getRefElementCode).orElse(null))
-                .assessmentVersion(oasysSet.getRefAssVersion() == null ? null : AssessmentVersionDto.from(oasysSet.getRefAssVersion()))
-                .completed(Optional.ofNullable(oasysSet.getDateCompleted()).isPresent())
-                .completedDateTime(oasysSet.getDateCompleted())
-                .oasysSetId(oasysSet.getOasysSetPk())
-                .oasysBcsParts(OasysBcsPartDto.from(oasysSet.getOasysBcsParts()))
-                .qaReview(QaReviewDto.from(oasysSet.getQaReview()))
-                .sections(SectionDto.from(oasysSet.getOasysSectionMap().values()))
-                .voided(Optional.ofNullable(oasysSet.getAssessmentVoidedDate()).isPresent())
-                .historicStatus(oasysSet.getGroup().getHistoricStatusELm())
-                .assessmentStatus(Optional.ofNullable(oasysSet.getAssessmentStatus()).map(RefElement::getRefElementCode).orElse(null))
-                .tspEligible(oasysSet.getTspEligible().orElse(null))
-                .childSafeguardingIndicated(oasysSet.getChildSafeguardingIndicated().orElse(null))
-                .layer3SentencePlanNeeds(AssessmentNeedDto.from(SectionDto.from(oasysSet.getLayer3SentencePlanNeeds()).values(), OasysSet.getPlanSections()))
-                .build();
+    public static AssessmentDto from(Assessment assessmentSummary, Boolean childSafeguardingIndicated, Collection<AssessmentNeed> needs) {
+        if (assessmentSummary == null) {
+            return null;
+        }
+        var assessmentVersion = assessmentSummary.getAssessmentVersion();
+        return new AssessmentDto(
+                assessmentSummary.getOasysSetPk(),
+                Objects.nonNull(assessmentVersion) ? assessmentVersion.getRefAssVersionCode() : null,
+                Objects.nonNull(assessmentVersion) ? assessmentVersion.getVersionNumber() : null,
+                Objects.nonNull(assessmentVersion) ? assessmentVersion.getRefAssVersionUk() : null,
+                assessmentSummary.getAssessmentType(),
+                assessmentSummary.getAssessmentStatus(),
+                assessmentSummary.getGroup().getHistoricStatus(),
+                Objects.nonNull(assessmentVersion) ? assessmentVersion.getOasysScoringAlgVersion() : null,
+                assessmentSummary.getAssessorName(),
+                assessmentSummary.getCreateDate(),
+                assessmentSummary.getDateCompleted(),
+                assessmentSummary.getAssessmentVoidedDate(),
+                SectionDto.from(assessmentSummary.getOasysSections()),
+                childSafeguardingIndicated,
+                AssessmentNeedDto.from(needs));
     }
 }

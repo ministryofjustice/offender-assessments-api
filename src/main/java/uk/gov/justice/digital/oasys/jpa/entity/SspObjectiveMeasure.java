@@ -1,18 +1,21 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Time;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "SSP_OBJECTIVE_MEASURE")
-public class SspObjectiveMeasure {
+public class SspObjectiveMeasure implements Serializable {
     @Id
     @Column(name = "SSP_OBJECTIVE_MEASURE_PK")
     private Long sspObjectiveMeasurePk;

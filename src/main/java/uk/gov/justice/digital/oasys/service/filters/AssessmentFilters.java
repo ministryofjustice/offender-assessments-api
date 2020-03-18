@@ -2,7 +2,6 @@ package uk.gov.justice.digital.oasys.service.filters;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import uk.gov.justice.digital.oasys.api.DtoUtils;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 
 import java.util.Objects;
@@ -12,22 +11,24 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AssessmentFilters {
 
-    public static Stream<OasysSet> assessmentsFilterOf(Stream<OasysSet> sets, Optional<String> filterAssessmentStatus, Optional<String> filterAssessmentType, Optional<String> filterGroupStatus, Optional<Boolean> filterVoided) {
+    public static Stream<OasysSet> assessmentsFilterOf(Stream<OasysSet> sets, String filterAssessmentStatus, String filterAssessmentType, String filterGroupStatus, Boolean filterVoided) {
 
-        if (filterAssessmentStatus.isPresent()) {
-            sets = sets.filter(set -> filterAssessmentStatus.get().equals(DtoUtils.refElementCode(set.getAssessmentStatus())));
+        if (Optional.ofNullable(filterAssessmentStatus).isPresent()) {
+            sets = sets.filter(set -> filterAssessmentStatus.equals(
+                    Objects.nonNull(set.getAssessmentStatus()) ? set.getAssessmentStatus().getRefElementCode() : null));
         }
 
-        if (filterAssessmentType.isPresent()) {
-            sets = sets.filter(set -> filterAssessmentType.get().equals(DtoUtils.refElementCode(set.getAssessmentType())));
+        if (Optional.ofNullable(filterAssessmentType).isPresent()) {
+            sets = sets.filter(set -> filterAssessmentType.equals(
+                    Objects.nonNull(set.getAssessmentStatus()) ? set.getAssessmentType().getRefElementCode() : null));
         }
 
-        if (filterGroupStatus.isPresent()) {
-            sets = sets.filter(set -> filterGroupStatus.get().equals(set.getGroup() == null ? null : set.getGroup().getHistoricStatusELm()));
+        if (Optional.ofNullable(filterGroupStatus).isPresent()) {
+            sets = sets.filter(set -> filterGroupStatus.equals(set.getGroup() == null ? null : set.getGroup().getHistoricStatusELm()));
         }
 
-        if (filterVoided.isPresent()) {
-            sets = sets.filter(set -> filterVoided.get() == (Objects.nonNull(set.getAssessmentVoidedDate())));
+        if (Optional.ofNullable(filterVoided).isPresent()) {
+            sets = sets.filter(set -> filterVoided == (Objects.nonNull(set.getAssessmentVoidedDate())));
         }
 
         return sets;

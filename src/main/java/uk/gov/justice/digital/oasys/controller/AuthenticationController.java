@@ -12,6 +12,9 @@ import uk.gov.justice.digital.oasys.api.OasysUserAuthenticationDto;
 import uk.gov.justice.digital.oasys.api.OffenderPermissionResource;
 import uk.gov.justice.digital.oasys.api.ValidateUserRequest;
 import uk.gov.justice.digital.oasys.service.AuthenticationService;
+import uk.gov.justice.digital.oasys.utils.LogEvent;
+
+import java.util.Optional;
 
 import static net.logstash.logback.argument.StructuredArguments.value;
 import static org.springframework.http.HttpStatus.*;
@@ -34,7 +37,6 @@ public class AuthenticationController {
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<OasysUserAuthenticationDto> getUserByUserId(@PathVariable("oasysUserId") String oasysUserId) {
-
         return authenticationService.getUserByUserId(oasysUserId)
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(NOT_FOUND));
@@ -47,7 +49,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthorisationDto> getUserAuthorisedForOffenderId(@PathVariable("oasysUserId") String oasysUserId,
                                                                            @PathVariable("offenderId") Long offenderId,
                                                                            @PathVariable("resource") OffenderPermissionResource resource,
-                                                                           @RequestParam("sessionId") Long sessionId) {
+                                                                           @RequestParam("sessionId") Optional<Long> sessionId) {
         return ResponseEntity.ok(authenticationService.userCanAccessOffenderRecord(oasysUserId, offenderId, sessionId, resource));
     }
 

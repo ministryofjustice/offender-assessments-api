@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.sql.Time;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "SSP_CRIM_NEED_OBJ_PIVOT")

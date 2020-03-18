@@ -1,14 +1,17 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.Set;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "SSP_INTERVENTION_IN_SET")
@@ -54,5 +57,13 @@ public class SspInterventionInSet {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @OneToMany
+    @JoinColumn(name = "SSP_INTERVENTION_IN_SET_PK", referencedColumnName = "SSP_INTERVENTION_IN_SET_PK", insertable = false, updatable = false)
+    private Set<SspWhoDoWorkPivot> sspWhoDoWorkPivot;
+
+    @ManyToOne
+    @JoinColumn(name = "SSP_INTERVENTION_IN_SET_PK", referencedColumnName = "SSP_INTERVENTION_IN_SET_PK",insertable=false, updatable=false)
+    private SspInterventionMeasure sspInterventionMeasure;
 
 }

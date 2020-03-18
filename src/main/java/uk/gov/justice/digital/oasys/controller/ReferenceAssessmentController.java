@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.justice.digital.oasys.api.ReferenceAssessmentDto;
+import uk.gov.justice.digital.oasys.api.RefAssessmentDto;
 import uk.gov.justice.digital.oasys.service.RefAssessmentService;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -32,8 +32,8 @@ public class ReferenceAssessmentController {
             @ApiResponse(code = 404, message = "Assessment not found"),
             @ApiResponse(code = 200, message = "OK")})
 
-    public ResponseEntity<ReferenceAssessmentDto> getReferenceAssessmentOf(@PathVariable("type") String type,
-                                                                           @PathVariable("revision") String revision) {
+    public ResponseEntity<RefAssessmentDto> getReferenceAssessmentOf(@PathVariable("type") String type,
+                                                                     @PathVariable("revision") String revision) {
 
         return refAssessmentService.getReferenceAssessmentOf(type, revision)
                 .map(referenceAssessment -> new ResponseEntity<>(referenceAssessment, HttpStatus.OK))

@@ -5,31 +5,32 @@ import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjective;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjectivesInSet;
-
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Value
 @Builder(access = AccessLevel.PRIVATE)
 public class ObjectiveDto {
-    private List<CriminogenicNeedDto> criminogenicNeeds;
-    private List<InterventionDto> interventions;
+    private Set<CriminogenicNeedDto> criminogenicNeeds;
+    private Set<InterventionDto> interventions;
     private ObjectiveMeasureDto objectiveMeasure;
     private RefElementDto objectiveType;
-    private WhoDoingWorkDto whoDoingWork;
     private String objectiveCode;
     private String objectiveDescription;
+    private String objectiveHeading;
+    private String objectiveComment;
     private String howMeasured;
+    private LocalDateTime createdDate;
 
-    public static List<ObjectiveDto> from(Set<SspObjectivesInSet> sspObjectivesInSets) {
+    public static Set<ObjectiveDto> from(Set<SspObjectivesInSet> sspObjectivesInSets) {
 
         return sspObjectivesInSets.stream()
                 .map(ObjectiveDto::from)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
-    private static ObjectiveDto from(SspObjectivesInSet sspo) {
+    public static ObjectiveDto from(SspObjectivesInSet sspo) {
         if (sspo == null) {
             return null;
         }
@@ -40,9 +41,11 @@ public class ObjectiveDto {
                 .interventions(InterventionDto.from(sspo.getSspObjIntervenePivots()))
                 .objectiveCode(objectiveCodeOf(sspo.getSspObjective()))
                 .objectiveDescription(objectiveDescriptionOf(sspo.getSspObjective()))
+                .objectiveComment(objectiveCommentOf(sspo.getSspObjective()))
+                .objectiveHeading(objectiveHeadingOf(sspo.getSspObjective()))
                 .objectiveMeasure(ObjectiveMeasureDto.from(sspo.getSspObjectiveMeasure()))
                 .objectiveType(RefElementDto.from(sspo.getObjectiveType()))
-                .whoDoingWork(WhoDoingWorkDto.from(sspo.getSspWhoDoWorkPivot()))
+                .createdDate(sspo.getCreateDate())
                 .build();
     }
 
@@ -51,6 +54,20 @@ public class ObjectiveDto {
             return null;
         }
         return sspObjective.getObjective().getObjectiveDesc();
+    }
+
+    private static String objectiveHeadingOf(SspObjective sspObjective) {
+        if (sspObjective == null || sspObjective.getObjective() == null) {
+            return null;
+        }
+        return sspObjective.getObjective().getObjectiveHeading().getRefElementDesc();
+    }
+
+    private static String objectiveCommentOf(SspObjective sspObjective) {
+        if (sspObjective == null) {
+            return null;
+        }
+        return sspObjective.getObjectiveDesc();
     }
 
     private static String objectiveCodeOf(SspObjective sspObjective) {

@@ -7,6 +7,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.SspCrimNeedObjPivot;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Builder(access = AccessLevel.PRIVATE)
@@ -16,7 +17,7 @@ public class CriminogenicNeedDto {
     private String description;
     private Integer priority;
 
-    public static List<CriminogenicNeedDto> from(List<SspCrimNeedObjPivot> sspCrimNeedObjPivots) {
+    public static Set<CriminogenicNeedDto> from(Set<SspCrimNeedObjPivot> sspCrimNeedObjPivots) {
         return Optional.ofNullable(sspCrimNeedObjPivots)
                 .map(needs -> needs
                         .stream()
@@ -26,7 +27,7 @@ public class CriminogenicNeedDto {
                                 .description(DtoUtils.refElementDesc(need.getCriminogenicNeed()))
                                 .priority(need.getDisplaySort() != null ? need.getDisplaySort().intValue() : null)
                                 .build())
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+                        .collect(Collectors.toSet()))
+                .orElse(Collections.emptySet());
     }
 }
