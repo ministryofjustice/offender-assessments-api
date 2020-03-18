@@ -1,9 +1,10 @@
 package uk.gov.justice.digital.oasys.api;
 
 import io.swagger.annotations.ApiModel;
+import lombok.Getter;
 
 import java.util.Arrays;
-
+@Getter
 @ApiModel(description = "Offender Type Models")
 public enum OffenderIdentifier {
     OASYS("oasysOffenderId"),
