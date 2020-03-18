@@ -62,4 +62,8 @@ public class RefSection {
     })
     private List<RefQuestion> refQuestions;
 
+    public boolean hasSectionType(){
+        return sectionType != null;
+    }
+
 }

@@ -346,11 +346,15 @@ public class ControllerServiceTestContext {
     public static Set<SspCrimNeedObjPivot> getNeeds() {
         var need1 = SspCrimNeedObjPivot.builder()
                 .sspCrimNeedObjPivotPk(1l)
-                .criminogenicNeed(refElementFrom("I10", "Need 1", null)).build();
+                .criminogenicNeed(refElementFrom("I10", "Need 1", null))
+                .displaySort(1l)
+                .build();
 
         var need2 = SspCrimNeedObjPivot.builder()
                 .sspCrimNeedObjPivotPk(2l)
-                .criminogenicNeed(refElementFrom("I20", "Need 2", null)).build();
+                .criminogenicNeed(refElementFrom("I20", "Need 2", null))
+                .displaySort(2l)
+                .build();
 
         return Set.of(need1,need2);
     }
@@ -361,9 +365,12 @@ public class ControllerServiceTestContext {
                 .sspObjectivesInSetPk(objectiveInSetPK)
                 .sspObjIntervenePivotPk(1l)
                 .sspInterventionInSet(SspInterventionInSet.builder()
+                        .copiedForwardIndicator("Y")
                         .sspInterventionInSetPk(1l)
                         .interventionComment("Intervention Comment")
                         .intervention(refElementFrom("V1", "Intervention 1", "Inv 1"))
+                        .timescaleForIntervention(RefElement.builder().refElementCode("ONE_MONTH").refElementDesc("One Month").build())
+                        .sspInterventionMeasure(SspInterventionMeasure.builder().build())
                         .sspWhoDoWorkPivot(Set.of(SspWhoDoWorkPivot.builder()
                                 .sspWhoDoWorkPivotPk(1l)
                                 .comments("Who do work comment")

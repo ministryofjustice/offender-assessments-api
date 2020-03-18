@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.oasys.api.simple;
+package uk.gov.justice.digital.oasys.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 public class AssessmentNeedDto {
     @JsonProperty("section")
     private SectionHeader section;
+    @JsonProperty("name")
+    private String name;
     @JsonProperty("overThreshold")
     private Boolean overThreshold;
     @JsonProperty("riskOfHarm")
@@ -40,6 +42,7 @@ public class AssessmentNeedDto {
     private static AssessmentNeedDto from(AssessmentNeed need) {
         return new AssessmentNeedDto(
                 need.getSection(),
+                need.getName(),
                 need.getOverThreshold(),
                 need.getRiskOfHarm(),
                 need.getRiskOfReoffending(),

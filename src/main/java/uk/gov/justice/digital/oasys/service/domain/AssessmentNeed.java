@@ -8,6 +8,7 @@ import lombok.Getter;
 public class AssessmentNeed {
 
     private SectionHeader section;
+    private String name;
     private Boolean riskOfHarm;
     private Boolean riskOfReoffending;
     private Boolean overThreshold;

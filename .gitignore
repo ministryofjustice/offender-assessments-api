@@ -6,6 +6,7 @@
 .idea/
 .gradle/
 build/
+src/main/generated
 
 # CMake
 cmake-build-debug/

@@ -8,8 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uk.gov.justice.digital.oasys.api.simple.AssessmentDto;
-import uk.gov.justice.digital.oasys.api.simple.AssessmentSummaryDto;
+import uk.gov.justice.digital.oasys.api.AssessmentDto;
+import uk.gov.justice.digital.oasys.api.AssessmentSummaryDto;
 import uk.gov.justice.digital.oasys.service.AssessmentsService;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
