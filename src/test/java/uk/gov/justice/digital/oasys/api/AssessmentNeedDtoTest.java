@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.oasys.api.simple;
+package uk.gov.justice.digital.oasys.api;
 
 import org.junit.Before;
 import org.junit.Test;

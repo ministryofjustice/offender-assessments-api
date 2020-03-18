@@ -13,11 +13,8 @@ public class FullSentencePlanDtoTest {
 
     @Test
     public void shouldReturnSentencePlanDtoFromOASysSetEntity() {
-
-        OasysSet oasysSet = ControllerServiceTestContext.layer3AssessmentOasysSetWithFullSentencePlan(123L);
-
+        var oasysSet = ControllerServiceTestContext.layer3AssessmentOasysSetWithFullSentencePlan(123L);
         var sentencePlan = FullSentencePlanDto.from(oasysSet);
-
         assertThat(sentencePlan.getOasysSetId()).isEqualTo(123l);
         assertThat(sentencePlan.getObjectives()).hasSize(2);
         assertThat(sentencePlan.getQuestions()).hasSize(3);
@@ -25,17 +22,14 @@ public class FullSentencePlanDtoTest {
 
     @Test
     public void shouldUseEarliestObjectiveDateForStartDate() {
-
-        OasysSet oasysSet = ControllerServiceTestContext.layer3AssessmentOasysSetWithFullSentencePlan(123L);
-
+        var oasysSet = ControllerServiceTestContext.layer3AssessmentOasysSetWithFullSentencePlan(123L);
         var sentencePlan = FullSentencePlanDto.from(oasysSet);
         assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringSeconds(LocalDateTime.of(2019, 11,28, 9, 00));
     }
 
     @Test
     public void shouldReturnOASysSetCompletedDateAsSentencePlanCompletedDate() {
-
-        OasysSet oasysSet = OasysSet.builder()
+        var oasysSet = OasysSet.builder()
                 .createDate(LocalDateTime.now().minusDays(1))
                 .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
                 .group(OasysAssessmentGroup.builder().build())
@@ -59,8 +53,6 @@ public class FullSentencePlanDtoTest {
     @Test
     public void sentencePlanHasNullCompletedDateIfNotPresent() {
         var today = LocalDateTime.now();
-
-
         var oasysSet = OasysSet.builder()
                 .createDate(today)
                 .dateCompleted(null)
@@ -76,8 +68,6 @@ public class FullSentencePlanDtoTest {
 
     @Test
     public void shouldReturnRefQuestionsForSPSectionsInAdditionToOASysQuestions() {
-
-
         var section = ControllerServiceTestContext.getSentencePlanSection();
         section.getRefSection().setRefQuestions(List.of(RefQuestion.builder()
                 .refQuestionUk(1l)

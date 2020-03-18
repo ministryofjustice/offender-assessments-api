@@ -1,24 +1,18 @@
-package uk.gov.justice.digital.oasys.api.simple;
+package uk.gov.justice.digital.oasys.api;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefSection;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.AssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
-import uk.gov.justice.digital.oasys.service.domain.AssessmentNeed;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static uk.gov.justice.digital.oasys.jpa.entity.simple.QAssessment.assessment;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SectionDtoTest {

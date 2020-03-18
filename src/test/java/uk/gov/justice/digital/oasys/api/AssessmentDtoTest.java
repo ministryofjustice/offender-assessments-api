@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.oasys.api.simple;
+package uk.gov.justice.digital.oasys.api;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -89,7 +89,6 @@ public class AssessmentDtoTest {
 
     @Test
     public void shouldBuildValidDtoNeedsNull() {
-        var needs = new HashSet<AssessmentNeed>();
         var dto = AssessmentDto.from(assessment, true, null);
 
         assertThat(dto.getAssessmentId()).isEqualTo(assessment.getOasysSetPk());
@@ -134,7 +133,6 @@ public class AssessmentDtoTest {
         when(assessment.getAssessmentVoidedDate()).thenReturn(voided);
         when(assessment.getAssessmentVersion()).thenReturn(version);
         when(assessment.getOasysSections()).thenReturn(Set.of());
-        //when(assessment.getOasysBcsParts()).thenReturn(Set.of());
         when(assessment.getGroup()).thenReturn(assessmentGroup);
     }
 }
