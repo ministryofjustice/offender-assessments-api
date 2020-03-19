@@ -64,8 +64,8 @@ public class NeedsConfig {
                                 REOFFENDING_QUESTION, "7.99")),
                 entry("8"
                         , Map.of(
-                                HARM_QUESTION, "8.97",
-                                REOFFENDING_QUESTION, "8.98")),
+                                HARM_QUESTION, "8.98",
+                                REOFFENDING_QUESTION, "8.99")),
                 entry("9"
                         , Map.of(
                                 HARM_QUESTION, "9.98",
