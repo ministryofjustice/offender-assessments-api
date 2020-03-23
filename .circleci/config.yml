@@ -65,7 +65,7 @@ orbs:
   aws-cli: circleci/aws-cli@0.1.18
   kubernetes: circleci/kubernetes@0.10.1
   helm: circleci/helm@0.2.3
-  owasp: entur/owasp@0.0.6
+  snyk: snyk/snyk@0.0.9
 
 jobs:
   build:
@@ -77,6 +77,11 @@ jobs:
             - gradle-{{ checksum "build.gradle" }}
             - gradle-
       - run: ./gradlew build
+      - snyk/scan:
+          fail-on-issues: false
+          monitor-on-build: true
+          project: '${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}'
+          organization: 'digital-probation-services'
       - run:
           name: Record the Application Version
           command: |
@@ -134,45 +139,13 @@ jobs:
              docker push mojdigitalstudio/offender-assessments-api:$APP_VERSION
              docker push mojdigitalstudio/offender-assessments-api:latest
             fi
-
-  trivy-scan:
-    executor: deployer
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/app
-      - setup_remote_docker
-      - run:
-          name: Fetch latest image
-          command: |
-            docker pull mojdigitalstudio/offender-assessments-api:latest
-            docker tag mojdigitalstudio/offender-assessments-api:latest mojdigitalstudio/offender-assessments-api:trivy-scan
-      - run:
-          name: Install trivy
-          command: |
-            VERSION=$(
-                curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | \
-                grep '"tag_name":' | \
-                sed -E 's/.*"v([^"]+)".*/\1/'
-            )
-            wget https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${VERSION}_Linux-64bit.tar.gz
-            tar zxvf trivy_${VERSION}_Linux-64bit.tar.gz
-            sudo mv trivy /usr/local/bin
-      - run:
-          name: Scan the local image with trivy
-          command: |
-            mkdir -p build/reports/trivy
-            trivy \
-              --exit-code 0 \
-              --no-progress \
-              -f json \
-              -o build/reports/trivy/report.json \
-              -s "HIGH,CRITICAL" \
-              "mojdigitalstudio/offender-assessments-api:trivy-scan"
-      - persist_to_workspace:
-          root: .
-          paths:
-            - build/reports/trivy
+      - snyk/scan:
+          docker-image-name: 'mojdigitalstudio/offender-assessments-api:latest'
+          target-file: 'Dockerfile'
+          fail-on-issues: false
+          monitor-on-build: true
+          project: '${CIRCLE_PROJECT_REPONAME}/latest'
+          organization: 'digital-probation-services'
 
   sonar-scan:
     executor: sonar-scanner
@@ -233,15 +206,9 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-      - owasp/gradle_owasp_dependency_check:
-          executor: builder
-          persist_to_workspace: true
-      - trivy-scan
       - sonar-scan:
           requires:
             - build
-            - owasp/gradle_owasp_dependency_check
-            - trivy-scan
   build-test-and-deploy:
     jobs:
       - build:
