@@ -31,9 +31,6 @@ public class SentencePlansControllerTest {
     @LocalServerPort
     int port;
 
-    @MockBean
-    private AssessmentRepository assessmentRepository;
-
     @Autowired
     @Qualifier("globalObjectMapper")
     private ObjectMapper objectMapper;

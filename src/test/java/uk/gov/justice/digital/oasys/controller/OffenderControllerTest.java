@@ -16,8 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.gov.justice.digital.oasys.api.OffenderDto;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
-import uk.gov.justice.digital.oasys.api.simple.OffenderDto;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +54,6 @@ public class OffenderControllerTest {
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (aClass, s) -> mapper
         ));
-
     }
 
     @Test
