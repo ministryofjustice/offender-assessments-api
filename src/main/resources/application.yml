@@ -5,9 +5,15 @@ spring:
     cache-names: users
     caffeine:
       spec: expireAfterWrite=2m
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9090/auth/issuer
   flyway:
     enabled: false
+
+
 
   jpa:
     hibernate:
@@ -30,12 +36,13 @@ management:
     web:
       base-path: /
       exposure:
-        include: 'info, health, ping'
+        include: 'health, info, ping, mappings'
   endpoint:
     health:
       cache:
         time-to-live: 2000ms
-      show-details: always
+      show-components: always
+      show-details: never
     info:
       cache:
         time-to-live: 2000ms
@@ -59,6 +66,8 @@ graceful:
 logging:
   level:
     org:
+      springframework:
+        security: DEBUG
       hibernate: INFO
     uk:
       gov: INFO

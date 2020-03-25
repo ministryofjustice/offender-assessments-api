@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.oasys.api;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;

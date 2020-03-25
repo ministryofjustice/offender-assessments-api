@@ -1,24 +1,23 @@
 package uk.gov.justice.digital.oasys.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.AssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleAssessmentRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
-
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
 public class AssessmentsServiceTest {
 
     @Mock
@@ -41,7 +40,7 @@ public class AssessmentsServiceTest {
 
     AssessmentsService assessmentsService;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         assessmentsService = new AssessmentsService(assessmentRepository, offenderService, sectionService);
         setupAssessmentGroup();
@@ -61,12 +60,15 @@ public class AssessmentsServiceTest {
 
     }
 
-    @Test(expected = ApplicationExceptions.EntityNotFoundException.class)
+    @Test
     public void shouldGetAssessmentNull() {
         Long oasysId = 21345L;
         when(assessmentRepository.getAssessment(oasysId)).thenReturn(Optional.empty());
 
-        assessmentsService.getAssessment(oasysId);
+        assertThatThrownBy(() ->  assessmentsService.getAssessment(oasysId))
+                .isInstanceOf(ApplicationExceptions.EntityNotFoundException.class);
+
+
     }
 
     @Test
@@ -121,7 +123,7 @@ public class AssessmentsServiceTest {
         verifyNoMoreInteractions(assessmentRepository);
     }
 
-    @Test(expected = ApplicationExceptions.EntityNotFoundException.class)
+    @Test()
     public void shouldGetLatestAssessmentNull() {
         Long oasysId = 21345L;
         String offenderOasys = oasysId.toString();
@@ -130,7 +132,9 @@ public class AssessmentsServiceTest {
         when(offenderService.getOffenderIdByIdentifier(offenderIdentifier.toString(), offenderOasys)).thenReturn(oasysId);
         when(assessmentRepository.getLatestAssessment(oasysId, null, null, null, null)).thenReturn(Optional.empty());
 
-        assessmentsService.getLatestAssessmentForOffender(offenderIdentifier.toString(), offenderOasys, null, null, null, null);
+        assertThatThrownBy(() ->  assessmentsService.getLatestAssessmentForOffender(offenderIdentifier.toString(), offenderOasys, null, null, null, null))
+                .isInstanceOf(ApplicationExceptions.EntityNotFoundException.class);
+
     }
 
     private void setupAssessmentGroup() {

@@ -1,17 +1,13 @@
 package uk.gov.justice.digital.oasys.api;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
-
 import java.util.Collection;
 import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuestionDtoTest {
-
 
     @Test
     public void shouldReturnMapOfQuestionsFromOASysQuestionsSet() {
