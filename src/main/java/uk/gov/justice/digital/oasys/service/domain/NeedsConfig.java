@@ -4,7 +4,6 @@ package uk.gov.justice.digital.oasys.service.domain;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
 import java.util.Map;
 
 import static java.util.Map.entry;

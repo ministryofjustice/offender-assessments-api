@@ -6,7 +6,6 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class AnswerDtoTest {
 
     @Test
@@ -15,11 +14,11 @@ public class AnswerDtoTest {
 
         OasysAnswer oasysAnswer = OasysAnswer.builder().refAnswer(RefAnswer.builder()
                 .refAnswerCode("NO")
-                .defaultDisplayScore(2l)
-                .displaySort(5l)
-                .ogpScore(1l)
-                .ovpScore(2l)
-                .qaRawScore(3l)
+                .defaultDisplayScore(2L)
+                .displaySort(5L)
+                .ogpScore(1L)
+                .ovpScore(2L)
+                .qaRawScore(3L)
                 .refSectionAnswer("No").build()).build();
 
         question.setOasysAnswer(oasysAnswer);
@@ -30,11 +29,11 @@ public class AnswerDtoTest {
         assertThat(answer.getStaticText()).isEqualTo("No");
         assertThat(answer.getFreeFormText()).isNull();
         assertThat(answer.getRefAnswerCode()).isEqualTo("NO");
-        assertThat(answer.getOgpScore()).isEqualTo(1l);
-        assertThat(answer.getOvpScore()).isEqualTo(2l);
-        assertThat(answer.getQaRawScore()).isEqualTo(3l);
-        assertThat(answer.getDisplayOrder()).isEqualTo(5l);
-        assertThat(answer.getScore()).isEqualTo(1l);
+        assertThat(answer.getOgpScore()).isEqualTo(1L);
+        assertThat(answer.getOvpScore()).isEqualTo(2L);
+        assertThat(answer.getQaRawScore()).isEqualTo(3L);
+        assertThat(answer.getDisplayOrder()).isEqualTo(5L);
+        assertThat(answer.getScore()).isEqualTo(1L);
     }
 
     @Test
@@ -44,14 +43,14 @@ public class AnswerDtoTest {
         OasysAnswer oasysAnswer = OasysAnswer.builder().refAnswer(RefAnswer.builder()
                 .refAnswerCode("NO")
                 .refSectionAnswer("No")
-                .ogpScore(1l)
-                .ovpScore(2l).build()).build();
+                .ogpScore(1L)
+                .ovpScore(2L).build()).build();
 
         question.setOasysAnswer(oasysAnswer);
         oasysAnswer.setOasysQuestion(question);
 
         var answer = AnswerDto.from(question);
-        assertThat(answer.getScore()).isEqualTo(1l);
+        assertThat(answer.getScore()).isEqualTo(1L);
 
     }
 
@@ -62,13 +61,13 @@ public class AnswerDtoTest {
         OasysAnswer oasysAnswer = OasysAnswer.builder().refAnswer(RefAnswer.builder()
                 .refAnswerCode("NO")
                 .refSectionAnswer("No")
-                .ovpScore(2l).build()).build();
+                .ovpScore(2L).build()).build();
 
         question.setOasysAnswer(oasysAnswer);
         oasysAnswer.setOasysQuestion(question);
 
         var answer = AnswerDto.from(question);
-        assertThat(answer.getScore()).isEqualTo(2l);
+        assertThat(answer.getScore()).isEqualTo(2L);
 
     }
 
