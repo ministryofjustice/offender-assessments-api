@@ -150,4 +150,9 @@ task copyAgent(type: Copy) {
     into "$buildDir/libs"
 }
 
+test {
+    useJUnitPlatform()
+}
+
+
 assemble.dependsOn copyAgent

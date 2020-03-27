@@ -1,25 +1,18 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.*;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysAuthenticationRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
-import uk.gov.justice.digital.oasys.util.MockOAuthServer;
 import java.util.Optional;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +22,6 @@ import static uk.gov.justice.digital.oasys.api.OffenderPermissionResource.SENTEN
 
 
 public class AuthenticationControllerTest extends IntegrationTest {
-
 
     @MockBean
     private OffenderRepository offenderRepository;
@@ -43,8 +35,6 @@ public class AuthenticationControllerTest extends IntegrationTest {
 
     @Value("${sample.token}")
     private String validOauthToken;
-
-    public static MockOAuthServer mockOAuthServer = new MockOAuthServer();
 
     @BeforeEach
     public void setup() {
