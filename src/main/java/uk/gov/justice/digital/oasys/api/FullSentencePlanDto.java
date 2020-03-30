@@ -3,9 +3,9 @@ package uk.gov.justice.digital.oasys.api;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSection;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjectivesInSet;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -20,18 +20,15 @@ public class FullSentencePlanDto {
     private Set<ObjectiveDto> objectives;
     private Map<String, QuestionDto> questions;
 
-    public static FullSentencePlanDto from(OasysSet oasysSet) {
+    public static FullSentencePlanDto from(Assessment assessment, Optional<Section> section) {
 
-        if (oasysSet.getSspObjectivesInSets() == null || oasysSet.getSspObjectivesInSets().isEmpty()) {
+        if (assessment.getSspObjectivesInSets() == null || assessment.getSspObjectivesInSets().isEmpty()) {
             return null;
         }
-
-        var section = oasysSet.getOasysSections().stream()
-                .filter(s->s.getRefSection().getRefSectionCode().equals("ISP") || s.getRefSection().getRefSectionCode().equals("RSP")).findFirst(); //get the section
-
+        
         Map<String, QuestionDto> sentencePlanFields = new HashMap<>();
         if(section.isPresent()) {
-            var questions = section.map(OasysSection::getOasysQuestions).orElse(Collections.emptySet()).stream() // get the questions for the section
+            var questions = section.get().getOasysQuestions().stream() // get the questions for the section
                     .sorted(Comparator.comparingLong(q -> q.getRefQuestion().getDisplaySort())) // sort by display order
                     .collect(Collectors.toList());
             questions.forEach(question -> sentencePlanFields.put(question.getRefQuestion().getRefQuestionCode(), QuestionDto.from(question)));
@@ -42,12 +39,11 @@ public class FullSentencePlanDto {
             }
         }
 
-
         return new FullSentencePlanDto(
-                oasysSet.getOasysSetPk(),
-                earliestSspObjectiveOf(oasysSet.getSspObjectivesInSets()),
-                oasysSet.getDateCompleted(),
-                ObjectiveDto.from(oasysSet.getSspObjectivesInSets()),
+                assessment.getOasysSetPk(),
+                earliestSspObjectiveOf(assessment.getSspObjectivesInSets()),
+                assessment.getDateCompleted(),
+                ObjectiveDto.from(assessment.getSspObjectivesInSets()),
                 sentencePlanFields);
 
     }

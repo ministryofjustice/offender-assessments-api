@@ -1,5 +1,7 @@
 package uk.gov.justice.digital.oasys.jpa.entity.simple;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,8 +11,10 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Table(name = "OASYS_ASSESSMENT_GROUP")
+@Builder
 public class AssessmentGroup {
 
     @Id
