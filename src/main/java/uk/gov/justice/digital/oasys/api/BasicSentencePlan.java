@@ -2,10 +2,9 @@ package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
 import lombok.Value;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
-
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Value
@@ -15,8 +14,8 @@ public class BasicSentencePlan {
     private final LocalDate createdDate;
     private List<BasicSentencePlanItem> basicSentencePlanItems;
 
-    public static BasicSentencePlan from(OasysSet oasysSet) {
-        final List<BasicSentencePlanItem> basicSentencePlanItems = oasysSet.getBasicSentencePlanList()
+    public static BasicSentencePlan from(Assessment assessment) {
+        final List<BasicSentencePlanItem> basicSentencePlanItems = assessment.getBasicSentencePlanList()
                 .stream()
                 .map(BasicSentencePlanItem::from)
                 .collect(Collectors.toList());
@@ -27,7 +26,17 @@ public class BasicSentencePlan {
 
         return BasicSentencePlan.builder()
                 .basicSentencePlanItems(basicSentencePlanItems)
-                .sentencePlanId(oasysSet.getOasysSetPk())
-                .createdDate(oasysSet.getCreateDate().toLocalDate()).build();
+                .sentencePlanId(assessment.getOasysSetPk())
+                .createdDate(assessment.getCreateDate().toLocalDate()).build();
+    }
+
+    public static Set<BasicSentencePlan> from(Collection<Assessment> assessments) {
+        return Optional.ofNullable(assessments)
+                .map(as -> as
+                        .stream()
+                        .map(BasicSentencePlan::from)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toSet()))
+                .orElse(Set.of());
     }
 }
