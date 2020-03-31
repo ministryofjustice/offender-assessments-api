@@ -29,10 +29,6 @@ public class OffenderService {
     }
 
     public Long getOffenderIdByIdentifier(String identityType, String identity) {
-        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identityType);
-        if(offenderIdentifier.equals(OffenderIdentifier.OASYS)) {
-            return Long.valueOf(identity);
-        }
         return getOffenderSummary(identityType, identity).getOffenderPk();
     }
 

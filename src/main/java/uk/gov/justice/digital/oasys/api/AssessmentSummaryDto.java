@@ -30,8 +30,8 @@ public class AssessmentSummaryDto {
     private String assessmentStatus;
     @JsonProperty("groupHistoricStatus")
     private String historicStatus;
-    @JsonProperty("oasysScoringAlgorithmVersion")
-    private Long oasysScoringAlgorithmVersion;
+    @JsonProperty("refAssessmentOasysScoringAlgorithmVersion")
+    private Long refAssessmentOasysScoringAlgorithmVersion;
     @JsonProperty("assessorName")
     private String assessorName;
     @JsonProperty("created")

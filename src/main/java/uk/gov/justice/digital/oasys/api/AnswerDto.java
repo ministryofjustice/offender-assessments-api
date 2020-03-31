@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
 

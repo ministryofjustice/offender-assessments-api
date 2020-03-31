@@ -6,11 +6,17 @@ import io.restassured.config.RestAssuredConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
+@Sql(scripts = "classpath:sentencePlans/before-test.sql", config = @SqlConfig(transactionMode = ISOLATED))
+@Sql(scripts = "classpath:sentencePlans/after-test.sql", config = @SqlConfig(transactionMode = ISOLATED), executionPhase = AFTER_TEST_METHOD)
 public class SentencePlansControllerTest extends IntegrationTest {
 
     @Value("${sample.token}")
@@ -29,7 +35,7 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan[] sentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/basicSentencePlans", 1L)
+                .get("/offenders/oasysOffenderId/{0}/basicSentencePlans", 100L)
                 .then()
                 .statusCode(200)
                 .extract()
@@ -37,7 +43,7 @@ public class SentencePlansControllerTest extends IntegrationTest {
                 .as(BasicSentencePlan[].class);
 
         assertThat(sentencePlans).hasSize(2);
-        assertThat(sentencePlans).extracting("sentencePlanId").containsOnly(1L, 2L);
+        assertThat(sentencePlans).extracting("sentencePlanId").containsOnly(100L, 200L);
     }
 
     @Test
@@ -45,14 +51,14 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/basicSentencePlans/latest", 1L)
+                .get("/offenders/oasysOffenderId/{0}/basicSentencePlans/latest", 100L)
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(100L);
     }
 
     @Test
@@ -70,7 +76,7 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ12345")
+                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ100")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -85,14 +91,14 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/crn/{0}/basicSentencePlans/latest", "XYZ12345")
+                .get("/offenders/crn/{0}/basicSentencePlans/latest", "XYZ100")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(100L);
     }
 
 
@@ -111,7 +117,7 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/basicSentencePlans", "PNC1234")
+                .get("/offenders/pnc/{0}/basicSentencePlans", "PNC100")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -122,18 +128,18 @@ public class SentencePlansControllerTest extends IntegrationTest {
     }
 
     @Test
-    public void canGetLatestSentencePlansForOffenderPnc() {
+    public void canGetLatestSentencePlanForOffenderPnc() {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/pnc/{0}/basicSentencePlans/latest", "PNC1234")
+                .get("/offenders/pnc/{0}/basicSentencePlans/latest", "PNC100")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(100L);
     }
 
 
@@ -152,7 +158,7 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/basicSentencePlans", "NOMIS123456")
+                .get("/offenders/nomisId/{0}/basicSentencePlans", "NOMIS100")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -167,14 +173,14 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/nomisId/{0}/basicSentencePlans/latest", "NOMIS123456")
+                .get("/offenders/nomisId/{0}/basicSentencePlans/latest", "NOMIS100")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(100L);
     }
 
 
@@ -193,7 +199,7 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan[] SentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/basicSentencePlans", "Book12")
+                .get("/offenders/bookingId/{0}/basicSentencePlans", "B100")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -208,14 +214,14 @@ public class SentencePlansControllerTest extends IntegrationTest {
         BasicSentencePlan sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/bookingId/{0}/basicSentencePlans/latest", "Book12")
+                .get("/offenders/bookingId/{0}/basicSentencePlans/latest", "B100")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan.class);
 
-        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(2L);
+        assertThat(sentencePlan).extracting("sentencePlanId").isEqualTo(100L);
     }
 
 
@@ -235,14 +241,14 @@ public class SentencePlansControllerTest extends IntegrationTest {
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("assessmentType", "LAYER_3")
-                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ12345")
+                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ100")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan[].class);
 
-        assertThat(sentencePlans).extracting("sentencePlanId").containsOnly(1l, 2l);
+        assertThat(sentencePlans).extracting("sentencePlanId").containsOnly(100l, 200l);
     }
 
     @Test
@@ -251,14 +257,14 @@ public class SentencePlansControllerTest extends IntegrationTest {
                 .when()
                 .auth().oauth2(validOauthToken)
                 .param("historicStatus", "CURRENT")
-                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ12345")
+                .get("/offenders/crn/{0}/basicSentencePlans", "XYZ100")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(BasicSentencePlan[].class);
 
-        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(1l, 2l);
+        assertThat(SentencePlans).extracting("sentencePlanId").containsOnly(100l, 200l);
     }
 
     @Test
@@ -266,7 +272,7 @@ public class SentencePlansControllerTest extends IntegrationTest {
         FullSentencePlanDto[] sentencePlans = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/fullSentencePlans", 1L)
+                .get("/offenders/oasysOffenderId/{0}/fullSentencePlans", 100L)
                 .then()
                 .statusCode(200)
                 .extract()
@@ -274,7 +280,7 @@ public class SentencePlansControllerTest extends IntegrationTest {
                 .as(FullSentencePlanDto[].class);
 
         assertThat(sentencePlans).hasSize(1);
-        assertThat(sentencePlans).extracting("oasysSetId").containsOnly(1L);
+        assertThat(sentencePlans).extracting("oasysSetId").containsOnly(100L);
     }
 
     @Test
@@ -282,14 +288,14 @@ public class SentencePlansControllerTest extends IntegrationTest {
         FullSentencePlanDto sentencePlan = given()
                 .when()
                 .auth().oauth2(validOauthToken)
-                .get("/offenders/oasysOffenderId/{0}/fullSentencePlans/{1}", 1L, 1L)
+                .get("/offenders/oasysOffenderId/{0}/fullSentencePlans/{1}", 100L, 100L)
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(FullSentencePlanDto.class);
 
-                assertThat(sentencePlan.getOasysSetId()).isEqualTo(1L);
+        assertThat(sentencePlan.getOasysSetId()).isEqualTo(100L);
     }
 
 }

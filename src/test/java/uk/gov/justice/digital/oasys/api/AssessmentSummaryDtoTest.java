@@ -45,7 +45,7 @@ public class AssessmentSummaryDtoTest {
         assertThat(dto.getRefAssessmentId()).isEqualTo(assessment.getAssessmentVersion().getRefAssVersionUk());
         assertThat(dto.getRefAssessmentVersionCode()).isEqualTo(assessment.getAssessmentVersion().getRefAssVersionCode());
         assertThat(dto.getRefAssessmentVersionNumber()).isEqualTo(assessment.getAssessmentVersion().getVersionNumber());
-        assertThat(dto.getOasysScoringAlgorithmVersion()).isEqualTo(assessment.getAssessmentVersion().getOasysScoringAlgVersion());
+        assertThat(dto.getRefAssessmentOasysScoringAlgorithmVersion()).isEqualTo(assessment.getAssessmentVersion().getOasysScoringAlgVersion());
         assertThat(dto.getCompletedDateTime()).isEqualTo(assessment.getDateCompleted());
         assertThat(dto.getVoidedDateTime()).isEqualTo(assessment.getAssessmentVoidedDate());
     }
