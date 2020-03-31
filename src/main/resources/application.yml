@@ -60,8 +60,6 @@ graceful:
 logging:
   level:
     org:
-      springframework:
-        security: DEBUG
       hibernate: INFO
     uk:
       gov: INFO
