@@ -16,6 +16,9 @@ env:
   - name: JAVA_OPTS
     value: "{{ .Values.env.JAVA_OPTS }}"
 
+  - name: OAUTH_ENDPOINT_URL
+    value: "{{ .Values.env.OAUTH_ENDPOINT_URL }}"
+
   - name: SPRING_DATASOURCE_USERNAME
     valueFrom:
       secretKeyRef:
@@ -33,9 +36,6 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: SPRING_DATASOURCE_URL
-
-  - name: JWT_PUBLIC_KEY
-    value: "{{ .Values.env.JWT_PUBLIC_KEY }}"
 
   - name: APPINSIGHTS_INSTRUMENTATIONKEY
     valueFrom:

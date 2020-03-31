@@ -1,11 +1,11 @@
 package uk.gov.justice.digital.oasys.service;
 
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.justice.digital.oasys.api.OasysUserAuthenticationDto;
 import uk.gov.justice.digital.oasys.api.OffenderPermissionResource;
 import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static uk.gov.justice.digital.oasys.api.OffenderPermissionLevel.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
 public class AuthenticationServiceTest {
 
 
@@ -32,7 +32,7 @@ public class AuthenticationServiceTest {
 
     AuthenticationService service;
 
-    @Before
+    @BeforeEach
     public void setup() {
         service = new AuthenticationService(oasysUserRepository, oasysAuthenticationRepository);
     }

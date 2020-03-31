@@ -1,22 +1,13 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
 import static io.restassured.RestAssured.given;
@@ -24,44 +15,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
 @Sql(scripts = "classpath:sentencePlans/before-test.sql", config = @SqlConfig(transactionMode = ISOLATED))
 @Sql(scripts = "classpath:sentencePlans/after-test.sql", config = @SqlConfig(transactionMode = ISOLATED), executionPhase = AFTER_TEST_METHOD)
-public class SentencePlansControllerTest {
-
-    @LocalServerPort
-    int port;
-
-    @Autowired
-    @Qualifier("globalObjectMapper")
-    private ObjectMapper objectMapper;
+public class SentencePlansControllerTest extends IntegrationTest {
 
     @Value("${sample.token}")
     private String validOauthToken;
 
-    @Before
+    @BeforeEach
     public void setup() {
         RestAssured.port = port;
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (aClass, s) -> objectMapper
         ));
-    }
-
-
-    @After
-    public void tearDown() {
-    }
-
-    @Test
-    public void endpointsAreAuthorised() {
-        given()
-                .when()
-                .get("/xyz")
-                .then()
-                .statusCode(401);
     }
 
     @Test
@@ -329,7 +295,7 @@ public class SentencePlansControllerTest {
                 .body()
                 .as(FullSentencePlanDto.class);
 
-                assertThat(sentencePlan.getOasysSetId()).isEqualTo(100L);
+        assertThat(sentencePlan.getOasysSetId()).isEqualTo(100L);
     }
 
 }

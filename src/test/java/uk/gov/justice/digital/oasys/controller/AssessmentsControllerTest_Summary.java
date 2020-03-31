@@ -4,18 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.justice.digital.oasys.api.AssessmentSummaryDto;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
 
@@ -29,15 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
-@RunWith(SpringRunner.class)
-@ActiveProfiles("test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = "classpath:assessments/before-test-summary.sql", config = @SqlConfig(transactionMode = ISOLATED))
 @Sql(scripts = "classpath:assessments/after-test-summary.sql", config = @SqlConfig(transactionMode = ISOLATED), executionPhase = AFTER_TEST_METHOD)
-public class AssessmentsControllerTest_Summary {
-
-    @LocalServerPort
-    int port;
+public class AssessmentsControllerTest_Summary extends IntegrationTest {
 
     @Autowired
     @Qualifier("globalObjectMapper")
@@ -58,7 +48,7 @@ public class AssessmentsControllerTest_Summary {
     private Long voidedAssessmentId = 5431L;
     private Long historicAssessmentId = 5430L;
 
-    @Before
+    @BeforeEach
     public void setup() {
         RestAssured.port = port;
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(

@@ -1,20 +1,18 @@
 package uk.gov.justice.digital.oasys.api;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.justice.digital.oasys.jpa.entity.RefSection;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
 public class SectionDtoTest {
 
     @Mock
@@ -23,7 +21,7 @@ public class SectionDtoTest {
     @Mock
     RefSection refSection;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         setupSection();
         setupRefSection();
