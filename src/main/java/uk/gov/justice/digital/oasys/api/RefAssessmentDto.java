@@ -1,10 +1,9 @@
-package uk.gov.justice.digital.oasys.api.simple;
+package uk.gov.justice.digital.oasys.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import uk.gov.justice.digital.oasys.api.RefSectionDto;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersion;
 
 import java.util.Collection;

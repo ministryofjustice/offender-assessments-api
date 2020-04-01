@@ -2,30 +2,17 @@ package uk.gov.justice.digital.oasys.controller;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
-public class PingEndpointIntTest {
+public class PingEndpointIntTest extends IntegrationTest {
 
-    @LocalServerPort
-    int port;
-
-    @Before
+    @BeforeEach
     public void setup() {
         RestAssured.port = port;
-
     }
 
     @Test

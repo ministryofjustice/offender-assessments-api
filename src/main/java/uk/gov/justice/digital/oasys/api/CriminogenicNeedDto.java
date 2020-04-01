@@ -6,7 +6,6 @@ import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.SspCrimNeedObjPivot;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -2,6 +2,9 @@ package uk.gov.justice.digital.oasys.controller;
 
 import org.mockito.Mockito;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.AssessmentGroup;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
 import uk.gov.justice.digital.oasys.service.OffenderService;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
@@ -177,6 +180,8 @@ public class ControllerServiceTestContext {
                 .oasysSetPk(id).build();
     }
 
+
+
     public static Set<OasysSection> completeLayer3AssessmentSections() {
 
         OasysSection section10 = OasysSection.builder()
@@ -248,25 +253,7 @@ public class ControllerServiceTestContext {
 
 
 
-    public static OasysSet layer3AssessmentOasysSetWithFullSentencePlan(Long id) {
-
-        Set<OasysSection> sections = new HashSet<>();
-        sections.addAll(completeLayer3AssessmentSections());
-        sections.add(getSentencePlanSection());
-
-        return OasysSet.builder()
-                .createDate(LocalDateTime.now().minusDays(1))
-                .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
-                .group(OasysAssessmentGroup.builder().build())
-                .oasysSections(sections)
-
-                .sspObjectivesInSets(getObjectivesInSet())
-                .assessmentStatus(RefElement.builder().build())
-                .basicSentencePlanList(Set.of(aSentencePlan(1), aSentencePlan(2)))
-                .oasysSetPk(id).build();
-    }
-
-    public static OasysSection getSentencePlanSection() {
+    public static Section getSentencePlanSection() {
 
 
         OasysQuestion questionIP1 = OasysQuestion.builder()
@@ -288,7 +275,7 @@ public class ControllerServiceTestContext {
         questionIP1.setOasysAnswer(answerIP1);
         answerIP1.setOasysQuestion(questionIP1);
 
-        var section =  OasysSection.builder()
+        var section =  Section.builder()
                     .refSection(RefSection.builder()
                             .refSectionCode("ISP")
                             .refQuestions(List.of(RefQuestion.builder()
@@ -302,7 +289,7 @@ public class ControllerServiceTestContext {
 
 
 
-        return  section;
+        return section;
     }
 
     public static Set<SspObjectivesInSet> getObjectivesInSet() {
@@ -346,11 +333,15 @@ public class ControllerServiceTestContext {
     public static Set<SspCrimNeedObjPivot> getNeeds() {
         var need1 = SspCrimNeedObjPivot.builder()
                 .sspCrimNeedObjPivotPk(1l)
-                .criminogenicNeed(refElementFrom("I10", "Need 1", null)).build();
+                .criminogenicNeed(refElementFrom("I10", "Need 1", null))
+                .displaySort(1l)
+                .build();
 
         var need2 = SspCrimNeedObjPivot.builder()
                 .sspCrimNeedObjPivotPk(2l)
-                .criminogenicNeed(refElementFrom("I20", "Need 2", null)).build();
+                .criminogenicNeed(refElementFrom("I20", "Need 2", null))
+                .displaySort(2l)
+                .build();
 
         return Set.of(need1,need2);
     }
@@ -361,9 +352,12 @@ public class ControllerServiceTestContext {
                 .sspObjectivesInSetPk(objectiveInSetPK)
                 .sspObjIntervenePivotPk(1l)
                 .sspInterventionInSet(SspInterventionInSet.builder()
+                        .copiedForwardIndicator("Y")
                         .sspInterventionInSetPk(1l)
                         .interventionComment("Intervention Comment")
                         .intervention(refElementFrom("V1", "Intervention 1", "Inv 1"))
+                        .timescaleForIntervention(RefElement.builder().refElementCode("ONE_MONTH").refElementDesc("One Month").build())
+                        .sspInterventionMeasure(SspInterventionMeasure.builder().build())
                         .sspWhoDoWorkPivot(Set.of(SspWhoDoWorkPivot.builder()
                                 .sspWhoDoWorkPivotPk(1l)
                                 .comments("Who do work comment")
@@ -402,6 +396,64 @@ public class ControllerServiceTestContext {
                 .refElementShortDesc(shortDescription).build();
     }
 
+
+    public static Assessment layer3AssessmentWithBasicSentencePlans(Long id) {
+        return Assessment.builder()
+                .createDate(LocalDateTime.now().minusDays(1))
+                .assessmentType("LAYER_3")
+                .basicSentencePlanList(Set.of(aBasicSentencePlan(1), aBasicSentencePlan(2)))
+                .oasysSetPk(id).build();
+    }
+
+
+    private static BasicSentencePlanObj aBasicSentencePlan(long l) {
+        return BasicSentencePlanObj.builder()
+                .basicSentPlanObjPk(1L)
+                .includeInPlanInd("Y")
+                .createDate(LocalDateTime.now().minusDays(1))
+                .objectiveText("obj" + l)
+                .measureText("measure" + l)
+                .timescalesText("timescales" + l)
+                .whoWillDoWorkText("who" + l)
+                .whatWorkText("what" + l)
+                .dateOpened(LocalDateTime.now().minusDays(10))
+                .problemAreaCompInd("Y")
+                .offenceBehaviourLink(RefElement.builder().refElementShortDesc("LINK" + l).refElementDesc("Link" + l).build())
+                .oasysSetPk(l).build();
+    }
+
+    public static Assessment layer3AssessmentWithFullSentencePlan(Long id) {
+
+        Set<Section> sections = new HashSet<>();
+        sections.addAll(layer3AssessmentSections());
+        sections.add(getSentencePlanSection());
+
+        return Assessment.builder()
+                .createDate(LocalDateTime.now().minusDays(1))
+                .assessmentType("LAYER_3")
+                .group(AssessmentGroup.builder().build())
+                .oasysSections(sections)
+                .sspObjectivesInSets(getObjectivesInSet())
+                .assessmentStatus("COMPLETED")
+                .oasysSetPk(id).build();
+    }
+
+    public static Set<Section> layer3AssessmentSections() {
+
+        var section10 = Section.builder()
+                .refSection(RefSection.builder()
+                        .crimNeedScoreThreshold(5L).refSectionCode("10")
+                        .scoredForOgp("Y")
+                        .scoredForOvp("Y")
+                        .sectionType(
+                                RefElement.builder().refElementCode("10").refElementShortDesc("Emotional Wellbeing").build()).build())
+                .sectOvpRawScore(5L)
+                .sectOgpRawScore(5L)
+                .lowScoreNeedAttnInd("YES")
+                .sectOtherRawScore(10L)
+                .oasysQuestions(getOASysQuestions()).build();
+        return Set.of( section10);
+    }
 
 
 }

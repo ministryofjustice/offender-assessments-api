@@ -1,28 +1,19 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.gov.justice.digital.oasys.api.*;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysAuthenticationRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
-
 import java.util.Optional;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -30,13 +21,7 @@ import static uk.gov.justice.digital.oasys.api.OffenderPermissionLevel.WRITE;
 import static uk.gov.justice.digital.oasys.api.OffenderPermissionResource.SENTENCE_PLAN;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
-public class AuthenticationControllerTest {
-
-    @LocalServerPort
-    int port;
+public class AuthenticationControllerTest extends IntegrationTest {
 
     @MockBean
     private OffenderRepository offenderRepository;
@@ -48,22 +33,16 @@ public class AuthenticationControllerTest {
     @MockBean
     private OasysAuthenticationRepository oasysAuthenticationRepository;
 
-    @Autowired
-    @Qualifier("globalObjectMapper")
-    private ObjectMapper objectMapper;
-
     @Value("${sample.token}")
     private String validOauthToken;
 
-    @Before
+    @BeforeEach
     public void setup() {
         RestAssured.port = port;
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (aClass, s) -> objectMapper
         ));
-
         ControllerTestContext.setup(offenderRepository);
-
     }
 
     @Test
@@ -76,7 +55,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void canGetuserForUserCode() {
+    public void canGetUserForUserCode() {
         Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(ControllerTestContext.oasysUser("USER_CODE")));
         OasysUserAuthenticationDto oasysUser = given()
                 .when()

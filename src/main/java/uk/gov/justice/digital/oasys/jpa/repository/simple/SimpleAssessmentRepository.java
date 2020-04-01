@@ -53,19 +53,23 @@ public class SimpleAssessmentRepository {
     private void filterQuery(JPAQuery<Assessment> query, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
 
         if (Objects.nonNull(filterAssessmentStatus)) {
-            query.where(QAssessment.assessment.assessmentStatus.eq(filterAssessmentStatus));
+            query.where(QAssessment.assessment.assessmentStatus.equalsIgnoreCase(filterAssessmentStatus));
         }
 
         if (Objects.nonNull(filterAssessmentType)) {
-            query.where(QAssessment.assessment.assessmentType.eq(filterAssessmentType));
+            query.where(QAssessment.assessment.assessmentType.equalsIgnoreCase(filterAssessmentType));
         }
 
         if (Objects.nonNull(filterGroupStatus)) {
-            query.where(QAssessment.assessment.group.historicStatus.eq(filterGroupStatus));
+            query.where(QAssessment.assessment.group.historicStatus.equalsIgnoreCase(filterGroupStatus));
         }
 
-        if (Objects.nonNull(filterVoided) && Boolean.TRUE.equals(filterVoided)) {
-            query.where(QAssessment.assessment.assessmentVoidedDate.isNull());
+        if (Objects.nonNull(filterVoided)) {
+            if(Boolean.TRUE.equals(filterVoided)) {
+                query.where(QAssessment.assessment.assessmentVoidedDate.isNotNull());
+            } else {
+                query.where(QAssessment.assessment.assessmentVoidedDate.isNull());
+            }
         }
 
     }

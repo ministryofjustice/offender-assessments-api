@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.justice.digital.oasys.api.simple.RefAssessmentDto;
+import uk.gov.justice.digital.oasys.api.RefAssessmentDto;
 import uk.gov.justice.digital.oasys.service.RefAssessmentService;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;

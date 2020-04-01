@@ -1,70 +1,60 @@
 package uk.gov.justice.digital.oasys.config;
 
 
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import net.minidev.json.JSONArray;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
-public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
-
-    @Value("${jwt.public.key}")
-    private String jwtPublicKey;
-
-    @Value("${api.base.path:api}")
-    private String apiBasePath;
+@EnableWebSecurity
+public class ResourceServerConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable().antMatcher("/**")
-                .cors().disable().antMatcher("/**")
+
+        http.headers().frameOptions().sameOrigin().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                // Can't have CSRF protection as requires session
+                .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/h2-console/**", "/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
+                    .antMatchers("/h2-console/**", "/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
                         "/swagger-ui.html", "/webjars/**", "/swagger-resources/configuration/ui", "/swagger-ui.html",
-                        "/swagger-resources/configuration/security", "/health", "/info", "/ping").permitAll()
-                .antMatchers("/{apiBasePath}/**").hasAnyRole("REPORTING", "SYSTEM_READ_ONLY", "OASYS_READ_ONLY")
-                .anyRequest()
-                .permitAll();
-
-        http.headers().frameOptions().disable();
+                        "/swagger-resources/configuration/security", "/health", "/info", "/ping")
+                        .permitAll()
+                    .antMatchers("/authentication/**").hasAnyRole("OASYS_AUTHENTICATION", "OASYS_READ_ONLY")
+                    .antMatchers("/**").hasAnyRole("OASYS_READ_ONLY")
+                    .anyRequest()
+                    .authenticated()
+                    .and()
+                    .oauth2ResourceServer()
+                    .jwt()
+                .jwtAuthenticationConverter(getJwtAuthenticationConverter());;
 
     }
 
-    @Override
-    public void configure(ResourceServerSecurityConfigurer config) {
-        config.tokenServices(tokenServices());
-    }
 
-    @Bean
-    public TokenStore tokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
-    }
 
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setVerifierKey(new String(Base64.decodeBase64(jwtPublicKey)));
+    Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            JSONArray claims =  (JSONArray) jwt.getClaims().get("authorities");
+            return claims.stream().map(c-> String.valueOf(c)).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
+        });
         return converter;
     }
-
-    @Bean
-    @Primary
-    public DefaultTokenServices tokenServices() {
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
-        return defaultTokenServices;
-    }
-
 }

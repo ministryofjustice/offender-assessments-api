@@ -3,7 +3,7 @@ package uk.gov.justice.digital.oasys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
-import uk.gov.justice.digital.oasys.api.simple.OffenderDto;
+import uk.gov.justice.digital.oasys.api.OffenderDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
@@ -29,10 +29,6 @@ public class OffenderService {
     }
 
     public Long getOffenderIdByIdentifier(String identityType, String identity) {
-        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identityType);
-        if(offenderIdentifier.equals(OffenderIdentifier.OASYS)) {
-            return Long.valueOf(identity);
-        }
         return getOffenderSummary(identityType, identity).getOffenderPk();
     }
 

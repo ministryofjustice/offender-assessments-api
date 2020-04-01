@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.justice.digital.oasys.api.simple.AssessmentDto;
-import uk.gov.justice.digital.oasys.api.simple.AssessmentSummaryDto;
+import uk.gov.justice.digital.oasys.api.AssessmentDto;
+import uk.gov.justice.digital.oasys.api.AssessmentSummaryDto;
 import uk.gov.justice.digital.oasys.jpa.entity.RefSection;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
@@ -100,7 +100,16 @@ public class AssessmentsService {
     }
 
     private static AssessmentNeed checkRiskAndThresholdLevels(Section section){
-        String sectionCode = section.hasRefSection() ? section.getRefSection().getRefSectionCode() : null;
+        String sectionCode;
+        String shortDesc;
+        if (section.hasRefSection()) {
+            sectionCode = section.getRefSection().getRefSectionCode();
+            shortDesc = section.getRefSection().hasSectionType() ? section.getRefSection().getSectionType().getRefElementShortDesc() : null;
+        }
+        else {
+            sectionCode = null;
+            shortDesc = null;
+        }
         SectionHeader sectionName = SectionHeader.findByValue(sectionCode);
         var answers = section.getRefAnswers(NeedsConfig.getHarmQuestion(sectionCode), NeedsConfig.getReoffendingQuestion(sectionCode));
         var riskHarm = isPositiveAnswer(answers.get(NeedsConfig.getHarmQuestion(sectionCode)));
@@ -109,7 +118,7 @@ public class AssessmentsService {
         var flaggedAsNeed = isPositiveAnswer(section.getLowScoreNeedAttnInd());
 
         //section type code enum
-        return new AssessmentNeed(sectionName, riskHarm, riskReoffending, overThreshold, flaggedAsNeed);
+        return new AssessmentNeed(sectionName, shortDesc, riskHarm, riskReoffending, overThreshold, flaggedAsNeed);
     }
 
     private static boolean sectionIsOverThreshold(Section section) {

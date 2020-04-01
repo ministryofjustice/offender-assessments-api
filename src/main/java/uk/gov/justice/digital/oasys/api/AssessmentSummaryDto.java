@@ -1,19 +1,21 @@
-package uk.gov.justice.digital.oasys.api.simple;
+package uk.gov.justice.digital.oasys.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-import uk.gov.justice.digital.oasys.service.domain.AssessmentNeed;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class AssessmentDto {
+public class AssessmentSummaryDto {
     @JsonProperty("assessmentId")
     private Long assessmentId;
     @JsonProperty("refAssessmentVersionCode")
@@ -38,24 +40,20 @@ public class AssessmentDto {
     private LocalDateTime completedDateTime;
     @JsonProperty("voided")
     private LocalDateTime voidedDateTime;
-    @JsonProperty("sections")
-    private Collection<SectionDto> sections;
-    //TODO: we don't need these until we get to update the sentence plan code
-    //@JsonProperty("oasysBcsParts")
-    //private Collection<OasysBcsPartDto> oasysBcsParts;
-    //@JsonProperty("qaReview")
-    //private QaReviewDto qaReview;
-    @JsonProperty("childSafeguardingIndicated")
-    private Boolean childSafeguardingIndicated;
-    @JsonProperty("layer3SentencePlanNeeds")
-    private Collection<AssessmentNeedDto> layer3SentencePlanNeeds;
 
-    public static AssessmentDto from(Assessment assessmentSummary, Boolean childSafeguardingIndicated, Collection<AssessmentNeed> needs) {
-        if (assessmentSummary == null) {
-            return null;
-        }
+    public static Collection<AssessmentSummaryDto> from(Collection<Assessment> assessmentSummaries) {
+        return Optional.ofNullable(assessmentSummaries)
+                .map(as -> as
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .map(AssessmentSummaryDto::from)
+                        .collect(Collectors.toSet()))
+                .orElse(Set.of());
+    }
+
+    private static AssessmentSummaryDto from(Assessment assessmentSummary) {
         var assessmentVersion = assessmentSummary.getAssessmentVersion();
-        return new AssessmentDto(
+        return new AssessmentSummaryDto(
                 assessmentSummary.getOasysSetPk(),
                 Objects.nonNull(assessmentVersion) ? assessmentVersion.getRefAssVersionCode() : null,
                 Objects.nonNull(assessmentVersion) ? assessmentVersion.getVersionNumber() : null,
@@ -67,9 +65,6 @@ public class AssessmentDto {
                 assessmentSummary.getAssessorName(),
                 assessmentSummary.getCreateDate(),
                 assessmentSummary.getDateCompleted(),
-                assessmentSummary.getAssessmentVoidedDate(),
-                SectionDto.from(assessmentSummary.getOasysSections()),
-                childSafeguardingIndicated,
-                AssessmentNeedDto.from(needs));
+                assessmentSummary.getAssessmentVoidedDate());
     }
 }
