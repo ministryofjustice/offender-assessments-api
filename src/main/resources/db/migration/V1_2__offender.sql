@@ -274,6 +274,38 @@ create table OFFENDER_USER
 		foreign key (USER_ACCESS_TYPE_CAT, USER_ACCESS_TYPE_ELM) references REF_ELEMENT
 );
 
+create table OFFENDER_LINK
+(
+    OFFENDER_LINK_PK     NUMBER                  not null
+        constraint OFFENDER_LINK_PK
+            primary key,
+    INITIATING_OFFENDER  NUMBER                  not null
+        constraint OFF_OLI_INITIATING
+            references OFFENDER
+                on delete cascade,
+    DECIDING_OFFENDER    NUMBER                  not null
+        constraint OFF_OLI_DECIDING
+            references OFFENDER
+                on delete cascade,
+    MERGED_OFFENDER      NUMBER
+        constraint OFF_OLI_MERGED
+            references OFFENDER
+                on delete cascade,
+    REVERSED_IND         VARCHAR2(1) default 'N' not null,
+    LINK_TYPE_ELM        VARCHAR2(50)            not null,
+    LINK_TYPE_CAT        VARCHAR2(50)            not null,
+    REVERSAL_ALLOWED_IND VARCHAR2(1) default 'Y' not null,
+    ORIG_INITATING_PNC   VARCHAR2(20),
+    DECIDER_CANCEL_IND   VARCHAR2(1) default 'N' not null,
+    CHECKSUM             VARCHAR2(4000),
+    CREATE_DATE          DATE,
+    CREATE_USER          VARCHAR2(100)           not null,
+    LASTUPD_DATE         DATE,
+    LASTUPD_USER         VARCHAR2(100)           not null,
+    constraint ELM_FK108
+        foreign key (LINK_TYPE_CAT, LINK_TYPE_ELM) references REF_ELEMENT
+);
+
 
 
 

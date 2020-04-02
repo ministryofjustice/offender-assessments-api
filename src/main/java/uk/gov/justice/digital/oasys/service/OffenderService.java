@@ -2,17 +2,14 @@ package uk.gov.justice.digital.oasys.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
 import uk.gov.justice.digital.oasys.api.OffenderDto;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysAssessmentGroup;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderLink;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
-import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
+import uk.gov.justice.digital.oasys.jpa.repository.OffenderLinkRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleOffenderRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import static uk.gov.justice.digital.oasys.utils.LogEvent.OFFENDER_NOT_FOUND;
 
@@ -20,12 +17,12 @@ import static uk.gov.justice.digital.oasys.utils.LogEvent.OFFENDER_NOT_FOUND;
 public class OffenderService {
 
     private final SimpleOffenderRepository simpleOffenderRepository;
-    private final OffenderRepository offenderRepository;
+    private OffenderLinkRepository offenderLinkRepository;
 
     @Autowired
-    public OffenderService(OffenderRepository offenderRepository, SimpleOffenderRepository simpleOffenderRepository) {
-        this.offenderRepository = offenderRepository;
+    public OffenderService(SimpleOffenderRepository simpleOffenderRepository, OffenderLinkRepository offenderLinkRepository) {
         this.simpleOffenderRepository = simpleOffenderRepository;
+        this.offenderLinkRepository = offenderLinkRepository;
     }
 
     public Long getOffenderIdByIdentifier(String identityType, String identity) {
@@ -36,42 +33,27 @@ public class OffenderService {
         return OffenderDto.from(getOffenderSummary(identityType, identity));
     }
 
-    // only used for sentence plans now
-    //@Deprecated(forRemoval = true)
-    public List<OasysAssessmentGroup> findOffenderAssessmentGroup(String identifierType, String identifier) {
-        OffenderIdentifier offenderIdentifier = OffenderIdentifier.fromString(identifierType);
-        return findOffenderByIdentifier(offenderIdentifier, identifier).getOasysAssessmentGroups();
-    }
-
     private OffenderSummary getOffenderSummary(String identityType, String identity) {
-       return simpleOffenderRepository.getOffender(identityType, identity)
-                .orElseThrow(() ->new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identityType, identity), OFFENDER_NOT_FOUND));
+       return checkForOffenderMerge(simpleOffenderRepository.getOffender(identityType, identity)
+                .orElseThrow(() ->new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identityType, identity), OFFENDER_NOT_FOUND)));
     }
 
-    private Offender findOffenderByIdentifier(OffenderIdentifier identifierType, String identifier) {
-
-        Optional<Offender> offender;
-        switch (identifierType) {
-            case CRN:
-                offender = offenderRepository.getByCmsProbNumber(identifier);
-                break;
-            case PNC:
-                offender = offenderRepository.getByPnc(identifier);
-                break;
-            case NOMIS:
-                offender = offenderRepository.getByCmsPrisNumber(identifier);
-                break;
-            case OASYS:
-                offender = offenderRepository.findById(Long.valueOf(identifier));
-                break;
-            case BOOKING:
-                offender = offenderRepository.getByPrisonNumber(identifier);
-                break;
-            default:
-                offender = Optional.empty();
-                break;
+    private OffenderSummary checkForOffenderMerge(OffenderSummary offender) {
+        if(Objects.nonNull(offender.getMergeIndicated()) && offender.getMergeIndicated().equals("Y")) {
+            var linkedOffender = offenderLinkRepository.findMergedOffender(offender.getOffenderPk());
+            if(linkedOffender.isPresent()) {
+                var mergedOffenderPK = findMergedOffenderPK(linkedOffender.get());
+                offender.setMergedOffenderPK(mergedOffenderPK);
+            }
         }
-        return offender.orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identifierType, identifier), OFFENDER_NOT_FOUND));
+        return offender;
     }
 
+    private Long findMergedOffenderPK(OffenderLink mergedOffender) {
+            var linkedOffender = offenderLinkRepository.findMergedOffender(mergedOffender.getMergedOffenderPK());
+            if(linkedOffender.isPresent()) {
+                return findMergedOffenderPK(linkedOffender.get());
+            }
+            return mergedOffender.getMergedOffenderPK();
+        }
 }
