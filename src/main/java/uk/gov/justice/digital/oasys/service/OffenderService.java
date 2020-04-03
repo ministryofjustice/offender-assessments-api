@@ -34,8 +34,7 @@ public class OffenderService {
     }
 
     private OffenderSummary getOffenderSummary(String identityType, String identity) {
-       return checkForOffenderMerge(simpleOffenderRepository.getOffender(identityType, identity)
-                .orElseThrow(() ->new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identityType, identity), OFFENDER_NOT_FOUND)));
+       return checkForOffenderMerge(getOffenderFromRepository(identityType, identity));
     }
 
     private OffenderSummary checkForOffenderMerge(OffenderSummary offender) {
@@ -43,10 +42,17 @@ public class OffenderService {
             var linkedOffender = offenderLinkRepository.findMergedOffender(offender.getOffenderPk());
             if(linkedOffender.isPresent()) {
                 var mergedOffenderPK = findMergedOffenderPK(linkedOffender.get());
-                offender.setMergedOffenderPK(mergedOffenderPK);
+                var mergedOffender = getOffenderFromRepository("oasysOffenderId", String.valueOf(mergedOffenderPK));
+                mergedOffender.setMergedOffenderPK(offender.getOffenderPk());
+                return mergedOffender;
             }
         }
         return offender;
+    }
+
+    private OffenderSummary getOffenderFromRepository(String identityType, String identity) {
+        return simpleOffenderRepository.getOffender(identityType, identity)
+                .orElseThrow(() ->new ApplicationExceptions.EntityNotFoundException(String.format("Offender %s: %s, not found!", identityType, identity), OFFENDER_NOT_FOUND));
     }
 
     private Long findMergedOffenderPK(OffenderLink mergedOffender) {

@@ -184,8 +184,8 @@ public class OffenderControllerTest extends IntegrationTest {
                 .body()
                 .as(OffenderDto.class);
 
-        assertThat(offender.getOasysOffenderId()).isEqualTo(100);
-        assertThat(offender.getMergedOasysOffenderId()).isEqualTo(300);
+        assertThat(offender.getOasysOffenderId()).isEqualTo(300);
+        assertThat(offender.getMergedOasysOffenderId()).isEqualTo(100);
     }
 
     @Test
@@ -201,8 +201,8 @@ public class OffenderControllerTest extends IntegrationTest {
                 .body()
                 .as(OffenderDto.class);
 
-        assertThat(offender.getOasysOffenderId()).isEqualTo(400);
-        assertThat(offender.getMergedOasysOffenderId()).isEqualTo(800);
+        assertThat(offender.getOasysOffenderId()).isEqualTo(800);
+        assertThat(offender.getMergedOasysOffenderId()).isEqualTo(400);
     }
 
     private void validateOffender(OffenderDto offender) {
