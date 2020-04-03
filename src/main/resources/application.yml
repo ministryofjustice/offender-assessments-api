@@ -5,7 +5,11 @@ spring:
     cache-names: users
     caffeine:
       spec: expireAfterWrite=2m
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${oauth.endpoint.url:http://localhost:9090/auth}/issuer
   flyway:
     enabled: false
 
@@ -14,7 +18,7 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
 
 server:
   port: 8080
@@ -30,19 +34,16 @@ management:
     web:
       base-path: /
       exposure:
-        include: 'info, health, ping'
+        include: 'health, info, ping'
   endpoint:
     health:
       cache:
         time-to-live: 2000ms
-      show-details: always
+      show-components: always
+      show-details: never
     info:
       cache:
         time-to-live: 2000ms
-
-jwt:
-  public:
-    key: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS1NSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQW1YSWc4S2EzZ1ROcDB2RVBPWCtnU2lsdDdQL1lnR21lVENtVHMzcHhmY2NlUk5idDc4ZlBSd0ZsaXV5UngvNTRsbDFjRDlYTE1EZjNNZ2NpTVJURDU1c3IvTnNJTnVRTWVaM3NVYjFXUktiMEh2QlRzejhrNGZ4blYzS1orYVRnbmFWRHZUcDdzVlpnRFlrdjhVbW1mdUE5RCtjeThLY2p5amhxakFPU3ZZeXR4bTNPS2pabXhWcE1lUERwa2Rtc1VlVXBVQUZLUUZNUmlFeXJ6QmhveEI3THFRQlg1djExd3FMZEEyKytYTnVpcFMwdmJDUzlnVVVpL3Y5SHdjR29ENXpqcTFkMElhRkRoS3lHMVRoTjFjd25xQjREV1A1T3BTSk5HQktRNmRNM0RXd3FjNVhaTTJGdFhnR1hYYkVPK3lqZjVNVUc1eHJQelpCQTNmMDN3d0lEQVFBQi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ==
 
 appinsights:
   instrumentationkey:

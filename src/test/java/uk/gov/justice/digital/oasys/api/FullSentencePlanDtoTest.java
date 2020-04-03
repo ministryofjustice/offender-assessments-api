@@ -1,11 +1,14 @@
 package uk.gov.justice.digital.oasys.api;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,8 +16,9 @@ public class FullSentencePlanDtoTest {
 
     @Test
     public void shouldReturnSentencePlanDtoFromOASysSetEntity() {
-        var oasysSet = ControllerServiceTestContext.layer3AssessmentOasysSetWithFullSentencePlan(123L);
-        var sentencePlan = FullSentencePlanDto.from(oasysSet);
+        var assessment = ControllerServiceTestContext.layer3AssessmentWithFullSentencePlan(123L);
+        var section = Optional.ofNullable(ControllerServiceTestContext.getSentencePlanSection());
+        var sentencePlan = FullSentencePlanDto.from(assessment, section);
         assertThat(sentencePlan.getOasysSetId()).isEqualTo(123l);
         assertThat(sentencePlan.getObjectives()).hasSize(2);
         assertThat(sentencePlan.getQuestions()).hasSize(3);
@@ -22,18 +26,18 @@ public class FullSentencePlanDtoTest {
 
     @Test
     public void shouldUseEarliestObjectiveDateForStartDate() {
-        var oasysSet = ControllerServiceTestContext.layer3AssessmentOasysSetWithFullSentencePlan(123L);
-        var sentencePlan = FullSentencePlanDto.from(oasysSet);
+        var assessment = ControllerServiceTestContext.layer3AssessmentWithFullSentencePlan(123L);
+        var section = Optional.ofNullable(ControllerServiceTestContext.getSentencePlanSection());
+        var sentencePlan = FullSentencePlanDto.from(assessment, section);
         assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringSeconds(LocalDateTime.of(2019, 11,28, 9, 00));
     }
 
     @Test
     public void shouldReturnOASysSetCompletedDateAsSentencePlanCompletedDate() {
-        var oasysSet = OasysSet.builder()
+        var assessment = Assessment.builder()
                 .createDate(LocalDateTime.now().minusDays(1))
-                .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
-                .group(OasysAssessmentGroup.builder().build())
-                .assessmentStatus(RefElement.builder().build())
+                .assessmentType("LAYER_3")
+                .assessmentStatus("COMPLETED")
                 .oasysSections(Collections.emptySet())
                 .sspObjectivesInSets(Set.of(
                         SspObjectivesInSet.builder()
@@ -41,8 +45,8 @@ public class FullSentencePlanDtoTest {
                                 .build()))
                 .dateCompleted(LocalDateTime.now().minusDays(1))
                 .oasysSetPk(123l).build();
-
-        var sentencePlan = FullSentencePlanDto.from(oasysSet);
+        var section = Optional.ofNullable(ControllerServiceTestContext.getSentencePlanSection());
+        var sentencePlan = FullSentencePlanDto.from(assessment,section);
 
         assertThat(sentencePlan.getOasysSetId()).isEqualTo(123l);
         assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringMinutes(LocalDateTime.now().minusDays(10));
@@ -53,14 +57,14 @@ public class FullSentencePlanDtoTest {
     @Test
     public void sentencePlanHasNullCompletedDateIfNotPresent() {
         var today = LocalDateTime.now();
-        var oasysSet = OasysSet.builder()
+        var assessment = Assessment.builder()
                 .createDate(today)
                 .dateCompleted(null)
                 .oasysSections(Collections.emptySet())
                 .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(today).build()).build()))
                 .build();
-
-        final FullSentencePlanDto actual = FullSentencePlanDto.from(oasysSet);
+        var section = Optional.ofNullable(ControllerServiceTestContext.getSentencePlanSection());
+        var actual = FullSentencePlanDto.from(assessment, section);
 
         assertThat(actual.getCompletedDate()).isNull();
     }
@@ -75,17 +79,16 @@ public class FullSentencePlanDtoTest {
                 .displaySort(1l)
                 .refSectionQuestion("Ref Question Text").build()));
 
-        OasysSet oasysSet = OasysSet.builder()
+        Assessment assessment = Assessment.builder()
                 .createDate(LocalDateTime.now().minusDays(1))
-                .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
-                .group(OasysAssessmentGroup.builder().build())
-                .assessmentStatus(RefElement.builder().build())
+                .assessmentType("LAYER_3")
+                .assessmentStatus("COMPLETED")
                 .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(LocalDateTime.now()).build()).build()))
                 .dateCompleted(LocalDateTime.now().minusDays(1))
                 .oasysSections(Set.of(section))
                 .oasysSetPk(123l).build();
 
-        var sentencePlan = FullSentencePlanDto.from(oasysSet);
+        var sentencePlan = FullSentencePlanDto.from(assessment, Optional.ofNullable(section));
         assertThat(sentencePlan.getQuestions()).hasSize(3);
         assertThat(sentencePlan.getQuestions()).containsOnlyKeys("IP.40", "IP.1", "IP.2");
     }

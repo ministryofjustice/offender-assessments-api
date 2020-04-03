@@ -17,7 +17,7 @@ buildscript {
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.2.5.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'org.owasp.dependencycheck' version '5.2.4'
     id "com.gorylenko.gradle-git-properties" version "2.2.0"
     id 'com.github.ben-manes.versions' version '0.26.0'
@@ -102,10 +102,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'org.springframework.security.oauth:spring-security-oauth2:2.4.0.RELEASE'
-    implementation 'org.springframework.security:spring-security-jwt:1.1.0.RELEASE'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.0'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.8.1'
@@ -138,8 +136,9 @@ dependencies {
 
     testRuntime 'com.h2database:h2:1.4.199'
     testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'junit:junit:4.12'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
     testImplementation 'io.rest-assured:rest-assured:3.3.0'
     testImplementation 'com.github.tomakehurst:wiremock:2.25.0'
     testImplementation 'com.revinate:assertj-json:1.2.0'
@@ -163,5 +162,10 @@ task copyAgent(type: Copy) {
     from configurations.agentDeps
     into "$buildDir/libs"
 }
+
+test {
+    useJUnitPlatform()
+}
+
 
 assemble.dependsOn copyAgent

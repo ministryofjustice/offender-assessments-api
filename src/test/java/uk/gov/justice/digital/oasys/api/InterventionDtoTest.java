@@ -1,7 +1,7 @@
 package uk.gov.justice.digital.oasys.api;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
 
 import static org.assertj.core.api.Assertions.assertThat;

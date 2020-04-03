@@ -43,7 +43,7 @@ public class OffenderSummary {
     private String forename3;
     //these risks come from either Nomis or Delius
     @Column(name = "RISK_TO_OTHERS_ELM")
-    private String riskToSelf;
-    @Column(name = "RISK_TO_SELF_ELM")
     private String riskToOthers;
+    @Column(name = "RISK_TO_SELF_ELM")
+    private String riskToSelf;
 }

@@ -12,8 +12,10 @@ import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Table(name = "OASYS_SECTION")
+@Builder
 public class Section {
 
     @Id

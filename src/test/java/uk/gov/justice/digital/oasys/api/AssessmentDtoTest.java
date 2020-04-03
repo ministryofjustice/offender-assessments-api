@@ -1,10 +1,10 @@
 package uk.gov.justice.digital.oasys.api;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.AssessmentGroup;
@@ -17,7 +17,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
 public class AssessmentDtoTest {
 
     @Mock
@@ -29,7 +29,7 @@ public class AssessmentDtoTest {
     @Mock
     Assessment assessment;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         setupAssessmentGroup();
         setupVersion();

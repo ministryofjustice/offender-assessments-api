@@ -1,22 +1,20 @@
 package uk.gov.justice.digital.oasys.api;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersion;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.AssessmentGroup;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
 public class AssessmentSummaryDtoTest {
 
     @Mock
@@ -28,7 +26,7 @@ public class AssessmentSummaryDtoTest {
     @Mock
     Assessment assessment;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         setupVersion();
         setupAssessment();
@@ -47,7 +45,7 @@ public class AssessmentSummaryDtoTest {
         assertThat(dto.getRefAssessmentId()).isEqualTo(assessment.getAssessmentVersion().getRefAssVersionUk());
         assertThat(dto.getRefAssessmentVersionCode()).isEqualTo(assessment.getAssessmentVersion().getRefAssVersionCode());
         assertThat(dto.getRefAssessmentVersionNumber()).isEqualTo(assessment.getAssessmentVersion().getVersionNumber());
-        assertThat(dto.getOasysScoringAlgorithmVersion()).isEqualTo(assessment.getAssessmentVersion().getOasysScoringAlgVersion());
+        assertThat(dto.getRefAssessmentOasysScoringAlgorithmVersion()).isEqualTo(assessment.getAssessmentVersion().getOasysScoringAlgVersion());
         assertThat(dto.getCompletedDateTime()).isEqualTo(assessment.getDateCompleted());
         assertThat(dto.getVoidedDateTime()).isEqualTo(assessment.getAssessmentVoidedDate());
     }
