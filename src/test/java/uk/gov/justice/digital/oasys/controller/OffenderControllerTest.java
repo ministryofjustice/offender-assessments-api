@@ -1,20 +1,13 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.justice.digital.oasys.api.OffenderDto;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
 import static io.restassured.RestAssured.given;
@@ -175,6 +168,41 @@ public class OffenderControllerTest extends IntegrationTest {
                 .get("/offenders/{0}/{1}", OffenderIdentifier.PNC.getValue(), pnc + "n")
                 .then()
                 .statusCode(404);
+    }
+
+
+    @Test
+    public void shouldGetMergedOffender() {
+
+        var offender = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.OASYS.getValue(), 100)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(OffenderDto.class);
+
+        assertThat(offender.getOasysOffenderId()).isEqualTo(300);
+        assertThat(offender.getMergedOasysOffenderId()).isEqualTo(100);
+    }
+
+    @Test
+    public void shouldGetMergedTwiceOffender() {
+
+        var offender = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.OASYS.getValue(), 400)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(OffenderDto.class);
+
+        assertThat(offender.getOasysOffenderId()).isEqualTo(800);
+        assertThat(offender.getMergedOasysOffenderId()).isEqualTo(400);
     }
 
     private void validateOffender(OffenderDto offender) {
