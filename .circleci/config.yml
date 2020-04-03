@@ -65,7 +65,7 @@ orbs:
   aws-cli: circleci/aws-cli@0.1.18
   kubernetes: circleci/kubernetes@0.10.1
   helm: circleci/helm@0.2.3
-  snyk: snyk/snyk@0.0.9
+  snyk: snyk/snyk@0.0.10
 
 jobs:
   build:
@@ -77,11 +77,6 @@ jobs:
             - gradle-{{ checksum "build.gradle" }}
             - gradle-
       - run: ./gradlew build
-      - snyk/scan:
-          fail-on-issues: false
-          monitor-on-build: true
-          project: '${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}'
-          organization: 'digital-probation-services'
       - run:
           name: Record the Application Version
           command: |
@@ -139,6 +134,24 @@ jobs:
              docker push mojdigitalstudio/offender-assessments-api:$APP_VERSION
              docker push mojdigitalstudio/offender-assessments-api:latest
             fi
+
+  app-scan:
+    executor: builder
+    steps:
+      - checkout
+      - snyk/scan:
+          fail-on-issues: false
+          monitor-on-build: true
+          additional-arguments: "--configuration-matching='^((?!test).)*$'"
+          project: '${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}'
+          organization: 'digital-probation-services'
+
+  image-scan:
+    executor: deployer
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - snyk/scan:
           docker-image-name: 'mojdigitalstudio/offender-assessments-api:latest'
           target-file: 'Dockerfile'
@@ -209,6 +222,8 @@ workflows:
       - sonar-scan:
           requires:
             - build
+      - app-scan
+      - image-scan
   build-test-and-deploy:
     jobs:
       - build:
