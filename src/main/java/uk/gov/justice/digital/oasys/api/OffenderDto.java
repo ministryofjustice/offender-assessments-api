@@ -39,6 +39,8 @@ public class OffenderDto {
     private String bookingNumber;
     @JsonProperty("mergePncNumber")
     private String mergePncNumber;
+    @JsonProperty("mergedOasysOffenderId")
+    private Long mergedOasysOffenderId;
 
     public static OffenderDto from(OffenderSummary offender) {
         if (offender == null) {
@@ -59,6 +61,7 @@ public class OffenderDto {
                 offender.getLegacyCmsProbNumber(),
                 offender.getCroNumber(),
                 offender.getPrisonNumber(),
-                offender.getMergePncNumber());
+                offender.getMergePncNumber(),
+                offender.getMergedOffenderPK());
     }
 }

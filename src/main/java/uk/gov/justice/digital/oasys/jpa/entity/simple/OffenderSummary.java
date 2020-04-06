@@ -1,16 +1,14 @@
 package uk.gov.justice.digital.oasys.jpa.entity.simple;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Builder
 @Table(name = "OFFENDER")
 public class OffenderSummary {
 
@@ -41,9 +39,16 @@ public class OffenderSummary {
     private String forename2;
     @Column(name = "FORENAME_3")
     private String forename3;
+    @Column(name = "MERGED_IND")
+    private String mergeIndicated;
+
     //these risks come from either Nomis or Delius
     @Column(name = "RISK_TO_OTHERS_ELM")
     private String riskToOthers;
     @Column(name = "RISK_TO_SELF_ELM")
     private String riskToSelf;
+
+    @Transient
+    @Setter
+    private Long mergedOffenderPK;
 }

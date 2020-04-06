@@ -1,19 +1,11 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import org.mockito.Mockito;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.AssessmentGroup;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
 import uk.gov.justice.digital.oasys.service.OffenderService;
-import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
-import uk.gov.justice.digital.oasys.utils.LogEvent;
-
-import java.math.BigDecimal;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,118 +17,6 @@ public class ControllerServiceTestContext {
 
     public static void setup(OffenderService offenderService) {
 
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("crn1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("crn2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("nomisId1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("nomisId2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("bookingId1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("bookingId2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("pnc1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("pnc2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("1"))).thenReturn(anOffender());
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("2"))).thenThrow(new ApplicationExceptions.EntityNotFoundException("Some Error", LogEvent.OFFENDER_NOT_FOUND));
-        Mockito.when(offenderService.findOffenderAssessmentGroup(any(),eq("3"))).thenReturn(assessedOffender());
-
-    }
-
-    public static List<OasysAssessmentGroup>  anOffender() {
-        return anAssessmentGroup();
-    }
-
-    private static List<OasysAssessmentGroup>  assessedOffender() {
-        return anAssessmentGrouWithSingleSet();
-    }
-
-    private static List<OasysAssessmentGroup> anAssessmentGroup() {
-        return List.of(OasysAssessmentGroup.builder()
-                .oasysAssessmentGroupPk(1L)
-                .oasysSets(someOasysSets())
-                .build());
-    }
-
-    private static List<OasysAssessmentGroup> anAssessmentGrouWithSingleSet() {
-        return List.of(OasysAssessmentGroup.builder()
-                .oasysAssessmentGroupPk(1L)
-                .oasysSets(List.of(layer3AssessmentOasysSet(1L)))
-                .build());
-    }
-
-    private static List<OasysSet> someOasysSets() {
-        return List.of(OasysSet.builder()
-                        .createDate(LocalDateTime.now().minusDays(1))
-                        .assessmentType(assessmentType("oasys"))
-                        .oasysSetPk(1L)
-                        .ogrs31Year(BigDecimal.ONE)
-                        .ogrs32Year(BigDecimal.TEN)
-                        .ogp1Year(BigDecimal.ONE)
-                        .ogp2Year(BigDecimal.TEN)
-                        .ogpDyWesc(BigDecimal.ONE)
-                        .ogpStWesc(BigDecimal.TEN)
-                        .ogpTotWesc(BigDecimal.ONE)
-                        .ovpStWesc(BigDecimal.TEN)
-                        .ovpDyWesc(BigDecimal.ONE)
-                        .ovpTotWesc(BigDecimal.TEN)
-                        .ovp1Year(BigDecimal.ONE)
-                        .ovp2Year(BigDecimal.TEN)
-                        .ovpPrevWesc(BigDecimal.ONE)
-                        .ovpVioWesc(BigDecimal.TEN)
-                        .ovpNonVioWesc(BigDecimal.ONE)
-                        .ovpAgeWesc(BigDecimal.TEN)
-                        .ovpSexWesc(BigDecimal.ONE)
-                        .group(aGroup("HISTORIC"))
-                        .assessmentStatus(anAssessmentStatus("OPEN"))
-                        .basicSentencePlanList(Set.of(aSentencePlan(1L), aSentencePlan(2L)))
-                        .offenceBlock(anOffenceBlock())
-                        .build(),
-                OasysSet.builder()
-                        .createDate(LocalDateTime.now())
-                        .assessmentType(assessmentType("sara"))
-                        .oasysSetPk(2L)
-                        .ogrs31Year(BigDecimal.TEN)
-                        .ogrs32Year(BigDecimal.ONE)
-                        .ogp1Year(BigDecimal.TEN)
-                        .ogp2Year(BigDecimal.ONE)
-                        .ogpDyWesc(BigDecimal.TEN)
-                        .ogpStWesc(BigDecimal.ONE)
-                        .ogpTotWesc(BigDecimal.TEN)
-                        .ovpStWesc(BigDecimal.ONE)
-                        .ovpDyWesc(BigDecimal.TEN)
-                        .ovpTotWesc(BigDecimal.ONE)
-                        .ovp1Year(BigDecimal.TEN)
-                        .ovp2Year(BigDecimal.ONE)
-                        .ovpPrevWesc(BigDecimal.TEN)
-                        .ovpVioWesc(BigDecimal.ONE)
-                        .ovpNonVioWesc(BigDecimal.TEN)
-                        .ovpAgeWesc(BigDecimal.ONE)
-                        .ovpSexWesc(BigDecimal.TEN)
-                        .group(aGroup("CURRENT"))
-                        .assessmentStatus(anAssessmentStatus("COMPLETE"))
-                        .assessmentVoidedDate(LocalDateTime.now())
-                        .basicSentencePlanList(Set.of(aSentencePlan(2L)))
-                        .offenceBlock(anOffenceBlock())
-                        .build());
-    }
-
-    private static Set<OffenceBlock> anOffenceBlock() {
-        return Set.of(OffenceBlock.builder()
-                .offenceSentenceDetail(OffenceSentenceDetail
-                        .builder()
-                        .activityDesc("activity")
-                        .cjaSupervisionMonths(10L)
-                        .cjaUnpaidHours(10L)
-                        .build())
-                .sentence(Sentence
-                        .builder()
-                        .cjaInd("Y")
-                        .custodialInd("Y")
-                        .endDate(LocalDate.MAX)
-                        .orderType(RefElement.builder().refElementDesc("orderType").build())
-                        .sentenceCode("sentenceCode")
-                        .sentenceDesc("sentenceDesc")
-                        .startDate(LocalDate.MIN)
-                        .build()
-                )
-                .build());
     }
 
     private static BasicSentencePlanObj aSentencePlan(long l) {
@@ -154,33 +34,6 @@ public class ControllerServiceTestContext {
                         .offenceBehaviourLink(RefElement.builder().refElementShortDesc("LINK" + l).refElementDesc("Link" + l).build())
                         .oasysSetPk(l).build();
     }
-
-    private static RefElement anAssessmentStatus(String status) {
-        return RefElement.builder().refElementCode(status).build();
-    }
-
-    private static OasysAssessmentGroup aGroup(String status) {
-        return OasysAssessmentGroup.builder()
-                .historicStatusELm(status)
-                .build();
-    }
-
-    private static RefElement assessmentType(String type) {
-        return RefElement.builder().refElementCode(type).build();
-    }
-
-    public static OasysSet layer3AssessmentOasysSet(Long id) {
-        return OasysSet.builder()
-                .createDate(LocalDateTime.now().minusDays(1))
-                .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
-                .group(OasysAssessmentGroup.builder().build())
-                .oasysSections(completeLayer3AssessmentSections())
-                .assessmentStatus(RefElement.builder().build())
-                .basicSentencePlanList(Set.of(aSentencePlan(1), aSentencePlan(2)))
-                .oasysSetPk(id).build();
-    }
-
-
 
     public static Set<OasysSection> completeLayer3AssessmentSections() {
 
