@@ -48,8 +48,8 @@ public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity handle(Exception e) {
-        log.error("Exception: {}", e.getMessage(), value(EVENT, UNCAUGHT_EXCEPTION));
-        return new ResponseEntity<>(e.getMessage(), INTERNAL_SERVER_ERROR);
-    }
+        log.error("Exception: {}", e.getMessage());
+        return new ResponseEntity(INTERNAL_SERVER_ERROR);
 
-} 
+    }
+}
