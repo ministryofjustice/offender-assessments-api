@@ -10,17 +10,18 @@ buildscript {
         }
     }
     dependencies {
-        classpath('net.ltgt.gradle:gradle-apt-plugin:0.18')
+        classpath('net.ltgt.gradle:gradle-apt-plugin:0.21')
     }
 }
 
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'org.owasp.dependencycheck' version '5.2.4'
-    id "com.gorylenko.gradle-git-properties" version "2.2.0"
-    id 'com.github.ben-manes.versions' version '0.26.0'
+    id 'org.owasp.dependencycheck' version '5.3.2.1'
+    id "com.gorylenko.gradle-git-properties" version "2.2.2"
+    id 'com.github.ben-manes.versions' version '0.28.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.13'
 }
 
 apply plugin: 'net.ltgt.apt'
@@ -85,16 +86,16 @@ dependencyCheck {
     }
 }
 
-def queryDslVersion = '4.1.3'
+def queryDslVersion = '4.2.2'
 
 dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
     annotationProcessor (
             "com.querydsl:querydsl-apt:${queryDslVersion}:jpa",
-            "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final",
+            "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2",
             "javax.annotation:javax.annotation-api:1.3.2",
-            "org.projectlombok:lombok:1.18.10"
+            "org.projectlombok:lombok:1.18.12"
     )
 
     implementation files('lib/ojdbc8-12.2.0.1.jar')
@@ -104,17 +105,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.0'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.11.0.rc1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.0.rc1'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.8.1'
-    implementation 'com.github.timpeeters:spring-boot-graceful-shutdown:2.1.1'
-    implementation "com.querydsl:querydsl-core:${queryDslVersion}"
+    implementation 'com.github.timpeeters:spring-boot-graceful-shutdown:2.2.1'
+
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
-    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
     implementation 'javax.activation:activation:1.1.1'
-    implementation 'com.sun.xml.bind:jaxb-impl:2.3.0'
+    implementation 'com.sun.xml.bind:jaxb-impl:3.0.0-M1'
     implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
     implementation 'javax.inject:javax.inject:1'
 
@@ -122,29 +123,29 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     implementation 'com.zaxxer:HikariCP:3.4.2'
     implementation 'commons-io:commons-io:2.6'
-    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'org.apache.commons:commons-lang3:3.10'
 
     implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
-    implementation 'com.microsoft.azure:applicationinsights-spring-boot-starter:2.6.0-BETA'
-    implementation 'com.microsoft.azure:applicationinsights-logging-logback:2.6.0-BETA'
-    agentDeps 'com.microsoft.azure:applicationinsights-agent:2.6.0-BETA'
+    implementation 'com.microsoft.azure:applicationinsights-spring-boot-starter:2.6.0'
+    implementation 'com.microsoft.azure:applicationinsights-logging-logback:2.6.0'
+    agentDeps 'com.microsoft.azure:applicationinsights-agent:2.6.0'
     implementation configurations.agentDeps
 
-    compileOnly 'org.projectlombok:lombok:1.18.10'
-    runtime 'com.h2database:h2:1.4.199'
-    runtime 'org.flywaydb:flyway-core:5.2.4'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    runtime 'com.h2database:h2:1.4.200'
+    runtime 'org.flywaydb:flyway-core:6.3.3'
 
-    testRuntime 'com.h2database:h2:1.4.199'
+    testRuntime 'com.h2database:h2:1.4.200'
     testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'io.rest-assured:rest-assured:3.3.0'
-    testImplementation 'com.github.tomakehurst:wiremock:2.25.0'
+    testImplementation 'com.github.tomakehurst:wiremock:2.26.3'
     testImplementation 'com.revinate:assertj-json:1.2.0'
     testImplementation('org.assertj:assertj-core')
 
-    implementation ('com.google.guava:guava:24.1.1-jre') {
+    implementation ('com.google.guava:guava:28.2-jre') {
         because 'Transitive dependency. Previous versions have a known vulnerability'
     }
     implementation ('commons-beanutils:commons-beanutils:1.9.4') {
