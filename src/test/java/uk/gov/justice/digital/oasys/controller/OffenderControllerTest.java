@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
+import uk.gov.justice.digital.oasys.api.ErrorResponse;
 import uk.gov.justice.digital.oasys.api.OffenderDto;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
 import static io.restassured.RestAssured.given;
@@ -22,10 +23,15 @@ public class OffenderControllerTest extends IntegrationTest {
     @Value("${sample.token}")
     private String validOauthToken;
     private Long oasysOffenderId = 1234L;
+    private Long deletedOasysOffenderId = 4321L;
     private String pnc = "PNC";
     private String crn = "CRN";
     private String nomis = "NOMIS";
     private String booking = "BOOKIN";
+    private String deletedPnc = "DPNC";
+    private String deletedCrn = "DCRN";
+    private String deletedNomis = "DNOMIS";
+    private String deletedBooking = "DBOOK";
 
     @BeforeEach
     public void setup() {
@@ -49,6 +55,36 @@ public class OffenderControllerTest extends IntegrationTest {
                 .as(OffenderDto.class);
 
         validateOffender(offender);
+    }
+
+    @Test
+    public void shouldGetDeletedOffenderOasys() {
+
+        var offender = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.OASYS.getValue(), deletedOasysOffenderId)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(OffenderDto.class);
+
+        assertThat(offender.getOasysOffenderId()).isEqualTo(deletedOasysOffenderId);
+        assertThat(offender.isLimitedAccessOffender()).isTrue();
+        assertThat(offender.getFamilyName()).isEqualTo("Offender");
+        assertThat(offender.getForename1()).isEqualTo("Mike");
+        assertThat(offender.getForename2()).isEqualTo("Tom");
+        assertThat(offender.getForename3()).isEqualTo("Steve");
+        assertThat(offender.getRiskToOthers()).isEqualTo("Y");
+        assertThat(offender.getRiskToSelf()).isEqualTo("N");
+        assertThat(offender.getPnc()).isEqualTo(pnc);
+        assertThat(offender.getCrn()).isEqualTo(crn);
+        assertThat(offender.getNomisId()).isEqualTo(nomis);
+        assertThat(offender.getLegacyCmsProbNumber()).isEqualTo("LEGACYCMS");
+        assertThat(offender.getCroNumber()).isEqualTo("CRO");
+        assertThat(offender.getBookingNumber()).isEqualTo(booking);
+        assertThat(offender.getMergePncNumber()).isEqualTo("MPNC");
     }
 
     @Test
@@ -79,6 +115,17 @@ public class OffenderControllerTest extends IntegrationTest {
     }
 
     @Test
+    public void shouldNotGetDeletedOffenderBooking() {
+
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.BOOKING.getValue(), deletedBooking)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     public void shouldGetOffenderBookingNotFound() {
 
         given()
@@ -103,6 +150,17 @@ public class OffenderControllerTest extends IntegrationTest {
                 .as(OffenderDto.class);
 
         validateOffender(offender);
+    }
+
+    @Test
+    public void shouldNotGetDeletedOffenderCRN() {
+
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.CRN.getValue(), deletedCrn)
+                .then()
+                .statusCode(404);
     }
 
     @Test
@@ -133,6 +191,17 @@ public class OffenderControllerTest extends IntegrationTest {
     }
 
     @Test
+    public void shouldNotGetDeletedOffenderNomis() {
+
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.NOMIS.getValue(), deletedNomis)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     public void shouldGetOffenderNomisNotFound() {
 
         given()
@@ -157,6 +226,17 @@ public class OffenderControllerTest extends IntegrationTest {
                 .as(OffenderDto.class);
 
         validateOffender(offender);
+    }
+
+    @Test
+    public void shouldNotGetDeletedOffenderPNC() {
+
+        given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.PNC.getValue(), deletedPnc)
+                .then()
+                .statusCode(404);
     }
 
     @Test
@@ -203,6 +283,60 @@ public class OffenderControllerTest extends IntegrationTest {
 
         assertThat(offender.getOasysOffenderId()).isEqualTo(800);
         assertThat(offender.getMergedOasysOffenderId()).isEqualTo(400);
+    }
+
+    @Test
+    public void shouldReturnErrorWhenDuplicatePNCOffendersFound() {
+
+        var result = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.PNC.getValue(), "PNCD")
+                .then()
+                .statusCode(409)
+                .extract()
+                .body()
+                .as(ErrorResponse.class);
+
+        assertThat(result.getDeveloperMessage()).contains("Duplicate offender found for PNC PNCD");
+        assertThat(result.getUserMessage()).contains("Duplicate offender found for PNC PNCD");
+        assertThat(result.getStatus()).isEqualTo(409);
+    }
+
+    @Test
+    public void shouldReturnErrorWhenDuplicateCRNOffendersFound() {
+
+        var result = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.CRN.getValue(), "CRND")
+                .then()
+                .statusCode(409)
+                .extract()
+                .body()
+                .as(ErrorResponse.class);
+
+        assertThat(result.getDeveloperMessage()).contains("Duplicate offender found for CRN CRND");
+        assertThat(result.getUserMessage()).contains("Duplicate offender found for CRN CRND");
+        assertThat(result.getStatus()).isEqualTo(409);
+    }
+
+    @Test
+    public void shouldReturnErrorWhenDuplicateNomisOffendersFound() {
+
+        var result = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/{0}/{1}", OffenderIdentifier.NOMIS.getValue(), "NOMISD")
+                .then()
+                .statusCode(409)
+                .extract()
+                .body()
+                .as(ErrorResponse.class);
+
+        assertThat(result.getDeveloperMessage()).contains("Duplicate offender found for NOMIS NOMISD");
+        assertThat(result.getUserMessage()).contains("Duplicate offender found for NOMIS NOMISD");
+        assertThat(result.getStatus()).isEqualTo(409);
     }
 
     private void validateOffender(OffenderDto offender) {

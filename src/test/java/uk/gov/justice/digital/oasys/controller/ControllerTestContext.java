@@ -3,7 +3,6 @@ package uk.gov.justice.digital.oasys.controller;
 import org.mockito.Mockito;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.List.of;
 import static org.mockito.ArgumentMatchers.eq;
 
 public class ControllerTestContext {
@@ -28,7 +26,6 @@ public class ControllerTestContext {
         Mockito.when(offenderRepository.getByPnc(eq("pnc2"))).thenReturn(Optional.empty());
         Mockito.when(offenderRepository.findById(eq(1L))).thenReturn(anOffender());
         Mockito.when(offenderRepository.findById(eq(2L))).thenReturn(Optional.empty());
-        Mockito.when(offenderRepository.findById(eq(3L))).thenReturn(assessedOffender());
 
     }
 
@@ -38,23 +35,10 @@ public class ControllerTestContext {
                 .build());
     }
 
-    private static Optional<Offender> assessedOffender() {
-        return Optional.ofNullable(Offender.builder()
-                .oasysAssessmentGroups(anAssessmentGrouWithSingleSet())
-                .build());
-    }
-
     private static List<OasysAssessmentGroup> anAssessmentGroup() {
         return List.of(OasysAssessmentGroup.builder()
                 .oasysAssessmentGroupPk(1L)
                 .oasysSets(someOasysSets())
-                .build());
-    }
-
-    private static List<OasysAssessmentGroup> anAssessmentGrouWithSingleSet() {
-        return List.of(OasysAssessmentGroup.builder()
-                .oasysAssessmentGroupPk(1L)
-                .oasysSets(List.of(layer3AssessmentOasysSet(1L)))
                 .build());
     }
 
@@ -191,69 +175,4 @@ public class ControllerTestContext {
                 .oasysSetPk(id).build();
     }
 
-    public static OasysSet layer3AssessmentOasysSet(Long id) {
-        return OasysSet.builder()
-                .assessmentType(RefElement.builder().refElementCode("LAYER_3").build())
-                .group(OasysAssessmentGroup.builder().build())
-                .oasysSections(completeLayer3AssessmentSections())
-                .assessmentStatus(RefElement.builder().build())
-                .oasysSetPk(id).build();
-    }
-
-    public static Set<OasysSection> completeLayer3AssessmentSections() {
-
-
-
-        OasysQuestion question1098 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
-                .refQuestion(RefQuestion.builder().refQuestionCode("10.98").build()).build();
-
-        OasysQuestion question1099 = OasysQuestion.builder().freeFormatAnswer("Free form answer")
-                .refQuestion(RefQuestion.builder().refQuestionCode("10.99").build()).build();
-
-        OasysAnswer answer1098 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").build()).build();
-        OasysAnswer answer1099 = OasysAnswer.builder().refAnswer(RefAnswer.builder().refAnswerCode("YES").build()).build();
-
-        question1098.setOasysAnswer(answer1098);
-        answer1098.setOasysQuestion(question1098);
-
-        question1099.setOasysAnswer(answer1099);
-        answer1099.setOasysQuestion(question1099);
-
-        OasysSection section10 = OasysSection.builder()
-                .refSection(RefSection.builder()
-                        .crimNeedScoreThreshold(5L).refSectionCode("10")
-                        .scoredForOgp("Y")
-                        .scoredForOvp("Y")
-                        .sectionType(
-                        RefElement.builder().refElementCode("10").refElementShortDesc("Emotional Wellbeing").build()).build())
-                .sectOvpRawScore(5L)
-                .sectOgpRawScore(5L)
-                .lowScoreNeedAttnInd("YES")
-                .sectOtherRawScore(10L)
-                .oasysQuestions(Set.of(question1098, question1099)).build();
-        return Set.of( section10);
-    }
-
-    public static OasysUser oasysUser(String userCode) {
-        return OasysUser.builder()
-                .oasysUserCode(userCode)
-                .userForename1("Test")
-                .userFamilyName("User")
-                .emailAddress("test@test.com")
-                .userStatus(RefElement.builder().refCategoryCode("USER_STATUS").refElementCode("ACTIVE").refElementDesc("Active").build())
-                .roles(of(AreaEstUserRole.builder().ctAreaEstCode("1234").build()))
-                .build();
-    }
-
-    public static List<RefElement> interventions() {
-        return List.of(RefElement.builder()
-                .refElementCode("INV1")
-                .refElementDesc("Intervention 1")
-                .refElementShortDesc("Inv 1").build(),
-                RefElement.builder()
-                        .refElementCode("INV1")
-                        .refElementDesc("Intervention 1")
-                        .refElementShortDesc("Inv 1").build());
-
-    }
 }

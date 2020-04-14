@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.justice.digital.oasys.jpa.entity.SspInterventionMeasure;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext.refElementFrom;
+import static uk.gov.justice.digital.oasys.api.ApiTestContext.refElementFrom;
 
 public class InterventionMeasureDtoTest {
     @Test

@@ -1,9 +1,7 @@
 package uk.gov.justice.digital.oasys.api;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
 import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysSet;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 
@@ -17,7 +15,7 @@ public class BasicSentencePlanTest {
 
     @Test
     public void shouldCreateBasicSentencePlanFromEntity() {
-        var assessment = ControllerServiceTestContext.layer3AssessmentWithBasicSentencePlans(1l);
+        var assessment = ApiTestContext.layer3AssessmentWithBasicSentencePlans(1l);
         var plan = BasicSentencePlan.from(assessment);
         assertThat(plan).isNotNull();
         assertThat(plan.getBasicSentencePlanItems()).hasSize(2);
