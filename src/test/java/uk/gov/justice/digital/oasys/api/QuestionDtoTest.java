@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.oasys.api;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
 import java.util.Collection;
 import java.util.Set;
@@ -12,7 +11,7 @@ public class QuestionDtoTest {
     @Test
     public void shouldReturnMapOfQuestionsFromOASysQuestionsSet() {
 
-        var oasysQuestions = ControllerServiceTestContext.getOASysQuestions();
+        var oasysQuestions = ApiTestContext.getOASysQuestions();
 
         var questions = QuestionDto.from(oasysQuestions);
 
@@ -24,7 +23,7 @@ public class QuestionDtoTest {
     @Test
     public void shouldReturnQuestionFreeFormTextIfPresent() {
 
-        var oasysQuestions = ControllerServiceTestContext.getOASysQuestions();
+        var oasysQuestions = ApiTestContext.getOASysQuestions();
 
         var questions = QuestionDto.from(oasysQuestions);
         var question = get(questions, "IP.1");
@@ -34,7 +33,7 @@ public class QuestionDtoTest {
     @Test
     public void shouldReturnQuestionValues() {
 
-        var oasysQuestions = ControllerServiceTestContext.getOASysQuestions();
+        var oasysQuestions = ApiTestContext.getOASysQuestions();
 
         var questions = QuestionDto.from(oasysQuestions);
         var question = get(questions, "10.98");
@@ -49,7 +48,7 @@ public class QuestionDtoTest {
     @Test
     public void shouldReturnQuestionAnswerIfPresent() {
 
-        var oasysQuestions = ControllerServiceTestContext.getOASysQuestions();
+        var oasysQuestions = ApiTestContext.getOASysQuestions();
 
         var questions = QuestionDto.from(oasysQuestions);
 

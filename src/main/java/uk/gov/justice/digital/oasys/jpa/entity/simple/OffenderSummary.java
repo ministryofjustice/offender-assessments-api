@@ -41,6 +41,8 @@ public class OffenderSummary {
     private String forename3;
     @Column(name = "MERGED_IND")
     private String mergeIndicated;
+    @Column(name = "DELETED_DATE")
+    private String deletedDate;
 
     //these risks come from either Nomis or Delius
     @Column(name = "RISK_TO_OTHERS_ELM")

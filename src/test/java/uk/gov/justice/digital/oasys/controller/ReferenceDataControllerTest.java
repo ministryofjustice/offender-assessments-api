@@ -9,7 +9,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import uk.gov.justice.digital.oasys.api.RefElementDto;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.ReferenceDataRepository;
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +33,7 @@ public class ReferenceDataControllerTest extends IntegrationTest {
                 (aClass, s) -> objectMapper
         ));
 
-        Mockito.when(referenceDataRepository.findAllByRefCategoryCodeAndEndDateIsBefore(eq("INTERVENTION"), any())).thenReturn(ControllerTestContext.interventions());
+        Mockito.when(referenceDataRepository.findAllByRefCategoryCodeAndEndDateIsBefore(eq("INTERVENTION"), any())).thenReturn(interventions());
     }
 
     @Test
@@ -46,6 +49,18 @@ public class ReferenceDataControllerTest extends IntegrationTest {
                 .as(RefElementDto[].class);
 
         assertThat(sentencePlans).hasSize(2);
+    }
+
+    public List<RefElement> interventions() {
+        return List.of(RefElement.builder()
+                        .refElementCode("INV1")
+                        .refElementDesc("Intervention 1")
+                        .refElementShortDesc("Inv 1").build(),
+                RefElement.builder()
+                        .refElementCode("INV1")
+                        .refElementDesc("Intervention 1")
+                        .refElementShortDesc("Inv 1").build());
+
     }
 
 }

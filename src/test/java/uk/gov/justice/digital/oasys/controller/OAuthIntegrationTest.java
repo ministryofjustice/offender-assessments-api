@@ -8,10 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import java.util.Optional;
 import static io.restassured.RestAssured.given;
+import static java.util.List.of;
 import static org.mockito.ArgumentMatchers.eq;
 
 public class OAuthIntegrationTest extends IntegrationTest {
@@ -70,7 +74,7 @@ public class OAuthIntegrationTest extends IntegrationTest {
 
     @Test
     public void authorisationEndpointReturnsOKWhenRoleIsOASYS_READ_ONLY() {
-        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(ControllerTestContext.oasysUser("USER_CODE")));
+        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(oasysUser("USER_CODE")));
 
         given()
                 .when()
@@ -82,7 +86,7 @@ public class OAuthIntegrationTest extends IntegrationTest {
 
     @Test
     public void authorisationEndpointReturnsOKWhenRoleIsOASYS_AUTHENTICATION() {
-        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(ControllerTestContext.oasysUser("USER_CODE")));
+        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(oasysUser("USER_CODE")));
         given()
                 .when()
                 .auth().oauth2(authRoleToken)
@@ -110,5 +114,16 @@ public class OAuthIntegrationTest extends IntegrationTest {
                 .get("/offenders/oasysOffenderId/{0}", 1L)
                 .then()
                 .statusCode(200);
+    }
+
+    public OasysUser oasysUser(String userCode) {
+        return OasysUser.builder()
+                .oasysUserCode(userCode)
+                .userForename1("Test")
+                .userFamilyName("User")
+                .emailAddress("test@test.com")
+                .userStatus(RefElement.builder().refCategoryCode("USER_STATUS").refElementCode("ACTIVE").refElementDesc("Active").build())
+                .roles(of(AreaEstUserRole.builder().ctAreaEstCode("1234").build()))
+                .build();
     }
 }

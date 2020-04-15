@@ -11,7 +11,6 @@ public enum LogEvent {
     USER_AUTHENTICATION,
     USER_SERVICE_ERROR,
 
-
     GET_SECTION_FOUND,
     GET_SECTION_NOT_FOUND,
     GET_SECTIONS_FOUND,
@@ -20,7 +19,6 @@ public enum LogEvent {
     GET_ASSESSMENT_NOT_FOUND,
     GET_LATEST_ASSESSMENT_FOUND,
     GET_LATEST_ASSESSMENT_NOT_FOUND,
-
 
     GET_ASSESSMENT,
     GET_ASSESSMENT_SUMMARY,
@@ -38,7 +36,8 @@ public enum LogEvent {
     GET_BASIC_SP_NOT_FOUND,
     GET_LATEST_ASSESSMENT,
     GET_OFFENDER_SUMMARY,
-    GET_OFFENDER_SUMMARY_FOUND;
+    GET_OFFENDER_SUMMARY_FOUND,
+    DUPLICATE_OFFENDER_FOUND;
 
     public static final String EVENT = "event_id";
     public static final String EXCEPTION = "exception";

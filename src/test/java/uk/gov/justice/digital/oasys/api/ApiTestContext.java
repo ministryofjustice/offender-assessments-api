@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.oasys.controller;
+package uk.gov.justice.digital.oasys.api;
 
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
@@ -13,7 +13,7 @@ import java.util.Set;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
-public class ControllerServiceTestContext {
+public class ApiTestContext {
 
     public static void setup(OffenderService offenderService) {
 
