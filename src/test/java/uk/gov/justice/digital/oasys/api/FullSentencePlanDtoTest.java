@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.oasys.api;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 
@@ -16,8 +15,8 @@ public class FullSentencePlanDtoTest {
 
     @Test
     public void shouldReturnSentencePlanDtoFromOASysSetEntity() {
-        var assessment = ControllerServiceTestContext.layer3AssessmentWithFullSentencePlan(123L);
-        var section = Optional.ofNullable(ControllerServiceTestContext.getSentencePlanSection());
+        var assessment = ApiTestContext.layer3AssessmentWithFullSentencePlan(123L);
+        var section = Optional.ofNullable(ApiTestContext.getSentencePlanSection());
         var sentencePlan = FullSentencePlanDto.from(assessment, section);
         assertThat(sentencePlan.getOasysSetId()).isEqualTo(123l);
         assertThat(sentencePlan.getObjectives()).hasSize(2);
@@ -26,8 +25,8 @@ public class FullSentencePlanDtoTest {
 
     @Test
     public void shouldUseEarliestObjectiveDateForStartDate() {
-        var assessment = ControllerServiceTestContext.layer3AssessmentWithFullSentencePlan(123L);
-        var section = Optional.ofNullable(ControllerServiceTestContext.getSentencePlanSection());
+        var assessment = ApiTestContext.layer3AssessmentWithFullSentencePlan(123L);
+        var section = Optional.ofNullable(ApiTestContext.getSentencePlanSection());
         var sentencePlan = FullSentencePlanDto.from(assessment, section);
         assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringSeconds(LocalDateTime.of(2019, 11,28, 9, 00));
     }
@@ -45,7 +44,7 @@ public class FullSentencePlanDtoTest {
                                 .build()))
                 .dateCompleted(LocalDateTime.now().minusDays(1))
                 .oasysSetPk(123l).build();
-        var section = Optional.ofNullable(ControllerServiceTestContext.getSentencePlanSection());
+        var section = Optional.ofNullable(ApiTestContext.getSentencePlanSection());
         var sentencePlan = FullSentencePlanDto.from(assessment,section);
 
         assertThat(sentencePlan.getOasysSetId()).isEqualTo(123l);
@@ -63,7 +62,7 @@ public class FullSentencePlanDtoTest {
                 .oasysSections(Collections.emptySet())
                 .sspObjectivesInSets(Set.of(SspObjectivesInSet.builder().sspObjective(SspObjective.builder().createDate(today).build()).build()))
                 .build();
-        var section = Optional.ofNullable(ControllerServiceTestContext.getSentencePlanSection());
+        var section = Optional.ofNullable(ApiTestContext.getSentencePlanSection());
         var actual = FullSentencePlanDto.from(assessment, section);
 
         assertThat(actual.getCompletedDate()).isNull();
@@ -72,7 +71,7 @@ public class FullSentencePlanDtoTest {
 
     @Test
     public void shouldReturnRefQuestionsForSPSectionsInAdditionToOASysQuestions() {
-        var section = ControllerServiceTestContext.getSentencePlanSection();
+        var section = ApiTestContext.getSentencePlanSection();
         section.getRefSection().setRefQuestions(List.of(RefQuestion.builder()
                 .refQuestionUk(1l)
                 .refQuestionCode("IP.40")

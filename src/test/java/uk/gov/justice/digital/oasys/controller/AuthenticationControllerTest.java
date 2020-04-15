@@ -10,11 +10,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import uk.gov.justice.digital.oasys.api.*;
+import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
+import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
+import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysAuthenticationRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import java.util.Optional;
 import static io.restassured.RestAssured.given;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static uk.gov.justice.digital.oasys.api.OffenderPermissionLevel.WRITE;
@@ -22,9 +26,6 @@ import static uk.gov.justice.digital.oasys.api.OffenderPermissionResource.SENTEN
 
 
 public class AuthenticationControllerTest extends IntegrationTest {
-
-    @MockBean
-    private OffenderRepository offenderRepository;
 
     @MockBean
     private OasysUserRepository oasysUserRepository;
@@ -42,7 +43,6 @@ public class AuthenticationControllerTest extends IntegrationTest {
         RestAssured.config = RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (aClass, s) -> objectMapper
         ));
-        ControllerTestContext.setup(offenderRepository);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class AuthenticationControllerTest extends IntegrationTest {
 
     @Test
     public void canGetUserForUserCode() {
-        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(ControllerTestContext.oasysUser("USER_CODE")));
+        Mockito.when(oasysUserRepository.findOasysUserByOasysUserCodeIgnoreCase(eq("USER_CODE"))).thenReturn(Optional.ofNullable(oasysUser("USER_CODE")));
         OasysUserAuthenticationDto oasysUser = given()
                 .when()
                 .auth().oauth2(validOauthToken)
@@ -169,6 +169,17 @@ public class AuthenticationControllerTest extends IntegrationTest {
         assertThat(authorisationDto.getOasysUserCode()).isEqualTo("USER_CODE");
         assertThat(authorisationDto.getOasysOffenderId()).isEqualTo(1l);
         assertThat(authorisationDto.getOffenderPermissionResource()).isEqualTo(SENTENCE_PLAN);
+    }
+
+    public OasysUser oasysUser(String userCode) {
+        return OasysUser.builder()
+                .oasysUserCode(userCode)
+                .userForename1("Test")
+                .userFamilyName("User")
+                .emailAddress("test@test.com")
+                .userStatus(RefElement.builder().refCategoryCode("USER_STATUS").refElementCode("ACTIVE").refElementDesc("Active").build())
+                .roles(of(AreaEstUserRole.builder().ctAreaEstCode("1234").build()))
+                .build();
     }
 
 

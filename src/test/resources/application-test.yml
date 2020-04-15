@@ -1,5 +1,4 @@
 server:
-  use-forward-headers: true
   tomcat:
     remote-ip-header: x-forwarded-for
     protocol_header: x-forwarded-proto
@@ -8,6 +7,9 @@ spring:
   datasource:
     url: 'jdbc:h2:mem:testdb;Mode=Oracle'
     type: com.zaxxer.hikari.HikariDataSource
+    properties:
+      hibernate:
+        show_sql: true
   security:
     oauth2:
       resourceserver:

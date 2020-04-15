@@ -1,14 +1,14 @@
 package uk.gov.justice.digital.oasys.api;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CriminogenicNeedDtoTest {
 
     @Test
     public void shouldReturnCriminogenicNeedDtosFromEntitySet() {
-        var sspCrimNeedObjPivots = ControllerServiceTestContext.getNeeds();
+        var sspCrimNeedObjPivots = ApiTestContext.getNeeds();
         var needs = CriminogenicNeedDto.from(sspCrimNeedObjPivots);
         assertThat(needs).extracting("code").containsOnly("I10", "I20");
     }
@@ -16,7 +16,7 @@ public class CriminogenicNeedDtoTest {
     @Test
     public void shouldReturnCriminogenicNeedDtoFromEntity() {
 
-        var sspCrimNeedObjPivots = ControllerServiceTestContext.getNeeds();
+        var sspCrimNeedObjPivots = ApiTestContext.getNeeds();
 
         var need = CriminogenicNeedDto.from(sspCrimNeedObjPivots).stream()
                 .filter(o -> o.getCode().equals("I10")).findFirst().get();

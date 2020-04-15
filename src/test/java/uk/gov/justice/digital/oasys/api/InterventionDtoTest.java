@@ -2,7 +2,6 @@ package uk.gov.justice.digital.oasys.api;
 
 
 import org.junit.jupiter.api.Test;
-import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,7 +10,7 @@ public class InterventionDtoTest {
 
     @Test
     public void shouldReturnInterventionDtosFromEntitySet() {
-        var sspObjIntervenePivot = ControllerServiceTestContext.getInterventions(1l);
+        var sspObjIntervenePivot = ApiTestContext.getInterventions(1l);
         var needs = InterventionDto.from(sspObjIntervenePivot);
         assertThat(needs).extracting("interventionCode").containsOnly("V1", "V2");
     }
@@ -19,7 +18,7 @@ public class InterventionDtoTest {
     @Test
     public void shouldReturnInterventionDtoFromEntity() {
 
-        var sspObjIntervenePivot = ControllerServiceTestContext.getInterventions(1l);
+        var sspObjIntervenePivot = ApiTestContext.getInterventions(1l);
 
         var intervention = InterventionDto.from(sspObjIntervenePivot).stream()
                 .filter(o -> o.getInterventionCode().equals("V1")).findFirst().get();

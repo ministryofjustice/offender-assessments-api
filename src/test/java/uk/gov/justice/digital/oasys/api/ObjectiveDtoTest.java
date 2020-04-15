@@ -1,7 +1,7 @@
 package uk.gov.justice.digital.oasys.api;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.justice.digital.oasys.controller.ControllerServiceTestContext;
+
 import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,7 +10,7 @@ public class ObjectiveDtoTest {
     @Test
     public void shouldReturnObjectiveDtosFromObjectivesInSet() {
 
-        var objectivesInSet = ControllerServiceTestContext.getObjectivesInSet();
+        var objectivesInSet = ApiTestContext.getObjectivesInSet();
 
         var objectives = ObjectiveDto.from(objectivesInSet);
 
@@ -20,7 +20,7 @@ public class ObjectiveDtoTest {
     @Test
     public void shouldReturnObjectiveDtoFromObjectivesInSet() {
 
-        var objectiveInSet = ControllerServiceTestContext.getObjectivesInSet().stream()
+        var objectiveInSet = ApiTestContext.getObjectivesInSet().stream()
                 .filter(o -> o.getSspObjectivesInSetPk().equals(1l)).findFirst();
 
         var objective = ObjectiveDto.from(objectiveInSet.get());

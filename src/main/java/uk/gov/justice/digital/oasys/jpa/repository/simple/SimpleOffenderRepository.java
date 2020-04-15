@@ -4,12 +4,17 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
+import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.QOffenderSummary;
+import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
+import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.OptionalLong;
 
 @Repository
 public class SimpleOffenderRepository {
@@ -34,23 +39,32 @@ public class SimpleOffenderRepository {
         switch (identityType) {
             case CRN:
                 query.where(qOffender.cmsProbNumber.eq(identity));
+                query.where(qOffender.deletedDate.isNull());
                 break;
             case PNC:
                 query.where(qOffender.pnc.eq(identity));
+                query.where(qOffender.deletedDate.isNull());
                 break;
             case NOMIS:
                 query.where(qOffender.cmsPrisNumber.eq(identity));
+                query.where(qOffender.deletedDate.isNull());
                 break;
             case OASYS:
                 query.where(qOffender.offenderPk.eq(Long.valueOf(identity)));
                 break;
             case BOOKING:
                 query.where(qOffender.prisonNumber.eq(identity));
+                query.where(qOffender.deletedDate.isNull());
                 break;
             default:
                 return Optional.empty();
         }
-        return Optional.ofNullable(query.fetchFirst());
+
+        var result = query.fetch();
+        if(result.size() > 1) {
+            throw new ApplicationExceptions.DuplicateOffenderRecordException(String.format("Duplicate offender found for %s %s", identityType, identity), LogEvent.DUPLICATE_OFFENDER_FOUND );
+        }
+        return result.isEmpty() ? Optional.empty() : Optional.ofNullable(result.get(0));
     }
 
 }
