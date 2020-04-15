@@ -23,7 +23,6 @@ import java.util.Properties;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
-@Profile(value = "default")
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -40,7 +39,11 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.any())
                 .paths(Predicates.or(regex("(\\/info.*)"),
                         regex("(\\/health.*)"),
-                        regex("(\\/offenders.*)")))
+                        regex("(\\/offenders.*)"),
+                        regex("(\\/authentication.*)"),
+                        regex("(\\/assessments.*)"),
+                        regex("(\\/referenceassessments.*)"),
+                        regex("(\\/referencedata.*)")))
                 .build();
 
         docket.genericModelSubstitutes(Optional.class);
