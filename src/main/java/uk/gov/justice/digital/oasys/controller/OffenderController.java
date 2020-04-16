@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.justice.digital.oasys.api.OffenderDto;
 import uk.gov.justice.digital.oasys.service.OffenderService;
+import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 @RestController
 @Api(tags = "Offenders")
@@ -29,7 +30,10 @@ public class OffenderController {
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<OffenderDto> getOffenderByPk(@PathVariable("identityType") String identityType, @PathVariable("identity") String identity) {
-        return ResponseEntity.ok(offenderService.getOffender(identityType, identity));
+        log.info("Fetching offender for identity: {},{}", identityType, identity, LogEvent.GET_OFFENDER_SUMMARY);
+        var offender = offenderService.getOffender(identityType, identity);
+        log.info("Found offender for identity: {},{}", identityType, identity, LogEvent.GET_OFFENDER_SUMMARY_FOUND);
+        return ResponseEntity.ok(offender);
     }
 
 }
