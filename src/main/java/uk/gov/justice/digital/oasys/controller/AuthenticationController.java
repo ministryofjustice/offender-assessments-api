@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.oasys.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import static uk.gov.justice.digital.oasys.utils.LogEvent.EVENT;
 import static uk.gov.justice.digital.oasys.utils.LogEvent.USER_AUTHENTICATION;
 
 @RestController
-@Api(description = "Authentication resources", tags = "Authentication")
+@Api(value = "Authentication resources", tags = "Authentication")
 @Slf4j
 public class AuthenticationController {
 
@@ -33,6 +34,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(path = "/authentication/user/{oasysUserId}", method = RequestMethod.GET)
+    @ApiOperation(value = "Gets a user by its user code")
     @ApiResponses({
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 200, message = "OK")})
@@ -43,6 +45,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(path = "/authentication/user/{oasysUserId}/offender/{offenderId}/{resource}", method = RequestMethod.GET)
+    @ApiOperation(value = "Verifies a user has access to an offender")
     @ApiResponses({
             @ApiResponse(code = 401, message = "User not authenticated for offender"),
             @ApiResponse(code = 200, message = "OK")})
@@ -54,6 +57,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(path = "/authentication/user/validate", method = RequestMethod.POST)
+    @ApiOperation(value = "Validates a users credentials")
     @ApiResponses({
             @ApiResponse(code = 401, message = "Incorrect Credentials"),
             @ApiResponse(code = 200, message = "OK")})

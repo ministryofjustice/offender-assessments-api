@@ -16,7 +16,7 @@ import java.util.Collection;
 
 
 @RestController
-@Api(description = "Offender Sentence Plan resources", tags = "Offender Basic Sentence Plans")
+@Api(value = "Offender Sentence Plan resources", tags = "Sentence Plans")
 @Slf4j
 public class SentencePlansController {
 

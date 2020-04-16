@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.oasys.controller;
 
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -15,9 +14,8 @@ import uk.gov.justice.digital.oasys.service.ReferenceDataService;
 
 import java.util.List;
 
-
 @RestController
-@Api(description = "Reference intervention resources", tags = "Interventions")
+@Api(description = "Reference resources", tags = "Reference Data")
 public class ReferenceDataController {
 
     public final ReferenceDataService referenceDataService;
