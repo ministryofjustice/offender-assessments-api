@@ -16,7 +16,7 @@ import uk.gov.justice.digital.oasys.utils.LogEvent;
 import java.util.Collection;
 
 @RestController
-@Api(tags = "Offender Assessments")
+@Api(value = "Offender Assessments", tags = "Assessments")
 @Slf4j
 public class AssessmentsController {
 
@@ -40,7 +40,7 @@ public class AssessmentsController {
     }
 
     @GetMapping(path = "/offenders/{identityType}/{identity}/assessments/summary")
-    @ApiOperation(value = "Gets all assessments for an offender")
+    @ApiOperation(value = "Gets a list of assessments for an offender")
     @ApiResponses({
             @ApiResponse(code = 404, message = "Offender not found"),
             @ApiResponse(code = 200, message = "OK")})

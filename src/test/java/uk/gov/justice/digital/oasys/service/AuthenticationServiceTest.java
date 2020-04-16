@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.oasys.service;
 
 
+import com.microsoft.applicationinsights.TelemetryClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,11 +31,14 @@ public class AuthenticationServiceTest {
     @Mock
     OasysAuthenticationRepository oasysAuthenticationRepository;
 
+    @Mock
+    TelemetryClient telemetryClient;
+
     AuthenticationService service;
 
     @BeforeEach
     public void setup() {
-        service = new AuthenticationService(oasysUserRepository, oasysAuthenticationRepository);
+        service = new AuthenticationService(oasysUserRepository, oasysAuthenticationRepository, telemetryClient);
     }
 
     @Test
