@@ -26,7 +26,6 @@ public class SpringConfiguration implements WebMvcConfigurer {
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .setSerializationInclusion(JsonInclude.Include.NON_ABSENT)
-                .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
                 .registerModules(new Jdk8Module(), new JavaTimeModule());
     }
 
