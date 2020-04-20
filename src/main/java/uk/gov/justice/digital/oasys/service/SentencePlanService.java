@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
+import uk.gov.justice.digital.oasys.api.SummarySentencePlanDto;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleAssessmentRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
@@ -55,6 +56,14 @@ public class SentencePlanService {
         Collection<Assessment> assessments = simpleAssessmentRepository.getAssessmentsForOffender(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
         log.info("Found {} Assessments for identity: ({},{})", assessments.size(), identity, identityType, value(EVENT, GET_FULL_SP));
         return assessments.stream().map(this::fullSentencePlanFrom).filter(Objects::nonNull).collect(Collectors.toSet());
+    }
+
+    public Collection<SummarySentencePlanDto> getSummarySentencePlansForOffender(String identityType, String identity, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
+        var offenderId = offenderService.getOffenderIdByIdentifier(identityType, identity);
+        Collection<Assessment> assessments = simpleAssessmentRepository.getAssessmentsForOffender(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
+
+        log.info("Found {} Assessments for identity: ({},{})", assessments.size(), identity, identityType, value(EVENT, GET_SUMMARY_SP));
+        return assessments.stream().map(SummarySentencePlanDto::from).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
     public FullSentencePlanDto getFullSentencePlan(Long oasysSetPk) {
