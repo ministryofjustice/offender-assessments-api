@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FullSentencePlanDtoTest {
 
     @Test
-    public void shouldReturnSentencePlanDtoFromOASysSetEntity() {
+    public void shouldReturnSentencePlanDtoFromOASysAssessment() {
         var assessment = ApiTestContext.layer3AssessmentWithFullSentencePlan(123L);
         var section = Optional.ofNullable(ApiTestContext.getSentencePlanSection());
         var sentencePlan = FullSentencePlanDto.from(assessment, section);
@@ -24,11 +24,25 @@ public class FullSentencePlanDtoTest {
     }
 
     @Test
-    public void shouldUseEarliestObjectiveDateForStartDate() {
+    public void shouldReturnNullWhenNoISPorRSPSectionFoundAndNoObjectives() {
+        var assessment = Assessment.builder()
+                .createDate(LocalDateTime.now().minusDays(1))
+                .assessmentType("LAYER_3")
+                .assessmentStatus("COMPLETED")
+                .oasysSections(Collections.emptySet())
+                .sspObjectivesInSets(Collections.emptySet())
+                .dateCompleted(LocalDateTime.now().minusDays(1))
+                .oasysSetPk(123l).build();
+        var sentencePlan = FullSentencePlanDto.from(assessment, Optional.empty());
+        assertThat(sentencePlan).isNull();
+    }
+
+    @Test
+    public void shouldUseCreatedDateForStartDate() {
         var assessment = ApiTestContext.layer3AssessmentWithFullSentencePlan(123L);
         var section = Optional.ofNullable(ApiTestContext.getSentencePlanSection());
         var sentencePlan = FullSentencePlanDto.from(assessment, section);
-        assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringSeconds(LocalDateTime.of(2019, 11,28, 9, 00));
+        assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringSeconds(LocalDateTime.now().minusDays(1));
     }
 
     @Test
@@ -48,7 +62,6 @@ public class FullSentencePlanDtoTest {
         var sentencePlan = FullSentencePlanDto.from(assessment,section);
 
         assertThat(sentencePlan.getOasysSetId()).isEqualTo(123l);
-        assertThat(sentencePlan.getCreatedDate()).isEqualToIgnoringMinutes(LocalDateTime.now().minusDays(10));
         assertThat(sentencePlan.getCompletedDate()).isEqualToIgnoringMinutes(LocalDateTime.now().minusDays(1));
 
     }

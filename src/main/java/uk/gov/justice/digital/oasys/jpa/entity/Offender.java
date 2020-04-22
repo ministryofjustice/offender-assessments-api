@@ -1,16 +1,13 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -207,5 +204,22 @@ public class Offender {
     @OneToMany
     @JoinColumn(name = "OFFENDER_PK", referencedColumnName = "OFFENDER_PK")
     private List<OasysAssessmentGroup> oasysAssessmentGroups;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Offender))
+            return false;
+
+        Offender other = (Offender) o;
+        return getOffenderPk() != null &&
+                getOffenderPk().equals(other.getOffenderPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

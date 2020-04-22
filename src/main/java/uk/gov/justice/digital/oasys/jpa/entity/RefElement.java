@@ -1,14 +1,12 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -46,5 +44,21 @@ public class RefElement {
     private LocalDateTime lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RefElementPK)) return false;
+        RefElementPK that = (RefElementPK) o;
+        return Objects.nonNull(getRefCategoryCode()) &&
+                Objects.nonNull(getRefElementCode()) &&
+                Objects.equals(getRefCategoryCode(), that.getRefCategoryCode()) &&
+                Objects.equals(getRefElementCode(), that.getRefElementCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

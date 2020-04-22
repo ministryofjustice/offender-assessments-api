@@ -1,14 +1,11 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
 
-@Data
+@Getter
 @Entity
 @Builder
 @Table(name = "OBJECTIVE")
@@ -43,5 +40,22 @@ public class Objective {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Objective))
+            return false;
+
+        Objective other = (Objective) o;
+        return getObjectiveCode() != null &&
+                getObjectiveCode().equals(other.getObjectiveCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

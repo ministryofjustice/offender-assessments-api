@@ -1,11 +1,16 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "QA_REVIEW")
 public class QaReview {
@@ -46,5 +51,22 @@ public class QaReview {
     @OneToOne
     @JoinColumn(name = "OASYS_SET_PK")
     private OasysSet oasysSet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof QaReview))
+            return false;
+
+        QaReview other = (QaReview) o;
+        return getQaReviewPk() != null &&
+                getQaReviewPk().equals(other.getQaReviewPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

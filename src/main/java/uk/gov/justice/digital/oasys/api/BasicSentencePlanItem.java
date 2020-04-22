@@ -7,6 +7,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Value
@@ -26,20 +27,24 @@ public class BasicSentencePlanItem {
     @JsonIgnore
     private final Long oasysSetId;
 
-    public static BasicSentencePlanItem from(BasicSentencePlanObj item) {
+    public static BasicSentencePlanItem from(BasicSentencePlanObj basicSentencePlanObj) {
+
+        if(Objects.isNull(basicSentencePlanObj)){
+            return null;
+        }
 
         return new BasicSentencePlanItem(
-                item.getBasicSentPlanObjPk(),
-                Optional.ofNullable(item.getIncludeInPlanInd()).map("Y"::equalsIgnoreCase).orElse(null),
-                Optional.ofNullable(item.getOffenceBehaviourLink()).map(RefElementDto::from).orElse(null),
-                item.getObjectiveText(),
-                item.getMeasureText(),
-                item.getWhatWorkText(),
-                item.getWhoWillDoWorkText(),
-                item.getTimescalesText(),
-                Optional.ofNullable(item.getDateOpened()).map(LocalDateTime::toLocalDate).orElse(null),
-                Optional.ofNullable(item.getDateCompleted()).map(LocalDateTime::toLocalDate).orElse(null),
-                Optional.ofNullable(item.getProblemAreaCompInd()).map("Y"::equalsIgnoreCase).orElse(null),
-                item.getOasysSetPk());
+                basicSentencePlanObj.getBasicSentPlanObjPk(),
+                Optional.ofNullable(basicSentencePlanObj.getIncludeInPlanInd()).map("Y"::equalsIgnoreCase).orElse(null),
+                Optional.ofNullable(basicSentencePlanObj.getOffenceBehaviourLink()).map(RefElementDto::from).orElse(null),
+                basicSentencePlanObj.getObjectiveText(),
+                basicSentencePlanObj.getMeasureText(),
+                basicSentencePlanObj.getWhatWorkText(),
+                basicSentencePlanObj.getWhoWillDoWorkText(),
+                basicSentencePlanObj.getTimescalesText(),
+                Optional.ofNullable(basicSentencePlanObj.getDateOpened()).map(LocalDateTime::toLocalDate).orElse(null),
+                Optional.ofNullable(basicSentencePlanObj.getDateCompleted()).map(LocalDateTime::toLocalDate).orElse(null),
+                Optional.ofNullable(basicSentencePlanObj.getProblemAreaCompInd()).map("Y"::equalsIgnoreCase).orElse(null),
+                basicSentencePlanObj.getOasysSetPk());
     }
 }

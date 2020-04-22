@@ -1,10 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,8 +9,8 @@ import java.sql.Time;
 
 @Entity
 @Table(name = "CMS_STUB_OFFENDER")
-@Data
-@Builder(toBuilder = true)
+@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CmsStubOffender {
@@ -139,5 +135,22 @@ public class CmsStubOffender {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof CmsStubOffender))
+            return false;
+
+        CmsStubOffender other = (CmsStubOffender) o;
+        return getCmsStubOffenderPk() != null &&
+                getCmsStubOffenderPk().equals(other.getCmsStubOffenderPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

@@ -51,5 +51,22 @@ public class OffenderLink {
     })
     private RefElement linkType;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof OffenderLink))
+            return false;
+
+        OffenderLink other = (OffenderLink) o;
+        return getOffenderLinkPk() != null &&
+                getOffenderLinkPk().equals(other.getOffenderLinkPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
 
 }

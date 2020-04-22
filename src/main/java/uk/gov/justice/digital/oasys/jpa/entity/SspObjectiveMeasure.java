@@ -1,15 +1,11 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
 
-@Data
+@Getter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -43,5 +39,22 @@ public class SspObjectiveMeasure implements Serializable {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof SspObjectiveMeasure))
+            return false;
+
+        SspObjectiveMeasure other = (SspObjectiveMeasure) o;
+        return getSspObjectiveMeasurePk() != null &&
+                getSspObjectiveMeasurePk().equals(other.getSspObjectiveMeasurePk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

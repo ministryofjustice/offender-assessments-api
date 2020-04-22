@@ -15,6 +15,11 @@ public class BasicSentencePlan {
     private List<BasicSentencePlanItem> basicSentencePlanItems;
 
     public static BasicSentencePlan from(Assessment assessment) {
+
+        if(Objects.isNull(assessment)) {
+            return null;
+        }
+
         final List<BasicSentencePlanItem> basicSentencePlanItems = assessment.getBasicSentencePlanList()
                 .stream()
                 .map(BasicSentencePlanItem::from)

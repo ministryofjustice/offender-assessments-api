@@ -1,14 +1,11 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.Objects;
 
-@Data
+@Getter
 @Entity
 @Table(name = "AREA_EST_USER_ROLE")
 @IdClass(AreaEstUserRolePK.class)
@@ -45,5 +42,23 @@ public class AreaEstUserRole {
     @ManyToOne
     @JoinColumn(name = "REF_ROLE_CODE", insertable = false, updatable = false)
     private RefRole refRole;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AreaEstUserRolePK)) return false;
+        AreaEstUserRolePK that = (AreaEstUserRolePK) o;
+        return Objects.nonNull(getOasysUserCode()) &&
+                Objects.nonNull(getRefRoleCode()) &&
+                Objects.nonNull(getCtAreaEstCode()) &&
+                Objects.equals(getOasysUserCode(), that.getOasysUserCode()) &&
+                Objects.equals(getRefRoleCode(), that.getRefRoleCode()) &&
+                Objects.equals(getCtAreaEstCode(), that.getCtAreaEstCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

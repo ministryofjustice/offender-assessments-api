@@ -10,6 +10,10 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
+import uk.gov.justice.digital.oasys.api.FullSentencePlanSummaryDto;
+
+import java.time.LocalDateTime;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
@@ -298,4 +302,22 @@ public class SentencePlansControllerTest extends IntegrationTest {
         assertThat(sentencePlan.getOasysSetId()).isEqualTo(100L);
     }
 
+    @Test
+    public void canGetFullSentencePlansSummaryForOffenderPk() {
+        FullSentencePlanSummaryDto[] sentencePlans = given()
+                .when()
+                .auth().oauth2(validOauthToken)
+                .get("/offenders/oasysOffenderId/{0}/fullSentencePlans/summary", 100L)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(FullSentencePlanSummaryDto[].class);
+
+        assertThat(sentencePlans).hasSize(1);
+        var plan =sentencePlans[0];
+        assertThat(plan.getOasysSetId()).isEqualTo(100L);
+        assertThat(plan.getCreatedDate()).isEqualToIgnoringSeconds(LocalDateTime.of(2020,3,6, 9,12));
+        assertThat(plan.getCompletedDate()).isEqualToIgnoringSeconds(LocalDateTime.of(2020,6,20, 23,00));;
+    }
 }

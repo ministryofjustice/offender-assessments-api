@@ -1,15 +1,12 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -68,5 +65,25 @@ public class RefQuestion {
             @JoinColumn(name = "REF_QUESTION_CODE", referencedColumnName = "REF_QUESTION_CODE")
     })
     private List<RefAnswer> refAnswers;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RefQuestionPK)) return false;
+        RefQuestionPK that = (RefQuestionPK) o;
+        return Objects.nonNull(getRefAssVersionCode()) &&
+                Objects.nonNull(getVersionNumber()) &&
+                Objects.nonNull(getRefSectionCode()) &&
+                Objects.nonNull(getRefQuestionCode()) &&
+                Objects.equals(getRefAssVersionCode(), that.getRefAssVersionCode()) &&
+                Objects.equals(getVersionNumber(), that.getVersionNumber()) &&
+                Objects.equals(getRefSectionCode(),that.getRefSectionCode()) &&
+                Objects.equals(getRefQuestionCode(), that.getRefQuestionCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.SspInterventionMeasure;
+import java.util.Objects;
 
 @Builder(access = AccessLevel.PRIVATE)
 @Value
@@ -12,7 +13,7 @@ public class InterventionMeasureDto {
     private RefElementDto status;
 
     public static InterventionMeasureDto from(SspInterventionMeasure sspInterventionMeasure) {
-        if (sspInterventionMeasure == null) {
+        if (Objects.isNull(sspInterventionMeasure)) {
             return null;
         }
         return builder()

@@ -1,17 +1,14 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
 
 @Builder
 @Entity
+@Getter
 @Table(name = "SSP_OBJ_INTERVENE_PIVOT")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SspObjIntervenePivot {
@@ -40,4 +37,21 @@ public class SspObjIntervenePivot {
     @OneToOne
     @JoinColumn(name = "SSP_INTERVENTION_IN_SET_PK", referencedColumnName = "SSP_INTERVENTION_IN_SET_PK")
     private SspInterventionInSet sspInterventionInSet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof SspObjIntervenePivot))
+            return false;
+
+        SspObjIntervenePivot other = (SspObjIntervenePivot) o;
+        return getSspObjIntervenePivotPk() != null &&
+                getSspObjIntervenePivotPk().equals(other.getSspObjIntervenePivotPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

@@ -65,4 +65,20 @@ public class Section {
                 .map(OasysAnswer::getRefAnswer)
                 .collect(Collectors.toMap(RefAnswer::getRefQuestionCode, RefAnswer::getRefAnswerCode));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Section))
+            return false;
+
+        Section other = (Section) o;
+        return oasysSectionPk != null &&
+                oasysSectionPk.equals(other.getOasysSectionPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

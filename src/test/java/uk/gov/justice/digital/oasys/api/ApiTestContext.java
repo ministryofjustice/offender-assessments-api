@@ -261,7 +261,7 @@ public class ApiTestContext {
 
     private static BasicSentencePlanObj aBasicSentencePlan(long l) {
         return BasicSentencePlanObj.builder()
-                .basicSentPlanObjPk(1L)
+                .basicSentPlanObjPk(l)
                 .includeInPlanInd("Y")
                 .createDate(LocalDateTime.now().minusDays(1))
                 .objectiveText("obj" + l)

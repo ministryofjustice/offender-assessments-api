@@ -6,6 +6,8 @@ import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjective;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjectivesInSet;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,13 +27,17 @@ public class ObjectiveDto {
 
     public static Set<ObjectiveDto> from(Set<SspObjectivesInSet> sspObjectivesInSets) {
 
+        if (sspObjectivesInSets.isEmpty()) {
+            return Collections.emptySet();
+        }
+
         return sspObjectivesInSets.stream()
                 .map(ObjectiveDto::from)
                 .collect(Collectors.toSet());
     }
 
     public static ObjectiveDto from(SspObjectivesInSet sspo) {
-        if (sspo == null) {
+        if (Objects.isNull(sspo)) {
             return null;
         }
         return ObjectiveDto
@@ -50,28 +56,28 @@ public class ObjectiveDto {
     }
 
     private static String objectiveDescriptionOf(SspObjective sspObjective) {
-        if (sspObjective == null || sspObjective.getObjective() == null) {
+        if (Objects.isNull(sspObjective) || Objects.isNull(sspObjective.getObjective())) {
             return null;
         }
         return sspObjective.getObjective().getObjectiveDesc();
     }
 
     private static String objectiveHeadingOf(SspObjective sspObjective) {
-        if (sspObjective == null || sspObjective.getObjective() == null) {
+        if (Objects.isNull(sspObjective) || Objects.isNull(sspObjective.getObjective())) {
             return null;
         }
         return sspObjective.getObjective().getObjectiveHeading().getRefElementDesc();
     }
 
     private static String objectiveCommentOf(SspObjective sspObjective) {
-        if (sspObjective == null) {
+        if (Objects.isNull(sspObjective)) {
             return null;
         }
         return sspObjective.getObjectiveDesc();
     }
 
     private static String objectiveCodeOf(SspObjective sspObjective) {
-        if (sspObjective == null || sspObjective.getObjective() == null) {
+        if (Objects.isNull(sspObjective) || Objects.isNull(sspObjective.getObjective())) {
             return null;
         }
         return sspObjective.getObjective().getObjectiveCode();

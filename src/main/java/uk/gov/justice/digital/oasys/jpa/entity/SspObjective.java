@@ -1,16 +1,12 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,6 +38,23 @@ public class SspObjective implements Serializable {
     @ManyToOne
     @JoinColumn(name = "OBJECTIVE_CODE")
     private Objective objective;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof SspObjective))
+            return false;
+
+        SspObjective other = (SspObjective) o;
+        return getSspObjectivePk() != null &&
+                getSspObjectivePk().equals(other.getSspObjectivePk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 
 }

@@ -37,8 +37,10 @@ public enum LogEvent {
     GET_LATEST_ASSESSMENT,
     GET_OFFENDER_SUMMARY,
     GET_OFFENDER_SUMMARY_FOUND,
-    DUPLICATE_OFFENDER_FOUND;
-
+    DUPLICATE_OFFENDER_FOUND,
+    GET_SUMMARY_SP_LIST,
+    GET_SUMMARY_SP_LIST_FOUND,
+    GET_SUMMARY_SP;
     public static final String EVENT = "event_id";
     public static final String EXCEPTION = "exception";
 }

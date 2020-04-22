@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
+import uk.gov.justice.digital.oasys.api.FullSentencePlanSummaryDto;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
 import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleAssessmentRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
@@ -35,7 +37,7 @@ public class SentencePlanService {
 
     public BasicSentencePlan getLatestBasicSentencePlanForOffender(String identityType, String identity, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
 
-        var offenderId = offenderService.getOffenderIdByIdentifier(identityType, identity);
+        var offenderId = getOffenderIdByIdentifier(identityType, identity);
         Assessment assessment = simpleAssessmentRepository.getLatestAssessment(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus)
                 .orElseThrow(() -> new ApplicationExceptions.EntityNotFoundException(String.format("Latest Basic Sentence Plan for Offender %s, not found!", offenderId), GET_BASIC_SP_NOT_FOUND));
 
@@ -44,17 +46,24 @@ public class SentencePlanService {
     }
 
     public Collection<BasicSentencePlan> getBasicSentencePlansForOffender(String identityType, String identity, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
-        var offenderId = offenderService.getOffenderIdByIdentifier(identityType, identity);
+        var offenderId = getOffenderIdByIdentifier(identityType, identity);
         Collection<Assessment> assessments = simpleAssessmentRepository.getAssessmentsForOffender(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
         log.info("Found {} Assessments for identity: ({},{})", assessments.size(), identity, identityType, value(EVENT, LogEvent.GET_BASIC_SP));
         return BasicSentencePlan.from(assessments);
     }
 
     public Collection<FullSentencePlanDto> getFullSentencePlansForOffender(String identityType, String identity, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
-        var offenderId = offenderService.getOffenderIdByIdentifier(identityType, identity);
+        var offenderId = getOffenderIdByIdentifier(identityType, identity);
         Collection<Assessment> assessments = simpleAssessmentRepository.getAssessmentsForOffender(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
         log.info("Found {} Assessments for identity: ({},{})", assessments.size(), identity, identityType, value(EVENT, GET_FULL_SP));
         return assessments.stream().map(this::fullSentencePlanFrom).filter(Objects::nonNull).collect(Collectors.toSet());
+    }
+
+    public Collection<FullSentencePlanSummaryDto> getFullSentencePlanSummariesForOffender(String identityType, String identity, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
+        var offenderId = getOffenderIdByIdentifier(identityType, identity);
+        Collection<Assessment> assessments = simpleAssessmentRepository.getAssessmentsForOffender(offenderId,filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
+        log.info("Found {} Assessments for identity: ({},{})", assessments.size(), identity, identityType, value(EVENT, GET_SUMMARY_SP));
+        return assessments.stream().map(this::fullSentencePlanSummaryFrom).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
     public FullSentencePlanDto getFullSentencePlan(Long oasysSetPk) {
@@ -64,8 +73,21 @@ public class SentencePlanService {
         return fullSentencePlanFrom(assessment);
     }
 
+    private Long getOffenderIdByIdentifier(String identityType, String identity) {
+        return offenderService.getOffenderIdByIdentifier(identityType, identity);
+    }
+
     private FullSentencePlanDto fullSentencePlanFrom(Assessment assessment) {
-        var section = sectionService.getSectionsForAssessment(assessment.getOasysSetPk(), "ISP", "RSP").stream().findFirst();
+        Optional<Section> section = getFullSentencePlanSection(assessment);
         return FullSentencePlanDto.from(assessment, section);
+    }
+
+    private FullSentencePlanSummaryDto fullSentencePlanSummaryFrom(Assessment assessment) {
+        Optional<Section> section = getFullSentencePlanSection(assessment);
+        return FullSentencePlanSummaryDto.from(assessment, section);
+    }
+
+    private Optional<Section> getFullSentencePlanSection(Assessment assessment) {
+        return sectionService.getSectionsForAssessment(assessment.getOasysSetPk(), "ISP", "RSP").stream().findFirst();
     }
 }
