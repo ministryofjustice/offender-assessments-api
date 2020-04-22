@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
 
+import java.util.Objects;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OffenderDto {
@@ -43,7 +45,7 @@ public class OffenderDto {
     private Long mergedOasysOffenderId;
 
     public static OffenderDto from(OffenderSummary offender) {
-        if (offender == null) {
+        if (Objects.isNull(offender)) {
             return null;
         }
         return new OffenderDto(

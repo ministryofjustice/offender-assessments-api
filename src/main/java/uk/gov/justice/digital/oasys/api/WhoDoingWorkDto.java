@@ -21,7 +21,6 @@ public class WhoDoingWorkDto {
 
     public static Set<WhoDoingWorkDto> from(Set<SspWhoDoWorkPivot> sspWhoDoWorkPivot) {
 
-
         return Optional.ofNullable(sspWhoDoWorkPivot).orElse(Collections.emptySet())
                 .stream()
                 .map(work -> WhoDoingWorkDto.builder()

@@ -1,13 +1,11 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
-@ToString(exclude = "oasysQuestion")
-@EqualsAndHashCode(exclude = "oasysQuestion")
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +15,6 @@ public class OasysAnswer {
     @Id
     @Column(name = "OASYS_ANSWER_PK")
     private Long oasysAnswerPk;
-    //    @Column(name = "OASYS_QUESTION_PK")
-//    private Long oasysQuestionPk;
     @Column(name = "MIG_GUID")
     private String migGuid;
     @Column(name = "MIG_ID")
@@ -50,5 +46,22 @@ public class OasysAnswer {
 
     public boolean hasRefAnswer(){
         return refAnswer != null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof OasysAnswer))
+            return false;
+
+        OasysAnswer other = (OasysAnswer) o;
+        return getOasysAnswerPk() != null &&
+                getOasysAnswerPk().equals(other.getOasysAnswerPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }

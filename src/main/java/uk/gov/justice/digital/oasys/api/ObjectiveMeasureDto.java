@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjectiveMeasure;
 
+import java.util.Objects;
+
 @Builder(access = AccessLevel.PRIVATE)
 @Value
 public class ObjectiveMeasureDto {
@@ -12,7 +14,7 @@ public class ObjectiveMeasureDto {
     private RefElementDto status;
 
     public static ObjectiveMeasureDto from(SspObjectiveMeasure sspObjectiveMeasure) {
-        if (sspObjectiveMeasure == null) {
+        if (Objects.isNull(sspObjectiveMeasure)) {
             return null;
         }
         return builder()

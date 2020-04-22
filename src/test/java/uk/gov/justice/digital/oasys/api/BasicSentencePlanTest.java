@@ -21,7 +21,7 @@ public class BasicSentencePlanTest {
         assertThat(plan.getBasicSentencePlanItems()).hasSize(2);
         assertThat(plan.getSentencePlanId()).isEqualTo(1);
         assertThat(plan.getCreatedDate()).isEqualTo(LocalDate.now().minusDays(1));
-        assertThat(plan.getBasicSentencePlanItems()).extracting("basicSentPlanObjId").containsOnly(1l);
+        assertThat(plan.getBasicSentencePlanItems()).extracting("basicSentPlanObjId").containsOnly(1l, 2l);
         assertThat(plan.getBasicSentencePlanItems()).extracting("includeInPlan").containsOnly(true);
         assertThat(plan.getBasicSentencePlanItems()).extracting("objectiveText").containsOnly("obj1", "obj2");
         assertThat(plan.getBasicSentencePlanItems()).extracting("measureText").containsOnly("measure1", "measure2");

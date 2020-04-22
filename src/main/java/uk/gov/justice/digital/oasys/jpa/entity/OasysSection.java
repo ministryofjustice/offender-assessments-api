@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Data
+@Getter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -89,5 +89,22 @@ public class OasysSection {
                 .filter(OasysAnswer::hasRefAnswer)
                 .map(OasysAnswer::getRefAnswer)
                 .collect(Collectors.toMap(RefAnswer::getRefQuestionCode, RefAnswer::getRefAnswerCode));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof OasysSection))
+            return false;
+
+        OasysSection other = (OasysSection) o;
+        return getOasysSectionPk() != null &&
+                getOasysSectionPk().equals(other.getOasysSectionPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }

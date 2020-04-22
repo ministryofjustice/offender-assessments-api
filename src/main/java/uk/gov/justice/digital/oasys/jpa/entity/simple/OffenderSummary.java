@@ -53,4 +53,20 @@ public class OffenderSummary {
     @Transient
     @Setter
     private Long mergedOffenderPK;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OffenderSummary))
+            return false;
+
+        OffenderSummary other = (OffenderSummary) o;
+        return offenderPk != null &&
+                offenderPk.equals(other.getOffenderPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

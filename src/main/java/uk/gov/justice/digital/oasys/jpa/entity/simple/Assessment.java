@@ -64,4 +64,20 @@ public class Assessment {
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private Set<SspObjectivesInSet> sspObjectivesInSets;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Assessment))
+            return false;
+
+        Assessment other = (Assessment) o;
+        return oasysSetPk != null &&
+                oasysSetPk.equals(other.getOasysSetPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

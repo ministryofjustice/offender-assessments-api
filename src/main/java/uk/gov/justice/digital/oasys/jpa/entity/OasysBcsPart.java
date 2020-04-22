@@ -1,11 +1,14 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.Data;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "OASYS_BCS_PART")
 public class OasysBcsPart {
@@ -63,5 +66,22 @@ public class OasysBcsPart {
     @OneToOne
     @JoinColumn(name = "BCS_PART_USER", referencedColumnName = "OASYS_USER_CODE")
     private OasysUser bcsPartUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof OasysBcsPart))
+            return false;
+
+        OasysBcsPart other = (OasysBcsPart) o;
+        return getOasysBcsPartPk() != null &&
+                getOasysBcsPartPk().equals(other.getOasysBcsPartPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

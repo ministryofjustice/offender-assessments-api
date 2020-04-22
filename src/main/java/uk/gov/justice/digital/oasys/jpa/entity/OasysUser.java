@@ -1,15 +1,12 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.List;
 
-@Data
+@Getter
 @Entity
 @Table(name = "OASYS_USER")
 @Builder
@@ -78,6 +75,23 @@ public class OasysUser {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "OASYS_USER_CODE", referencedColumnName = "OASYS_USER_CODE")
     private List<AreaEstUserRole> roles;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof OasysUser))
+            return false;
+
+        OasysUser other = (OasysUser) o;
+        return getOasysUserCode() != null &&
+                getOasysUserCode().equals(other.getOasysUserCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 
 }

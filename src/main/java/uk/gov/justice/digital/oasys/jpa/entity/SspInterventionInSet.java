@@ -1,15 +1,12 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.Set;
 
-@Data
+@Getter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -66,4 +63,20 @@ public class SspInterventionInSet {
     @JoinColumn(name = "SSP_INTERVENTION_IN_SET_PK", referencedColumnName = "SSP_INTERVENTION_IN_SET_PK",insertable=false, updatable=false)
     private SspInterventionMeasure sspInterventionMeasure;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof SspInterventionInSet))
+            return false;
+
+        SspInterventionInSet other = (SspInterventionInSet) o;
+        return getSspInterventionInSetPk() != null &&
+                getSspInterventionInSetPk().equals(other.getSspInterventionInSetPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

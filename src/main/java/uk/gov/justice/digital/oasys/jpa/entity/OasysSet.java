@@ -513,4 +513,21 @@ public class OasysSet {
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private Set<OffenceBlock> offenceBlock;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof OasysSet))
+            return false;
+
+        OasysSet other = (OasysSet) o;
+        return getOasysSetPk() != null &&
+                getOasysSetPk().equals(other.getOasysSetPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

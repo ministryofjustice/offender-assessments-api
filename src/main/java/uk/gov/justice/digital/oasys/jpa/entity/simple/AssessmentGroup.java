@@ -30,4 +30,20 @@ public class AssessmentGroup {
     @OneToMany
     @JoinColumn(name = "OASYS_ASSESSMENT_GROUP_PK", referencedColumnName = "OASYS_ASSESSMENT_GROUP_PK")
     private Set<Assessment> assessments;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AssessmentGroup))
+            return false;
+
+        AssessmentGroup other = (AssessmentGroup) o;
+        return oasysAssessmentGroupPk != null &&
+                oasysAssessmentGroupPk.equals(other.getOasysAssessmentGroupPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

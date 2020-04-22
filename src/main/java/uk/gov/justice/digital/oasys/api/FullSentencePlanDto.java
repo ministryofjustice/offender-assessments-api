@@ -22,7 +22,7 @@ public class FullSentencePlanDto {
 
     public static FullSentencePlanDto from(Assessment assessment, Optional<Section> section) {
 
-        if (assessment.getSspObjectivesInSets() == null || assessment.getSspObjectivesInSets().isEmpty()) {
+        if ((assessment.getSspObjectivesInSets().isEmpty()) && section.isEmpty()) {
             return null;
         }
         
@@ -41,17 +41,10 @@ public class FullSentencePlanDto {
 
         return new FullSentencePlanDto(
                 assessment.getOasysSetPk(),
-                earliestSspObjectiveOf(assessment.getSspObjectivesInSets()),
+                assessment.getCreateDate(),
                 assessment.getDateCompleted(),
                 ObjectiveDto.from(assessment.getSspObjectivesInSets()),
                 sentencePlanFields);
 
-    }
-
-    private static LocalDateTime earliestSspObjectiveOf(Set<SspObjectivesInSet> sspObjectivesInSets) {
-        return sspObjectivesInSets.stream()
-                .min(Comparator.comparing(SspObjectivesInSet::getCreateDate))
-                .map(SspObjectivesInSet::getCreateDate)
-                .orElse(null);
     }
 }

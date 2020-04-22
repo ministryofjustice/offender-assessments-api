@@ -2,6 +2,7 @@ package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -10,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Time;
 
-@Data
+@Getter
 @Entity
 @Table(name = "REF_ROLE")
 @NoArgsConstructor
@@ -41,5 +42,22 @@ public class RefRole {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof RefRole))
+            return false;
+
+        RefRole other = (RefRole) o;
+        return getRefRoleCode() != null &&
+                getRefRoleCode().equals(other.getRefRoleCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

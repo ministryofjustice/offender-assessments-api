@@ -1,11 +1,17 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.Objects;
 
-@Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "TEAM")
 @IdClass(TeamPK.class)
@@ -41,5 +47,23 @@ public class Team {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TeamPK)) return false;
+        TeamPK that = (TeamPK) o;
+        return Objects.nonNull(getCtAreaEstCode()) &&
+                Objects.nonNull(getDivisionCode()) &&
+                Objects.nonNull(getTeamCode()) &&
+                Objects.equals(getCtAreaEstCode(), that.getCtAreaEstCode()) &&
+                Objects.equals(getDivisionCode(), that.getDivisionCode()) &&
+                Objects.equals(getTeamCode(), that.getTeamCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

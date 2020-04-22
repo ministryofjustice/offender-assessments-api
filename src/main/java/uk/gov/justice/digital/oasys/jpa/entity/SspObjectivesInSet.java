@@ -2,18 +2,16 @@ package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
-@Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @Table(name = "SSP_OBJECTIVES_IN_SET")
 @Builder
 public class SspObjectivesInSet {
@@ -71,5 +69,22 @@ public class SspObjectivesInSet {
     @OneToMany
     @JoinColumn(name = "SSP_OBJECTIVES_IN_SET_PK", referencedColumnName = "SSP_OBJECTIVES_IN_SET_PK")
     private Set<SspCrimNeedObjPivot> sspCrimNeedObjPivots;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof SspObjectivesInSet))
+            return false;
+
+        SspObjectivesInSet other = (SspObjectivesInSet) o;
+        return getSspObjectivesInSetPk() != null &&
+                getSspObjectivesInSetPk().equals(other.getSspObjectivesInSetPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

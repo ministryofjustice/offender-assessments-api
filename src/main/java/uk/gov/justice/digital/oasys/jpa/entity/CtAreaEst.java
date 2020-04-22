@@ -1,16 +1,15 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Time;
 
-@Data
+@Getter
 @Entity
 @Table(name = "CT_AREA_EST")
 @NoArgsConstructor
@@ -69,5 +68,22 @@ public class CtAreaEst {
     private String runQaSampleInd;
     @Column(name = "BCS_ON_RECEPTION_IND")
     private String bcsOnReceptionInd;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof CtAreaEst))
+            return false;
+
+        CtAreaEst other = (CtAreaEst) o;
+        return getCtAreaEstCode() != null &&
+                getCtAreaEstCode().equals(other.getCtAreaEstCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

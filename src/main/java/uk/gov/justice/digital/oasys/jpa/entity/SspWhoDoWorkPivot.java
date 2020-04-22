@@ -1,15 +1,13 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
 
-@Data
+@Getter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -43,5 +41,22 @@ public class SspWhoDoWorkPivot implements Serializable {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof SspWhoDoWorkPivot))
+            return false;
+
+        SspWhoDoWorkPivot other = (SspWhoDoWorkPivot) o;
+        return getSspWhoDoWorkPivotPk() != null &&
+                getSspWhoDoWorkPivotPk().equals(other.getSspWhoDoWorkPivotPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

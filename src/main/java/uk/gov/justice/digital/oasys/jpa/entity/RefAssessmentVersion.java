@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -47,5 +48,21 @@ public class RefAssessmentVersion {
             @JoinColumn(name = "VERSION_NUMBER", referencedColumnName = "VERSION_NUMBER")
     })
     private List<RefSection> refSections;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RefAssessmentVersionPK)) return false;
+        RefAssessmentVersionPK that = (RefAssessmentVersionPK) o;
+        return Objects.nonNull(getRefAssVersionCode()) &&
+                Objects.nonNull(getVersionNumber()) &&
+                Objects.equals(getRefAssVersionCode(), that.getRefAssVersionCode()) &&
+                Objects.equals(getVersionNumber(), that.getVersionNumber());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

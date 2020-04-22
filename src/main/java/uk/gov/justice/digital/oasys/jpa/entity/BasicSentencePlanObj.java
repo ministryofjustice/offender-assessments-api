@@ -1,14 +1,10 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @Entity
 @Table(name = "BASIC_SENTENCE_PLAN_OBJ")
 @Builder(toBuilder = true)
@@ -69,5 +65,22 @@ public class BasicSentencePlanObj {
     private Long cfLastBcsInt;
     @Column(name = "CF_ORIG_BCS_INT")
     private Long cfOrigBcsInt;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof BasicSentencePlanObj))
+            return false;
+
+        BasicSentencePlanObj other = (BasicSentencePlanObj) o;
+        return getBasicSentPlanObjPk() != null &&
+                getBasicSentPlanObjPk().equals(other.getBasicSentPlanObjPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }

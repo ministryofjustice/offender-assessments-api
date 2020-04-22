@@ -5,8 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Time;
 
-@Data
-@EqualsAndHashCode(exclude = {"offenceSentenceDetail", "sentence", "oasysSet"})
+@Getter
 @Entity
 @Table(name = "OFFENCE_BLOCK")
 @Builder
@@ -94,4 +93,21 @@ public class OffenceBlock {
     @OneToOne
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private OasysSet oasysSet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof OffenceBlock))
+            return false;
+
+        OffenceBlock other = (OffenceBlock) o;
+        return getOffenceBlockPk() != null &&
+                getOffenceBlockPk().equals(other.getOffenceBlockPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

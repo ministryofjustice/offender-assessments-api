@@ -1,14 +1,13 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
-import lombok.Data;
-
+import lombok.Getter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Time;
 
-@Data
+@Getter
 @Entity
 @Table(name = "COURT")
 public class Court {
@@ -35,5 +34,22 @@ public class Court {
     private Time lastupdDate;
     @Column(name = "LASTUPD_USER")
     private String lastupdUser;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Court))
+            return false;
+
+        Court other = (Court) o;
+        return getCourtPk() != null &&
+                getCourtPk().equals(other.getCourtPk());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }
