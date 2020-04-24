@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysBcsPart;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersion;
-import uk.gov.justice.digital.oasys.jpa.entity.SspObjectivesInSet;
+import uk.gov.justice.digital.oasys.jpa.entity.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -63,6 +60,11 @@ public class Assessment {
     @OneToMany
     @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
     private Set<SspObjectivesInSet> sspObjectivesInSets;
+
+    //TODO: Sentence data shuold come from Delius or Nomis
+    @OneToMany
+    @JoinColumn(name = "OASYS_SET_PK", referencedColumnName = "OASYS_SET_PK")
+    private Set<OffenceBlock> offenceBlocks;
 
     @Override
     public boolean equals(Object o) {

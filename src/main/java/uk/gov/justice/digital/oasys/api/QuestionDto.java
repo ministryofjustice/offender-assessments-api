@@ -7,6 +7,7 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,12 +31,10 @@ public class QuestionDto {
     }
 
     public static Set<QuestionDto> from(Collection<OasysQuestion> oasysQuestions) {
-        return Optional.ofNullable(oasysQuestions)
-                .map(sections -> sections
+        return Optional.ofNullable(oasysQuestions).orElse(Collections.emptySet())
                         .stream()
                         .map(QuestionDto::from)
-                        .collect(Collectors.toSet()))
-                .orElse(null);
+                        .collect(Collectors.toSet());
     }
 
     public static QuestionDto from(OasysQuestion question) {

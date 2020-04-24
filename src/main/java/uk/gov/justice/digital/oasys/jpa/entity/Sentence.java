@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -28,10 +28,7 @@ public class Sentence {
     private String custodialInd;
     @Column(name = "CJA_IND")
     private String cjaInd;
-    @Column(name = "START_DATE")
-    private LocalDate startDate;
-    @Column(name = "END_DATE")
-    private LocalDate endDate;
+
     @OneToOne
     @JoinColumns({
             @JoinColumn(name = "ORDER_TYPE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
@@ -39,16 +36,8 @@ public class Sentence {
     })
     private RefElement orderType;
 
-    @Column(name = "CHECKSUM")
-    private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
-    @Column(name = "CREATE_USER")
-    private String createUser;
-    @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
-    @Column(name = "LASTUPD_USER")
-    private String lastupdUser;
+    private LocalDateTime createDate;
 
     @Override
     public boolean equals(Object o) {

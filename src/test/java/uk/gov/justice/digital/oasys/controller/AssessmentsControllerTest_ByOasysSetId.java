@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.oasys.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -11,9 +10,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import uk.gov.justice.digital.oasys.api.AssessmentDto;
 import uk.gov.justice.digital.oasys.service.domain.SectionHeader;
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,6 +98,21 @@ public class AssessmentsControllerTest_ByOasysSetId extends IntegrationTest {
         var relationships = assessment.getLayer3SentencePlanNeeds().stream().filter(n -> n.getSection().equals(SectionHeader.RELATIONSHIPS)).findFirst().get();
         assertThat(relationships.getOverThreshold()).isTrue();
 
+
+        //sentence data
+        var sentence = assessment.getSentence().stream().filter(s->s.getSentenceCode().equalsIgnoreCase("310")).findFirst().get();
+        assertThat(sentence.getSentenceLengthCustodyDays()).isEqualTo(100);
+        assertThat(sentence.getSentenceDate()).isEqualTo(LocalDate.of(2017,10,1));
+        assertThat(sentence.getOffenceDate()).isEqualTo(LocalDate.of(2017,8,1));
+        assertThat(sentence.getActivity()).isEqualTo("Activity 1");
+        assertThat(sentence.getCja()).isFalse();
+        assertThat(sentence.getCustodial()).isTrue();
+        assertThat(sentence.getCjaSupervisionMonths()).isNull();
+        assertThat(sentence.getCjaUnpaidHours()).isEqualTo(120);
+        assertThat(sentence.getOrderType().getCode()).isEqualTo("S");
+        assertThat(sentence.getOffenceBlockType().getCode()).isEqualTo("PRINCIPAL_PROPOSAL");
+        assertThat(sentence.getParolable()).isTrue();
+        assertThat(sentence.getSentenceDescription()).isEqualTo("Life");
     }
 
 }

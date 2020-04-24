@@ -28,12 +28,6 @@ public class Court {
     private String checksum;
     @Column(name = "CREATE_DATE")
     private Time createDate;
-    @Column(name = "CREATE_USER")
-    private String createUser;
-    @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
-    @Column(name = "LASTUPD_USER")
-    private String lastupdUser;
 
     @Override
     public boolean equals(Object o) {
