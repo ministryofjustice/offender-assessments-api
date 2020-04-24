@@ -45,6 +45,10 @@ public class AssessmentDto {
     //private Collection<OasysBcsPartDto> oasysBcsParts;
     //@JsonProperty("qaReview")
     //private QaReviewDto qaReview;
+    //TODO: Sentence data shoUld come from Delius or Nomis
+    @JsonProperty("sentence")
+    private Collection<SentenceDto> sentence;
+
     @JsonProperty("childSafeguardingIndicated")
     private Boolean childSafeguardingIndicated;
     @JsonProperty("layer3SentencePlanNeeds")
@@ -69,6 +73,7 @@ public class AssessmentDto {
                 assessmentSummary.getDateCompleted(),
                 assessmentSummary.getAssessmentVoidedDate(),
                 SectionDto.from(assessmentSummary.getOasysSections()),
+                SentenceDto.from(assessmentSummary.getOffenceBlocks()),
                 childSafeguardingIndicated,
                 AssessmentNeedDto.from(needs));
     }

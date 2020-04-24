@@ -101,6 +101,9 @@ public class ControllerTestContext {
     private static Set<OffenceBlock> anOffenceBlock() {
         return Set.of(OffenceBlock.builder()
                 .offenceBlockPk(1L)
+                .sentenceDate(LocalDate.MAX)
+                .offenceDate(LocalDate.MIN)
+                .sentLengthCustDays(100l)
                 .offenceSentenceDetail(OffenceSentenceDetail
                         .builder()
                         .activityDesc("activity")
@@ -111,16 +114,17 @@ public class ControllerTestContext {
                         .builder()
                         .cjaInd("Y")
                         .custodialInd("Y")
-                        .endDate(LocalDate.MAX)
                         .orderType(RefElement.builder().refElementDesc("orderType").build())
                         .sentenceCode("sentenceCode")
                         .sentenceDesc("sentenceDesc")
-                        .startDate(LocalDate.MIN)
                         .build()
                 )
                 .build(),
                 OffenceBlock.builder()
                         .offenceBlockPk(2L)
+                        .sentenceDate(LocalDate.MAX)
+                        .offenceDate(LocalDate.MIN)
+                        .sentLengthCustDays(200l)
                         .offenceSentenceDetail(OffenceSentenceDetail
                                 .builder()
                                 .activityDesc("another activity")
@@ -131,11 +135,10 @@ public class ControllerTestContext {
                                 .builder()
                                 .cjaInd("Y")
                                 .custodialInd("Y")
-                                .endDate(LocalDate.MAX)
+
                                 .orderType(RefElement.builder().refElementDesc("orderType").build())
                                 .sentenceCode("310")
                                 .sentenceDesc("Life")
-                                .startDate(LocalDate.MIN)
                                 .build()
                         )
                         .build());
@@ -166,13 +169,4 @@ public class ControllerTestContext {
     private static RefElement assessmentType(String type) {
         return RefElement.builder().refElementCode(type).build();
     }
-
-    public static OasysSet anOasysSet(Long id) {
-        return OasysSet.builder()
-                .assessmentType(RefElement.builder().build())
-                .group(OasysAssessmentGroup.builder().build())
-                .assessmentStatus(RefElement.builder().build())
-                .oasysSetPk(id).build();
-    }
-
 }

@@ -34,16 +34,6 @@ public class RefElement {
     private LocalDateTime startDate;
     @Column(name = "END_DATE")
     private LocalDateTime endDate;
-    @Column(name = "CHECKSUM")
-    private String checksum;
-    @Column(name = "CREATE_DATE")
-    private LocalDateTime createDate;
-    @Column(name = "CREATE_USER")
-    private String createUser;
-    @Column(name = "LASTUPD_DATE")
-    private LocalDateTime lastupdDate;
-    @Column(name = "LASTUPD_USER")
-    private String lastupdUser;
 
     @Override
     public boolean equals(Object o) {

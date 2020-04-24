@@ -3,7 +3,7 @@ package uk.gov.justice.digital.oasys.jpa.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -23,10 +23,14 @@ public class OffenceSentenceDetail {
     private Long cjaSupervisionMonths;
     @Column(name = "ACTIVITY_DESC")
     private String activityDesc;
-    @Column(name = "YES_NO_ELM")
-    private String yesNoElm;
-    @Column(name = "YES_NO_CAT")
-    private String yesNoCat;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "YES_NO_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
+            @JoinColumn(name = "YES_NO_ELM", referencedColumnName = "REF_ELEMENT_CODE")
+    })
+    private RefElement yesNo;
+
     @OneToOne
     @JoinColumns({
             @JoinColumn(name = "SENTENCE_ATTRIBUTE_CAT", referencedColumnName = "REF_CATEGORY_CODE"),
@@ -34,20 +38,8 @@ public class OffenceSentenceDetail {
     })
     private RefElement sentenceAttribute;
 
-    @Column(name = "MIG_GUID")
-    private String migGuid;
-    @Column(name = "MIG_ID")
-    private String migId;
-    @Column(name = "CHECKSUM")
-    private String checksum;
     @Column(name = "CREATE_DATE")
-    private Time createDate;
-    @Column(name = "CREATE_USER")
-    private String createUser;
-    @Column(name = "LASTUPD_DATE")
-    private Time lastupdDate;
-    @Column(name = "LASTUPD_USER")
-    private String lastupdUser;
+    private LocalDateTime createDate;
 
     @OneToOne
     @JoinColumn(name = "OFFENCE_BLOCK_PK", referencedColumnName = "OFFENCE_BLOCK_PK")

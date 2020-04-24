@@ -5,12 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static uk.gov.justice.digital.oasys.api.DtoUtils.refElementDesc;
 import static uk.gov.justice.digital.oasys.api.DtoUtils.ynToBoolean;
 
 @Value
@@ -27,12 +24,10 @@ public class SentenceDto {
     private Boolean custodial;
     @JsonProperty("cja")
     private Boolean cja;
-    @JsonProperty("startDate")
-    private LocalDate startDate;
-    @JsonProperty("endDate")
-    private LocalDate endDate;
     @JsonProperty("orderType")
-    private String orderType;
+    private RefElementDto orderType;
+    @JsonProperty("offenceBlockType")
+    private RefElementDto offenceBlockType;
     @JsonProperty("cjaUnpaidHours")
     private Long cjaUnpaidHours;
     @JsonProperty("cjaSupervisionMonths")
@@ -41,32 +36,39 @@ public class SentenceDto {
     private String activity;
     @JsonProperty("parolable")
     private Boolean parolable;
+    @JsonProperty("offenceDate")
+    private LocalDate offenceDate;
+    @JsonProperty("sentenceDate")
+    private LocalDate sentenceDate;
+    @JsonProperty("sentenceLengthCustodyDays")
+    private Long sentenceLengthCustodyDays;
 
-    public static Set<SentenceDto> from(List<OasysAssessmentGroup> oasysAssessmentGroups) {
-        Optional<OasysSet> latestSet = oasysAssessmentGroups.stream()
-                .flatMap(g -> g.getOasysSets().stream())
-                .max(Comparator.comparing(OasysSet::getCreateDate));
-        Set<OffenceBlock> latestOffenceBlock = latestSet.isPresent() ? latestSet.get().getOffenceBlock() : new HashSet<>();
 
-        return latestOffenceBlock.stream().filter(Objects::nonNull).map(SentenceDto::from).collect(Collectors.toSet());
+    public static Set<SentenceDto> from(Set<OffenceBlock> offenceBlocks) {
+        return Optional.ofNullable(offenceBlocks).orElse(Collections.emptySet())
+                .stream()
+                .map(SentenceDto::from)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
     private static SentenceDto from(OffenceBlock offenceBlock) {
         var sentenceDetail = Optional.ofNullable(offenceBlock.getOffenceSentenceDetail());
         var sentence = Optional.ofNullable(offenceBlock.getSentence());
-
         return SentenceDto.builder()
                 .activity(sentenceDetail.map(OffenceSentenceDetail::getActivityDesc).orElse(null))
                 .cja(ynToBoolean(sentence.map(Sentence::getCjaInd).orElse(null)))
                 .cjaSupervisionMonths(sentenceDetail.map(OffenceSentenceDetail::getCjaSupervisionMonths).orElse(null))
                 .cjaUnpaidHours(sentenceDetail.map(OffenceSentenceDetail::getCjaUnpaidHours).orElse(null))
                 .custodial(ynToBoolean(sentence.map(Sentence::getCustodialInd).orElse(null)))
-                .endDate(sentence.map(Sentence::getEndDate).orElse(null))
-                .orderType(refElementDesc(sentence.map(Sentence::getOrderType).orElse(null)))
+                .orderType(RefElementDto.from(sentence.map(Sentence::getOrderType).orElse(null)))
+                .offenceBlockType(RefElementDto.from(offenceBlock.getOffenceBlockType()))
                 .sentenceCode(sentence.map(Sentence::getSentenceCode).orElse(null))
                 .sentenceDescription(sentence.map(Sentence::getSentenceDesc).orElse(null))
-                .startDate(sentence.map(Sentence::getStartDate).orElse(null))
                 .parolable(sentence.map(s -> PAROLE_SENTENCE_TYPES.contains(s.getSentenceCode())).orElse(null))
+                .offenceDate(offenceBlock.getOffenceDate())
+                .sentenceDate(offenceBlock.getSentenceDate())
+                .sentenceLengthCustodyDays(offenceBlock.getSentLengthCustDays())
                 .build();
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
+import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
@@ -107,7 +108,7 @@ public class OAuthIntegrationTest extends IntegrationTest {
 
     @Test
     public void returnsOKWhenRoleIsOASYS_READ_ONLYAndEndpointIsOffenderData() {
-        Mockito.when(offenderRepository.findById(eq(1l))).thenReturn(ControllerTestContext.anOffender());
+        Mockito.when(offenderRepository.findById(eq(1l))).thenReturn(anOffender());
         given()
                 .when()
                 .auth().oauth2(readonlyOauthToken)
@@ -116,7 +117,7 @@ public class OAuthIntegrationTest extends IntegrationTest {
                 .statusCode(200);
     }
 
-    public OasysUser oasysUser(String userCode) {
+    private OasysUser oasysUser(String userCode) {
         return OasysUser.builder()
                 .oasysUserCode(userCode)
                 .userForename1("Test")
@@ -125,5 +126,11 @@ public class OAuthIntegrationTest extends IntegrationTest {
                 .userStatus(RefElement.builder().refCategoryCode("USER_STATUS").refElementCode("ACTIVE").refElementDesc("Active").build())
                 .roles(of(AreaEstUserRole.builder().ctAreaEstCode("1234").build()))
                 .build();
+    }
+
+    private Optional<Offender> anOffender() {
+        return Optional.ofNullable(Offender.builder()
+                .offenderPk(1L)
+                .build());
     }
 }
