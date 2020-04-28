@@ -1,23 +1,15 @@
 package uk.gov.justice.digital.oasys.api;
 
 import uk.gov.justice.digital.oasys.jpa.entity.*;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.AssessmentGroup;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
-import uk.gov.justice.digital.oasys.service.OffenderService;
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.AssessmentGroup;
+import uk.gov.justice.digital.oasys.jpa.entity.Section;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-
 public class ApiTestContext {
-
-    public static void setup(OffenderService offenderService) {
-
-    }
 
     private static BasicSentencePlanObj aSentencePlan(long l) {
                 return BasicSentencePlanObj.builder()
@@ -35,22 +27,6 @@ public class ApiTestContext {
                         .oasysSetPk(l).build();
     }
 
-    public static Set<OasysSection> completeLayer3AssessmentSections() {
-
-        OasysSection section10 = OasysSection.builder()
-                .refSection(RefSection.builder()
-                        .crimNeedScoreThreshold(5L).refSectionCode("10")
-                        .scoredForOgp("Y")
-                        .scoredForOvp("Y")
-                        .sectionType(
-                        RefElement.builder().refElementCode("10").refElementShortDesc("Emotional Wellbeing").build()).build())
-                .sectOvpRawScore(5L)
-                .sectOgpRawScore(5L)
-                .lowScoreNeedAttnInd("YES")
-                .sectOtherRawScore(10L)
-                .oasysQuestions(getOASysQuestions()).build();
-        return Set.of( section10);
-    }
 
     public static Set<OasysQuestion> getOASysQuestions() {
         OasysQuestion question1098 = OasysQuestion.builder()

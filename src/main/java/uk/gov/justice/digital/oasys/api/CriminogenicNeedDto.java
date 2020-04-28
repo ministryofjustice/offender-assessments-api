@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 @Builder(access = AccessLevel.PRIVATE)
 @Value
 public class CriminogenicNeedDto {
-    private String code;
-    private String description;
-    private Integer priority;
+    String code;
+    String description;
+    Integer priority;
 
     public static Set<CriminogenicNeedDto> from(Set<SspCrimNeedObjPivot> sspCrimNeedObjPivots) {
         return Optional.ofNullable(sspCrimNeedObjPivots)

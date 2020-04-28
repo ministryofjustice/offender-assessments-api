@@ -1,20 +1,17 @@
-package uk.gov.justice.digital.oasys.jpa.repository.simple;
+package uk.gov.justice.digital.oasys.jpa.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import uk.gov.justice.digital.oasys.api.OffenderIdentifier;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.QOffenderSummary;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderSummary;
+import uk.gov.justice.digital.oasys.jpa.entity.QOffenderSummary;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 import javax.persistence.EntityManager;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 
 @Repository
 public class SimpleOffenderRepository {

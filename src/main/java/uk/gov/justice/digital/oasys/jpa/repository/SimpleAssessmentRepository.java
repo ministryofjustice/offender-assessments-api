@@ -1,20 +1,15 @@
-package uk.gov.justice.digital.oasys.jpa.repository.simple;
+package uk.gov.justice.digital.oasys.jpa.repository;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.QAssessment;
-import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
-
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.QAssessment;
 import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
-
-import static uk.gov.justice.digital.oasys.utils.LogEvent.GET_ASSESSMENT_NOT_FOUND;
-import static uk.gov.justice.digital.oasys.utils.LogEvent.GET_LATEST_ASSESSMENT_NOT_FOUND;
 
 @Repository
 public class SimpleAssessmentRepository {
@@ -42,6 +37,11 @@ public class SimpleAssessmentRepository {
     public Collection<Assessment> getAssessmentsForOffender(Long offenderId, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
         var query = getAssessmentsQueryForOffender(offenderId);
         filterQuery(query, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
+        return query.fetch();
+    }
+
+    public Collection<Assessment> getAssessmentsForOffender(Long offenderId) {
+        var query = getAssessmentsQueryForOffender(offenderId);
         return query.fetch();
     }
 

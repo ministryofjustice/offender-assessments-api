@@ -11,9 +11,9 @@ import java.util.Optional;
 @Builder(access = AccessLevel.PRIVATE)
 public class RefElementDto {
 
-    private final String code;
-    private final String shortDescription;
-    private final String description;
+    String code;
+    String shortDescription;
+    String description;
 
     public static RefElementDto from(RefElement refElement) {
         return Optional.ofNullable(refElement).map(r -> RefElementDto

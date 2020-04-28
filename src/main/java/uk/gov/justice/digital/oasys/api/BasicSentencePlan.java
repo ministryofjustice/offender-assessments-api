@@ -2,7 +2,7 @@ package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
 import lombok.Value;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 @Value
 @Builder(toBuilder = true)
 public class BasicSentencePlan {
-    private final Long sentencePlanId;
-    private final LocalDate createdDate;
-    private List<BasicSentencePlanItem> basicSentencePlanItems;
+    Long sentencePlanId;
+    LocalDate createdDate;
+    List<BasicSentencePlanItem> basicSentencePlanItems;
 
     public static BasicSentencePlan from(Assessment assessment) {
 

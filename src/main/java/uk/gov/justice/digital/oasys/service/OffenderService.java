@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.justice.digital.oasys.api.OffenderDto;
 import uk.gov.justice.digital.oasys.jpa.entity.OffenderLink;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderSummary;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderLinkRepository;
-import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleOffenderRepository;
+import uk.gov.justice.digital.oasys.jpa.repository.SimpleOffenderRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 
 import java.util.Objects;

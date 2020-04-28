@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;

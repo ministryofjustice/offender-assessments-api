@@ -3,6 +3,7 @@ package uk.gov.justice.digital.oasys.api;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysBcsPart;
 
 import java.time.LocalDateTime;
@@ -11,28 +12,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Data
+@Value
 @Builder(access = AccessLevel.PRIVATE)
 public class OasysBcsPartDto {
-    private String bcsPart;
-    private String bcsPartStatus;
-    private String part1CheckedInd;
-    private LocalDateTime part1CheckedDate;
-    private String bcsPartUserArea;
-    private String bcsPartUserPosition;
-    private LocalDateTime bcsPartCompDate;
-    private LocalDateTime createDate;
-    private LocalDateTime lastupdDate;
-    private String createUser;
-    private String lastupdUser;
-    private String praComplete;
-    private String praCompUser;
-    private LocalDateTime praCompDate;
-    private String lockIncompleteReason;
-    private String lockIncompleteOtherText;
-
-    private OasysUserDto bcsPartUser;
-    private OasysUserDto part1CheckedUser;
+    String bcsPart;
+    String bcsPartStatus;
+    String part1CheckedInd;
+    LocalDateTime part1CheckedDate;
+    String bcsPartUserArea;
+    String bcsPartUserPosition;
+    LocalDateTime bcsPartCompDate;
+    LocalDateTime createDate;
+    LocalDateTime lastupdDate;
+    String createUser;
+    String lastupdUser;
+    String praComplete;
+    String praCompUser;
+    LocalDateTime praCompDate;
+    String lockIncompleteReason;
+    String lockIncompleteOtherText;
+    OasysUserDto bcsPartUser;
+    OasysUserDto part1CheckedUser;
 
     public static List<OasysBcsPartDto> from(Collection<OasysBcsPart> oasysBcsParts) {
         return Optional.ofNullable(oasysBcsParts)

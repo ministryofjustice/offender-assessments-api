@@ -1,11 +1,7 @@
 package uk.gov.justice.digital.oasys.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-
+import lombok.Value;
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
@@ -13,33 +9,20 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Value
 public class AssessmentSummaryDto {
-    @JsonProperty("assessmentId")
-    private Long assessmentId;
-    @JsonProperty("refAssessmentVersionCode")
-    private String refAssessmentVersionCode;
-    @JsonProperty("refAssessmentVersionNumber")
-    private String refAssessmentVersionNumber;
-    @JsonProperty("refAssessmentId")
-    private Long refAssessmentId;
-    @JsonProperty("assessmentType")
-    private String assessmentType;
-    @JsonProperty("assessmentStatus")
-    private String assessmentStatus;
-    @JsonProperty("groupHistoricStatus")
-    private String historicStatus;
-    @JsonProperty("refAssessmentOasysScoringAlgorithmVersion")
-    private Long refAssessmentOasysScoringAlgorithmVersion;
-    @JsonProperty("assessorName")
-    private String assessorName;
-    @JsonProperty("created")
-    private LocalDateTime createdDateTime;
-    @JsonProperty("completed")
-    private LocalDateTime completedDateTime;
-    @JsonProperty("voided")
-    private LocalDateTime voidedDateTime;
+    Long assessmentId;
+    String refAssessmentVersionCode;
+    String refAssessmentVersionNumber;
+    Long refAssessmentId;
+    String assessmentType;
+    String assessmentStatus;
+    String historicStatus;
+    Long refAssessmentOasysScoringAlgorithmVersion;
+    String assessorName;
+    LocalDateTime createdDateTime;
+    LocalDateTime completedDateTime;
+    LocalDateTime voidedDateTime;
 
     public static Collection<AssessmentSummaryDto> from(Collection<Assessment> assessmentSummaries) {
         return Optional.ofNullable(assessmentSummaries)

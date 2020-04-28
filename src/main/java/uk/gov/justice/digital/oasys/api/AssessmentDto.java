@@ -1,58 +1,39 @@
 package uk.gov.justice.digital.oasys.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
+import lombok.Value;
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
 import uk.gov.justice.digital.oasys.service.domain.AssessmentNeed;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Value
 public class AssessmentDto {
-    @JsonProperty("assessmentId")
-    private Long assessmentId;
-    @JsonProperty("refAssessmentVersionCode")
-    private String refAssessmentVersionCode;
-    @JsonProperty("refAssessmentVersionNumber")
-    private String refAssessmentVersionNumber;
-    @JsonProperty("refAssessmentId")
-    private Long refAssessmentId;
-    @JsonProperty("assessmentType")
-    private String assessmentType;
-    @JsonProperty("assessmentStatus")
-    private String assessmentStatus;
-    @JsonProperty("groupHistoricStatus")
-    private String historicStatus;
-    @JsonProperty("refAssessmentOasysScoringAlgorithmVersion")
-    private Long refAssessmentOasysScoringAlgorithmVersion;
-    @JsonProperty("assessorName")
-    private String assessorName;
-    @JsonProperty("created")
-    private LocalDateTime createdDateTime;
-    @JsonProperty("completed")
-    private LocalDateTime completedDateTime;
-    @JsonProperty("voided")
-    private LocalDateTime voidedDateTime;
-    @JsonProperty("sections")
-    private Collection<SectionDto> sections;
+
+    Long assessmentId;
+    String refAssessmentVersionCode;
+    String refAssessmentVersionNumber;
+    Long refAssessmentId;
+    String assessmentType;
+    String assessmentStatus;
+    String historicStatus;
+    Long refAssessmentOasysScoringAlgorithmVersion;
+    String assessorName;
+    LocalDateTime createdDateTime;
+    LocalDateTime completedDateTime;
+    LocalDateTime voidedDateTime;
+    Collection<SectionDto> sections;
     //TODO: we don't need these until we get to update the sentence plan code
     //@JsonProperty("oasysBcsParts")
     //private Collection<OasysBcsPartDto> oasysBcsParts;
     //@JsonProperty("qaReview")
     //private QaReviewDto qaReview;
     //TODO: Sentence data shoUld come from Delius or Nomis
-    @JsonProperty("sentence")
-    private Collection<SentenceDto> sentence;
+    Collection<SentenceDto> sentence;
 
-    @JsonProperty("childSafeguardingIndicated")
-    private Boolean childSafeguardingIndicated;
-    @JsonProperty("layer3SentencePlanNeeds")
-    private Collection<AssessmentNeedDto> layer3SentencePlanNeeds;
+    Boolean childSafeguardingIndicated;
+    Collection<AssessmentNeedDto> layer3SentencePlanNeeds;
 
     public static AssessmentDto from(Assessment assessmentSummary, Boolean childSafeguardingIndicated, Collection<AssessmentNeed> needs) {
         if (Objects.isNull(assessmentSummary)) {

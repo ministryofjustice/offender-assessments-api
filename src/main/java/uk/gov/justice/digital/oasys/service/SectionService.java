@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
-import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleSectionRepository;
+import uk.gov.justice.digital.oasys.jpa.entity.Section;
+import uk.gov.justice.digital.oasys.jpa.repository.SimpleSectionRepository;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 import java.util.Collection;

@@ -15,7 +15,6 @@ import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysAuthenticationRepository;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
-import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import java.util.Optional;
 import static io.restassured.RestAssured.given;
 import static java.util.List.of;

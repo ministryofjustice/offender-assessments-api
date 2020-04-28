@@ -1,26 +1,23 @@
 package uk.gov.justice.digital.oasys.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
 
 import java.util.Optional;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
+@Value
 public class AnswerDto {
-    private Long refAnswerId;
-    private String refAnswerCode;
-    private Long oasysAnswerId;
-    private Long displayOrder;
-    private String staticText;
-    private String freeFormText;
-    private Long ogpScore;
-    private Long ovpScore;
-    private Long qaRawScore;
+    Long refAnswerId;
+    String refAnswerCode;
+    Long oasysAnswerId;
+    Long displayOrder;
+    String staticText;
+    String freeFormText;
+    Long ogpScore;
+    Long ovpScore;
+    Long qaRawScore;
 
     public static AnswerDto from(OasysQuestion question) {
         var oasysAnswer = question.getOasysAnswer();
@@ -41,11 +38,6 @@ public class AnswerDto {
                 refAnswer.map(RefAnswer::getOgpScore).orElse(null),
                 refAnswer.map(RefAnswer::getOvpScore).orElse(null),
                 refAnswer.map(RefAnswer::getQaRawScore).orElse(null));
-    }
-
-    @JsonIgnore
-    public Long getScore() {
-        return Optional.ofNullable(ogpScore).orElse(Optional.ofNullable(ovpScore).orElse(null));
     }
 }
 

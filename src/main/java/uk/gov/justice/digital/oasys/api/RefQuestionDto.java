@@ -2,6 +2,7 @@ package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.RefQuestion;
 
 import java.util.Collections;
@@ -9,18 +10,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Data
+@Value
 @Builder
 public class RefQuestionDto {
-    private Long refQuestionId;
-    private String refQuestionCode;
-    private Long refDisplaySort;
-    private String refQuestionText;
-    private boolean refMandatoryIndicator;
-    private Long refQAWeighting;
-    private String refCtAreaEstCode;
-
-    private List<RefAnswerDto> refAnswers;
+    Long refQuestionId;
+    String refQuestionCode;
+    Long refDisplaySort;
+    String refQuestionText;
+    boolean refMandatoryIndicator;
+    Long refQAWeighting;
+    String refCtAreaEstCode;
+    List<RefAnswerDto> refAnswers;
 
     public static List<RefQuestionDto> from(List<RefQuestion> refQuestions) {
         return Optional.ofNullable(refQuestions).orElse(Collections.emptyList())

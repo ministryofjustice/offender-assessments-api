@@ -1,29 +1,19 @@
 package uk.gov.justice.digital.oasys.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAssessmentVersion;
 
 import java.util.Collection;
 
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Value
 public class RefAssessmentDto {
-    @JsonProperty("refAssessmentVersionId")
-    private Long refAssessmentVersionId;
-    @JsonProperty("refVersionCode")
-    private String refAssVersionCode;
-    @JsonProperty("versionNumber")
-    private String versionNumber;
-    @JsonProperty("oasysScoringAlgorithmVersion")
-    private Long oasysScoringAlgorithmVersion;
-    @JsonProperty("refModuleCode")
-    private String refModuleCode;
-
-    @JsonProperty("refSections")
-    private Collection<RefSectionDto> refSections;
+    Long refAssessmentVersionId;
+    String refAssVersionCode;
+    String versionNumber;
+    Long oasysScoringAlgorithmVersion;
+    String refModuleCode;
+    Collection<RefSectionDto> refSections;
 
     public static RefAssessmentDto from(RefAssessmentVersion refAssessmentVersion) {
         if (refAssessmentVersion == null) {

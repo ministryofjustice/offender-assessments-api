@@ -1,50 +1,30 @@
 package uk.gov.justice.digital.oasys.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
-
+import lombok.Value;
+import uk.gov.justice.digital.oasys.jpa.entity.Section;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Value
 public class SectionDto {
-    @JsonProperty("sectionId")
-    private Long sectionId;
-    @JsonProperty("assessmentId")
-    private Long assessmentId;
-    @JsonProperty("refAssessmentVersionCode")
-    private String refAssessmentVersionCode;
-    @JsonProperty("refSectionVersionNumber")
-    private String refSectionVersionNumber;
-    @JsonProperty("refSectionCode")
-    private String refSectionCode;
-    @JsonProperty("refSectionCrimNeedScoreThreshold")
-    private Long refSectionCrimNeedScoreThreshold;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("sectionOgpWeightedScore")
-    private Long sectionOgpWeightedScore;
-    @JsonProperty("sectionOgpRawScore")
-    private Long sectionOgpRawScore;
-    @JsonProperty("sectionOvpWeightedScore")
-    private Long sectionOvpWeightedScore;
-    @JsonProperty("sectionOvpRawScore")
-    private Long sectionOvpRawScore;
-    @JsonProperty("sectionOtherWeightedScore")
-    private Long sectionOtherWeightedScore;
-    @JsonProperty("sectionOtherRawScore")
-    private Long sectionOtherRawScore;
-    @JsonProperty("lowScoreAttentionNeeded")
-    private String lowScoreAttentionNeeded;
-    @JsonProperty("questions")
-    private Collection<QuestionDto> questions;
+    Long sectionId;
+    Long assessmentId;
+    String refAssessmentVersionCode;
+    String refSectionVersionNumber;
+    String refSectionCode;
+    Long refSectionCrimNeedScoreThreshold;
+    String status;
+    Long sectionOgpWeightedScore;
+    Long sectionOgpRawScore;
+    Long sectionOvpWeightedScore;
+    Long sectionOvpRawScore;
+    Long sectionOtherWeightedScore;
+    Long sectionOtherRawScore;
+    String lowScoreAttentionNeeded;
+    Collection<QuestionDto> questions;
 
     public static Collection<SectionDto> from(Collection<Section> sections) {
         return Optional.ofNullable(sections)

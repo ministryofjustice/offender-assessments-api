@@ -10,8 +10,8 @@ import java.util.Objects;
 @Builder(access = AccessLevel.PRIVATE)
 @Value
 public class ObjectiveMeasureDto {
-    private String comments;
-    private RefElementDto status;
+    String comments;
+    RefElementDto status;
 
     public static ObjectiveMeasureDto from(SspObjectiveMeasure sspObjectiveMeasure) {
         if (Objects.isNull(sspObjectiveMeasure)) {

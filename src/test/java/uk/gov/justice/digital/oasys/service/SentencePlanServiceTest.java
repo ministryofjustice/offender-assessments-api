@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
-import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleAssessmentRepository;
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.Section;
+import uk.gov.justice.digital.oasys.jpa.repository.SimpleAssessmentRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

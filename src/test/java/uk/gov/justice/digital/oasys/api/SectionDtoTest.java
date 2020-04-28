@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.justice.digital.oasys.jpa.entity.RefSection;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
+import uk.gov.justice.digital.oasys.jpa.entity.Section;
 import java.util.HashSet;
 import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;

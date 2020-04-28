@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.*;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
 
 import javax.persistence.*;
 import java.io.Serializable;

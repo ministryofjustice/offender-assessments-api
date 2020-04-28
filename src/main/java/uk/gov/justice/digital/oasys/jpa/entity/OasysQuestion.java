@@ -10,7 +10,6 @@ import java.sql.Time;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "oasysAnswer")
 @Table(name = "OASYS_QUESTION")
 public class OasysQuestion {
     @Id

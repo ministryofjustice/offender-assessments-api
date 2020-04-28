@@ -1,13 +1,9 @@
 package uk.gov.justice.digital.oasys.api;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
+@Value
 public class ValidateUserRequest {
-    private String user;
-    private String password;
+    String user;
+    String password;
 }

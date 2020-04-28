@@ -9,8 +9,8 @@ import java.util.Objects;
 @Builder(access = AccessLevel.PRIVATE)
 @Value
 public class InterventionMeasureDto {
-    private String comments;
-    private RefElementDto status;
+    String comments;
+    RefElementDto status;
 
     public static InterventionMeasureDto from(SspInterventionMeasure sspInterventionMeasure) {
         if (Objects.isNull(sspInterventionMeasure)) {

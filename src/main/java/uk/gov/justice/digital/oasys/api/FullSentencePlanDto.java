@@ -1,24 +1,19 @@
 package uk.gov.justice.digital.oasys.api;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Value;
-import uk.gov.justice.digital.oasys.jpa.entity.SspObjectivesInSet;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
-
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.Section;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Value
 public class FullSentencePlanDto {
-    private Long oasysSetId;
-    private LocalDateTime createdDate;
-    private LocalDateTime completedDate;
-    private Set<ObjectiveDto> objectives;
-    private Map<String, QuestionDto> questions;
+    Long oasysSetId;
+    LocalDateTime createdDate;
+    LocalDateTime completedDate;
+    Set<ObjectiveDto> objectives;
+    Map<String, QuestionDto> questions;
 
     public static FullSentencePlanDto from(Assessment assessment, Optional<Section> section) {
 

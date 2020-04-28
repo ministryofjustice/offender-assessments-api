@@ -1,17 +1,13 @@
 package uk.gov.justice.digital.oasys.api;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
-
 import java.util.Objects;
 
-@Data
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Value
 public class OasysUserDto {
-    private String oasysUserId;
-    private String userName;
+    String oasysUserId;
+    String userName;
 
     public static OasysUserDto from(OasysUser oasysUser) {
         if (Objects.isNull(oasysUser)) {

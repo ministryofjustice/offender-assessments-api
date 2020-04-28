@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.digital.oasys.api.BasicSentencePlan;
 import uk.gov.justice.digital.oasys.api.FullSentencePlanDto;
 import uk.gov.justice.digital.oasys.api.FullSentencePlanSummaryDto;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
-import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleAssessmentRepository;
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.Section;
+import uk.gov.justice.digital.oasys.jpa.repository.SimpleAssessmentRepository;
 import uk.gov.justice.digital.oasys.service.exception.ApplicationExceptions;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 

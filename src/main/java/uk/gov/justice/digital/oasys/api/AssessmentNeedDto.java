@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Value;
 import uk.gov.justice.digital.oasys.service.domain.AssessmentNeed;
 import uk.gov.justice.digital.oasys.service.domain.SectionHeader;
 
@@ -13,20 +14,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Value
 public class AssessmentNeedDto {
-    @JsonProperty("section")
     private SectionHeader section;
-    @JsonProperty("name")
     private String name;
-    @JsonProperty("overThreshold")
     private Boolean overThreshold;
-    @JsonProperty("riskOfHarm")
     private Boolean riskOfHarm;
-    @JsonProperty("riskOfReoffending")
     private Boolean riskOfReoffending;
-    @JsonProperty("flaggedAsNeed")
     private Boolean flaggedAsNeed;
 
     public static Collection<AssessmentNeedDto> from(Collection<AssessmentNeed> needs) {
