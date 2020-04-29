@@ -29,7 +29,7 @@ public class AssessmentDto {
     //private Collection<OasysBcsPartDto> oasysBcsParts;
     //@JsonProperty("qaReview")
     //private QaReviewDto qaReview;
-    //TODO: Sentence data shoUld come from Delius or Nomis
+    //TODO: Sentence data should come from Delius or Nomis
     Collection<SentenceDto> sentence;
 
     Boolean childSafeguardingIndicated;

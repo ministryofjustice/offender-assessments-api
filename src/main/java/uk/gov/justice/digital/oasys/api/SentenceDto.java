@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.oasys.api;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
@@ -12,8 +11,6 @@ import static uk.gov.justice.digital.oasys.api.DtoUtils.ynToBoolean;
 @Value
 @Builder
 public class SentenceDto {
-    @JsonIgnore
-    private static List<String> PAROLE_SENTENCE_TYPES = List.of("310", "1200", "930", "410");
 
     String sentenceCode;
     String sentenceDescription;
@@ -24,7 +21,6 @@ public class SentenceDto {
     Long cjaUnpaidHours;
     Long cjaSupervisionMonths;
     String activity;
-    Boolean parolable;
     LocalDate offenceDate;
     LocalDate sentenceDate;
     Long sentenceLengthCustodyDays;
@@ -51,7 +47,6 @@ public class SentenceDto {
                 sentenceDetail.map(OffenceSentenceDetail::getCjaUnpaidHours).orElse(null),
                 sentenceDetail.map(OffenceSentenceDetail::getCjaSupervisionMonths).orElse(null),
                 sentenceDetail.map(OffenceSentenceDetail::getActivityDesc).orElse(null),
-                sentence.map(s -> PAROLE_SENTENCE_TYPES.contains(s.getSentenceCode())).orElse(null),
                 offenceBlock.getOffenceDate(),
                 offenceBlock.getSentenceDate(),
                 offenceBlock.getSentLengthCustDays());
