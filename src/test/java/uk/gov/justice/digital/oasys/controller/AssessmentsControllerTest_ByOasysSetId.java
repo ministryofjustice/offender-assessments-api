@@ -111,7 +111,6 @@ public class AssessmentsControllerTest_ByOasysSetId extends IntegrationTest {
         assertThat(sentence.getCjaUnpaidHours()).isEqualTo(120);
         assertThat(sentence.getOrderType().getCode()).isEqualTo("S");
         assertThat(sentence.getOffenceBlockType().getCode()).isEqualTo("PRINCIPAL_PROPOSAL");
-        assertThat(sentence.getParolable()).isTrue();
         assertThat(sentence.getSentenceDescription()).isEqualTo("Life");
     }
 

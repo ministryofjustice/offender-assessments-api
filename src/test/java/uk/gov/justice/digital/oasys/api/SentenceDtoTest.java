@@ -27,7 +27,6 @@ public class SentenceDtoTest {
         Assertions.assertThat(firstResult.getCjaSupervisionMonths()).isEqualTo(15L);
         Assertions.assertThat(firstResult.getCjaUnpaidHours()).isEqualTo(10L);
         Assertions.assertThat(firstResult.getActivity()).isEqualTo("activity");
-        Assertions.assertThat(firstResult.getParolable()).isFalse();
         Assertions.assertThat(firstResult.getOffenceBlockType().getCode()).isEqualTo("typeCode");
         Assertions.assertThat(firstResult.getOffenceBlockType().getDescription()).isEqualTo("offenceType");
     }
@@ -50,7 +49,6 @@ public class SentenceDtoTest {
         Assertions.assertThat(firstResult.getCjaSupervisionMonths()).isNull();
         Assertions.assertThat(firstResult.getCjaUnpaidHours()).isNull();
         Assertions.assertThat(firstResult.getActivity()).isNull();
-        Assertions.assertThat(firstResult.getParolable()).isFalse();
         Assertions.assertThat(firstResult.getOffenceBlockType().getCode()).isEqualTo("typeCode");
         Assertions.assertThat(firstResult.getOffenceBlockType().getDescription()).isEqualTo("offenceType");
     }
@@ -72,26 +70,6 @@ public class SentenceDtoTest {
         Assertions.assertThat(firstResult.getCjaSupervisionMonths()).isEqualTo(15L);
         Assertions.assertThat(firstResult.getCjaUnpaidHours()).isEqualTo(10L);
         Assertions.assertThat(firstResult.getActivity()).isEqualTo("activity");
-        Assertions.assertThat(firstResult.getParolable()).isNull();
-    }
-
-    @Test
-    public void shouldSetParolableToTrueWhenSentenceCodeIsParolable() {
-
-        var result = SentenceDto.from(anOffenceBlockParolableSentence());
-        var firstResult = result.stream().findFirst().get();
-        Assertions.assertThat(firstResult.getSentenceCode()).isEqualTo("310");
-        Assertions.assertThat(firstResult.getParolable()).isTrue();
-    }
-
-    @Test
-    public void shouldSetParolableToFalseWhenSentenceCodeIsNotParolable() {
-
-        var result = SentenceDto.from(anOffenceBlockNotParolableSentence());
-        var firstResult = result.stream().findFirst().get();
-
-        Assertions.assertThat(firstResult.getSentenceCode()).isEqualTo("910");
-        Assertions.assertThat(firstResult.getParolable()).isFalse();
     }
 
     private static Set<OffenceBlock> anOffenceBlockValid() {

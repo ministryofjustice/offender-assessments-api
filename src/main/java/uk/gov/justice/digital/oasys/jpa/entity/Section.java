@@ -1,10 +1,6 @@
-package uk.gov.justice.digital.oasys.jpa.entity.simple;
+package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.*;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysAnswer;
-import uk.gov.justice.digital.oasys.jpa.entity.OasysQuestion;
-import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
-import uk.gov.justice.digital.oasys.jpa.entity.RefSection;
 
 import javax.persistence.*;
 import java.util.*;

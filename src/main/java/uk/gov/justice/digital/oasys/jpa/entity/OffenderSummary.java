@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.oasys.jpa.entity.simple;
+package uk.gov.justice.digital.oasys.jpa.entity;
 
 import lombok.*;
 

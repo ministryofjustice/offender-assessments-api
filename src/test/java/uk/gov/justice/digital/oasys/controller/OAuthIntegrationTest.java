@@ -10,19 +10,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import uk.gov.justice.digital.oasys.jpa.entity.AreaEstUserRole;
 import uk.gov.justice.digital.oasys.jpa.entity.OasysUser;
-import uk.gov.justice.digital.oasys.jpa.entity.Offender;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
 import uk.gov.justice.digital.oasys.jpa.repository.OasysUserRepository;
-import uk.gov.justice.digital.oasys.jpa.repository.OffenderRepository;
 import java.util.Optional;
 import static io.restassured.RestAssured.given;
 import static java.util.List.of;
 import static org.mockito.ArgumentMatchers.eq;
 
 public class OAuthIntegrationTest extends IntegrationTest {
-
-    @MockBean
-    private OffenderRepository offenderRepository;
 
     @MockBean
     private OasysUserRepository oasysUserRepository;
@@ -108,7 +103,6 @@ public class OAuthIntegrationTest extends IntegrationTest {
 
     @Test
     public void returnsOKWhenRoleIsOASYS_READ_ONLYAndEndpointIsOffenderData() {
-        Mockito.when(offenderRepository.findById(eq(1l))).thenReturn(anOffender());
         given()
                 .when()
                 .auth().oauth2(readonlyOauthToken)
@@ -128,9 +122,4 @@ public class OAuthIntegrationTest extends IntegrationTest {
                 .build();
     }
 
-    private Optional<Offender> anOffender() {
-        return Optional.ofNullable(Offender.builder()
-                .offenderPk(1L)
-                .build());
-    }
 }

@@ -33,42 +33,6 @@ public class AnswerDtoTest {
         assertThat(answer.getOvpScore()).isEqualTo(2L);
         assertThat(answer.getQaRawScore()).isEqualTo(3L);
         assertThat(answer.getDisplayOrder()).isEqualTo(5L);
-        assertThat(answer.getScore()).isEqualTo(1L);
-    }
-
-    @Test
-    public void shouldUseOGPScoreForOverallScoreIfPresent() {
-        OasysQuestion question = OasysQuestion.builder().freeFormatAnswer("Free form answer").build();
-
-        OasysAnswer oasysAnswer = OasysAnswer.builder().refAnswer(RefAnswer.builder()
-                .refAnswerCode("NO")
-                .refSectionAnswer("No")
-                .ogpScore(1L)
-                .ovpScore(2L).build()).build();
-
-        question.setOasysAnswer(oasysAnswer);
-        oasysAnswer.setOasysQuestion(question);
-
-        var answer = AnswerDto.from(question);
-        assertThat(answer.getScore()).isEqualTo(1L);
-
-    }
-
-    @Test
-    public void shouldUseOVPScoreForOverallScoreIfOGPNotPresent() {
-        OasysQuestion question = OasysQuestion.builder().freeFormatAnswer("Free form answer").build();
-
-        OasysAnswer oasysAnswer = OasysAnswer.builder().refAnswer(RefAnswer.builder()
-                .refAnswerCode("NO")
-                .refSectionAnswer("No")
-                .ovpScore(2L).build()).build();
-
-        question.setOasysAnswer(oasysAnswer);
-        oasysAnswer.setOasysQuestion(question);
-
-        var answer = AnswerDto.from(question);
-        assertThat(answer.getScore()).isEqualTo(2L);
-
     }
 
     @Test

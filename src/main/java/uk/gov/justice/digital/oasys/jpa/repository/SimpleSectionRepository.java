@@ -1,11 +1,11 @@
-package uk.gov.justice.digital.oasys.jpa.repository.simple;
+package uk.gov.justice.digital.oasys.jpa.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.QSection;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Section;
+import uk.gov.justice.digital.oasys.jpa.entity.QSection;
+import uk.gov.justice.digital.oasys.jpa.entity.Section;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 import javax.persistence.EntityManager;

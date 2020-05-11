@@ -14,16 +14,16 @@ import java.util.stream.Collectors;
 @Value
 @Builder(access = AccessLevel.PRIVATE)
 public class ObjectiveDto {
-    private Set<CriminogenicNeedDto> criminogenicNeeds;
-    private Set<InterventionDto> interventions;
-    private ObjectiveMeasureDto objectiveMeasure;
-    private RefElementDto objectiveType;
-    private String objectiveCode;
-    private String objectiveDescription;
-    private String objectiveHeading;
-    private String objectiveComment;
-    private String howMeasured;
-    private LocalDateTime createdDate;
+    Set<CriminogenicNeedDto> criminogenicNeeds;
+    Set<InterventionDto> interventions;
+    ObjectiveMeasureDto objectiveMeasure;
+    RefElementDto objectiveType;
+    String objectiveCode;
+    String objectiveDescription;
+    String objectiveHeading;
+    String objectiveComment;
+    String howMeasured;
+    LocalDateTime createdDate;
 
     public static Set<ObjectiveDto> from(Set<SspObjectivesInSet> sspObjectivesInSets) {
 

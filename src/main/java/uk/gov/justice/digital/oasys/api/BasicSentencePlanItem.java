@@ -13,19 +13,17 @@ import java.util.Optional;
 @Value
 @Builder
 public class BasicSentencePlanItem {
-    private final Long basicSentPlanObjId;
-    private final Boolean includeInPlan;
-    private final RefElementDto offenceBehaviourLink;
-    private final String objectiveText;
-    private final String measureText;
-    private final String whatWorkText;
-    private final String whoWillDoWorkText;
-    private final String timescalesText;
-    private final LocalDate dateOpened;
-    private final LocalDate dateCompleted;
-    private final Boolean problemAreaCompInd;
-    @JsonIgnore
-    private final Long oasysSetId;
+    Long basicSentPlanObjId;
+    Boolean includeInPlan;
+    RefElementDto offenceBehaviourLink;
+    String objectiveText;
+    String measureText;
+    String whatWorkText;
+    String whoWillDoWorkText;
+    String timescalesText;
+    LocalDate dateOpened;
+    LocalDate dateCompleted;
+    Boolean problemAreaCompInd;
 
     public static BasicSentencePlanItem from(BasicSentencePlanObj basicSentencePlanObj) {
 
@@ -44,7 +42,6 @@ public class BasicSentencePlanItem {
                 basicSentencePlanObj.getTimescalesText(),
                 Optional.ofNullable(basicSentencePlanObj.getDateOpened()).map(LocalDateTime::toLocalDate).orElse(null),
                 Optional.ofNullable(basicSentencePlanObj.getDateCompleted()).map(LocalDateTime::toLocalDate).orElse(null),
-                Optional.ofNullable(basicSentencePlanObj.getProblemAreaCompInd()).map("Y"::equalsIgnoreCase).orElse(null),
-                basicSentencePlanObj.getOasysSetPk());
+                Optional.ofNullable(basicSentencePlanObj.getProblemAreaCompInd()).map("Y"::equalsIgnoreCase).orElse(null));
     }
 }

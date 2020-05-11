@@ -1,30 +1,28 @@
 package uk.gov.justice.digital.oasys.api;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.QaReview;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static uk.gov.justice.digital.oasys.api.DtoUtils.ynToBoolean;
 
-@Data
+@Value
 @Builder
 public class QaReviewDto {
-    private Long qaScore;
-    private String qaGrading;
-    private String qaStatus;
-    private LocalDateTime dateSelected;
-    private LocalDateTime dateCompleted;
-    private String qaSubstitutionReason;
-    private Long refPeriodYear;
-    private Long refPeriodQtr;
-    private Long refPeriodMonth;
-    private Long displaySort;
-    private boolean currentlyHidden;
-
-    private OasysUserDto qaUser;
+    Long qaScore;
+    String qaGrading;
+    String qaStatus;
+    LocalDateTime dateSelected;
+    LocalDateTime dateCompleted;
+    String qaSubstitutionReason;
+    Long refPeriodYear;
+    Long refPeriodQtr;
+    Long refPeriodMonth;
+    Long displaySort;
+    boolean currentlyHidden;
+    OasysUserDto qaUser;
 
     public static QaReviewDto from(QaReview qaReview) {
         return Optional.ofNullable(qaReview)

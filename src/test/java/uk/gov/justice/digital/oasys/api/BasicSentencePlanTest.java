@@ -3,8 +3,7 @@ package uk.gov.justice.digital.oasys.api;
 import org.junit.jupiter.api.Test;
 import uk.gov.justice.digital.oasys.jpa.entity.BasicSentencePlanObj;
 import uk.gov.justice.digital.oasys.jpa.entity.RefElement;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
-
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -31,7 +30,6 @@ public class BasicSentencePlanTest {
         assertThat(plan.getBasicSentencePlanItems()).extracting("dateOpened").containsOnly(LocalDate.now().minusDays(10));
         assertThat(plan.getBasicSentencePlanItems()).extracting("dateCompleted").containsOnlyNulls();
         assertThat(plan.getBasicSentencePlanItems()).extracting("problemAreaCompInd").containsOnly(true);
-        assertThat(plan.getBasicSentencePlanItems()).extracting("oasysSetId").containsOnly(1l, 2l);
         assertThat(plan.getBasicSentencePlanItems()).extracting("offenceBehaviourLink.shortDescription").containsOnly("LINK1", "LINK2");
         assertThat(plan.getBasicSentencePlanItems()).extracting("offenceBehaviourLink.description").containsOnly("Link1", "Link2");
     }

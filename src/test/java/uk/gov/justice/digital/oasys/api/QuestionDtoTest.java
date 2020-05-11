@@ -63,7 +63,6 @@ public class QuestionDtoTest {
         assertThat(question.getAnswer().getOvpScore()).isNull();
         assertThat(question.getAnswer().getQaRawScore()).isNull();
         assertThat(question.getAnswer().getDisplayOrder()).isEqualTo(1l);
-        assertThat(question.getAnswer().getScore()).isNull();
     }
   
     @Test

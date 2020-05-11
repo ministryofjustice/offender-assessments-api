@@ -48,10 +48,6 @@ public class QaReview {
     @JoinColumn(name = "OASYS_USER_CODE", referencedColumnName = "OASYS_USER_CODE")
     private OasysUser qaUser;
 
-    @OneToOne
-    @JoinColumn(name = "OASYS_SET_PK")
-    private OasysSet oasysSet;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

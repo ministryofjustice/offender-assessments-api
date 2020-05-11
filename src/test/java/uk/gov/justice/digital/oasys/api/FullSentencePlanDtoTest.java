@@ -2,7 +2,7 @@ package uk.gov.justice.digital.oasys.api;
 
 import org.junit.jupiter.api.Test;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.Assessment;
+import uk.gov.justice.digital.oasys.jpa.entity.Assessment;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

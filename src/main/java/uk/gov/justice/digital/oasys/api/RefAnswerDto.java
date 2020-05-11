@@ -2,19 +2,18 @@ package uk.gov.justice.digital.oasys.api;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.RefAnswer;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Data
+@Value
 @Builder(access = AccessLevel.PRIVATE)
 public class RefAnswerDto {
-    private Long refAnswerId;
-    private String refAnswerCode;
-    private Long refDisplaySort;
+    Long refAnswerId;
+    String refAnswerCode;
+    Long refDisplaySort;
 
     public static List<RefAnswerDto> from(List<RefAnswer> refAnswers) {
         return Optional.ofNullable(refAnswers)

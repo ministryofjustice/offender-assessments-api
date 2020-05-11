@@ -13,7 +13,7 @@ import uk.gov.justice.digital.oasys.service.OffenderService;
 import uk.gov.justice.digital.oasys.utils.LogEvent;
 
 @RestController
-@Api(tags = "Offenders")
+@Api(value= "Offender ", tags = "Offenders")
 @Slf4j
 public class OffenderController {
 

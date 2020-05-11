@@ -7,9 +7,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.justice.digital.oasys.jpa.entity.OffenderLink;
-import uk.gov.justice.digital.oasys.jpa.entity.simple.OffenderSummary;
+import uk.gov.justice.digital.oasys.jpa.entity.OffenderSummary;
 import uk.gov.justice.digital.oasys.jpa.repository.OffenderLinkRepository;
-import uk.gov.justice.digital.oasys.jpa.repository.simple.SimpleOffenderRepository;
+import uk.gov.justice.digital.oasys.jpa.repository.SimpleOffenderRepository;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
