@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  oauth:
+    image: mojdigitalstudio/nomis-oauth2-server:latest
+    networks:
+      - hmpps
+    container_name: oauth
+    ports:
+      - "9090:9090"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/auth/health"]
+    environment:
+      - SERVER_PORT=9090
+      - SPRING_PROFILES_ACTIVE=dev
+networks:
+  hmpps:
