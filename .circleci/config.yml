@@ -10,16 +10,16 @@ commands:
       - run:
           name: Setup kubectl
           command: |
-            echo -n "${AKS_ENV_CACERT}" | base64 -d > /tmp/cluster_ca.crt
-            kubectl config set-cluster "${AKS_ENV_NAMESPACE}" \
+            echo -n "${KUBE_ENV_CACERT}" | base64 -d > /tmp/cluster_ca.crt
+            kubectl config set-cluster "${KUBE_ENV_NAMESPACE}" \
               --certificate-authority="/tmp/cluster_ca.crt" \
-              --server="${AKS_API_URL}"
+              --server="${KUBE_API_URL}"
             kubectl config set-credentials circleci \
-              --token="${AKS_ENV_TOKEN}"
+              --token="${KUBE_ENV_TOKEN}"
             kubectl config set-context circleci \
-              --cluster="${AKS_ENV_NAMESPACE}" \
+              --cluster="${KUBE_ENV_NAMESPACE}" \
               --user="circleci" \
-              --namespace="${AKS_ENV_NAMESPACE}"
+              --namespace="${KUBE_ENV_NAMESPACE}"
             # confirm setup is ok
             kubectl config use-context circleci
   deploy_to_env:
@@ -37,10 +37,10 @@ commands:
           command: |
             APP_VERSION=$(cat ~/app/app_version.txt)
             sed -i "s/appVersion: \".*\"/appVersion: \"${APP_VERSION}\"/g" ~/git/helm_deploy/offender-assessments-api/Chart.yaml
-            aws secretsmanager --region ${AWS_DEFAULT_REGION} get-secret-value --secret-id ${AKS_ENV_NAMESPACE} | jq -r .SecretString | \
+            aws secretsmanager --region ${AWS_DEFAULT_REGION} get-secret-value --secret-id ${KUBE_ENV_NAMESPACE} | jq -r .SecretString | \
             helm upgrade offender-assessments-api ~/git/helm_deploy/offender-assessments-api/. \
             --install --wait --reset-values --timeout 5m --history-max 10 \
-              --namespace=${AKS_ENV_NAMESPACE} \
+              --namespace=${KUBE_ENV_NAMESPACE} \
               --values ~/git/helm_deploy/values-<< parameters.env >>.yaml \
               --values - \
               --set image.tag="${APP_VERSION}"
