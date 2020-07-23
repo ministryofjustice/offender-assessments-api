@@ -38,8 +38,8 @@ public class RefElement {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RefElementPK)) return false;
-        RefElementPK that = (RefElementPK) o;
+        if (!(o instanceof RefElement)) return false;
+        RefElement that = (RefElement) o;
         return Objects.nonNull(getRefCategoryCode()) &&
                 Objects.nonNull(getRefElementCode()) &&
                 Objects.equals(getRefCategoryCode(), that.getRefCategoryCode()) &&

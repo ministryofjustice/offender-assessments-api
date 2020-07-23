@@ -69,8 +69,8 @@ public class RefQuestion {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RefQuestionPK)) return false;
-        RefQuestionPK that = (RefQuestionPK) o;
+        if (!(o instanceof RefQuestion)) return false;
+        RefQuestion that = (RefQuestion) o;
         return Objects.nonNull(getRefAssVersionCode()) &&
                 Objects.nonNull(getVersionNumber()) &&
                 Objects.nonNull(getRefSectionCode()) &&

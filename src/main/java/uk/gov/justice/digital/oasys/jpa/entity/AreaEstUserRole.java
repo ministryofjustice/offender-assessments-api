@@ -46,8 +46,8 @@ public class AreaEstUserRole {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AreaEstUserRolePK)) return false;
-        AreaEstUserRolePK that = (AreaEstUserRolePK) o;
+        if (!(o instanceof AreaEstUserRole)) return false;
+        AreaEstUserRole that = (AreaEstUserRole) o;
         return Objects.nonNull(getOasysUserCode()) &&
                 Objects.nonNull(getRefRoleCode()) &&
                 Objects.nonNull(getCtAreaEstCode()) &&

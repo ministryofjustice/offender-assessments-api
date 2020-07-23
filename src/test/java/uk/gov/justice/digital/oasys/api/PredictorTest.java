@@ -60,9 +60,9 @@ class PredictorTest {
 
     @Test
     public void shouldBuildValidDtoNull() {
-        var dto = RefAssessmentDto.from(null);
+        var predictor = Predictor.from(null);
 
-        assertThat(dto).isNull();
+        assertThat(predictor).isNull();
     }
 
     private void setupVersion() {

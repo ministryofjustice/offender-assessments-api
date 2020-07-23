@@ -72,10 +72,6 @@ public class AssessmentsService {
     }
 
     private Boolean calculateChildSafeguardingIndicated(String assessmentType, Long oasysSetId) {
-        if (!LAYER_3.equalsIgnoreCase(assessmentType)) {
-            return null;
-        }
-
         var roshSection = sectionService.getSectionForAssessment(oasysSetId, ROSH_SECTION);
         if(Objects.isNull(roshSection)) {
             return null;

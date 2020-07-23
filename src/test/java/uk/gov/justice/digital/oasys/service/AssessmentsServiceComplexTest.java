@@ -53,33 +53,6 @@ public class AssessmentsServiceComplexTest {
     }
 
     @Test
-    public void shouldGetAssessmentNoChildSafeGuardingNotLAYER3() {
-        setupAssessment("LAYER_2");
-
-        Long oasysId = 21345L;
-        when(assessmentRepository.getAssessment(oasysId)).thenReturn(Optional.of(assessment));
-
-        var assessmentDto = assessmentsService.getAssessment(oasysId);
-
-        assertThat(assessmentDto.getChildSafeguardingIndicated()).isNull();
-    }
-
-    @Test
-    public void shouldGetLatestAssessmentNoChildSafeGuardingNotLAYER3() {
-        setupAssessment("LAYER_2");
-
-        Long oasysId = 21345L;
-        String offenderOasys = oasysId.toString();
-        OffenderIdentifier offenderIdentifier = OffenderIdentifier.OASYS;
-        when(offenderService.getOffenderIdByIdentifier(offenderIdentifier.toString(), offenderOasys)).thenReturn(oasysId);
-        when(assessmentRepository.getLatestAssessment(oasysId, null, null, null, null)).thenReturn(Optional.of(assessment));
-
-        var assessmentDto = assessmentsService.getLatestAssessmentForOffender(offenderIdentifier.toString(), offenderOasys, null, null, null, null);
-
-        assertThat(assessmentDto.getChildSafeguardingIndicated()).isNull();
-    }
-
-    @Test
     public void shouldGetLatestAssessmentValidROSHPositive() {
         setupAssessment("LAYER_3");
         var section = Mockito.mock(Section.class);
