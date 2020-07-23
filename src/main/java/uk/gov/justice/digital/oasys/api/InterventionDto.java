@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.oasys.api;
 
-import lombok.Builder;
 import lombok.Value;
 import uk.gov.justice.digital.oasys.jpa.entity.SspObjIntervenePivot;
 import java.util.Collections;

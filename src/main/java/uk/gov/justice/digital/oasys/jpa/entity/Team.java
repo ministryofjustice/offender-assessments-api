@@ -51,8 +51,8 @@ public class Team {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TeamPK)) return false;
-        TeamPK that = (TeamPK) o;
+        if (!(o instanceof Team)) return false;
+        Team that = (Team) o;
         return Objects.nonNull(getCtAreaEstCode()) &&
                 Objects.nonNull(getDivisionCode()) &&
                 Objects.nonNull(getTeamCode()) &&

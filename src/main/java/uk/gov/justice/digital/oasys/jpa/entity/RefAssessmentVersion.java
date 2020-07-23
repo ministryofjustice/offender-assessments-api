@@ -52,8 +52,8 @@ public class RefAssessmentVersion {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RefAssessmentVersionPK)) return false;
-        RefAssessmentVersionPK that = (RefAssessmentVersionPK) o;
+        if (!(o instanceof RefAssessmentVersion)) return false;
+        RefAssessmentVersion that = (RefAssessmentVersion) o;
         return Objects.nonNull(getRefAssVersionCode()) &&
                 Objects.nonNull(getVersionNumber()) &&
                 Objects.equals(getRefAssVersionCode(), that.getRefAssVersionCode()) &&

@@ -1,10 +1,11 @@
 package uk.gov.justice.digital.oasys.api;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.gov.justice.digital.oasys.jpa.entity.*;
 import java.time.LocalDate;
 import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class SentenceDtoTest {
@@ -15,20 +16,20 @@ public class SentenceDtoTest {
         var result = SentenceDto.from(anOffenceBlockValid());
         var firstResult = result.stream().findFirst().get();
 
-        Assertions.assertThat(firstResult.getSentenceCode()).isEqualTo("sentenceCode");
-        Assertions.assertThat(firstResult.getSentenceDescription()).isEqualTo("sentenceDesc");
-        Assertions.assertThat(firstResult.getCustodial()).isTrue();
-        Assertions.assertThat(firstResult.getCja()).isTrue();
-        Assertions.assertThat(firstResult.getOffenceDate()).isEqualTo(LocalDate.MIN);
-        Assertions.assertThat(firstResult.getSentenceDate()).isEqualTo(LocalDate.MAX);
-        Assertions.assertThat(firstResult.getSentenceLengthCustodyDays()).isEqualTo(100);
-        Assertions.assertThat(firstResult.getOrderType().getCode()).isEqualTo("typeCode");
-        Assertions.assertThat(firstResult.getOrderType().getDescription()).isEqualTo("orderType");
-        Assertions.assertThat(firstResult.getCjaSupervisionMonths()).isEqualTo(15L);
-        Assertions.assertThat(firstResult.getCjaUnpaidHours()).isEqualTo(10L);
-        Assertions.assertThat(firstResult.getActivity()).isEqualTo("activity");
-        Assertions.assertThat(firstResult.getOffenceBlockType().getCode()).isEqualTo("typeCode");
-        Assertions.assertThat(firstResult.getOffenceBlockType().getDescription()).isEqualTo("offenceType");
+        assertThat(firstResult.getSentenceCode()).isEqualTo("sentenceCode");
+        assertThat(firstResult.getSentenceDescription()).isEqualTo("sentenceDesc");
+        assertThat(firstResult.getCustodial()).isTrue();
+        assertThat(firstResult.getCja()).isTrue();
+        assertThat(firstResult.getOffenceDate()).isEqualTo(LocalDate.MIN);
+        assertThat(firstResult.getSentenceDate()).isEqualTo(LocalDate.MAX);
+        assertThat(firstResult.getSentenceLengthCustodyDays()).isEqualTo(100);
+        assertThat(firstResult.getOrderType().getCode()).isEqualTo("typeCode");
+        assertThat(firstResult.getOrderType().getDescription()).isEqualTo("orderType");
+        assertThat(firstResult.getCjaSupervisionMonths()).isEqualTo(15L);
+        assertThat(firstResult.getCjaUnpaidHours()).isEqualTo(10L);
+        assertThat(firstResult.getActivity()).isEqualTo("activity");
+        assertThat(firstResult.getOffenceBlockType().getCode()).isEqualTo("typeCode");
+        assertThat(firstResult.getOffenceBlockType().getDescription()).isEqualTo("offenceType");
     }
 
     @Test
@@ -37,20 +38,20 @@ public class SentenceDtoTest {
         var result = SentenceDto.from(anOffenceBlockNullDetail());
         var firstResult = result.stream().findFirst().get();
 
-        Assertions.assertThat(firstResult.getSentenceCode()).isEqualTo("sentenceCode");
-        Assertions.assertThat(firstResult.getSentenceDescription()).isEqualTo("sentenceDesc");
-        Assertions.assertThat(firstResult.getCustodial()).isTrue();
-        Assertions.assertThat(firstResult.getCja()).isTrue();
-        Assertions.assertThat(firstResult.getOffenceDate()).isEqualTo(LocalDate.MIN);
-        Assertions.assertThat(firstResult.getSentenceDate()).isEqualTo(LocalDate.MAX);
-        Assertions.assertThat(firstResult.getSentenceLengthCustodyDays()).isEqualTo(100);
-        Assertions.assertThat(firstResult.getOrderType().getCode()).isEqualTo("typeCode");
-        Assertions.assertThat(firstResult.getOrderType().getDescription()).isEqualTo("orderType");
-        Assertions.assertThat(firstResult.getCjaSupervisionMonths()).isNull();
-        Assertions.assertThat(firstResult.getCjaUnpaidHours()).isNull();
-        Assertions.assertThat(firstResult.getActivity()).isNull();
-        Assertions.assertThat(firstResult.getOffenceBlockType().getCode()).isEqualTo("typeCode");
-        Assertions.assertThat(firstResult.getOffenceBlockType().getDescription()).isEqualTo("offenceType");
+        assertThat(firstResult.getSentenceCode()).isEqualTo("sentenceCode");
+        assertThat(firstResult.getSentenceDescription()).isEqualTo("sentenceDesc");
+        assertThat(firstResult.getCustodial()).isTrue();
+        assertThat(firstResult.getCja()).isTrue();
+        assertThat(firstResult.getOffenceDate()).isEqualTo(LocalDate.MIN);
+        assertThat(firstResult.getSentenceDate()).isEqualTo(LocalDate.MAX);
+        assertThat(firstResult.getSentenceLengthCustodyDays()).isEqualTo(100);
+        assertThat(firstResult.getOrderType().getCode()).isEqualTo("typeCode");
+        assertThat(firstResult.getOrderType().getDescription()).isEqualTo("orderType");
+        assertThat(firstResult.getCjaSupervisionMonths()).isNull();
+        assertThat(firstResult.getCjaUnpaidHours()).isNull();
+        assertThat(firstResult.getActivity()).isNull();
+        assertThat(firstResult.getOffenceBlockType().getCode()).isEqualTo("typeCode");
+        assertThat(firstResult.getOffenceBlockType().getDescription()).isEqualTo("offenceType");
     }
 
     @Test
@@ -59,17 +60,17 @@ public class SentenceDtoTest {
         var result = SentenceDto.from(anOffenceBlockNullSentence());
         var firstResult = result.stream().findFirst().get();
 
-        Assertions.assertThat(firstResult.getSentenceCode()).isNull();
-        Assertions.assertThat(firstResult.getSentenceDescription()).isNull();
-        Assertions.assertThat(firstResult.getCustodial()).isNull();
-        Assertions.assertThat(firstResult.getCja()).isNull();
-        Assertions.assertThat(firstResult.getOffenceDate()).isEqualTo(LocalDate.MIN);
-        Assertions.assertThat(firstResult.getSentenceDate()).isEqualTo(LocalDate.MAX);
-        Assertions.assertThat(firstResult.getSentenceLengthCustodyDays()).isEqualTo(100);
-        Assertions.assertThat(firstResult.getOrderType()).isNull();
-        Assertions.assertThat(firstResult.getCjaSupervisionMonths()).isEqualTo(15L);
-        Assertions.assertThat(firstResult.getCjaUnpaidHours()).isEqualTo(10L);
-        Assertions.assertThat(firstResult.getActivity()).isEqualTo("activity");
+        assertThat(firstResult.getSentenceCode()).isNull();
+        assertThat(firstResult.getSentenceDescription()).isNull();
+        assertThat(firstResult.getCustodial()).isNull();
+        assertThat(firstResult.getCja()).isNull();
+        assertThat(firstResult.getOffenceDate()).isEqualTo(LocalDate.MIN);
+        assertThat(firstResult.getSentenceDate()).isEqualTo(LocalDate.MAX);
+        assertThat(firstResult.getSentenceLengthCustodyDays()).isEqualTo(100);
+        assertThat(firstResult.getOrderType()).isNull();
+        assertThat(firstResult.getCjaSupervisionMonths()).isEqualTo(15L);
+        assertThat(firstResult.getCjaUnpaidHours()).isEqualTo(10L);
+        assertThat(firstResult.getActivity()).isEqualTo("activity");
     }
 
     private static Set<OffenceBlock> anOffenceBlockValid() {
@@ -112,28 +113,6 @@ public class SentenceDtoTest {
                         .orderType(RefElement.builder().refElementCode("typeCode").refElementDesc("orderType").build())
                         .sentenceCode("sentenceCode")
                         .sentenceDesc("sentenceDesc")
-                        .build()
-                )
-                .build());
-    }
-
-    private static Set<OffenceBlock> anOffenceBlockParolableSentence() {
-        return Set.of(OffenceBlock.builder()
-                .offenceBlockPk(1L)
-                .sentence(Sentence
-                        .builder()
-                        .sentenceCode("310")
-                        .build()
-                )
-                .build());
-    }
-
-    private static Set<OffenceBlock> anOffenceBlockNotParolableSentence() {
-        return Set.of(OffenceBlock.builder()
-                .offenceBlockPk(1L)
-                .sentence(Sentence
-                        .builder()
-                        .sentenceCode("910")
                         .build()
                 )
                 .build());
