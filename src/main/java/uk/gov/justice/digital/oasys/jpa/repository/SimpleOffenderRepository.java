@@ -35,23 +35,23 @@ public class SimpleOffenderRepository {
 
         switch (identityType) {
             case CRN:
-                query.where(qOffender.cmsProbNumber.eq(identity));
-                query.where(qOffender.deletedDate.isNull());
+                query.where(qOffender.cmsProbNumber.toUpperCase().eq(identity.toUpperCase())
+                        .and(qOffender.deletedDate.isNull()));
                 break;
             case PNC:
-                query.where(qOffender.pnc.eq(identity));
-                query.where(qOffender.deletedDate.isNull());
+                query.where(qOffender.pnc.toUpperCase().eq(identity.toUpperCase())
+                        .and(qOffender.deletedDate.isNull()));
                 break;
             case NOMIS:
-                query.where(qOffender.cmsPrisNumber.eq(identity));
-                query.where(qOffender.deletedDate.isNull());
+                query.where(qOffender.cmsPrisNumber.toUpperCase().eq(identity.toUpperCase())
+                        .and(qOffender.deletedDate.isNull()));
                 break;
             case OASYS:
                 query.where(qOffender.offenderPk.eq(Long.valueOf(identity)));
                 break;
             case BOOKING:
-                query.where(qOffender.prisonNumber.eq(identity));
-                query.where(qOffender.deletedDate.isNull());
+                query.where(qOffender.prisonNumber.toUpperCase().eq(identity.toUpperCase())
+                        .and(qOffender.deletedDate.isNull()));
                 break;
             default:
                 return Optional.empty();
