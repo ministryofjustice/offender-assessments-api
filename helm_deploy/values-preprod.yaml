@@ -21,5 +21,5 @@ ingress:
 env:
   JAVA_OPTS: "-Xmx512m -Duser.timezone=UTC"
   TZ: UTC
-  OAUTH_ENDPOINT_URL: https://gateway.preprod.nomis-api.service.hmpps.dsd.io/auth
+  OAUTH_ENDPOINT_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth
 
