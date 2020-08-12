@@ -14,12 +14,12 @@ ingress:
     kubernetes.io/ingress.class: "nginx"
     certmanager.k8s.io/cluster-issuer: letsencrypt-production
   hosts:
-    - host: offender-preprod.aks-live-1.studio-hosting.service.justice.gov.uk
+    - host: offender-prprod.aks-live-1.studio-hosting.service.justice.gov.uk
       cert_secret: offender-assessments-api-preprod-tls-secret
   path: /
 
 env:
   JAVA_OPTS: "-Xmx512m -Duser.timezone=UTC"
   TZ: UTC
-  OAUTH_ENDPOINT_URL: https://gateway.preprod.nomis-api.service.hmpps.dsd.io/auth
+  OAUTH_ENDPOINT_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth
 
