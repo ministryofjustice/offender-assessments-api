@@ -171,13 +171,6 @@ jobs:
 
 workflows:
   version: 2
-    jobs:
-      - build:
-          filters:
-            tags:
-              ignore: /.*/
-      - app-scan
-      - image-scan
   build-test-and-deploy:
     jobs:
       - build:
