@@ -171,14 +171,6 @@ jobs:
 
 workflows:
   version: 2
-  scheduled:
-    triggers:
-      - schedule:
-          cron: "0 7 * * 1-5"
-          filters:
-            branches:
-              only:
-                - main
     jobs:
       - build:
           filters:
