@@ -47,7 +47,6 @@ public class AuthenticationController {
     @RequestMapping(path = "/authentication/user/{oasysUserId}/offender/{offenderId}/{resource}", method = RequestMethod.GET)
     @ApiOperation(value = "Verifies a user has access to an offender")
     @ApiResponses({
-            @ApiResponse(code = 401, message = "User not authenticated for offender"),
             @ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<AuthorisationDto> getUserAuthorisedForOffenderId(@PathVariable("oasysUserId") String oasysUserId,
                                                                            @PathVariable("offenderId") Long offenderId,
