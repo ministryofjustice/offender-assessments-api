@@ -30,7 +30,7 @@ public class SimpleAssessmentRepository {
     public Optional<Assessment> getLatestAssessment(Long offenderId, String filterGroupStatus, String filterAssessmentType, Boolean filterVoided, String filterAssessmentStatus) {
         var query = getAssessmentsQueryForOffender(offenderId);
         filterQuery(query, filterGroupStatus, filterAssessmentType, filterVoided, filterAssessmentStatus);
-        var assessment = query.orderBy(QAssessment.assessment.dateCompleted.desc()).fetchFirst();
+        var assessment = query.orderBy(QAssessment.assessment.createDate.desc()).fetchFirst();
         return Optional.ofNullable(assessment);
     }
 
