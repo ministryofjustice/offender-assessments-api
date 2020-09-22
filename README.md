@@ -1,5 +1,9 @@
 # Offender Assesments API
 
+**This project has been archived and replaced by https://github.com/ministryofjustice/offender-assessments-api-kotlin**
+---
+
+
 The service provides REST access to the OASYS Oracle DB offender assessment information.
 
 ## Continuous Integration
